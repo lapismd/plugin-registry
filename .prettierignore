@@ -1,0 +1,4 @@
+generated/v1/
+dist/
+.astro/
+node_modules/

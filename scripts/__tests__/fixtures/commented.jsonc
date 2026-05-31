@@ -1,0 +1,5 @@
+{
+  // jsonc-parser should accept comments in source entries.
+  "schemaVersion": 1,
+  "id": "lapis-docs",
+}

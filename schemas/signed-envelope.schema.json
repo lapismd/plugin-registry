@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://registry.lapis.md/schemas/signed-envelope.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["keyId", "alg", "sig"],
+  "properties": {
+    "keyId": { "type": "string", "minLength": 1 },
+    "alg": { "const": "ed25519" },
+    "sig": { "type": "string", "minLength": 1 }
+  }
+}

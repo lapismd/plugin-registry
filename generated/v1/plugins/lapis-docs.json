@@ -1,0 +1,43 @@
+{
+  "channel": "official",
+  "contributes": {
+    "editorViews": [
+      {
+        "filenamePatterns": [
+          "*.lapisdoc",
+          "*.lapissheet"
+        ],
+        "id": "lapis-docs.document",
+        "label": "Lapis Document"
+      }
+    ]
+  },
+  "description": "Rich document and spreadsheet editing for Lapis.",
+  "id": "lapis-docs",
+  "latestVersion": "0.1.0",
+  "name": "Docs",
+  "owner": {
+    "name": "Lapis Notes",
+    "verified": true
+  },
+  "schemaVersion": 1,
+  "status": "pending",
+  "versions": {
+    "0.1.0": {
+      "files": [],
+      "minAppVersion": "1.7.7",
+      "platforms": [
+        "web",
+        "electron"
+      ],
+      "releaseManifest": {
+        "pending": true,
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "size": 0,
+        "url": "https://registry.lapis.md/assets/lapis-docs/0.1.0/release.signed.json"
+      },
+      "releasedAt": "2026-05-31T00:00:00.000Z",
+      "version": "0.1.0"
+    }
+  }
+}

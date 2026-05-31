@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schemas/catalog-entry.schema.json",
+  "schemaVersion": 1,
+  "id": "lapis-slides",
+  "name": "Slides",
+  "description": "Presentation mode for markdown notes.",
+  "author": "Lapis Notes",
+  "authorUrl": "https://app.lapis.md",
+  "channel": "official",
+  "status": "pending",
+  "latestVersion": "0.1.0",
+  "minAppVersion": "1.7.7",
+  "platforms": ["web", "electron"],
+  "categories": ["presentation", "markdown"],
+  "badges": ["official", "verified"],
+  "owner": {
+    "name": "Lapis Notes",
+    "verified": true,
+  },
+  "versions": {
+    "0.1.0": {
+      "version": "0.1.0",
+      "minAppVersion": "1.7.7",
+      "releasedAt": "2026-05-31T00:00:00.000Z",
+      "platforms": ["web", "electron"],
+      "releaseManifest": {
+        "url": "https://registry.lapis.md/assets/lapis-slides/0.1.0/release.signed.json",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "size": 0,
+        "pending": true,
+      },
+      "files": [],
+    },
+  },
+}

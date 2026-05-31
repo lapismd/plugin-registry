@@ -1,0 +1,45 @@
+---
+import { titleCase, type SitePlugin } from "../lib/registry-data";
+import CategoryIcon from "./CategoryIcon.astro";
+import StatusBadge from "./StatusBadge.astro";
+
+interface Props {
+  plugin: SitePlugin;
+  compact?: boolean;
+}
+
+const { plugin, compact = false } = Astro.props;
+const primaryCategory = plugin.categories[0] ?? "package";
+---
+
+<article
+  class:list={["plugin-card", compact && "plugin-card--compact"]}
+  data-search-item
+  data-search-text={plugin.searchText}
+  data-status={plugin.status}
+  data-categories={plugin.categories.join(" ")}
+>
+  <a class="plugin-icon" href={`/plugins/${plugin.id}/`} aria-hidden="true">
+    <CategoryIcon id={primaryCategory} size={18} />
+  </a>
+  <div>
+    <h3><a href={`/plugins/${plugin.id}/`}>{plugin.name}</a></h3>
+    <p>{plugin.description}</p>
+
+    <div class="plugin-meta">
+      <StatusBadge status={plugin.status} />
+      <span>{plugin.latestVersion}</span>
+      <span>{plugin.platforms.map(titleCase).join(", ")}</span>
+    </div>
+
+    <div class="plugin-chip-row" aria-label="Categories">
+      {
+        plugin.categories
+          .slice(0, compact ? 2 : 3)
+          .map((category) => (
+            <span class="plugin-chip">{titleCase(category)}</span>
+          ))
+      }
+    </div>
+  </div>
+</article>

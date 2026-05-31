@@ -1,0 +1,42 @@
+{
+  "channel": "official",
+  "contributes": {
+    "editorViews": [
+      {
+        "filenamePatterns": [
+          "*.pdf"
+        ],
+        "id": "lapis-pdf.viewer",
+        "label": "PDF"
+      }
+    ]
+  },
+  "description": "PDF viewing for Lapis.",
+  "id": "lapis-pdf",
+  "latestVersion": "0.1.0",
+  "name": "PDF",
+  "owner": {
+    "name": "Lapis Notes",
+    "verified": true
+  },
+  "schemaVersion": 1,
+  "status": "pending",
+  "versions": {
+    "0.1.0": {
+      "files": [],
+      "minAppVersion": "1.7.7",
+      "platforms": [
+        "web",
+        "electron"
+      ],
+      "releaseManifest": {
+        "pending": true,
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "size": 0,
+        "url": "https://registry.lapis.md/assets/lapis-pdf/0.1.0/release.signed.json"
+      },
+      "releasedAt": "2026-05-31T00:00:00.000Z",
+      "version": "0.1.0"
+    }
+  }
+}

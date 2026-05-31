@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://registry.lapis.md/schemas/plugin-detail.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "description",
+    "channel",
+    "status",
+    "owner",
+    "latestVersion",
+    "versions"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "channel": { "enum": ["official", "community"] },
+    "status": { "enum": ["active", "pending", "revoked"] },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "verified"],
+      "properties": {
+        "name": { "type": "string" },
+        "verified": { "type": "boolean" }
+      }
+    },
+    "latestVersion": { "type": "string" },
+    "readme": { "type": "object" },
+    "contributes": { "type": "object" },
+    "versions": { "type": "object" }
+  }
+}

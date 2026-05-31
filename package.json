@@ -1,0 +1,38 @@
+{
+  "name": "lapis-plugin-registry",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.32.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "registry:validate": "node scripts/validate-registry.mjs",
+    "registry:validate:remote": "node scripts/validate-registry.mjs --strict-remote",
+    "registry:generate": "node scripts/generate-registry.mjs",
+    "registry:sign": "node scripts/sign-registry.mjs",
+    "registry:verify-signatures": "node scripts/verify-signatures.mjs",
+    "site:dev": "astro dev",
+    "site:build": "node scripts/build-site.mjs",
+    "site:check": "astro check",
+    "site:preview": "astro preview",
+    "test": "node --test scripts/__tests__/*.test.mjs",
+    "check:format": "prettier . --check --log-level warn",
+    "fmt": "prettier . --write --log-level warn",
+    "check": "pnpm registry:validate && pnpm registry:generate && pnpm registry:verify-signatures && pnpm site:check && pnpm site:build && pnpm test && pnpm check:format"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "jsonc-parser": "^3.3.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@lucide/astro": "^1.17.0",
+    "@types/node": "^25.9.1",
+    "astro": "^6.4.2",
+    "prettier": "3.3.3",
+    "typescript": "^6.0.3"
+  }
+}

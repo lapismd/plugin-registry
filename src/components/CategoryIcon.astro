@@ -1,0 +1,64 @@
+---
+import {
+  BadgeCheck,
+  Blocks,
+  Check,
+  Database,
+  FileText,
+  Globe,
+  LayoutDashboard,
+  Monitor,
+  Network,
+  NotebookTabs,
+  Package,
+  Pencil,
+  Presentation,
+  Search,
+  ShieldCheck,
+  SlidersHorizontal,
+  Sparkles,
+  SquareDashedMousePointer,
+  Wrench,
+  Zap,
+} from "@lucide/astro";
+
+interface Props {
+  id?: string;
+  size?: number;
+  selected?: boolean;
+}
+
+const { id = "package", size = 15, selected = false } = Astro.props;
+
+const icons = {
+  active: BadgeCheck,
+  all: SlidersHorizontal,
+  automation: Zap,
+  canvas: SquareDashedMousePointer,
+  database: Database,
+  "developer-tools": Wrench,
+  diagnostics: SlidersHorizontal,
+  documents: FileText,
+  editor: Pencil,
+  electron: Monitor,
+  graph: Network,
+  markdown: FileText,
+  notebook: NotebookTabs,
+  official: ShieldCheck,
+  organization: LayoutDashboard,
+  package: Package,
+  pending: Sparkles,
+  presentation: Presentation,
+  revoked: ShieldCheck,
+  search: Search,
+  themes: Blocks,
+  verified: BadgeCheck,
+  viewer: FileText,
+  visualization: Network,
+  web: Globe,
+};
+
+const Icon = selected ? Check : icons[id as keyof typeof icons] ?? Package;
+---
+
+<Icon size={size} stroke-width="2" aria-hidden="true" />

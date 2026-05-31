@@ -1,0 +1,276 @@
+---
+import CategoryIcon from "../../components/CategoryIcon.astro";
+import StatusBadge from "../../components/StatusBadge.astro";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import {
+  getRegistrySiteData,
+  relatedPlugins,
+  titleCase,
+  type SitePlugin,
+} from "../../lib/registry-data";
+
+export async function getStaticPaths() {
+  const { plugins } = await getRegistrySiteData();
+  return plugins.map((plugin) => ({
+    params: { id: plugin.id },
+    props: { pluginId: plugin.id },
+  }));
+}
+
+const { pluginId } = Astro.props as { pluginId: string };
+const { plugins } = await getRegistrySiteData();
+const plugin = plugins.find((candidate) => candidate.id === pluginId) as SitePlugin;
+const related = relatedPlugins(plugin, plugins);
+const releases = Object.values(plugin.detailData.versions).sort((a, b) =>
+  b.version.localeCompare(a.version),
+);
+const installDisabled = plugin.status !== "active";
+const release = plugin.latestRelease;
+const primaryCategory = plugin.categories[0] ?? "package";
+const assetHealth = release.releaseManifest.pending ? 24 : 100;
+---
+
+<SiteLayout title={`${plugin.name} - Lapis Plugin Registry`} description={plugin.description}>
+  <main class="page-main">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Registry</a>
+      <span>/</span>
+      <a href="/plugins/">Plugins</a>
+      <span>/</span>
+      <span>{plugin.name}</span>
+    </nav>
+
+    <section class="plugin-detail-hero">
+      <div class="plugin-icon--large" aria-hidden="true">
+        <CategoryIcon id={primaryCategory} size={48} />
+      </div>
+      <div class="plugin-title">
+        <div class="hero-meta">
+          <span>By {plugin.owner.name}</span>
+          <span class="detail-chip detail-chip--verified">
+            <CategoryIcon id={plugin.owner.verified ? "verified" : "official"} size={13} />
+            {plugin.owner.verified ? "Verified" : plugin.channel === "official" ? "Official" : "Community"}
+          </span>
+          <span>{plugin.latestVersion}</span>
+          {
+            plugin.platforms.map((platform) => (
+              <span class="detail-chip detail-chip--platform">
+                <CategoryIcon id={platform} size={13} />
+                {titleCase(platform)}
+              </span>
+            ))
+          }
+        </div>
+        <h1>{plugin.name}</h1>
+        <p>{plugin.description}</p>
+        <div class="detail-actions">
+          <button
+            type="button"
+            class="button-primary"
+            disabled={installDisabled}
+            data-install-disabled={installDisabled ? "true" : "false"}
+          >
+            {installDisabled ? "Install pending" : "Install in Lapis"}
+          </button>
+          <a class="button-secondary" href={release.releaseManifest.url}>
+            Release manifest
+          </a>
+          <button class="button-icon" type="button" aria-label="More actions">
+            ...
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="detail-grid">
+      <div class="plugin-content">
+        <section class="detail-panel detail-tabs" data-tabs>
+          <div class="tab-list" role="tablist" aria-label="Plugin sections">
+            <button type="button" role="tab" aria-selected="true" data-tab="overview">
+              Overview
+            </button>
+            <button type="button" role="tab" aria-selected="false" data-tab="releases">
+              Releases <span>{releases.length}</span>
+            </button>
+          </div>
+
+          <div class="tab-panel" data-panel="overview">
+            <p>{plugin.description}</p>
+            {
+              plugin.filePatterns.length > 0 && (
+                <>
+                  <h2>File handlers</h2>
+                  <div class="file-list">
+                    {plugin.filePatterns.map((pattern) => <code>{pattern}</code>)}
+                  </div>
+                </>
+              )
+            }
+            <h2>Tags</h2>
+            <div class="file-list">
+              {
+                plugin.categories.map((category) => (
+                  <a class="detail-chip" href={`/plugins/?categories=${category}`}>
+                    <CategoryIcon id={category} size={13} />
+                    {titleCase(category)}
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="tab-panel" data-panel="releases" hidden>
+            <div class="release-list">
+              {
+                releases.map((item) => (
+                  <article class="release-row">
+                    <div>
+                      <h3>{item.version}</h3>
+                      <p>
+                        Lapis {item.minAppVersion}+ · {item.platforms.map(titleCase).join(", ")}
+                      </p>
+                    </div>
+                    <span class="detail-chip">
+                      {item.releaseManifest.pending ? "Pending assets" : "Signed"}
+                    </span>
+                  </article>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="detail-sidebar">
+        <section class="detail-panel">
+          <h2>Registry health</h2>
+          <div class="health-list">
+            <div class="health-row">
+              <span><b>Metadata</b><b>Signed</b></span>
+              <div class="health-bar"><i style="width: 100%"></i></div>
+            </div>
+            <div class="health-row">
+              <span><b>Release assets</b><b>{release.releaseManifest.pending ? "Pending" : "Ready"}</b></span>
+              <div class="health-bar"><i style={`width: ${assetHealth}%`}></i></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="detail-panel" aria-label="Plugin details">
+          <h2>Details</h2>
+          <dl>
+            <div>
+              <dt>Status</dt>
+              <dd><StatusBadge status={plugin.status} /></dd>
+            </div>
+            <div>
+              <dt>Current version</dt>
+              <dd>{plugin.latestVersion}</dd>
+            </div>
+            <div>
+              <dt>Minimum app version</dt>
+              <dd>Lapis {plugin.minAppVersion}+</dd>
+            </div>
+            <div>
+              <dt>Platforms</dt>
+              <dd>
+                <span class="file-list">
+                  {
+                    plugin.platforms.map((platform) => (
+                      <span class="detail-chip detail-chip--platform">
+                        <CategoryIcon id={platform} size={13} />
+                        {titleCase(platform)}
+                      </span>
+                    ))
+                  }
+                </span>
+              </dd>
+            </div>
+            <div>
+              <dt>Categories</dt>
+              <dd>
+                <span class="file-list">
+                  {
+                    plugin.categories.map((category) => (
+                      <a class="detail-chip" href={`/plugins/?categories=${category}`}>
+                        <CategoryIcon id={category} size={13} />
+                        {titleCase(category)}
+                      </a>
+                    ))
+                  }
+                </span>
+              </dd>
+            </div>
+            <div>
+              <dt>Owner</dt>
+              <dd>
+                <span class="file-list">
+                  <span>{plugin.owner.name}</span>
+                  {
+                    plugin.owner.verified && (
+                      <span class="detail-chip detail-chip--verified">
+                        <CategoryIcon id="verified" size={13} />
+                        Verified
+                      </span>
+                    )
+                  }
+                </span>
+              </dd>
+            </div>
+            <div>
+              <dt>Release manifest</dt>
+              <dd>
+                <a href={release.releaseManifest.url}>
+                  {release.releaseManifest.pending ? "Pending upload" : "Signed manifest"}
+                </a>
+              </dd>
+            </div>
+          </dl>
+        </section>
+      </aside>
+    </section>
+
+    {
+      related.length > 0 && (
+        <section class="related-section">
+          <h2>Related plugins</h2>
+          <div class="related-list">
+            {related.map((item) => (
+              <a class="related-item" href={`/plugins/${item.id}/`}>
+                <span class="plugin-icon plugin-icon--compact">
+                  <CategoryIcon id={item.categories[0]} size={18} />
+                </span>
+                <span>
+                  <span class="related-item__title">{item.name}</span>
+                  <span class="related-item__description">{item.description}</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </main>
+</SiteLayout>
+
+<script>
+  const tabRoots = document.querySelectorAll<HTMLElement>("[data-tabs]");
+  for (const root of tabRoots) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>("[data-tab]")];
+    const panels = [...root.querySelectorAll<HTMLElement>("[data-panel]")];
+    for (const tab of tabs) {
+      tab.addEventListener("click", () => {
+        const selected = tab.dataset.tab;
+        for (const candidate of tabs) {
+          candidate.setAttribute(
+            "aria-selected",
+            candidate === tab ? "true" : "false",
+          );
+        }
+        for (const panel of panels) {
+          panel.toggleAttribute("hidden", panel.dataset.panel !== selected);
+        }
+      });
+    }
+  }
+</script>

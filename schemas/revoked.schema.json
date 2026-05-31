@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://registry.lapis.md/schemas/revoked.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "generatedAt", "revoked"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "revoked": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["pluginId", "version", "reason", "message", "revokedAt"],
+        "properties": {
+          "pluginId": { "type": "string" },
+          "version": { "type": "string" },
+          "reason": { "type": "string" },
+          "message": { "type": "string" },
+          "revokedAt": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}

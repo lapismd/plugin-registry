@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://registry.lapis.md/schemas/catalog-entry.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "description",
+    "author",
+    "channel",
+    "status",
+    "latestVersion",
+    "minAppVersion",
+    "platforms",
+    "categories",
+    "owner",
+    "versions"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "id": { "$ref": "#/$defs/pluginId" },
+    "name": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "author": { "type": "string", "minLength": 1 },
+    "authorUrl": { "type": "string", "format": "uri" },
+    "channel": { "enum": ["official", "community"] },
+    "status": { "enum": ["active", "pending", "revoked"] },
+    "latestVersion": { "$ref": "#/$defs/semver" },
+    "minAppVersion": { "$ref": "#/$defs/semver" },
+    "platforms": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["web", "electron"] }
+    },
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+    },
+    "badges": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+    },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "verified"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "verified": { "type": "boolean" }
+      }
+    },
+    "readme": { "$ref": "#/$defs/hashedRemoteFile" },
+    "contributes": { "$ref": "#/$defs/contributes" },
+    "versions": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/pluginVersion" }
+    }
+  },
+  "$defs": {
+    "pluginId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$"
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:[-+][0-9A-Za-z.-]+)?$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "httpsUrl": {
+      "type": "string",
+      "pattern": "^https://.+"
+    },
+    "relativePath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+    },
+    "hashedRemoteFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "sha256", "size"],
+      "properties": {
+        "url": { "$ref": "#/$defs/httpsUrl" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "size": { "type": "integer", "minimum": 0 },
+        "pending": { "type": "boolean" },
+        "optional": { "type": "boolean" }
+      }
+    },
+    "contributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "editorViews": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "filenamePatterns"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "label": { "type": "string" },
+              "filenamePatterns": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "pluginVersion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "minAppVersion",
+        "releasedAt",
+        "platforms",
+        "releaseManifest",
+        "files"
+      ],
+      "properties": {
+        "version": { "$ref": "#/$defs/semver" },
+        "minAppVersion": { "$ref": "#/$defs/semver" },
+        "releasedAt": { "type": "string", "format": "date-time" },
+        "platforms": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["web", "electron"] }
+        },
+        "releaseManifest": { "$ref": "#/$defs/hashedRemoteFile" },
+        "files": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              { "$ref": "#/$defs/hashedRemoteFile" },
+              {
+                "type": "object",
+                "required": ["path"],
+                "properties": {
+                  "path": { "$ref": "#/$defs/relativePath" }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

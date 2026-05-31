@@ -1,0 +1,522 @@
+---
+import CategoryIcon from "../../components/CategoryIcon.astro";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import {
+  getRegistrySiteData,
+  statusLabel,
+  titleCase,
+} from "../../lib/registry-data";
+
+const { plugins, categories } = await getRegistrySiteData();
+const statusOptions = ["active", "pending", "revoked"] as const;
+const platformOptions = [...new Set(plugins.flatMap((plugin) => plugin.platforms))].sort();
+const statusCounts = new Map<string, number>();
+const platformCounts = new Map<string, number>();
+
+for (const plugin of plugins) {
+  statusCounts.set(plugin.status, (statusCounts.get(plugin.status) ?? 0) + 1);
+  for (const platform of plugin.platforms) {
+    platformCounts.set(platform, (platformCounts.get(platform) ?? 0) + 1);
+  }
+}
+---
+
+<SiteLayout title="Plugins - Lapis Plugin Registry">
+  <main class="page-main">
+    <section class="search-layout" data-plugin-search-root>
+      <aside class="filter-sidebar" aria-label="Plugin filters">
+        <section class="sidebar-panel">
+          <h2>Type</h2>
+          <button type="button" class="filter-option filter-option--static">
+            <span class="filter-option__main">
+              <span class="filter-option__icon">
+                <CategoryIcon id="package" />
+              </span>
+              <span>Plugins</span>
+            </span>
+            <span class="filter-count">{plugins.length}</span>
+          </button>
+        </section>
+
+        <section class="sidebar-panel">
+          <h2>Status</h2>
+          {
+            statusOptions.map((status) => (
+              <button
+                type="button"
+                class="filter-option"
+                data-filter-status={status}
+                data-filter-label={statusLabel(status)}
+                aria-pressed="false"
+              >
+                <span class="filter-option__main">
+                  <span class="filter-option__icon filter-option__icon-default">
+                    <CategoryIcon id={status} />
+                  </span>
+                  <span class="filter-option__icon filter-option__icon-check">
+                    <CategoryIcon selected />
+                  </span>
+                  <span>{statusLabel(status)}</span>
+                </span>
+                <span class="filter-count">{statusCounts.get(status) ?? 0}</span>
+              </button>
+            ))
+          }
+        </section>
+
+        <section class="sidebar-panel">
+          <h2>Categories</h2>
+          {
+            categories.map((category) => (
+              <button
+                type="button"
+                class="filter-option"
+                data-filter-category={category.id}
+                data-filter-label={category.label}
+                aria-pressed="false"
+              >
+                <span class="filter-option__main">
+                  <span class="filter-option__icon filter-option__icon-default">
+                    <CategoryIcon id={category.id} />
+                  </span>
+                  <span class="filter-option__icon filter-option__icon-check">
+                    <CategoryIcon selected />
+                  </span>
+                  <span>{category.label}</span>
+                </span>
+                <span class="filter-count">{category.count}</span>
+              </button>
+            ))
+          }
+        </section>
+
+        <section class="sidebar-panel">
+          <h2>Platforms</h2>
+          {
+            platformOptions.map((platform) => (
+              <button
+                type="button"
+                class="filter-option"
+                data-filter-platform={platform}
+                data-filter-label={titleCase(platform)}
+                aria-pressed="false"
+              >
+                <span class="filter-option__main">
+                  <span class="filter-option__icon filter-option__icon-default">
+                    <CategoryIcon id={platform} />
+                  </span>
+                  <span class="filter-option__icon filter-option__icon-check">
+                    <CategoryIcon selected />
+                  </span>
+                  <span>{titleCase(platform)}</span>
+                </span>
+                <span class="filter-count">{platformCounts.get(platform) ?? 0}</span>
+              </button>
+            ))
+          }
+        </section>
+
+        <section class="sidebar-panel">
+          <h2>Other</h2>
+          <button
+            type="button"
+            class="filter-option"
+            data-filter-official="official"
+            data-filter-label="Official"
+            aria-pressed="false"
+          >
+            <span class="filter-option__main">
+              <span class="filter-option__icon filter-option__icon-default">
+                <CategoryIcon id="official" />
+              </span>
+              <span class="filter-option__icon filter-option__icon-check">
+                <CategoryIcon selected />
+              </span>
+              <span>Official</span>
+            </span>
+            <span class="filter-count">{plugins.length}</span>
+          </button>
+        </section>
+      </aside>
+
+      <div class="results-panel">
+        <section class="results-heading">
+          <div class="page-title">
+            <h1>Plugins</h1>
+            <p><span data-result-count>{plugins.length}</span> results</p>
+          </div>
+          <div class="result-tools" aria-label="Result controls">
+            <div class="view-toggle" aria-label="View mode">
+              <button type="button" data-view="list" aria-pressed="true">
+                List
+              </button>
+              <button type="button" data-view="grid" aria-pressed="false">
+                Cards
+              </button>
+            </div>
+            <div class="sort-menu" data-sort-root>
+              <button
+                type="button"
+                class="sort-select"
+                data-sort-trigger
+                aria-haspopup="listbox"
+                aria-expanded="false"
+              >
+                <span data-sort-label>Name</span>
+                <span class="sort-chevrons" aria-hidden="true"></span>
+              </button>
+              <div class="sort-options" data-sort-options role="listbox" hidden>
+                <button type="button" role="option" data-sort-value="name" aria-selected="true">
+                  Name
+                </button>
+                <button type="button" role="option" data-sort-value="updated">
+                  Recently updated
+                </button>
+                <button type="button" role="option" data-sort-value="status">
+                  Status
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="active-filters" data-active-filters aria-live="polite"></div>
+        <div class="result-list" data-result-list data-view="list">
+          {
+            plugins.map((plugin) => (
+              <a
+                class="search-result dense-plugin-row"
+                href={`/plugins/${plugin.id}/`}
+                data-search-item
+                data-search-text={plugin.searchText}
+                data-status={plugin.status}
+                data-categories={plugin.categories.join(" ")}
+                data-platforms={plugin.platforms.join(" ")}
+                data-channel={plugin.channel}
+                data-name={plugin.name}
+                data-updated={plugin.latestRelease.releasedAt}
+              >
+                <span class="plugin-icon plugin-icon--compact">
+                  <CategoryIcon id={plugin.categories[0]} size={18} />
+                </span>
+                <span class="dense-plugin-row__body">
+                  <span class="dense-plugin-row__title">{plugin.name}</span>
+                  <span class="dense-plugin-row__description">
+                    {plugin.description}
+                  </span>
+                </span>
+              </a>
+            ))
+          }
+        </div>
+        <p class="empty-state" data-empty-state hidden>
+          No plugins match these filters.
+        </p>
+      </div>
+    </section>
+  </main>
+</SiteLayout>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-plugin-search-root]");
+  const headerQueryInput =
+    document.querySelector<HTMLInputElement>("[data-command-input]");
+  const list = document.querySelector<HTMLElement>("[data-result-list]");
+  const emptyState = document.querySelector<HTMLElement>("[data-empty-state]");
+  const activeFilters = document.querySelector<HTMLElement>("[data-active-filters]");
+  const resultCount = document.querySelector<HTMLElement>("[data-result-count]");
+  const sortRoot = document.querySelector<HTMLElement>("[data-sort-root]");
+  const sortTrigger = document.querySelector<HTMLButtonElement>("[data-sort-trigger]");
+  const sortOptions = document.querySelector<HTMLElement>("[data-sort-options]");
+  const sortLabel = document.querySelector<HTMLElement>("[data-sort-label]");
+  let sortValue = "name";
+  const items = [
+    ...document.querySelectorAll<HTMLElement>("[data-search-item]"),
+  ];
+  const state = {
+    categories: new Set<string>(),
+    platforms: new Set<string>(),
+    statuses: new Set<string>(),
+    official: false,
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  const initialQuery = params.get("q");
+  const categoryParam = params.get("categories") || params.get("category");
+  const platformParam = params.get("platforms") || params.get("platform");
+  const statusParam = params.get("status");
+
+  if (headerQueryInput && initialQuery) {
+    headerQueryInput.value = initialQuery;
+  }
+  for (const value of (categoryParam || "").split(",").filter(Boolean)) {
+    state.categories.add(value);
+  }
+  for (const value of (platformParam || "").split(",").filter(Boolean)) {
+    state.platforms.add(value);
+  }
+  for (const value of (statusParam || "").split(",").filter(Boolean)) {
+    state.statuses.add(value);
+  }
+  if (params.get("official") === "true") {
+    state.official = true;
+  }
+
+  function setPressed() {
+    for (const button of document.querySelectorAll<HTMLButtonElement>(
+      "[data-filter-category]",
+    )) {
+      button.setAttribute(
+        "aria-pressed",
+        state.categories.has(button.dataset.filterCategory || "") ? "true" : "false",
+      );
+    }
+    for (const button of document.querySelectorAll<HTMLButtonElement>(
+      "[data-filter-platform]",
+    )) {
+      button.setAttribute(
+        "aria-pressed",
+        state.platforms.has(button.dataset.filterPlatform || "") ? "true" : "false",
+      );
+    }
+    for (const button of document.querySelectorAll<HTMLButtonElement>(
+      "[data-filter-status]",
+    )) {
+      button.setAttribute(
+        "aria-pressed",
+        state.statuses.has(button.dataset.filterStatus || "") ? "true" : "false",
+      );
+    }
+    for (const button of document.querySelectorAll<HTMLButtonElement>(
+      "[data-filter-official]",
+    )) {
+      button.setAttribute("aria-pressed", state.official ? "true" : "false");
+    }
+  }
+
+  function selectedFilters() {
+    const selections: Array<{ group: string; value: string; label: string }> = [];
+    for (const [group, attribute, values] of [
+      ["categories", "category", state.categories],
+      ["platforms", "platform", state.platforms],
+      ["status", "status", state.statuses],
+    ] as const) {
+      for (const value of values) {
+        const button = document.querySelector<HTMLButtonElement>(
+          `[data-filter-${attribute}="${value}"]`,
+        );
+        selections.push({
+          group,
+          value,
+          label: button?.dataset.filterLabel || value,
+        });
+      }
+    }
+    if (state.official) {
+      selections.push({ group: "official", value: "true", label: "Official" });
+    }
+    return selections;
+  }
+
+  function renderActiveFilters() {
+    if (!activeFilters) {
+      return;
+    }
+    activeFilters.innerHTML = selectedFilters()
+      .map(
+        (filter) =>
+          `<button class="active-filter" type="button" data-remove-filter="${filter.group}" data-remove-value="${filter.value}">${filter.label}<span aria-hidden="true">x</span></button>`,
+      )
+      .join("");
+  }
+
+  function updateUrl() {
+    const next = new URLSearchParams();
+    const query = (headerQueryInput?.value || "").trim();
+    if (query) {
+      next.set("q", query);
+    }
+    if (state.categories.size > 0) {
+      next.set("categories", [...state.categories].join(","));
+    }
+    if (state.platforms.size > 0) {
+      next.set("platforms", [...state.platforms].join(","));
+    }
+    if (state.statuses.size > 0) {
+      next.set("status", [...state.statuses].join(","));
+    }
+    if (state.official) {
+      next.set("official", "true");
+    }
+    const suffix = next.toString() ? `?${next.toString()}` : "";
+    history.replaceState(null, "", `${window.location.pathname}${suffix}`);
+  }
+
+  function sortItems() {
+    if (!list) {
+      return;
+    }
+    const sorted = [...items].sort((a, b) => {
+      if (sortValue === "updated") {
+        return (b.dataset.updated || "").localeCompare(a.dataset.updated || "");
+      }
+      if (sortValue === "status") {
+        return (a.dataset.status || "").localeCompare(b.dataset.status || "");
+      }
+      return (a.dataset.name || "").localeCompare(b.dataset.name || "");
+    });
+    for (const item of sorted) {
+      list.append(item);
+    }
+  }
+
+  function applyFilters() {
+    const query = (headerQueryInput?.value || "").trim().toLowerCase();
+    let visible = 0;
+    for (const item of items) {
+      const text = item.dataset.searchText || "";
+      const categories = (item.dataset.categories || "").split(" ");
+      const platforms = (item.dataset.platforms || "").split(" ");
+      const matchesQuery = !query || text.includes(query);
+      const matchesCategory =
+        state.categories.size === 0 ||
+        categories.some((category) => state.categories.has(category));
+      const matchesPlatform =
+        state.platforms.size === 0 ||
+        platforms.some((platform) => state.platforms.has(platform));
+      const matchesStatus =
+        state.statuses.size === 0 ||
+        state.statuses.has(item.dataset.status || "");
+      const matchesOfficial =
+        !state.official || item.dataset.channel === "official";
+      const shouldShow =
+        matchesQuery &&
+        matchesCategory &&
+        matchesPlatform &&
+        matchesStatus &&
+        matchesOfficial;
+      item.toggleAttribute("hidden", !shouldShow);
+      if (shouldShow) {
+        visible += 1;
+      }
+    }
+    emptyState?.toggleAttribute("hidden", visible !== 0);
+    if (resultCount) {
+      resultCount.textContent = String(visible);
+    }
+    setPressed();
+    renderActiveFilters();
+    updateUrl();
+  }
+
+  root?.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+
+    const removeButton = target.closest<HTMLButtonElement>("[data-remove-filter]");
+    if (removeButton) {
+      const group = removeButton.dataset.removeFilter;
+      const value = removeButton.dataset.removeValue || "";
+      if (group === "categories") {
+        state.categories.delete(value);
+      } else if (group === "platforms") {
+        state.platforms.delete(value);
+      } else if (group === "status") {
+        state.statuses.delete(value);
+      } else if (group === "official") {
+        state.official = false;
+      }
+      applyFilters();
+      return;
+    }
+
+    const categoryButton = target.closest<HTMLButtonElement>(
+      "[data-filter-category]",
+    );
+    const platformButton = target.closest<HTMLButtonElement>(
+      "[data-filter-platform]",
+    );
+    const statusButton = target.closest<HTMLButtonElement>("[data-filter-status]");
+    const officialButton = target.closest<HTMLButtonElement>(
+      "[data-filter-official]",
+    );
+
+    if (categoryButton) {
+      const value = categoryButton.dataset.filterCategory || "";
+      state.categories.has(value)
+        ? state.categories.delete(value)
+        : state.categories.add(value);
+      applyFilters();
+    }
+    if (platformButton) {
+      const value = platformButton.dataset.filterPlatform || "";
+      state.platforms.has(value)
+        ? state.platforms.delete(value)
+        : state.platforms.add(value);
+      applyFilters();
+    }
+    if (statusButton) {
+      const value = statusButton.dataset.filterStatus || "";
+      state.statuses.has(value)
+        ? state.statuses.delete(value)
+        : state.statuses.add(value);
+      applyFilters();
+    }
+    if (officialButton) {
+      state.official = !state.official;
+      applyFilters();
+    }
+  });
+
+  document.querySelectorAll<HTMLButtonElement>("[data-view]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const view = button.dataset.view || "list";
+      list?.setAttribute("data-view", view);
+      document.querySelectorAll<HTMLButtonElement>("[data-view]").forEach((item) => {
+        item.setAttribute("aria-pressed", item === button ? "true" : "false");
+      });
+    });
+  });
+
+  headerQueryInput?.addEventListener("input", applyFilters);
+  window.addEventListener("lapis-plugin-search", applyFilters);
+  sortTrigger?.addEventListener("click", () => {
+    const expanded = sortTrigger.getAttribute("aria-expanded") === "true";
+    sortTrigger.setAttribute("aria-expanded", expanded ? "false" : "true");
+    sortOptions?.toggleAttribute("hidden", expanded);
+  });
+  sortOptions?.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+    const option = target.closest<HTMLButtonElement>("[data-sort-value]");
+    if (!option) {
+      return;
+    }
+    sortValue = option.dataset.sortValue || "name";
+    if (sortLabel) {
+      sortLabel.textContent = option.textContent?.trim() || "Name";
+    }
+    sortOptions.querySelectorAll<HTMLButtonElement>("[data-sort-value]").forEach((item) => {
+      item.setAttribute("aria-selected", item === option ? "true" : "false");
+    });
+    sortTrigger?.setAttribute("aria-expanded", "false");
+    sortOptions.hidden = true;
+    sortItems();
+    applyFilters();
+  });
+  document.addEventListener("click", (event) => {
+    if (event.target instanceof Node && sortRoot?.contains(event.target)) {
+      return;
+    }
+    sortTrigger?.setAttribute("aria-expanded", "false");
+    if (sortOptions) {
+      sortOptions.hidden = true;
+    }
+  });
+
+  sortItems();
+  applyFilters();
+</script>

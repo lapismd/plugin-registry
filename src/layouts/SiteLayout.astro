@@ -1,0 +1,50 @@
+---
+import SearchPalette from "../components/SearchPalette.astro";
+import { getRegistrySiteData } from "../lib/registry-data";
+import "../styles/site.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Lapis Plugin Registry",
+  description = "Signed plugin registry for Lapis Notes.",
+} = Astro.props;
+const { plugins } = await getRegistrySiteData();
+const isLandingPage = Astro.url.pathname === "/";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class:list={["site-header", isLandingPage && "site-header--landing"]}>
+        <a class="site-brand" href="/" aria-label="Lapis Plugin Registry">
+          <img src="/lapis-logo.svg" alt="" aria-hidden="true" />
+          <span>Lapis</span>
+        </a>
+        <SearchPalette plugins={plugins} />
+        <nav class="site-actions" aria-label="Primary">
+          <a href="/plugins/">Plugins</a>
+          <a href="/v1/index.json">Manifest</a>
+        </nav>
+      </header>
+      <slot />
+      <footer class="site-footer">
+        <div class="site-footer__inner">
+          <span>Signed registry metadata for Lapis Notes.</span>
+          <a href="/v1/index.json">Registry JSON</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://registry.lapis.md/schemas/catalog-index.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "generatedAt", "registries", "plugins"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "registries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lapis-official"],
+      "properties": {
+        "lapis-official": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "trustTier"],
+          "properties": {
+            "name": { "type": "string" },
+            "trustTier": { "const": "official" }
+          }
+        }
+      }
+    },
+    "plugins": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schemaVersion",
+          "id",
+          "name",
+          "description",
+          "author",
+          "channel",
+          "status",
+          "latestVersion",
+          "minAppVersion",
+          "platforms",
+          "categories",
+          "badges",
+          "owner",
+          "detail",
+          "contributes"
+        ],
+        "properties": {
+          "schemaVersion": { "const": 1 },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "author": { "type": "string" },
+          "authorUrl": { "type": "string" },
+          "channel": { "enum": ["official", "community"] },
+          "status": { "enum": ["active", "pending", "revoked"] },
+          "latestVersion": { "type": "string" },
+          "minAppVersion": { "type": "string" },
+          "platforms": {
+            "type": "array",
+            "items": { "enum": ["web", "electron"] }
+          },
+          "categories": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "badges": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "owner": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "verified"],
+            "properties": {
+              "name": { "type": "string" },
+              "verified": { "type": "boolean" }
+            }
+          },
+          "detail": { "type": "string" },
+          "contributes": { "type": "object" }
+        }
+      }
+    }
+  }
+}

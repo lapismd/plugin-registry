@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-05-31T00:00:00.000Z",
+  "keys": [
+    {
+      "alg": "ed25519",
+      "keyId": "lapis-registry-bootstrap-2026-05",
+      "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAE3G23UXiBthGMmsEKK3iPQSBUOy+GCT5wlj/Zq/yHpE=\n-----END PUBLIC KEY-----\n"
+    }
+  ],
+  "roles": {
+    "registry": [
+      "lapis-registry-bootstrap-2026-05"
+    ],
+    "release": []
+  },
+  "schemaVersion": 1
+}

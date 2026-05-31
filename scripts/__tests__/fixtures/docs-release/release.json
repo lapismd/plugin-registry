@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "type": "lapis.plugin.release",
+  "pluginId": "lapis-docs",
+  "version": "0.1.0",
+  "channel": "official",
+  "source": {
+    "repo": "lapis-notes",
+    "commit": "0000000000000000000000000000000000000000",
+    "package": "packages/plugins/plugin-docs"
+  },
+  "compatibility": {
+    "minAppVersion": "1.7.7",
+    "platforms": ["web", "electron"]
+  },
+  "files": [
+    {
+      "path": "manifest.json",
+      "sha256": "4287f51f267f0277139725206636335e608bc654d8f8a7c9183296303e566231",
+      "size": 94
+    }
+  ]
+}

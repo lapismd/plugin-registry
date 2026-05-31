@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://registry.lapis.md/schemas/plugin-release.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "type",
+    "pluginId",
+    "version",
+    "channel",
+    "source",
+    "compatibility",
+    "files"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "type": { "const": "lapis.plugin.release" },
+    "pluginId": { "type": "string" },
+    "version": { "type": "string" },
+    "channel": { "enum": ["official", "community"] },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repo", "commit", "package"],
+      "properties": {
+        "repo": { "type": "string" },
+        "commit": { "type": "string" },
+        "package": { "type": "string" }
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minAppVersion", "platforms"],
+      "properties": {
+        "minAppVersion": { "type": "string" },
+        "platforms": {
+          "type": "array",
+          "items": { "enum": ["web", "electron"] }
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "size"],
+        "properties": {
+          "path": { "type": "string" },
+          "sha256": { "type": "string" },
+          "size": { "type": "integer" },
+          "optional": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

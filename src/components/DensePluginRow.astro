@@ -1,0 +1,37 @@
+---
+import { type SitePlugin } from "../lib/registry-data";
+import CategoryIcon from "./CategoryIcon.astro";
+
+interface Props {
+  plugin: SitePlugin;
+  as?: "a" | "article";
+}
+
+const { plugin, as = "a" } = Astro.props as Props;
+const primaryCategory = plugin.categories[0] ?? "package";
+const href = `/plugins/${plugin.id}/`;
+---
+
+{
+  as === "article" ? (
+    <article class="dense-plugin-row">
+      <span class="plugin-icon plugin-icon--compact">
+        <CategoryIcon id={primaryCategory} size={18} />
+      </span>
+      <span class="dense-plugin-row__body">
+        <span class="dense-plugin-row__title">{plugin.name}</span>
+        <span class="dense-plugin-row__description">{plugin.description}</span>
+      </span>
+    </article>
+  ) : (
+    <a class="dense-plugin-row" href={href}>
+      <span class="plugin-icon plugin-icon--compact">
+        <CategoryIcon id={primaryCategory} size={18} />
+      </span>
+      <span class="dense-plugin-row__body">
+        <span class="dense-plugin-row__title">{plugin.name}</span>
+        <span class="dense-plugin-row__description">{plugin.description}</span>
+      </span>
+    </a>
+  )
+}

@@ -1,0 +1,13 @@
+---
+import { statusLabel } from "../lib/registry-data";
+
+interface Props {
+  status: "active" | "pending" | "revoked";
+}
+
+const { status } = Astro.props;
+---
+
+<span class:list={["status-badge", `status-badge--${status}`]}>
+  {statusLabel(status)}
+</span>

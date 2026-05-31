@@ -1,0 +1,16 @@
+---
+import PluginCard from "./PluginCard.astro";
+import type { SitePlugin } from "../lib/registry-data";
+
+interface Props {
+  plugins: SitePlugin[];
+  compact?: boolean;
+}
+
+const { plugins, compact = false } = Astro.props;
+---
+
+<div class="plugin-grid" data-plugin-grid>
+  {plugins.map((plugin) => <PluginCard plugin={plugin} compact={compact} />)}
+</div>
+<p class="empty-state" data-empty-state hidden>No plugins match these filters.</p>
