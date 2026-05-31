@@ -27,15 +27,19 @@ const targets = [
 ].filter((name) => name.endsWith(".json"));
 
 let publicKeyPem;
+let publicKeyRaw;
 for (const target of targets) {
   const targetUrl = new URL(target, generatedDir);
   const value = await readJson(targetUrl);
-  const signed = signJson(value, privateKeyPem, keyId);
+  const { signatures: _signatures, ...signedValue } = value;
+  const signed = signJson(signedValue, privateKeyPem, keyId);
   publicKeyPem = signed.publicKey;
+  publicKeyRaw = signed.publicKeyRaw;
   await writeJson(
     new URL(`${target.replace(/\.json$/, "")}.sig`, generatedDir),
     signed.sidecar,
   );
+  await writeJson(targetUrl, { ...signedValue, signatures: [signed.sidecar] });
 }
 
 const rootUrl = new URL("trust/root.json", generatedDir);
@@ -53,7 +57,7 @@ try {
 
 root.keys = [
   ...root.keys.filter((key) => key.keyId !== keyId),
-  { keyId, alg: "ed25519", publicKeyPem },
+  { keyId, alg: "ed25519", publicKeyPem, publicKey: publicKeyRaw },
 ].sort((a, b) => a.keyId.localeCompare(b.keyId));
 root.roles = {
   registry: [...new Set([...(root.roles?.registry ?? []), keyId])].sort(),

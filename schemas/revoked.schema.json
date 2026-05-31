@@ -3,7 +3,7 @@
   "$id": "https://registry.lapis.md/schemas/revoked.schema.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "generatedAt", "revoked"],
+  "required": ["schemaVersion", "generatedAt", "revoked", "signatures"],
   "properties": {
     "schemaVersion": { "const": 1 },
     "generatedAt": { "type": "string", "format": "date-time" },
@@ -21,6 +21,11 @@
           "revokedAt": { "type": "string", "format": "date-time" }
         }
       }
+    },
+    "signatures": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "signed-envelope.schema.json" }
     }
   }
 }

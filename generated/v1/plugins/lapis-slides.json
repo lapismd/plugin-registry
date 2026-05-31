@@ -9,6 +9,13 @@
     "verified": true
   },
   "schemaVersion": 1,
+  "signatures": [
+    {
+      "alg": "ed25519",
+      "keyId": "lapis-registry-bootstrap-2026-05",
+      "sig": "sKtP3Mw+l8xgthfxWvOAR+bgVLcVM8Gss43sBviK3lRwdNtLP8lFaB2CTGoHqxjDr3GacvQnrbUnpwkY1ZiIAg=="
+    }
+  ],
   "status": "pending",
   "versions": {
     "0.1.0": {

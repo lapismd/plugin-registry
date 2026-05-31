@@ -4,6 +4,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-bootstrap-2026-05",
+      "publicKey": "E3G23UXiBthGMmsEKK3iPQSBUOy+GCT5wlj/Zq/yHpE=",
       "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAE3G23UXiBthGMmsEKK3iPQSBUOy+GCT5wlj/Zq/yHpE=\n-----END PUBLIC KEY-----\n"
     }
   ],

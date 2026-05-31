@@ -1,6 +1,8 @@
 # Signing And Key Rotation
 
-Registry metadata is signed with Ed25519 sidecar files.
+Registry metadata is signed with Ed25519 inline `signatures` fields. Matching
+sidecar files are kept as audit artifacts and to make generated-output checks
+stable, but the Lapis app verifies the inline signatures.
 
 Signed files:
 
@@ -8,7 +10,22 @@ Signed files:
 - `generated/v1/plugins/*.json`
 - `generated/v1/revoked.json`
 
-Each has a matching `.sig` sidecar:
+Each JSON file contains:
+
+```json
+{
+  "schemaVersion": 1,
+  "signatures": [
+    {
+      "keyId": "lapis-registry-2026-01",
+      "alg": "ed25519",
+      "sig": "base64-signature"
+    }
+  ]
+}
+```
+
+Each also has a matching `.sig` sidecar with the same signature record:
 
 ```json
 {
@@ -18,8 +35,10 @@ Each has a matching `.sig` sidecar:
 }
 ```
 
-Public keys are recorded in `generated/v1/trust/root.json`. Private keys are
-provided through protected CI secrets and must never be committed.
+Public keys are recorded in `generated/v1/trust/root.json` as both PEM for
+Node-side tooling and raw base64 Ed25519 key bytes for browser verification.
+Private keys are provided through protected CI secrets and must never be
+committed.
 
 ## CI Secrets
 

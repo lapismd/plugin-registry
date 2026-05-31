@@ -24,7 +24,22 @@ for (const target of targets) {
   const sidecar = await readJson(new URL(sidecarPath, generatedDir));
   try {
     const publicKeyPem = publicKeyFor(root, sidecar.keyId);
-    if (!verifyJson(value, sidecar, publicKeyPem)) {
+    const { signatures: inlineSignatures, ...signedValue } = value;
+    const inlineSignature = inlineSignatures?.find(
+      (signature) => signature.keyId === sidecar.keyId,
+    );
+    if (!inlineSignature) {
+      errors.push(`${target}: missing inline signature ${sidecar.keyId}`);
+      continue;
+    }
+    if (
+      inlineSignature.alg !== sidecar.alg ||
+      inlineSignature.sig !== sidecar.sig
+    ) {
+      errors.push(`${target}: inline signature does not match sidecar`);
+      continue;
+    }
+    if (!verifyJson(signedValue, sidecar, publicKeyPem)) {
       errors.push(`${sidecarPath}: invalid signature`);
     }
   } catch (error) {

@@ -25,6 +25,15 @@ export async function writeJson(fileUrl, value) {
   await fs.writeFile(fileUrl, `${stableStringify(value, 2)}\n`);
 }
 
+export async function readJsonIfExists(fileUrl) {
+  try {
+    return await readJson(fileUrl);
+  } catch (error) {
+    if (error?.code === "ENOENT") return null;
+    throw error;
+  }
+}
+
 export async function readJsonc(fileUrl) {
   const source = await fs.readFile(fileUrl, "utf8");
   const errors = [];
@@ -377,14 +386,20 @@ export function sha256(bytes) {
 export function signJson(value, privateKeyPem, keyId) {
   const payload = Buffer.from(canonicalize(value));
   const privateKey = createPrivateKey(privateKeyPem);
-  const publicKey = createPublicKey(privateKey).export({
+  const publicKeyObject = createPublicKey(privateKey);
+  const publicKey = publicKeyObject.export({
     type: "spki",
     format: "pem",
+  });
+  const publicKeyDer = publicKeyObject.export({
+    type: "spki",
+    format: "der",
   });
   const signature = sign(null, payload, privateKey).toString("base64");
   return {
     sidecar: { keyId, alg: "ed25519", sig: signature },
     publicKey,
+    publicKeyRaw: Buffer.from(publicKeyDer).subarray(-32).toString("base64"),
   };
 }
 

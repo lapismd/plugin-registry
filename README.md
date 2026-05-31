@@ -2,7 +2,8 @@
 
 Static plugin registry metadata for Lapis Notes.
 
-The V1 registry publishes signed JSON metadata for official installable plugins.
+The V1 registry publishes inline-signed JSON metadata for official installable
+plugins.
 Generated files under `generated/v1/` are intended to be deployed as static
 assets, initially through Cloudflare Pages.
 
@@ -31,8 +32,8 @@ so verification can run in CI before production keys are installed.
 
 - `entries/**`: human-maintained JSONC source entries.
 - `schemas/**`: strict JSON schemas for source and generated metadata.
-- `generated/v1/**`: deterministic generated registry files and signature
-  sidecars.
+- `generated/v1/**`: deterministic generated registry files with inline
+  signatures plus matching signature sidecars.
 - `scripts/**`: validation, generation, signing, and verification tooling.
 
 The first real plugin entry is `lapis-docs`. App-side installation,

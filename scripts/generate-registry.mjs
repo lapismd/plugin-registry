@@ -4,6 +4,7 @@ import {
   buildRegistry,
   generatedDir,
   loadEntries,
+  readJsonIfExists,
   writeJson,
 } from "./lib/registry.mjs";
 
@@ -14,11 +15,11 @@ await fs.mkdir(generatedDir, { recursive: true });
 await fs.mkdir(new URL("plugins/", generatedDir), { recursive: true });
 await fs.mkdir(new URL("trust/", generatedDir), { recursive: true });
 
-await writeJson(new URL("index.json", generatedDir), registry.index);
+await writeSignedJsonIfSidecarExists("index.json", registry.index);
 for (const [pluginId, detail] of Object.entries(registry.details)) {
-  await writeJson(new URL(`plugins/${pluginId}.json`, generatedDir), detail);
+  await writeSignedJsonIfSidecarExists(`plugins/${pluginId}.json`, detail);
 }
-await writeJson(new URL("revoked.json", generatedDir), registry.revoked);
+await writeSignedJsonIfSidecarExists("revoked.json", registry.revoked);
 
 try {
   await fs.access(new URL("trust/root.json", generatedDir));
@@ -37,3 +38,12 @@ try {
 console.log(
   `Generated registry with ${entries.length} entr${entries.length === 1 ? "y" : "ies"}.`,
 );
+
+async function writeSignedJsonIfSidecarExists(relativePath, value) {
+  const sidecarPath = relativePath.replace(/\.json$/, ".sig");
+  const sidecar = await readJsonIfExists(new URL(sidecarPath, generatedDir));
+  await writeJson(
+    new URL(relativePath, generatedDir),
+    sidecar ? { ...value, signatures: [sidecar] } : value,
+  );
+}
