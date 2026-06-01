@@ -154,6 +154,66 @@ test("sync writes active markdown lint entry with release hashes and files", asy
   await rm(fixture.root, { recursive: true, force: true });
 });
 
+test("sync preserves curated readmeUrl values", async () => {
+  const fixture = await fixtureDir();
+  const releaseFixture = signedReleaseFixture({
+    pluginId: "lapis-pdf",
+    version: "2026.6.1",
+  });
+  await writeTrustRoot(fixture.trustRootPath, releaseFixture.publicKeyPem);
+  await writeFile(
+    new URL("lapis-pdf.jsonc", fixture.entriesDir),
+    JSON.stringify({
+      schemaVersion: 1,
+      id: "lapis-pdf",
+      name: "PDF",
+      description: "PDF viewing for Lapis.",
+      readmeUrl:
+        "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-pdf/README.md",
+      author: "Lapis Notes",
+      channel: "official",
+      status: "pending",
+      latestVersion: "0.1.0",
+      minAppVersion: "1.7.7",
+      platforms: ["web", "electron"],
+      categories: ["viewer", "documents"],
+      badges: ["official", "verified"],
+      owner: { name: "Lapis Notes", verified: true },
+      versions: {
+        "0.1.0": {
+          version: "0.1.0",
+          minAppVersion: "1.7.7",
+          releasedAt: "2026-05-31T00:00:00.000Z",
+          platforms: ["web", "electron"],
+          releaseManifest: {
+            url: "https://example.test/pending.json",
+            sha256: "0".repeat(64),
+            size: 0,
+            pending: true,
+          },
+          files: [],
+        },
+      },
+    }),
+  );
+  await syncForgejoReleases({
+    plugins: ["lapis-pdf"],
+    pluginsExplicit: true,
+    entriesDir: fixture.entriesDir,
+    trustRootPath: fixture.trustRootPath,
+    releaseTag: "official-plugin-assets-1",
+    fetchImpl: releaseFixture.fetchImpl,
+  });
+  const entry = JSON.parse(
+    await readFile(new URL("lapis-pdf.jsonc", fixture.entriesDir)),
+  );
+  assert.equal(
+    entry.readmeUrl,
+    "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-pdf/README.md",
+  );
+  await rm(fixture.root, { recursive: true, force: true });
+});
+
 test("sync can trust a local plugin release public key and records it in root", async () => {
   const fixture = await fixtureDir();
   const releaseFixture = signedReleaseFixture({

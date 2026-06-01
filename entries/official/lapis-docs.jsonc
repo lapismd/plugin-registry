@@ -19,6 +19,7 @@
   "latestVersion": "2026.6.1",
   "minAppVersion": "0.20.0",
   "name": "Docs",
+  "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-docs/README.md",
   "owner": {
     "name": "Lapis Notes",
     "verified": true,

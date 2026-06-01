@@ -20,6 +20,7 @@
     "id": { "type": "string" },
     "name": { "type": "string" },
     "description": { "type": "string" },
+    "readmeUrl": { "type": "string", "pattern": "^https://.+" },
     "channel": { "enum": ["official", "community"] },
     "status": { "enum": ["active", "pending", "revoked"] },
     "owner": {

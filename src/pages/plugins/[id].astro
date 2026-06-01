@@ -97,6 +97,13 @@ const assetHealth = release.releaseManifest.pending ? 24 : 100;
           <div class="tab-panel" data-panel="overview">
             <p>{plugin.description}</p>
             {
+              plugin.detailData.readmeUrl && (
+                <p>
+                  <a href={plugin.detailData.readmeUrl}>Read the plugin README</a>
+                </p>
+              )
+            }
+            {
               plugin.filePatterns.length > 0 && (
                 <>
                   <h2>File handlers</h2>

@@ -19,6 +19,7 @@
   "latestVersion": "2026.6.1",
   "minAppVersion": "1.7.7",
   "name": "PDF",
+  "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-pdf/README.md",
   "owner": {
     "name": "Lapis Notes",
     "verified": true,

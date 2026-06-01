@@ -19,6 +19,8 @@ function validEntry(overrides = {}) {
     id: "lapis-docs",
     name: "Docs",
     description: "Rich document and spreadsheet editing for Lapis.",
+    readmeUrl:
+      "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-docs/README.md",
     author: "Lapis Notes",
     authorUrl: "https://app.lapis.md",
     channel: "official",
@@ -92,6 +94,13 @@ test("rejects non-HTTPS release URLs", () => {
   assert.match(errors.join("\n"), /URL must use HTTPS/);
 });
 
+test("rejects non-HTTPS readmeUrl", () => {
+  const errors = validateEntryRules([
+    validEntry({ readmeUrl: "http://example.test/README.md" }),
+  ]);
+  assert.match(errors.join("\n"), /readmeUrl must use HTTPS/);
+});
+
 test("rejects path traversal in release files", () => {
   const entry = validEntry();
   entry.versions["0.1.0"].files = [
@@ -111,6 +120,10 @@ test("builds deterministic registry metadata with Docs contribution summary", ()
   const registry = buildRegistry([validEntry()]);
   assert.equal(registry.index.plugins[0].id, "lapis-docs");
   assert.equal(registry.index.plugins[0].detail, "plugins/lapis-docs.json");
+  assert.equal(
+    registry.details["lapis-docs"].readmeUrl,
+    "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-docs/README.md",
+  );
   assert.deepEqual(
     registry.index.plugins[0].contributes.editorViews[0].filenamePatterns,
     ["*.lapisdoc", "*.lapissheet"],

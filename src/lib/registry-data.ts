@@ -12,6 +12,7 @@ export interface RegistryPluginSummary {
   id: string;
   name: string;
   description: string;
+  readmeUrl?: string;
   author: string;
   authorUrl?: string;
   channel: "official" | "community";
@@ -63,6 +64,7 @@ export interface PluginDetail {
   id: string;
   name: string;
   description: string;
+  readmeUrl?: string;
   channel: "official" | "community";
   status: "active" | "pending" | "revoked";
   owner: {

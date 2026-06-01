@@ -43,4 +43,7 @@ so verification can run in CI before production keys are installed.
 
 Official plugin asset builds, release signing, and Forgejo upload live in the
 `lapis-notes` repository. This registry syncs those published releases into
-reviewed metadata with `pnpm registry:sync:forgejo`.
+reviewed metadata with `pnpm registry:sync:forgejo`. Plugin detail metadata can
+also include a signed mutable `readmeUrl`; clients fetch and render that README
+at view time so documentation copy can change without republishing registry
+metadata.

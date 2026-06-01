@@ -8,12 +8,13 @@
     "name": "Lapis Notes",
     "verified": true
   },
+  "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-slides/README.md",
   "schemaVersion": 1,
   "signatures": [
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "/a7c/A81rqcGgeuatVEIpTbunzMVjToSz3yKjjtEFcTvgah6xTa3smrkVi9UP40eKpJbCykRsCcfTdcph4FYBA=="
+      "sig": "P4yQI/RQ/EtFjERn3rwc7f5ibEfTWX9gDm6LSCkQQwnrIywAVnqNxamRwv6uHEC9SPAYqgT1lh9wjGww20GbDg=="
     }
   ],
   "status": "active",

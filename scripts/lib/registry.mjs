@@ -122,6 +122,9 @@ export function validateEntryRules(entries) {
         `${entry.__sourcePath}: community entries cannot claim the official badge`,
       );
     }
+    if (entry.readmeUrl && !entry.readmeUrl.startsWith("https://")) {
+      errors.push(`${entry.__sourcePath}: readmeUrl must use HTTPS`);
+    }
     if (!Object.hasOwn(entry.versions, entry.latestVersion)) {
       errors.push(
         `${entry.__sourcePath}: latestVersion must exist in versions`,
@@ -292,6 +295,7 @@ export function buildRegistry(entries) {
     id: entry.id,
     name: entry.name,
     description: entry.description,
+    readmeUrl: entry.readmeUrl,
     author: entry.author,
     authorUrl: entry.authorUrl,
     channel: entry.channel,
@@ -325,6 +329,7 @@ export function buildRegistry(entries) {
           id: entry.id,
           name: entry.name,
           description: entry.description,
+          ...(entry.readmeUrl ? { readmeUrl: entry.readmeUrl } : {}),
           channel: entry.channel,
           status: entry.status,
           owner: entry.owner,

@@ -24,6 +24,7 @@
     "id": { "$ref": "#/$defs/pluginId" },
     "name": { "type": "string", "minLength": 1 },
     "description": { "type": "string", "minLength": 1 },
+    "readmeUrl": { "$ref": "#/$defs/httpsUrl" },
     "author": { "type": "string", "minLength": 1 },
     "authorUrl": { "type": "string", "format": "uri" },
     "channel": { "enum": ["official", "community"] },

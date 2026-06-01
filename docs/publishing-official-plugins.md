@@ -47,6 +47,12 @@ manifests, fetches release files, computes hashes and sizes, updates
 assets. Bundled app-default functionality is intentionally outside this
 installable registry flow.
 
+Official entries may also include a mutable `readmeUrl` that points at an
+HTTPS README, usually the package-local README in `lapis-notes`. The URL is
+signed in registry metadata, but the README content is fetched and rendered by
+clients at view time so documentation edits do not require a registry republish.
+`registry:sync:forgejo` preserves curated `readmeUrl` values.
+
 The default `registry:validate` command allows pending entries for local
 bootstrap work. The publish workflow uses `registry:validate:remote`, which
 fails if pending release manifests remain.

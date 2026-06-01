@@ -388,6 +388,7 @@ export function buildUpdatedEntry({
     id: pluginId,
     name: existingEntry?.name ?? seed.name,
     description: existingEntry?.description ?? seed.description,
+    ...(existingEntry?.readmeUrl ? { readmeUrl: existingEntry.readmeUrl } : {}),
     author: existingEntry?.author ?? "Lapis Notes",
     authorUrl: existingEntry?.authorUrl ?? "https://app.lapis.md",
     channel: "official",
