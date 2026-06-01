@@ -160,8 +160,15 @@ export async function resolveRegistrySigningKey(
   if (env.LAPIS_REGISTRY_KEY_ID && env.LAPIS_REGISTRY_PRIVATE_KEY_PEM) {
     return {
       keyId: env.LAPIS_REGISTRY_KEY_ID,
-      privateKeyPem: env.LAPIS_REGISTRY_PRIVATE_KEY_PEM,
+      privateKeyPem: normalizePemSecret(env.LAPIS_REGISTRY_PRIVATE_KEY_PEM),
       source: "env",
+    };
+  }
+  if (env.LAPIS_REGISTRY_KEY_ID && env.LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64) {
+    return {
+      keyId: env.LAPIS_REGISTRY_KEY_ID,
+      privateKeyPem: decodeBase64Pem(env.LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64),
+      source: "env-b64",
     };
   }
   const defaultKey = await readDefaultRegistryKey(homeDir);
@@ -173,8 +180,26 @@ export async function resolveRegistrySigningKey(
     };
   }
   throw new Error(
-    "LAPIS_REGISTRY_KEY_ID and LAPIS_REGISTRY_PRIVATE_KEY_PEM are required, or generate a local key with pnpm registry:keygen.",
+    "LAPIS_REGISTRY_KEY_ID and LAPIS_REGISTRY_PRIVATE_KEY_PEM or LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64 are required, or generate a local key with pnpm registry:keygen.",
   );
+}
+
+export function normalizePemSecret(value) {
+  const normalized = value.replaceAll("\\n", "\n").trim();
+  if (normalized.includes("-----BEGIN")) {
+    return `${normalized}\n`;
+  }
+  const decoded = decodeBase64Pem(normalized);
+  if (decoded.includes("-----BEGIN")) {
+    return decoded;
+  }
+  return `${normalized}\n`;
+}
+
+function decodeBase64Pem(value) {
+  return `${Buffer.from(value.replace(/\s+/g, ""), "base64")
+    .toString("utf8")
+    .trim()}\n`;
 }
 
 export function publicKeyPemToRawBase64(publicKeyPem) {

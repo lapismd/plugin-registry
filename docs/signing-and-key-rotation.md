@@ -50,8 +50,9 @@ pnpm registry:sign
 
 `pnpm registry:keygen` writes `~/.lapis/lapis-registry-key.json` plus sibling
 private/public key files. `pnpm registry:sign` still prefers
-`LAPIS_REGISTRY_KEY_ID` and `LAPIS_REGISTRY_PRIVATE_KEY_PEM`; if those are not
-set, it reads the default local registry key.
+`LAPIS_REGISTRY_KEY_ID` with either `LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64` or
+`LAPIS_REGISTRY_PRIVATE_KEY_PEM`; if those are not set, it reads the default
+local registry key.
 
 Plugin release signing keys remain separate. During `pnpm registry:sync:forgejo`,
 release manifests are trusted when signed by a release key already listed in
@@ -63,9 +64,15 @@ that public key under `roles.release`.
 ## CI Secrets
 
 - `LAPIS_REGISTRY_KEY_ID`
-- `LAPIS_REGISTRY_PRIVATE_KEY_PEM`
+- `LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64`
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
+
+Create the base64 private key secret from the local registry key:
+
+```sh
+base64 -i ~/.lapis/lapis-registry-private.pem | tr -d '\n'
+```
 
 ## Rotation
 

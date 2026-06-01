@@ -26,7 +26,7 @@ Registry signing uses protected CI secrets or a local key generated under
 pnpm registry:keygen
 
 LAPIS_REGISTRY_KEY_ID=lapis-registry-2026-01 \
-LAPIS_REGISTRY_PRIVATE_KEY_PEM="$(cat private-key.pem)" \
+LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64="$(base64 -i ~/.lapis/lapis-registry-private.pem | tr -d '\n')" \
 pnpm registry:sign
 ```
 

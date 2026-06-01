@@ -198,6 +198,35 @@ test("registry signing key resolves from ~/.lapis fallback", async () => {
   await rm(fixture.root, { recursive: true, force: true });
 });
 
+test("registry signing key resolves base64 PEM env secret", async () => {
+  const { privateKey } = generateKeyPairSync("ed25519");
+  const privateKeyPem = privateKey.export({ type: "pkcs8", format: "pem" });
+  const key = await resolveRegistrySigningKey({
+    LAPIS_REGISTRY_KEY_ID: "lapis-registry-test",
+    LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64:
+      Buffer.from(privateKeyPem).toString("base64"),
+  });
+  const signed = signJson({ schemaVersion: 1 }, key.privateKeyPem, key.keyId);
+  assert.equal(
+    verifyJson({ schemaVersion: 1 }, signed.sidecar, signed.publicKey),
+    true,
+  );
+});
+
+test("registry signing key normalizes escaped newline PEM env secret", async () => {
+  const { privateKey } = generateKeyPairSync("ed25519");
+  const privateKeyPem = privateKey.export({ type: "pkcs8", format: "pem" });
+  const key = await resolveRegistrySigningKey({
+    LAPIS_REGISTRY_KEY_ID: "lapis-registry-test",
+    LAPIS_REGISTRY_PRIVATE_KEY_PEM: privateKeyPem.replaceAll("\n", "\\n"),
+  });
+  const signed = signJson({ schemaVersion: 1 }, key.privateKeyPem, key.keyId);
+  assert.equal(
+    verifyJson({ schemaVersion: 1 }, signed.sidecar, signed.publicKey),
+    true,
+  );
+});
+
 function asset(name) {
   return { name, releaseTag: "tag", url: `https://example.test/${name}` };
 }
