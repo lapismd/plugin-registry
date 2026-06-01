@@ -17,7 +17,7 @@ Each JSON file contains:
   "schemaVersion": 1,
   "signatures": [
     {
-      "keyId": "lapis-registry-2026-01",
+      "keyId": "lapis-registry-2026-06",
       "alg": "ed25519",
       "sig": "base64-signature"
     }
@@ -29,7 +29,7 @@ Each also has a matching `.sig` sidecar with the same signature record:
 
 ```json
 {
-  "keyId": "lapis-registry-2026-01",
+  "keyId": "lapis-registry-2026-06",
   "alg": "ed25519",
   "sig": "base64-signature"
 }
@@ -39,6 +39,10 @@ Public keys are recorded in `generated/v1/trust/root.json` as both PEM for
 Node-side tooling and raw base64 Ed25519 key bytes for browser verification.
 Private keys are provided through protected CI secrets and must never be
 committed.
+
+The active V1 registry signing key is `lapis-registry-2026-06`. The earlier
+`lapis-registry-bootstrap-2026-05` key is intentionally not trusted because its
+private credentials are not part of the current publishing setup.
 
 Local registry signing can use the same operator-friendly fallback pattern as
 plugin release signing:
