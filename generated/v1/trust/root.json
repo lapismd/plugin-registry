@@ -3,6 +3,12 @@
   "keys": [
     {
       "alg": "ed25519",
+      "keyId": "lapis-plugin-release-2026-06",
+      "publicKey": "bMPnlO7b+Xtthfk5wGUQAWWUV7NuIAhED4kX2EGzJqc=",
+      "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAbMPnlO7b+Xtthfk5wGUQAWWUV7NuIAhED4kX2EGzJqc=\n-----END PUBLIC KEY-----\n"
+    },
+    {
+      "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
       "publicKey": "/MmGQHJ5rOUECVsU5Ee/PLTouW8V3TyxGBnPKJT87JA=",
       "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA/MmGQHJ5rOUECVsU5Ee/PLTouW8V3TyxGBnPKJT87JA=\n-----END PUBLIC KEY-----\n"
@@ -19,7 +25,9 @@
       "lapis-registry-2026-06",
       "lapis-registry-bootstrap-2026-05"
     ],
-    "release": []
+    "release": [
+      "lapis-plugin-release-2026-06"
+    ]
   },
   "schemaVersion": 1
 }

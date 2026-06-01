@@ -44,8 +44,8 @@ pnpm registry:validate:remote
 `<plugin-id>-<version>-release.signed.json`, verifies signed official release
 manifests, fetches release files, computes hashes and sizes, updates
 `entries/official/*.jsonc`, and activates only plugins with verified remote
-assets. `lapis-bases` is intentionally excluded from this sync workflow and
-remains bundled/non-installable.
+assets. Bundled app-default functionality is intentionally outside this
+installable registry flow.
 
 The default `registry:validate` command allows pending entries for local
 bootstrap work. The publish workflow uses `registry:validate:remote`, which

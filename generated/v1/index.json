@@ -9,36 +9,6 @@
         "verified"
       ],
       "categories": [
-        "database",
-        "organization"
-      ],
-      "channel": "official",
-      "contributes": {},
-      "description": "Structured bases for Lapis notes.",
-      "detail": "plugins/lapis-bases.json",
-      "id": "lapis-bases",
-      "latestVersion": "0.1.0",
-      "minAppVersion": "1.7.7",
-      "name": "Bases",
-      "owner": {
-        "name": "Lapis Notes",
-        "verified": true
-      },
-      "platforms": [
-        "web",
-        "electron"
-      ],
-      "schemaVersion": 1,
-      "status": "pending"
-    },
-    {
-      "author": "Lapis Notes",
-      "authorUrl": "https://app.lapis.md",
-      "badges": [
-        "official",
-        "verified"
-      ],
-      "categories": [
         "canvas",
         "visualization"
       ],
@@ -57,7 +27,7 @@
       "description": "Infinite canvas view with JSON Canvas support.",
       "detail": "plugins/lapis-canvas.json",
       "id": "lapis-canvas",
-      "latestVersion": "0.1.0",
+      "latestVersion": "2026.6.1",
       "minAppVersion": "1.7.7",
       "name": "Canvas",
       "owner": {
@@ -69,7 +39,7 @@
         "electron"
       ],
       "schemaVersion": 1,
-      "status": "pending"
+      "status": "active"
     },
     {
       "author": "Lapis Notes",
@@ -98,8 +68,8 @@
       "description": "Rich document and spreadsheet editing for Lapis.",
       "detail": "plugins/lapis-docs.json",
       "id": "lapis-docs",
-      "latestVersion": "0.1.0",
-      "minAppVersion": "1.7.7",
+      "latestVersion": "2026.6.1",
+      "minAppVersion": "0.20.0",
       "name": "Docs",
       "owner": {
         "name": "Lapis Notes",
@@ -110,7 +80,7 @@
         "electron"
       ],
       "schemaVersion": 1,
-      "status": "pending"
+      "status": "active"
     },
     {
       "author": "Lapis Notes",
@@ -128,7 +98,7 @@
       "description": "Graph and local graph views powered by the metadata cache.",
       "detail": "plugins/lapis-graph.json",
       "id": "lapis-graph",
-      "latestVersion": "0.1.0",
+      "latestVersion": "2026.6.1",
       "minAppVersion": "1.7.7",
       "name": "Graph",
       "owner": {
@@ -140,7 +110,7 @@
         "electron"
       ],
       "schemaVersion": 1,
-      "status": "pending"
+      "status": "active"
     },
     {
       "author": "Lapis Notes",
@@ -170,7 +140,7 @@
         "electron"
       ],
       "schemaVersion": 1,
-      "status": "pending"
+      "status": "active"
     },
     {
       "author": "Lapis Notes",
@@ -188,7 +158,7 @@
       "description": "Reactive notebook support for markdown notes.",
       "detail": "plugins/lapis-notebook.json",
       "id": "lapis-notebook",
-      "latestVersion": "0.1.0",
+      "latestVersion": "2026.6.1",
       "minAppVersion": "1.7.7",
       "name": "Notebook",
       "owner": {
@@ -200,7 +170,7 @@
         "electron"
       ],
       "schemaVersion": 1,
-      "status": "pending"
+      "status": "active"
     },
     {
       "author": "Lapis Notes",
@@ -228,7 +198,7 @@
       "description": "PDF viewing for Lapis.",
       "detail": "plugins/lapis-pdf.json",
       "id": "lapis-pdf",
-      "latestVersion": "0.1.0",
+      "latestVersion": "2026.6.1",
       "minAppVersion": "1.7.7",
       "name": "PDF",
       "owner": {
@@ -240,7 +210,7 @@
         "electron"
       ],
       "schemaVersion": 1,
-      "status": "pending"
+      "status": "active"
     },
     {
       "author": "Lapis Notes",
@@ -258,7 +228,7 @@
       "description": "Presentation mode for markdown notes.",
       "detail": "plugins/lapis-slides.json",
       "id": "lapis-slides",
-      "latestVersion": "0.1.0",
+      "latestVersion": "2026.6.1",
       "minAppVersion": "1.7.7",
       "name": "Slides",
       "owner": {
@@ -270,7 +240,7 @@
         "electron"
       ],
       "schemaVersion": 1,
-      "status": "pending"
+      "status": "active"
     },
     {
       "author": "Lapis Notes",
@@ -288,7 +258,7 @@
       "description": "Telemetry diagnostics view.",
       "detail": "plugins/lapis-telemetry.json",
       "id": "lapis-telemetry",
-      "latestVersion": "0.1.0",
+      "latestVersion": "2026.6.1",
       "minAppVersion": "1.7.7",
       "name": "Telemetry Diagnostics",
       "owner": {
@@ -300,7 +270,7 @@
         "electron"
       ],
       "schemaVersion": 1,
-      "status": "pending"
+      "status": "active"
     }
   ],
   "registries": {
@@ -314,7 +284,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "oRMOQR96wfsjnl7/tyUOz5G2E79hd2WBlBs1ZLycxnJFlBka6CCIaePLKrC6FMeA1qAMenBAwgEz0+508ZREBA=="
+      "sig": "nLHV9T/wG/q/gECkR8p5nX93kylGzFz52wPWy6cntmwVYB0ZgYiPZg/z4i6q8Yg/b8oRuO+JjZmveUdrI2TKAA=="
     }
   ]
 }

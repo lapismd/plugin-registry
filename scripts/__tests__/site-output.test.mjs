@@ -23,8 +23,8 @@ test("site build emits pages and registry metadata", async () => {
     "plugins/lapis-docs/index.html",
     "v1/index.json",
     "v1/index.sig",
-    "v1/plugins/lapis-bases.json",
-    "v1/plugins/lapis-bases.sig",
+    "v1/plugins/lapis-docs.json",
+    "v1/plugins/lapis-docs.sig",
     "v1/trust/root.json",
   ];
 
@@ -36,6 +36,6 @@ test("site build emits pages and registry metadata", async () => {
     new URL("plugins/lapis-docs/index.html", dist),
     "utf8",
   );
-  assert.match(detail, /Install pending/);
+  assert.match(detail, /Signed manifest/);
   assert.match(detail, /\*\.lapisdoc/);
 });

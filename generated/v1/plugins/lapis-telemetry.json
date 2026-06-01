@@ -2,7 +2,7 @@
   "channel": "official",
   "description": "Telemetry diagnostics view.",
   "id": "lapis-telemetry",
-  "latestVersion": "0.1.0",
+  "latestVersion": "2026.6.1",
   "name": "Telemetry Diagnostics",
   "owner": {
     "name": "Lapis Notes",
@@ -13,26 +13,69 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "I3EXkg1r2kL1ZzdjnQJ3psnrJ1fXwXYd554jmBcSWRIHuWUabop9+kE+R4aRp1UCYpDoG+ASE0ywyrZv1clTBg=="
+      "sig": "ThfwD8mQq65qY32BxQEOIM0a5C1KWJSwE9ocioJvoP48BKlXivmaiV6xEJaBqnNaHVKZ+M+msoKXGcBdaL2pAw=="
     }
   ],
-  "status": "pending",
+  "status": "active",
   "versions": {
-    "0.1.0": {
-      "files": [],
+    "2026.6.1": {
+      "files": [
+        {
+          "path": "app.css",
+          "sha256": "bea60bd174808592a8a8f4a7860fdb1eb35a891ff078e82598ee1b60d6f43d88",
+          "size": 4226,
+          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-telemetry-2026.6.1-file-YXBwLmNzcw"
+        },
+        {
+          "path": "main.es.js",
+          "sha256": "2d2d7b460e33c1024fc17426b68f39317838f30193ae66d6b111fe78c54c8699",
+          "size": 86847,
+          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-telemetry-2026.6.1-file-bWFpbi5lcy5qcw"
+        },
+        {
+          "path": "main.js",
+          "sha256": "dfa839099b8ccd4e7cb4b635340ffc4a82ead710bab586653887b1917deae42b",
+          "size": 58906,
+          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-telemetry-2026.6.1-file-bWFpbi5qcw"
+        },
+        {
+          "path": "main.umd.js",
+          "sha256": "c22489ea34810a43fd21b549a78072cbe2ec9fd305831f836e90d72f4a225ab7",
+          "size": 59273,
+          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-telemetry-2026.6.1-file-bWFpbi51bWQuanM"
+        },
+        {
+          "path": "manifest.json",
+          "sha256": "0c678447255d30844b4d99089525a8652f282e37e09b36180142d951127f52a8",
+          "size": 257,
+          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-telemetry-2026.6.1-file-bWFuaWZlc3QuanNvbg"
+        },
+        {
+          "path": "styles-entry.js",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "size": 1,
+          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-telemetry-2026.6.1-file-c3R5bGVzLWVudHJ5Lmpz"
+        },
+        {
+          "optional": true,
+          "path": "styles.css",
+          "sha256": "b1797e3ad857c4090dcd439a3909149bb43022f4b5844ef6fe8c2cc32673278d",
+          "size": 105939,
+          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-telemetry-2026.6.1-file-c3R5bGVzLmNzcw"
+        }
+      ],
       "minAppVersion": "1.7.7",
       "platforms": [
         "web",
         "electron"
       ],
       "releaseManifest": {
-        "pending": true,
-        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
-        "size": 0,
-        "url": "https://registry.lapis.md/assets/lapis-telemetry/0.1.0/release.signed.json"
+        "sha256": "944bf5385c98e7970cb91473812d37f14f6a30a5988122b5ea0be93887863883",
+        "size": 2217,
+        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-telemetry-2026.6.1-release.signed.json"
       },
       "releasedAt": "2026-05-31T00:00:00.000Z",
-      "version": "0.1.0"
+      "version": "2026.6.1"
     }
   }
 }

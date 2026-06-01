@@ -403,11 +403,19 @@ export function buildUpdatedEntry({
       ? { contributes: existingEntry?.contributes ?? seed.contributes }
       : {}),
     versions: {
-      ...(existingEntry?.versions ?? {}),
+      ...nonPendingVersions(existingEntry?.versions ?? {}),
       [release.version]: versionEntry,
     },
   };
   return entry;
+}
+
+function nonPendingVersions(versions) {
+  return Object.fromEntries(
+    Object.entries(versions).filter(
+      ([, version]) => !version.releaseManifest?.pending,
+    ),
+  );
 }
 
 export async function loadSyncTrustRoot({
