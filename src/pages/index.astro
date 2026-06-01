@@ -22,7 +22,10 @@ const generatedDate = new Date(generatedAt).toLocaleDateString("en-GB");
       <p>Browse {plugins.length} official plugins built for Lapis Notes.</p>
     </section>
 
-    <section class="home-directory-grid" aria-label="Registry directory">
+    <section
+      class={`home-directory-grid ${pendingPlugins.length === 0 ? "home-directory-grid--two" : ""}`}
+      aria-label="Registry directory"
+    >
       <div class="directory-column">
         <div class="section-heading">
           <h2>Plugins</h2>
@@ -33,19 +36,21 @@ const generatedDate = new Date(generatedAt).toLocaleDateString("en-GB");
         </div>
       </div>
 
-      <div class="directory-column">
-        <div class="section-heading">
-          <h2>Coming soon</h2>
-          <a href="/plugins/?status=pending">View all</a>
-        </div>
-        <div class="dense-list">
-          {
-            pendingPlugins
-              .slice(0, 5)
-              .map((plugin) => <DensePluginRow plugin={plugin} />)
-          }
-        </div>
-      </div>
+      {
+        pendingPlugins.length > 0 && (
+          <div class="directory-column">
+            <div class="section-heading">
+              <h2>Coming soon</h2>
+              <a href="/plugins/?status=pending">View all</a>
+            </div>
+            <div class="dense-list">
+              {pendingPlugins
+                .slice(0, 5)
+                .map((plugin) => <DensePluginRow plugin={plugin} />)}
+            </div>
+          </div>
+        )
+      }
 
       <div class="directory-column">
         <div class="section-heading">
