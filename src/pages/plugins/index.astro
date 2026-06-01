@@ -1,4 +1,5 @@
 ---
+import { SlidersHorizontal, X } from "@lucide/astro";
 import CategoryIcon from "../../components/CategoryIcon.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import {
@@ -24,120 +25,140 @@ for (const plugin of plugins) {
 <SiteLayout title="Plugins - Lapis Plugin Registry">
   <main class="page-main">
     <section class="search-layout" data-plugin-search-root>
-      <aside class="filter-sidebar" aria-label="Plugin filters">
-        <section class="sidebar-panel">
-          <h2>Type</h2>
-          <button type="button" class="filter-option filter-option--static">
-            <span class="filter-option__main">
-              <span class="filter-option__icon">
-                <CategoryIcon id="package" />
-              </span>
-              <span>Plugins</span>
-            </span>
-            <span class="filter-count">{plugins.length}</span>
-          </button>
-        </section>
-
-        <section class="sidebar-panel">
-          <h2>Status</h2>
-          {
-            statusOptions.map((status) => (
-              <button
-                type="button"
-                class="filter-option"
-                data-filter-status={status}
-                data-filter-label={statusLabel(status)}
-                aria-pressed="false"
-              >
-                <span class="filter-option__main">
-                  <span class="filter-option__icon filter-option__icon-default">
-                    <CategoryIcon id={status} />
-                  </span>
-                  <span class="filter-option__icon filter-option__icon-check">
-                    <CategoryIcon selected />
-                  </span>
-                  <span>{statusLabel(status)}</span>
+      <div class="filter-sidebar-shell" data-filter-shell data-open="false">
+        <button
+          type="button"
+          class="filter-sidebar-backdrop"
+          data-filter-dismiss
+          aria-label="Close filters"
+        ></button>
+        <aside
+          class="filter-sidebar"
+          id="plugin-filters"
+          aria-label="Plugin filters"
+          data-filter-panel
+        >
+          <div class="filter-sidebar-header">
+            <p class="filter-sidebar-title">Filters</p>
+            <button type="button" class="filter-sidebar-close" data-filter-dismiss>
+              <span>Close</span>
+              <X size={16} stroke-width="2" aria-hidden="true" />
+            </button>
+          </div>
+          <section class="sidebar-panel">
+            <h2>Type</h2>
+            <button type="button" class="filter-option filter-option--static">
+              <span class="filter-option__main">
+                <span class="filter-option__icon">
+                  <CategoryIcon id="package" />
                 </span>
-                <span class="filter-count">{statusCounts.get(status) ?? 0}</span>
-              </button>
-            ))
-          }
-        </section>
-
-        <section class="sidebar-panel">
-          <h2>Categories</h2>
-          {
-            categories.map((category) => (
-              <button
-                type="button"
-                class="filter-option"
-                data-filter-category={category.id}
-                data-filter-label={category.label}
-                aria-pressed="false"
-              >
-                <span class="filter-option__main">
-                  <span class="filter-option__icon filter-option__icon-default">
-                    <CategoryIcon id={category.id} />
-                  </span>
-                  <span class="filter-option__icon filter-option__icon-check">
-                    <CategoryIcon selected />
-                  </span>
-                  <span>{category.label}</span>
-                </span>
-                <span class="filter-count">{category.count}</span>
-              </button>
-            ))
-          }
-        </section>
-
-        <section class="sidebar-panel">
-          <h2>Platforms</h2>
-          {
-            platformOptions.map((platform) => (
-              <button
-                type="button"
-                class="filter-option"
-                data-filter-platform={platform}
-                data-filter-label={titleCase(platform)}
-                aria-pressed="false"
-              >
-                <span class="filter-option__main">
-                  <span class="filter-option__icon filter-option__icon-default">
-                    <CategoryIcon id={platform} />
-                  </span>
-                  <span class="filter-option__icon filter-option__icon-check">
-                    <CategoryIcon selected />
-                  </span>
-                  <span>{titleCase(platform)}</span>
-                </span>
-                <span class="filter-count">{platformCounts.get(platform) ?? 0}</span>
-              </button>
-            ))
-          }
-        </section>
-
-        <section class="sidebar-panel">
-          <h2>Other</h2>
-          <button
-            type="button"
-            class="filter-option"
-            data-filter-official="official"
-            data-filter-label="Official"
-            aria-pressed="false"
-          >
-            <span class="filter-option__main">
-              <span class="filter-option__icon filter-option__icon-default">
-                <CategoryIcon id="official" />
+                <span>Plugins</span>
               </span>
-              <span class="filter-option__icon filter-option__icon-check">
-                <CategoryIcon selected />
+              <span class="filter-count">{plugins.length}</span>
+            </button>
+          </section>
+
+          <section class="sidebar-panel">
+            <h2>Status</h2>
+            {
+              statusOptions.map((status) => (
+                <button
+                  type="button"
+                  class="filter-option"
+                  data-filter-status={status}
+                  data-filter-label={statusLabel(status)}
+                  aria-pressed="false"
+                >
+                  <span class="filter-option__main">
+                    <span class="filter-option__icon filter-option__icon-default">
+                      <CategoryIcon id={status} />
+                    </span>
+                    <span class="filter-option__icon filter-option__icon-check">
+                      <CategoryIcon selected />
+                    </span>
+                    <span>{statusLabel(status)}</span>
+                  </span>
+                  <span class="filter-count">{statusCounts.get(status) ?? 0}</span>
+                </button>
+              ))
+            }
+          </section>
+
+          <section class="sidebar-panel">
+            <h2>Categories</h2>
+            {
+              categories.map((category) => (
+                <button
+                  type="button"
+                  class="filter-option"
+                  data-filter-category={category.id}
+                  data-filter-label={category.label}
+                  aria-pressed="false"
+                >
+                  <span class="filter-option__main">
+                    <span class="filter-option__icon filter-option__icon-default">
+                      <CategoryIcon id={category.id} />
+                    </span>
+                    <span class="filter-option__icon filter-option__icon-check">
+                      <CategoryIcon selected />
+                    </span>
+                    <span>{category.label}</span>
+                  </span>
+                  <span class="filter-count">{category.count}</span>
+                </button>
+              ))
+            }
+          </section>
+
+          <section class="sidebar-panel">
+            <h2>Platforms</h2>
+            {
+              platformOptions.map((platform) => (
+                <button
+                  type="button"
+                  class="filter-option"
+                  data-filter-platform={platform}
+                  data-filter-label={titleCase(platform)}
+                  aria-pressed="false"
+                >
+                  <span class="filter-option__main">
+                    <span class="filter-option__icon filter-option__icon-default">
+                      <CategoryIcon id={platform} />
+                    </span>
+                    <span class="filter-option__icon filter-option__icon-check">
+                      <CategoryIcon selected />
+                    </span>
+                    <span>{titleCase(platform)}</span>
+                  </span>
+                  <span class="filter-count">{platformCounts.get(platform) ?? 0}</span>
+                </button>
+              ))
+            }
+          </section>
+
+          <section class="sidebar-panel">
+            <h2>Other</h2>
+            <button
+              type="button"
+              class="filter-option"
+              data-filter-official="official"
+              data-filter-label="Official"
+              aria-pressed="false"
+            >
+              <span class="filter-option__main">
+                <span class="filter-option__icon filter-option__icon-default">
+                  <CategoryIcon id="official" />
+                </span>
+                <span class="filter-option__icon filter-option__icon-check">
+                  <CategoryIcon selected />
+                </span>
+                <span>Official</span>
               </span>
-              <span>Official</span>
-            </span>
-            <span class="filter-count">{plugins.length}</span>
-          </button>
-        </section>
-      </aside>
+              <span class="filter-count">{plugins.length}</span>
+            </button>
+          </section>
+        </aside>
+      </div>
 
       <div class="results-panel">
         <section class="results-heading">
@@ -146,12 +167,24 @@ for (const plugin of plugins) {
             <p><span data-result-count>{plugins.length}</span> results</p>
           </div>
           <div class="result-tools" aria-label="Result controls">
-            <div class="view-toggle" aria-label="View mode">
-              <button type="button" data-view="list" aria-pressed="true">
-                List
-              </button>
-              <button type="button" data-view="grid" aria-pressed="false">
-                Cards
+            <div class="result-view-tools">
+              <div class="view-toggle" aria-label="View mode">
+                <button type="button" data-view="list" aria-pressed="true">
+                  List
+                </button>
+                <button type="button" data-view="grid" aria-pressed="false">
+                  Cards
+                </button>
+              </div>
+              <button
+                type="button"
+                class="filter-sidebar-mobile-trigger"
+                data-filter-trigger
+                aria-controls="plugin-filters"
+                aria-expanded="false"
+                aria-label="Open filters"
+              >
+                <SlidersHorizontal size={16} stroke-width="2" aria-hidden="true" />
               </button>
             </div>
             <div class="sort-menu" data-sort-root>
@@ -224,11 +257,19 @@ for (const plugin of plugins) {
   const emptyState = document.querySelector<HTMLElement>("[data-empty-state]");
   const activeFilters = document.querySelector<HTMLElement>("[data-active-filters]");
   const resultCount = document.querySelector<HTMLElement>("[data-result-count]");
+  const filterShell = document.querySelector<HTMLElement>("[data-filter-shell]");
+  const filterPanel = document.querySelector<HTMLElement>("[data-filter-panel]");
+  const filterTrigger = document.querySelector<HTMLButtonElement>("[data-filter-trigger]");
   const sortRoot = document.querySelector<HTMLElement>("[data-sort-root]");
   const sortTrigger = document.querySelector<HTMLButtonElement>("[data-sort-trigger]");
   const sortOptions = document.querySelector<HTMLElement>("[data-sort-options]");
   const sortLabel = document.querySelector<HTMLElement>("[data-sort-label]");
+  const filterDismissButtons = [
+    ...document.querySelectorAll<HTMLButtonElement>("[data-filter-dismiss]"),
+  ];
+  const mobileFiltersBreakpoint = window.matchMedia("(max-width: 860px)");
   let sortValue = "name";
+  let lastMobileFilterFocus: HTMLElement | null = null;
   const items = [
     ...document.querySelectorAll<HTMLElement>("[data-search-item]"),
   ];
@@ -408,6 +449,34 @@ for (const plugin of plugins) {
     updateUrl();
   }
 
+  function setMobileFiltersOpen(
+    nextOpen: boolean,
+    options: { moveFocus?: boolean; returnFocus?: boolean } = {},
+  ) {
+    const open = nextOpen && mobileFiltersBreakpoint.matches;
+    filterShell?.setAttribute("data-open", open ? "true" : "false");
+    filterTrigger?.setAttribute("aria-expanded", open ? "true" : "false");
+    document.documentElement.classList.toggle("has-mobile-filter-overlay", open);
+    document.body.classList.toggle("has-mobile-filter-overlay", open);
+
+    if (open) {
+      lastMobileFilterFocus =
+        document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      if (options.moveFocus !== false) {
+        const closeButton = filterPanel?.querySelector<HTMLButtonElement>(
+          ".filter-sidebar-close",
+        );
+        closeButton?.focus();
+      }
+      return;
+    }
+
+    if (options.returnFocus !== false && lastMobileFilterFocus?.isConnected) {
+      lastMobileFilterFocus.focus();
+    }
+    lastMobileFilterFocus = null;
+  }
+
   root?.addEventListener("click", (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) {
@@ -479,8 +548,23 @@ for (const plugin of plugins) {
     });
   });
 
+  filterTrigger?.addEventListener("click", () => {
+    const isOpen = filterShell?.getAttribute("data-open") === "true";
+    setMobileFiltersOpen(!isOpen);
+  });
+  filterDismissButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      setMobileFiltersOpen(false);
+    });
+  });
+
   headerQueryInput?.addEventListener("input", applyFilters);
   window.addEventListener("lapis-plugin-search", applyFilters);
+  mobileFiltersBreakpoint.addEventListener("change", (event) => {
+    if (!event.matches) {
+      setMobileFiltersOpen(false, { moveFocus: false, returnFocus: false });
+    }
+  });
   sortTrigger?.addEventListener("click", () => {
     const expanded = sortTrigger.getAttribute("aria-expanded") === "true";
     sortTrigger.setAttribute("aria-expanded", expanded ? "false" : "true");
@@ -516,7 +600,22 @@ for (const plugin of plugins) {
       sortOptions.hidden = true;
     }
   });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") {
+      return;
+    }
+    if (sortTrigger?.getAttribute("aria-expanded") === "true") {
+      sortTrigger.setAttribute("aria-expanded", "false");
+      if (sortOptions) {
+        sortOptions.hidden = true;
+      }
+    }
+    if (filterShell?.getAttribute("data-open") === "true") {
+      setMobileFiltersOpen(false);
+    }
+  });
 
+  setMobileFiltersOpen(false, { moveFocus: false, returnFocus: false });
   sortItems();
   applyFilters();
 </script>
