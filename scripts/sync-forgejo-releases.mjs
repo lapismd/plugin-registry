@@ -108,8 +108,8 @@ export function parseArgs(argv, env = process.env) {
     pluginsExplicit: false,
     releaseTag: "",
     dryRun: false,
-    forgejoServer: env.GITHUB_SERVER_URL ?? defaultForgejoServer,
-    forgejoRepo: env.GITHUB_REPOSITORY ?? defaultForgejoRepo,
+    forgejoServer: env.FORGEJO_SERVER ?? defaultForgejoServer,
+    forgejoRepo: env.FORGEJO_REPO ?? defaultForgejoRepo,
     help: false,
   };
   for (let index = 0; index < args.length; index += 1) {

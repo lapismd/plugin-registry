@@ -32,13 +32,19 @@ test("default official Forgejo plugin list excludes bases and includes markdown 
 
 test("parseArgs accepts explicit plugin selections", () => {
   assert.deepEqual(
-    parseArgs([
-      "--plugins",
-      "lapis-pdf,lapis-graph",
-      "--release-tag",
-      "official-plugin-assets-1",
-      "--dry-run",
-    ]),
+    parseArgs(
+      [
+        "--plugins",
+        "lapis-pdf,lapis-graph",
+        "--release-tag",
+        "official-plugin-assets-1",
+        "--dry-run",
+      ],
+      {
+        GITHUB_REPOSITORY: "lapis-notes/plugin-registry",
+        GITHUB_SERVER_URL: "https://ci.example.invalid",
+      },
+    ),
     {
       plugins: ["lapis-pdf", "lapis-graph"],
       pluginsExplicit: true,
@@ -46,6 +52,24 @@ test("parseArgs accepts explicit plugin selections", () => {
       dryRun: true,
       forgejoServer: "https://code.ju.ma",
       forgejoRepo: "lapis-notes/lapis",
+      help: false,
+    },
+  );
+});
+
+test("parseArgs accepts explicit Forgejo source overrides", () => {
+  assert.deepEqual(
+    parseArgs([], {
+      FORGEJO_SERVER: "https://forgejo.example.invalid",
+      FORGEJO_REPO: "owner/source-repo",
+    }),
+    {
+      plugins: officialForgejoPluginIds,
+      pluginsExplicit: false,
+      releaseTag: "",
+      dryRun: false,
+      forgejoServer: "https://forgejo.example.invalid",
+      forgejoRepo: "owner/source-repo",
       help: false,
     },
   );
