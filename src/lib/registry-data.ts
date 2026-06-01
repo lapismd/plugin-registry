@@ -84,6 +84,9 @@ export interface SitePlugin extends RegistryPluginSummary {
 }
 
 const registryRoot = path.join(process.cwd(), "generated", "v1");
+const siteRegistryRoot =
+  process.env.LAPIS_REGISTRY_SITE_V1_DIR ??
+  path.join(process.cwd(), "dist", "v1");
 
 export async function getRegistrySiteData() {
   const index = await readJson<RegistryIndex>("index.json");
@@ -155,6 +158,18 @@ export function relatedPlugins(plugin: SitePlugin, plugins: SitePlugin[]) {
     )
     .slice(0, 6)
     .map((entry) => entry.plugin);
+}
+
+export async function readGeneratedReadmeHtml(pluginId: string) {
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(pluginId)) return null;
+  try {
+    return await readFile(
+      path.join(siteRegistryRoot, "readmes", pluginId, "README.html"),
+      "utf8",
+    );
+  } catch {
+    return null;
+  }
 }
 
 export function statusLabel(status: SitePlugin["status"]) {

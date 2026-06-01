@@ -6,17 +6,25 @@ import { publishRegistryReadmes } from "./lib/readmes.mjs";
 
 const root = new URL("../", import.meta.url);
 const dist = new URL("../dist/", import.meta.url);
+const siteBuild = new URL("../tmp/site-build/", import.meta.url);
 const registrySource = new URL("../generated/v1/", import.meta.url);
-const registryTarget = new URL("../dist/v1/", import.meta.url);
+const siteRegistry = new URL("v1/", siteBuild);
+const registryTarget = new URL("v1/", dist);
 
-await run("pnpm", ["exec", "astro", "build"], root.pathname);
-await fs.rm(registryTarget, { recursive: true, force: true });
-await fs.mkdir(path.dirname(registryTarget.pathname), { recursive: true });
-await fs.cp(registrySource, registryTarget, { recursive: true });
+await fs.rm(siteBuild, { recursive: true, force: true });
+await fs.mkdir(siteRegistry, { recursive: true });
+await fs.cp(registrySource, siteRegistry, { recursive: true });
 const readmes = await publishRegistryReadmes({
   registryDir: registrySource,
-  outputDir: registryTarget,
+  outputDir: siteRegistry,
 });
+
+await run("pnpm", ["exec", "astro", "build"], root.pathname, {
+  LAPIS_REGISTRY_SITE_V1_DIR: siteRegistry.pathname,
+});
+await fs.rm(registryTarget, { recursive: true, force: true });
+await fs.mkdir(path.dirname(registryTarget.pathname), { recursive: true });
+await fs.cp(siteRegistry, registryTarget, { recursive: true });
 
 const required = [
   "index.html",
@@ -40,10 +48,11 @@ for (const skipped of readmes.skipped) {
   );
 }
 
-function run(command, args, cwd) {
+function run(command, args, cwd, env = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       cwd,
+      env: { ...process.env, ...env },
       stdio: "inherit",
       shell: process.platform === "win32",
     });

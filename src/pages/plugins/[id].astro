@@ -4,6 +4,7 @@ import StatusBadge from "../../components/StatusBadge.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import {
   getRegistrySiteData,
+  readGeneratedReadmeHtml,
   relatedPlugins,
   titleCase,
   type SitePlugin,
@@ -29,7 +30,7 @@ const release = plugin.latestRelease;
 const primaryCategory = plugin.categories[0] ?? "package";
 const assetHealth = release.releaseManifest.pending ? 24 : 100;
 const readmeUrl = plugin.detailData.readmeUrl;
-const readmeHtmlPath = readmeUrl ? `/v1/readmes/${plugin.id}/README.html` : "";
+const readmeHtml = readmeUrl ? await readGeneratedReadmeHtml(plugin.id) : null;
 ---
 
 <SiteLayout title={`${plugin.name} - Lapis Plugin Registry`} description={plugin.description}>
@@ -98,15 +99,18 @@ const readmeHtmlPath = readmeUrl ? `/v1/readmes/${plugin.id}/README.html` : "";
 
           <div class="tab-panel" data-panel="overview">
             {
-              readmeUrl ? (
+              readmeHtml ? (
                 <>
-                  <section
-                    class="readme-panel"
-                    data-plugin-readme
-                    data-readme-html={readmeHtmlPath}
-                  >
+                  <section class="readme-panel" data-plugin-readme set:html={readmeHtml} />
+                  <p class="readme-source">
+                    <a href={readmeUrl}>View source README</a>
+                  </p>
+                </>
+              ) : readmeUrl ? (
+                <>
+                  <section class="readme-panel" data-plugin-readme-error>
                     <div class="readme-panel__status" data-readme-status>
-                      Loading README...
+                      README details are unavailable. Use the source README link for the latest documentation.
                     </div>
                   </section>
                   <p class="readme-source">
@@ -275,30 +279,6 @@ const readmeHtmlPath = readmeUrl ? `/v1/readmes/${plugin.id}/README.html` : "";
 </SiteLayout>
 
 <script>
-  const readmePanels =
-    document.querySelectorAll<HTMLElement>("[data-plugin-readme]");
-  for (const panel of readmePanels) {
-    const endpoint = panel.dataset.readmeHtml;
-    const status = panel.querySelector<HTMLElement>("[data-readme-status]");
-    if (!endpoint || !status) continue;
-    fetch(endpoint, { headers: { Accept: "text/html" } })
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error(`README request failed with HTTP ${response.status}`);
-        }
-        return response.text();
-      })
-      .then((html) => {
-        panel.innerHTML = html;
-        panel.dataset.readmeLoaded = "true";
-      })
-      .catch(() => {
-        status.textContent =
-          "README details are unavailable. Use the source README link for the latest documentation.";
-        panel.dataset.readmeError = "true";
-      });
-  }
-
   const tabRoots = document.querySelectorAll<HTMLElement>("[data-tabs]");
   for (const root of tabRoots) {
     const tabs = [...root.querySelectorAll<HTMLButtonElement>("[data-tab]")];

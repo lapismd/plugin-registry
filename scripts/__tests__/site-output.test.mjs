@@ -46,4 +46,6 @@ test("site build emits pages and registry metadata", async () => {
   assert.match(detail, /\*\.lapisdoc/);
   assert.match(detail, /data-plugin-readme/);
   assert.match(detail, /View source README/);
+  assert.doesNotMatch(detail, /Loading README/);
+  assert.doesNotMatch(detail, /fetch\(endpoint/);
 });

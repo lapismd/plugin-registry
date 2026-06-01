@@ -17,10 +17,17 @@ test("publishRegistryReadmes writes deterministic markdown and HTML artifacts", 
   const result = await publishRegistryReadmes({
     registryDir: fixture.registryDir,
     outputDir: fixture.outputDir,
-    fetchImpl: async () =>
-      new Response("# Example\n\n- **Ready**", {
+    publicRegistryBaseUrl: "https://registry.example.test/v1/",
+    fetchImpl: async (url) => {
+      if (String(url).endsWith(".png")) {
+        return new Response(`image:${url}`, {
+          headers: { "content-type": "image/png" },
+        });
+      }
+      return new Response("# Example\n\n![Logo](./logo.png)\n\n- **Ready**", {
         headers: { "content-type": "text/plain; charset=utf-8" },
-      }),
+      });
+    },
   });
 
   assert.deepEqual(result.skipped, []);
@@ -33,19 +40,22 @@ test("publishRegistryReadmes writes deterministic markdown and HTML artifacts", 
     result.published[0].manifestPath,
     "readmes/lapis-test/manifest.json",
   );
-  assert.equal(
-    await readFile(
-      new URL("readmes/lapis-test/README.md", fixture.outputDir),
-      "utf8",
-    ),
-    "# Example\n\n- **Ready**",
+  const markdown = await readFile(
+    new URL("readmes/lapis-test/README.md", fixture.outputDir),
+    "utf8",
   );
   assert.match(
-    await readFile(
-      new URL("readmes/lapis-test/README.html", fixture.outputDir),
-      "utf8",
-    ),
-    /<h1>Example<\/h1>/,
+    markdown,
+    /!\[Logo\]\(https:\/\/registry\.example\.test\/v1\/readmes\/lapis-test\/assets\/[a-f0-9]{16}\.png\)/,
+  );
+  const html = await readFile(
+    new URL("readmes/lapis-test/README.html", fixture.outputDir),
+    "utf8",
+  );
+  assert.match(html, /<h1>Example<\/h1>/);
+  assert.match(
+    html,
+    /https:\/\/registry\.example\.test\/v1\/readmes\/lapis-test\/assets\/[a-f0-9]{16}\.png/,
   );
   const manifest = JSON.parse(
     await readFile(
@@ -54,7 +64,7 @@ test("publishRegistryReadmes writes deterministic markdown and HTML artifacts", 
     ),
   );
   assert.match(manifest.markdown.sha256, /^[a-f0-9]{64}$/);
-  assert.equal(manifest.images.length, 0);
+  assert.equal(manifest.images.length, 1);
 
   await rm(fixture.root, { recursive: true, force: true });
 });
@@ -66,6 +76,9 @@ test("localizeReadmeImages mirrors images and rewrites markdown", async () => {
       "![Logo](./logo.png)\n\n![Remote](https://cdn.example.test/remote.webp)",
     sourceUrl: new URL("https://example.test/docs/README.md"),
     targetDir: new URL("readmes/lapis-test/", fixture.outputDir),
+    publicReadmeBaseUrl: new URL(
+      "https://registry.example.test/v1/readmes/lapis-test/",
+    ),
     fetchImpl: async (url) =>
       new Response(`image:${url}`, {
         headers: {
@@ -74,8 +87,14 @@ test("localizeReadmeImages mirrors images and rewrites markdown", async () => {
       }),
   });
 
-  assert.match(result.markdown, /!\[Logo\]\(assets\/[a-f0-9]{16}\.png\)/);
-  assert.match(result.markdown, /!\[Remote\]\(assets\/[a-f0-9]{16}\.webp\)/);
+  assert.match(
+    result.markdown,
+    /!\[Logo\]\(https:\/\/registry\.example\.test\/v1\/readmes\/lapis-test\/assets\/[a-f0-9]{16}\.png\)/,
+  );
+  assert.match(
+    result.markdown,
+    /!\[Remote\]\(https:\/\/registry\.example\.test\/v1\/readmes\/lapis-test\/assets\/[a-f0-9]{16}\.webp\)/,
+  );
   assert.equal(result.images.length, 2);
   assert.match(result.images[0].sha256, /^[a-f0-9]{64}$/);
 

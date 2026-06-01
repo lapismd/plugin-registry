@@ -4,15 +4,18 @@ import { createHash } from "node:crypto";
 
 const maxReadmeBytes = 256 * 1024;
 const maxReadmeImageBytes = 5 * 1024 * 1024;
+const defaultPublicRegistryBaseUrl = "https://registry.lapis.md/v1/";
 
 export async function publishRegistryReadmes({
   registryDir,
   outputDir,
   fetchImpl = fetch,
+  publicRegistryBaseUrl = defaultPublicRegistryBaseUrl,
 }) {
   const index = await readJson(new URL("index.json", registryDir));
   const published = [];
   const skipped = [];
+  const publicBase = new URL(publicRegistryBaseUrl);
 
   for (const plugin of index.plugins ?? []) {
     const detail = plugin.detail
@@ -37,6 +40,7 @@ export async function publishRegistryReadmes({
         markdown: sourceMarkdown,
         sourceUrl: source,
         targetDir,
+        publicReadmeBaseUrl: new URL(`readmes/${plugin.id}/`, publicBase),
         fetchImpl,
       });
       const manifest = {
@@ -89,6 +93,7 @@ export async function localizeReadmeImages({
   markdown,
   sourceUrl,
   targetDir,
+  publicReadmeBaseUrl,
   fetchImpl = fetch,
 }) {
   const images = [];
@@ -105,7 +110,12 @@ export async function localizeReadmeImages({
       const relativePath = `assets/${image.sha256.slice(0, 16)}${extension}`;
       await fs.mkdir(new URL("assets/", targetDir), { recursive: true });
       await fs.writeFile(new URL(relativePath, targetDir), image.bytes);
-      replacements.set(original, relativePath);
+      replacements.set(
+        original,
+        publicReadmeBaseUrl
+          ? new URL(relativePath, publicReadmeBaseUrl).href
+          : relativePath,
+      );
       images.push({
         sourceUrl: imageUrl.href,
         path: relativePath,
