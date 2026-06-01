@@ -1,4 +1,8 @@
 generated/v1/
 dist/
 .astro/
+tmp/
+coverage/
+.pnpm-store/
+..pnpm-store/
 node_modules/
