@@ -28,6 +28,8 @@ const installDisabled = plugin.status !== "active";
 const release = plugin.latestRelease;
 const primaryCategory = plugin.categories[0] ?? "package";
 const assetHealth = release.releaseManifest.pending ? 24 : 100;
+const readmeUrl = plugin.detailData.readmeUrl;
+const readmeHtmlPath = readmeUrl ? `/v1/readmes/${plugin.id}/README.html` : "";
 ---
 
 <SiteLayout title={`${plugin.name} - Lapis Plugin Registry`} description={plugin.description}>
@@ -95,12 +97,24 @@ const assetHealth = release.releaseManifest.pending ? 24 : 100;
           </div>
 
           <div class="tab-panel" data-panel="overview">
-            <p>{plugin.description}</p>
             {
-              plugin.detailData.readmeUrl && (
-                <p>
-                  <a href={plugin.detailData.readmeUrl}>Read the plugin README</a>
-                </p>
+              readmeUrl ? (
+                <>
+                  <section
+                    class="readme-panel"
+                    data-plugin-readme
+                    data-readme-html={readmeHtmlPath}
+                  >
+                    <div class="readme-panel__status" data-readme-status>
+                      Loading README...
+                    </div>
+                  </section>
+                  <p class="readme-source">
+                    <a href={readmeUrl}>View source README</a>
+                  </p>
+                </>
+              ) : (
+                <p>{plugin.description}</p>
               )
             }
             {
@@ -261,6 +275,30 @@ const assetHealth = release.releaseManifest.pending ? 24 : 100;
 </SiteLayout>
 
 <script>
+  const readmePanels =
+    document.querySelectorAll<HTMLElement>("[data-plugin-readme]");
+  for (const panel of readmePanels) {
+    const endpoint = panel.dataset.readmeHtml;
+    const status = panel.querySelector<HTMLElement>("[data-readme-status]");
+    if (!endpoint || !status) continue;
+    fetch(endpoint, { headers: { Accept: "text/html" } })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`README request failed with HTTP ${response.status}`);
+        }
+        return response.text();
+      })
+      .then((html) => {
+        panel.innerHTML = html;
+        panel.dataset.readmeLoaded = "true";
+      })
+      .catch(() => {
+        status.textContent =
+          "README details are unavailable. Use the source README link for the latest documentation.";
+        panel.dataset.readmeError = "true";
+      });
+  }
+
   const tabRoots = document.querySelectorAll<HTMLElement>("[data-tabs]");
   for (const root of tabRoots) {
     const tabs = [...root.querySelectorAll<HTMLButtonElement>("[data-tab]")];

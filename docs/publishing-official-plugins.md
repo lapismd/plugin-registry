@@ -49,9 +49,15 @@ installable registry flow.
 
 Official entries may also include a mutable `readmeUrl` that points at an
 HTTPS README, usually the package-local README in `lapis-notes`. The URL is
-signed in registry metadata, but the README content is fetched and rendered by
-clients at view time so documentation edits do not require a registry republish.
+signed in registry metadata, but the README content is fetched by the registry
+site build and published under `v1/readmes/<plugin-id>/` so clients render
+registry-hosted markdown without depending on source host CORS. Documentation
+edits require a site rebuild, but do not require metadata or release
+republishing.
 `registry:sync:forgejo` preserves curated `readmeUrl` values.
+Published registry metadata and README artifacts are served with permissive CORS
+headers from Cloudflare Pages middleware so browser and PWA clients can fetch
+them directly.
 
 The default `registry:validate` command allows pending entries for local
 bootstrap work. The publish workflow uses `registry:validate:remote`, which

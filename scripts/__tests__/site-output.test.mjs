@@ -8,7 +8,10 @@ const root = new URL("../../", import.meta.url);
 const dist = new URL("../../dist/", import.meta.url);
 
 test("site build emits pages and registry metadata", async () => {
-  if (!existsSync(new URL("index.html", dist))) {
+  if (
+    !existsSync(new URL("index.html", dist)) ||
+    !existsSync(new URL("v1/readmes/lapis-docs/README.html", dist))
+  ) {
     const result = spawnSync("pnpm", ["site:build"], {
       cwd: root.pathname,
       stdio: "inherit",
@@ -25,6 +28,9 @@ test("site build emits pages and registry metadata", async () => {
     "v1/index.sig",
     "v1/plugins/lapis-docs.json",
     "v1/plugins/lapis-docs.sig",
+    "v1/readmes/lapis-docs/README.md",
+    "v1/readmes/lapis-docs/README.html",
+    "v1/readmes/lapis-docs/manifest.json",
     "v1/trust/root.json",
   ];
 
@@ -38,4 +44,6 @@ test("site build emits pages and registry metadata", async () => {
   );
   assert.match(detail, /Signed manifest/);
   assert.match(detail, /\*\.lapisdoc/);
+  assert.match(detail, /data-plugin-readme/);
+  assert.match(detail, /View source README/);
 });

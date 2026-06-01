@@ -44,6 +44,11 @@ so verification can run in CI before production keys are installed.
 Official plugin asset builds, release signing, and Forgejo upload live in the
 `lapis-notes` repository. This registry syncs those published releases into
 reviewed metadata with `pnpm registry:sync:forgejo`. Plugin detail metadata can
-also include a signed mutable `readmeUrl`; clients fetch and render that README
-at view time so documentation copy can change without republishing registry
-metadata.
+also include a signed mutable `readmeUrl`; the site build fetches those README
+sources and publishes deterministic artifacts under `v1/readmes/<plugin-id>/`
+so browser clients render registry-hosted markdown without depending on source
+host CORS. Documentation copy changes require a site rebuild, but not metadata
+or release republishing.
+Cloudflare Pages middleware adds `Access-Control-Allow-Origin: *` to published
+registry files and README artifacts so the Lapis app can fetch them from web,
+PWA, and Electron surfaces.

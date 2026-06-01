@@ -2,6 +2,7 @@
 import { spawn } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { publishRegistryReadmes } from "./lib/readmes.mjs";
 
 const root = new URL("../", import.meta.url);
 const dist = new URL("../dist/", import.meta.url);
@@ -12,6 +13,10 @@ await run("pnpm", ["exec", "astro", "build"], root.pathname);
 await fs.rm(registryTarget, { recursive: true, force: true });
 await fs.mkdir(path.dirname(registryTarget.pathname), { recursive: true });
 await fs.cp(registrySource, registryTarget, { recursive: true });
+const readmes = await publishRegistryReadmes({
+  registryDir: registrySource,
+  outputDir: registryTarget,
+});
 
 const required = [
   "index.html",
@@ -26,7 +31,14 @@ for (const relativePath of required) {
   await fs.access(new URL(relativePath, dist));
 }
 
-console.log("Built site and copied registry metadata to dist/v1.");
+console.log(
+  `Built site, copied registry metadata, and published ${readmes.published.length} README artifact set${readmes.published.length === 1 ? "" : "s"} to dist/v1.`,
+);
+for (const skipped of readmes.skipped) {
+  console.warn(
+    `Skipped README for ${skipped.pluginId}: ${skipped.reason}${skipped.message ? ` (${skipped.message})` : ""}`,
+  );
+}
 
 function run(command, args, cwd) {
   return new Promise((resolve, reject) => {
