@@ -11,6 +11,12 @@ import { resolveRegistrySigningKey } from "./lib/keys.mjs";
 
 const signingKey = await resolveRegistrySigningKey();
 const keyId = signingKey.keyId;
+if (!keyId.startsWith("lapis-registry-")) {
+  throw new Error(
+    `Refusing to sign registry metadata with non-registry key id ${keyId}. ` +
+      "Set LAPIS_REGISTRY_KEY_ID and LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64 to the registry signing key, not the plugin release signing key.",
+  );
+}
 const privateKeyPem = signingKey.privateKeyPem;
 
 const targets = [
