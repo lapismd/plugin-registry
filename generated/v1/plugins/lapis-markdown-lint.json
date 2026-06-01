@@ -1,9 +1,9 @@
 {
   "channel": "official",
-  "description": "Graph and local graph views powered by the metadata cache.",
-  "id": "lapis-graph",
-  "latestVersion": "0.1.0",
-  "name": "Graph",
+  "description": "Markdown linting diagnostics for Lapis notes.",
+  "id": "lapis-markdown-lint",
+  "latestVersion": "2026.6.1",
+  "name": "Markdown Lint",
   "owner": {
     "name": "Lapis Notes",
     "verified": true
@@ -13,12 +13,12 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "Ke2wiDDvKNcaUEqkurh0cxxJiTkqLzkAIIeUIqZUFzvQTx0/5JEkF84CxeB8MlPru+1R9gZdWvLFca3iVA18DA=="
+      "sig": "HkR8Xk0qEt+h8qf1D7zLIEPiMeDVzyqR6lXkLLhhJmWchWmzo0to/jyyclYaLHhDgnFHITPHMX64pw2qs5KGBA=="
     }
   ],
   "status": "pending",
   "versions": {
-    "0.1.0": {
+    "2026.6.1": {
       "files": [],
       "minAppVersion": "1.7.7",
       "platforms": [
@@ -29,10 +29,10 @@
         "pending": true,
         "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
         "size": 0,
-        "url": "https://registry.lapis.md/assets/lapis-graph/0.1.0/release.signed.json"
+        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-markdown-lint-2026.6.1-release.signed.json"
       },
-      "releasedAt": "2026-05-31T00:00:00.000Z",
-      "version": "0.1.0"
+      "releasedAt": "2026-06-01T00:00:00.000Z",
+      "version": "2026.6.1"
     }
   }
 }

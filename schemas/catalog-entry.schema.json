@@ -144,19 +144,21 @@
         "releaseManifest": { "$ref": "#/$defs/hashedRemoteFile" },
         "files": {
           "type": "array",
-          "items": {
-            "allOf": [
-              { "$ref": "#/$defs/hashedRemoteFile" },
-              {
-                "type": "object",
-                "required": ["path"],
-                "properties": {
-                  "path": { "$ref": "#/$defs/relativePath" }
-                }
-              }
-            ]
-          }
+          "items": { "$ref": "#/$defs/releaseFile" }
         }
+      }
+    },
+    "releaseFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "url", "sha256", "size"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "url": { "$ref": "#/$defs/httpsUrl" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "size": { "type": "integer", "minimum": 0 },
+        "pending": { "type": "boolean" },
+        "optional": { "type": "boolean" }
       }
     }
   }

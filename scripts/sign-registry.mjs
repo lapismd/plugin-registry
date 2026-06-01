@@ -7,16 +7,11 @@ import {
   stableStringify,
   writeJson,
 } from "./lib/registry.mjs";
+import { resolveRegistrySigningKey } from "./lib/keys.mjs";
 
-const keyId = process.env.LAPIS_REGISTRY_KEY_ID;
-const privateKeyPem = process.env.LAPIS_REGISTRY_PRIVATE_KEY_PEM;
-
-if (!keyId || !privateKeyPem) {
-  console.error(
-    "LAPIS_REGISTRY_KEY_ID and LAPIS_REGISTRY_PRIVATE_KEY_PEM are required.",
-  );
-  process.exit(1);
-}
+const signingKey = await resolveRegistrySigningKey();
+const keyId = signingKey.keyId;
+const privateKeyPem = signingKey.privateKeyPem;
 
 const targets = [
   "index.json",
@@ -65,4 +60,6 @@ root.roles = {
 };
 await fs.writeFile(rootUrl, `${stableStringify(root, 2)}\n`);
 
-console.log(`Signed ${targets.length} registry metadata files with ${keyId}.`);
+console.log(
+  `Signed ${targets.length} registry metadata files with ${keyId} (${signingKey.source}).`,
+);

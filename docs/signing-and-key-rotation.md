@@ -40,6 +40,26 @@ Node-side tooling and raw base64 Ed25519 key bytes for browser verification.
 Private keys are provided through protected CI secrets and must never be
 committed.
 
+Local registry signing can use the same operator-friendly fallback pattern as
+plugin release signing:
+
+```sh
+pnpm registry:keygen
+pnpm registry:sign
+```
+
+`pnpm registry:keygen` writes `~/.lapis/lapis-registry-key.json` plus sibling
+private/public key files. `pnpm registry:sign` still prefers
+`LAPIS_REGISTRY_KEY_ID` and `LAPIS_REGISTRY_PRIVATE_KEY_PEM`; if those are not
+set, it reads the default local registry key.
+
+Plugin release signing keys remain separate. During `pnpm registry:sync:forgejo`,
+release manifests are trusted when signed by a release key already listed in
+`generated/v1/trust/root.json`, or by a local operator key from
+`~/.lapis/lapis-plugin-release-key.json` / release public-key env vars. When a
+local release key verifies a synced release, the registry trust root records
+that public key under `roles.release`.
+
 ## CI Secrets
 
 - `LAPIS_REGISTRY_KEY_ID`

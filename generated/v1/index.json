@@ -150,6 +150,36 @@
         "verified"
       ],
       "categories": [
+        "markdown",
+        "quality"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Markdown linting diagnostics for Lapis notes.",
+      "detail": "plugins/lapis-markdown-lint.json",
+      "id": "lapis-markdown-lint",
+      "latestVersion": "2026.6.1",
+      "minAppVersion": "1.7.7",
+      "name": "Markdown Lint",
+      "owner": {
+        "name": "Lapis Notes",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "electron"
+      ],
+      "schemaVersion": 1,
+      "status": "pending"
+    },
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://app.lapis.md",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
         "notebook",
         "markdown"
       ],
@@ -283,8 +313,8 @@
   "signatures": [
     {
       "alg": "ed25519",
-      "keyId": "lapis-registry-bootstrap-2026-05",
-      "sig": "VEyMuv+gdKiAdXEofmypThvhh0wgs0m0vJsfC1TAz/1tl4G3CGCDkpn7liCEXFIzZhb5Vs973npvvnhSt9jlCw=="
+      "keyId": "lapis-registry-2026-06",
+      "sig": "oRMOQR96wfsjnl7/tyUOz5G2E79hd2WBlBs1ZLycxnJFlBka6CCIaePLKrC6FMeA1qAMenBAwgEz0+508ZREBA=="
     }
   ]
 }

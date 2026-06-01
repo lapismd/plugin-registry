@@ -5,7 +5,8 @@ Static plugin registry metadata for Lapis Notes.
 The V1 registry publishes inline-signed JSON metadata for official installable
 plugins.
 Generated files under `generated/v1/` are intended to be deployed as static
-assets, initially through Cloudflare Pages.
+assets, while immutable official plugin release assets are published by the
+`lapis-notes` app repo as Forgejo release downloads.
 
 ## Commands
 
@@ -13,13 +14,17 @@ assets, initially through Cloudflare Pages.
 pnpm install
 pnpm check
 pnpm registry:validate
+pnpm registry:sync:forgejo -- --dry-run
 pnpm registry:generate
 pnpm registry:verify-signatures
 ```
 
-Signing requires protected CI secrets:
+Registry signing uses protected CI secrets or a local key generated under
+`~/.lapis/`:
 
 ```sh
+pnpm registry:keygen
+
 LAPIS_REGISTRY_KEY_ID=lapis-registry-2026-01 \
 LAPIS_REGISTRY_PRIVATE_KEY_PEM="$(cat private-key.pem)" \
 pnpm registry:sign
@@ -36,6 +41,6 @@ so verification can run in CI before production keys are installed.
   signatures plus matching signature sidecars.
 - `scripts/**`: validation, generation, signing, and verification tooling.
 
-The first real plugin entry is `lapis-docs`. App-side installation,
-provenance state, and migration from the bundled `docs` plugin live in the
-`lapis-notes` repository.
+Official plugin asset builds, release signing, and Forgejo upload live in the
+`lapis-notes` repository. This registry syncs those published releases into
+reviewed metadata with `pnpm registry:sync:forgejo`.

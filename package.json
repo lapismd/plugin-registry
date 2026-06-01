@@ -10,8 +10,10 @@
   "scripts": {
     "registry:validate": "node scripts/validate-registry.mjs",
     "registry:validate:remote": "node scripts/validate-registry.mjs --strict-remote",
+    "registry:sync:forgejo": "node scripts/sync-forgejo-releases.mjs",
     "registry:generate": "node scripts/generate-registry.mjs",
     "registry:sign": "node scripts/sign-registry.mjs",
+    "registry:keygen": "node scripts/generate-registry-key.mjs",
     "registry:verify-signatures": "node scripts/verify-signatures.mjs",
     "site:dev": "astro dev",
     "site:build": "node scripts/build-site.mjs",
