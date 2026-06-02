@@ -2,20 +2,29 @@
   "$schema": "../../schemas/catalog-entry.schema.json",
   "author": "Lapis Notes",
   "authorUrl": "https://app.lapis.md",
-  "badges": ["official", "verified"],
-  "categories": ["markdown", "quality"],
+  "badges": [
+    "official",
+    "verified"
+  ],
+  "categories": [
+    "markdown",
+    "quality"
+  ],
   "channel": "official",
   "description": "Markdown linting diagnostics for Lapis notes.",
   "id": "lapis-markdown-lint",
   "latestVersion": "2026.6.1",
   "minAppVersion": "1.7.7",
   "name": "Markdown Lint",
-  "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-markdown-lint/README.md",
   "owner": {
     "name": "Lapis Notes",
-    "verified": true,
+    "verified": true
   },
-  "platforms": ["web", "electron"],
+  "platforms": [
+    "web",
+    "electron"
+  ],
+  "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-markdown-lint/README.md",
   "schemaVersion": 1,
   "status": "active",
   "versions": {
@@ -23,38 +32,47 @@
       "files": [
         {
           "path": "index.d.ts",
-          "sha256": "7bade69803e0238ac7e4f9fd11449b27b8425185bc6df9469ee0b3586b8e71b3",
-          "size": 202,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-markdown-lint-2026.6.1-file-aW5kZXguZC50cw",
+          "sha256": "3c2f5554769097bfd24d0cc3be7933f723734fabc813aec3691e792f31926179",
+          "size": 412,
+          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-markdown-lint-2026.6.1-file-aW5kZXguZC50cw"
         },
         {
           "path": "index.js",
-          "sha256": "7a1ba26ce71b170c64db3f6a467d5de72867b62f9e78a4acacc0e17d1372004b",
-          "size": 4648,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-markdown-lint-2026.6.1-file-aW5kZXguanM",
+          "sha256": "e81f0cb4228101ac00a10a5f70f625ee8137eb3578b7609fe30d298c6854f29b",
+          "size": 4265,
+          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-markdown-lint-2026.6.1-file-aW5kZXguanM"
+        },
+        {
+          "path": "main.es.js",
+          "sha256": "f3e508162da05225434f57dc5f9e2e5a2ffb8c5c570cbfa3d579dda8246b7877",
+          "size": 153229,
+          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-markdown-lint-2026.6.1-file-bWFpbi5lcy5qcw"
         },
         {
           "path": "main.js",
-          "sha256": "7a1ba26ce71b170c64db3f6a467d5de72867b62f9e78a4acacc0e17d1372004b",
-          "size": 4648,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-markdown-lint-2026.6.1-file-bWFpbi5qcw",
+          "sha256": "95ba597aeb5925e4a68780a2594f130e2215678f9dad309dd650b67d58902253",
+          "size": 151652,
+          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-markdown-lint-2026.6.1-file-bWFpbi5qcw"
         },
         {
           "path": "manifest.json",
-          "sha256": "122a9665e02d1ac86eb02265b66157e710660d98141a111f02f74a63e6042071",
-          "size": 1180,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-markdown-lint-2026.6.1-file-bWFuaWZlc3QuanNvbg",
-        },
+          "sha256": "306b96d5a40e3caddd2161ca2e43f9115c9e84f6d8f6c19007d842234f88e77d",
+          "size": 1182,
+          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-markdown-lint-2026.6.1-file-bWFuaWZlc3QuanNvbg"
+        }
       ],
       "minAppVersion": "1.7.7",
-      "platforms": ["web", "electron"],
+      "platforms": [
+        "web",
+        "electron"
+      ],
       "releaseManifest": {
-        "sha256": "f4c8cede7e38115d7eb0e9b423a8d0be7d470a2f52ba3c7fcd923397e28a0e5b",
-        "size": 1456,
-        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-markdown-lint-2026.6.1-release.signed.json",
+        "sha256": "6d3ec4f31811d734166a0c553e4fac7182dcd37d0591b7480ca2b6c088491d59",
+        "size": 1716,
+        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-markdown-lint-2026.6.1-release.signed.json"
       },
       "releasedAt": "2026-05-31T00:00:00.000Z",
-      "version": "2026.6.1",
-    },
-  },
+      "version": "2026.6.1"
+    }
+  }
 }
