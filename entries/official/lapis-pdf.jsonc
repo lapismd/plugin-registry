@@ -30,13 +30,13 @@
   "versions": {
     "2026.6.6": {
       "bundle": {
-        "sha256": "9c716cc1588dcc39c4c4f0fefb5622bfdad3f82acbd3706b40b0402cedf28485",
-        "size": 25300193,
+        "sha256": "fd1d2e29a963461bc64f5690e15068c6a9db31ce4c37152a628688c61d85b407",
+        "size": 25300245,
         "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-pdf-2026.6.6/lapis-pdf-2026.6.6.lapis-plugin",
       },
       "minAppVersion": "1.7.7",
       "platforms": ["web", "electron"],
-      "releasedAt": "2026-06-06T00:00:00.000Z",
+      "releasedAt": "2026-06-06T22:47:18Z",
       "version": "2026.6.6",
     },
   },

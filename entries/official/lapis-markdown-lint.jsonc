@@ -21,13 +21,13 @@
   "versions": {
     "2026.6.6": {
       "bundle": {
-        "sha256": "3545d166219e2cef0505e774b4226e7c491fcb09744d18dbbdb7b7482b8fed5d",
-        "size": 313227,
+        "sha256": "72ef1de9ca9d4c930d3d6fcde935ca8a38b00fea30b39e17adb99da4244fab0a",
+        "size": 313279,
         "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-markdown-lint-2026.6.6/lapis-markdown-lint-2026.6.6.lapis-plugin",
       },
       "minAppVersion": "1.7.7",
       "platforms": ["web", "electron"],
-      "releasedAt": "2026-06-06T00:00:00.000Z",
+      "releasedAt": "2026-06-06T22:48:25Z",
       "version": "2026.6.6",
     },
   },

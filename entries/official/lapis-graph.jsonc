@@ -21,13 +21,13 @@
   "versions": {
     "2026.6.6": {
       "bundle": {
-        "sha256": "bd9967701bb54074bbde42ab52ceb95aee197320abfb70ff4270ff1348b1eb82",
-        "size": 343067,
+        "sha256": "32f9a2225934c6c0c1dbd945b27c8d58df6785544abb9a4c793cd6cf337980dc",
+        "size": 343119,
         "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin",
       },
       "minAppVersion": "1.7.7",
       "platforms": ["web", "electron"],
-      "releasedAt": "2026-06-06T00:00:00.000Z",
+      "releasedAt": "2026-06-06T22:47:38Z",
       "version": "2026.6.6",
     },
   },

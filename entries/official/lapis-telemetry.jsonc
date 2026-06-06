@@ -21,13 +21,13 @@
   "versions": {
     "2026.6.6": {
       "bundle": {
-        "sha256": "f715df726c4b063c29e63018f0d6de5972c9df7c0f8979084eea92d828058e78",
-        "size": 714692,
+        "sha256": "d92d3f1e8a0431f3a4a7ec41894bcb9c0b74f5dd50460603f482899648cb36f9",
+        "size": 714744,
         "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-telemetry-2026.6.6/lapis-telemetry-2026.6.6.lapis-plugin",
       },
       "minAppVersion": "1.7.7",
       "platforms": ["web", "electron"],
-      "releasedAt": "2026-06-06T00:00:00.000Z",
+      "releasedAt": "2026-06-06T22:48:22Z",
       "version": "2026.6.6",
     },
   },
