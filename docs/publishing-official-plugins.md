@@ -25,9 +25,11 @@ Expected Forgejo release asset names:
 ```
 
 The `.lapis-plugin` bundle is a deterministic ZIP-compatible archive containing
-`release.signed.json` and every installable plugin file. The signed release
-manifest records each bundled file path, hash, and size. `manifest.json` and
-`main.js` are required by app-side release packaging.
+`release.signed.json` and every installable plugin file. `release.signed.json`
+is stored as the first archive entry; plugin files are DEFLATE-compressed with
+deterministic settings. The signed release manifest records each bundled file
+path, uncompressed hash, and uncompressed size. `manifest.json` and `main.js`
+are required by app-side release packaging.
 
 ## Registry Update Flow
 

@@ -13,6 +13,9 @@ importers:
       ajv-formats:
         specifier: ^3.0.1
         version: 3.0.1(ajv@8.20.0)
+      fflate:
+        specifier: ^0.8.3
+        version: 0.8.3
       jsonc-parser:
         specifier: ^3.3.1
         version: 3.3.1
@@ -1523,6 +1526,12 @@ packages:
     peerDependenciesMeta:
       picomatch:
         optional: true
+
+  fflate@0.8.3:
+    resolution:
+      {
+        integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==,
+      }
 
   flattie@1.1.1:
     resolution:
@@ -3849,6 +3858,8 @@ snapshots:
   fdir@6.5.0(picomatch@4.0.4):
     optionalDependencies:
       picomatch: 4.0.4
+
+  fflate@0.8.3: {}
 
   flattie@1.1.1: {}
 

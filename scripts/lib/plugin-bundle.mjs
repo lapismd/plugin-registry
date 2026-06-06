@@ -1,7 +1,91 @@
+import { Unzip, UnzipInflate } from "fflate";
+
 export const pluginBundleReleaseManifestPath = "release.signed.json";
+export const pluginBundleStoredMethod = 0;
+export const pluginBundleDeflateMethod = 8;
 
 export function parsePluginBundle(input) {
   const bytes = Buffer.isBuffer(input) ? input : Buffer.from(input);
+  const expectedEntries = inspectPluginBundleMetadata(bytes);
+  const entries = new Map();
+  let seenFileCount = 0;
+  let firstError = null;
+
+  const unzip = new Unzip((file) => {
+    if (firstError) return;
+    try {
+      const expectedEntry = expectedEntries[seenFileCount];
+      seenFileCount += 1;
+      if (!expectedEntry) {
+        throw new Error(
+          `Unexpected file in .lapis-plugin bundle: ${file.name}`,
+        );
+      }
+      if (
+        file.name !== expectedEntry.path ||
+        file.compression !== expectedEntry.compressionMethod
+      ) {
+        throw new Error(
+          `Plugin bundle local entry order or method is invalid: ${file.name}`,
+        );
+      }
+      assertBundlePath(file.name);
+      if (entries.has(file.name)) {
+        throw new Error(`Duplicate file in .lapis-plugin bundle: ${file.name}`);
+      }
+      if (!isSupportedCompressionMethod(file.compression)) {
+        throw new Error(
+          `Unsupported plugin bundle compression method ${file.compression}: ${file.name}`,
+        );
+      }
+
+      const chunks = [];
+      let byteLength = 0;
+      file.ondata = (error, chunk, final) => {
+        if (error) {
+          firstError = new Error(
+            `Unable to extract plugin bundle file: ${file.name}`,
+            { cause: error },
+          );
+          return;
+        }
+        chunks.push(Buffer.from(chunk));
+        byteLength += chunk.byteLength;
+        if (final) {
+          entries.set(file.name, Buffer.concat(chunks, byteLength));
+        }
+      };
+      file.start();
+    } catch (error) {
+      firstError = error;
+    }
+  });
+  unzip.register(UnzipInflate);
+
+  try {
+    unzip.push(bytes, true);
+  } catch (error) {
+    firstError = error;
+  }
+
+  if (firstError) throw firstError;
+  if (seenFileCount !== expectedEntries.length) {
+    throw new Error(".lapis-plugin bundle entry count is invalid.");
+  }
+  for (const expectedEntry of expectedEntries) {
+    if (!entries.has(expectedEntry.path)) {
+      throw new Error(
+        `.lapis-plugin bundle did not extract ${expectedEntry.path}.`,
+      );
+    }
+  }
+  if (!entries.has(pluginBundleReleaseManifestPath)) {
+    throw new Error(".lapis-plugin bundle is missing release.signed.json.");
+  }
+  return entries;
+}
+
+function inspectPluginBundleMetadata(bytes) {
   const eocdOffset = findEndOfCentralDirectory(bytes);
   const totalEntries = bytes.readUInt16LE(eocdOffset + 10);
   const centralDirectorySize = bytes.readUInt32LE(eocdOffset + 12);
@@ -28,13 +112,13 @@ export function parsePluginBundle(input) {
     "central directory",
   );
 
-  const entries = new Map();
+  const entries = [];
+  const seenPaths = new Set();
   let offset = centralDirectoryOffset;
   for (let index = 0; index < totalEntries; index += 1) {
     assertSignature(bytes, offset, 0x02014b50, "central directory entry");
     const flags = bytes.readUInt16LE(offset + 8);
     const compressionMethod = bytes.readUInt16LE(offset + 10);
-    const crc32 = bytes.readUInt32LE(offset + 16);
     const compressedSize = bytes.readUInt32LE(offset + 20);
     const uncompressedSize = bytes.readUInt32LE(offset + 24);
     const nameLength = bytes.readUInt16LE(offset + 28);
@@ -48,68 +132,97 @@ export function parsePluginBundle(input) {
       .toString("utf8");
 
     assertBundlePath(entryPath);
-    if (entries.has(entryPath)) {
+    if (seenPaths.has(entryPath)) {
       throw new Error(`Duplicate file in .lapis-plugin bundle: ${entryPath}`);
     }
-    if ((flags & 0x1) !== 0 || (flags & 0x8) !== 0) {
+    seenPaths.add(entryPath);
+    if ((flags & 0x41) !== 0) {
       throw new Error(
-        `Unsupported ZIP flags for plugin bundle file: ${entryPath}`,
+        `Encrypted plugin bundle file is not supported: ${entryPath}`,
       );
     }
-    if (compressionMethod !== 0) {
+    if (!isSupportedCompressionMethod(compressionMethod)) {
       throw new Error(
-        `Plugin bundle file must use stored ZIP entries: ${entryPath}`,
+        `Unsupported plugin bundle compression method ${compressionMethod}: ${entryPath}`,
       );
     }
-    if (compressedSize !== uncompressedSize) {
+    if (compressedSize === 0xffffffff || uncompressedSize === 0xffffffff) {
       throw new Error(
-        `Plugin bundle file size metadata is invalid: ${entryPath}`,
+        `ZIP64 plugin bundle file metadata is not supported: ${entryPath}`,
       );
     }
-
-    const data = readLocalEntry({
-      bytes,
-      entryPath,
-      localHeaderOffset,
-      size: uncompressedSize,
-    });
-    if (crc32For(data) !== crc32) {
-      throw new Error(`Plugin bundle file CRC-32 mismatch: ${entryPath}`);
-    }
-    entries.set(entryPath, data);
+    entries.push(
+      inspectLocalEntry({
+        bytes,
+        entryPath,
+        localHeaderOffset,
+        compressionMethod,
+        flags,
+      }),
+    );
     offset += 46 + nameLength + extraLength + commentLength;
   }
 
   if (offset !== centralDirectoryOffset + centralDirectorySize) {
     throw new Error(".lapis-plugin central directory size is invalid.");
   }
-  if (!entries.has(pluginBundleReleaseManifestPath)) {
+
+  const localOrder = [...entries].sort(
+    (left, right) => left.localHeaderOffset - right.localHeaderOffset,
+  );
+  const firstEntry = localOrder[0];
+  if (firstEntry?.path !== pluginBundleReleaseManifestPath) {
+    throw new Error(
+      ".lapis-plugin bundle must store release.signed.json as the first entry.",
+    );
+  }
+  if (firstEntry.compressionMethod !== pluginBundleStoredMethod) {
+    throw new Error(".lapis-plugin release.signed.json entry must be stored.");
+  }
+  if (!seenPaths.has(pluginBundleReleaseManifestPath)) {
     throw new Error(".lapis-plugin bundle is missing release.signed.json.");
   }
-  return entries;
+  return localOrder;
 }
 
-function readLocalEntry({ bytes, entryPath, localHeaderOffset, size }) {
+function inspectLocalEntry({
+  bytes,
+  entryPath,
+  localHeaderOffset,
+  compressionMethod,
+  flags,
+}) {
   assertSignature(bytes, localHeaderOffset, 0x04034b50, "local file header");
-  const flags = bytes.readUInt16LE(localHeaderOffset + 6);
-  const compressionMethod = bytes.readUInt16LE(localHeaderOffset + 8);
-  const compressedSize = bytes.readUInt32LE(localHeaderOffset + 18);
+  const localFlags = bytes.readUInt16LE(localHeaderOffset + 6);
+  const localCompressionMethod = bytes.readUInt16LE(localHeaderOffset + 8);
   const nameLength = bytes.readUInt16LE(localHeaderOffset + 26);
   const extraLength = bytes.readUInt16LE(localHeaderOffset + 28);
   const nameStart = localHeaderOffset + 30;
   assertRange(nameStart, nameLength, bytes.byteLength, "local entry name");
+  assertRange(
+    nameStart + nameLength,
+    extraLength,
+    bytes.byteLength,
+    "local entry extra",
+  );
   const localPath = bytes
     .subarray(nameStart, nameStart + nameLength)
     .toString("utf8");
-  if (localPath !== entryPath || flags !== 0 || compressionMethod !== 0) {
+  if (
+    localPath !== entryPath ||
+    localFlags !== flags ||
+    localCompressionMethod !== compressionMethod
+  ) {
     throw new Error(`Plugin bundle local header mismatch: ${entryPath}`);
   }
-  if (compressedSize !== size) {
-    throw new Error(`Plugin bundle local size mismatch: ${entryPath}`);
-  }
-  const dataStart = nameStart + nameLength + extraLength;
-  assertRange(dataStart, size, bytes.byteLength, "local entry data");
-  return bytes.subarray(dataStart, dataStart + size);
+  return { path: entryPath, compressionMethod, localHeaderOffset };
+}
+
+function isSupportedCompressionMethod(compressionMethod) {
+  return (
+    compressionMethod === pluginBundleStoredMethod ||
+    compressionMethod === pluginBundleDeflateMethod
+  );
 }
 
 function findEndOfCentralDirectory(bytes) {
@@ -174,15 +287,4 @@ function assertRange(offset, length, totalLength, label) {
   ) {
     throw new Error(`Invalid .lapis-plugin ${label} range.`);
   }
-}
-
-function crc32For(bytes) {
-  let crc = 0xffffffff;
-  for (const byte of bytes) {
-    crc ^= byte;
-    for (let bit = 0; bit < 8; bit += 1) {
-      crc = crc & 1 ? 0xedb88320 ^ (crc >>> 1) : crc >>> 1;
-    }
-  }
-  return (crc ^ 0xffffffff) >>> 0;
 }

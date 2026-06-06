@@ -5,6 +5,7 @@ import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { Zip, ZipDeflate, ZipPassThrough } from "fflate";
 
 import {
   bundleAssetName,
@@ -610,80 +611,38 @@ function signedReleaseFixture({
 }
 
 function buildPluginBundle(entries) {
-  const sortedEntries = [...entries].sort((a, b) =>
-    a.path.localeCompare(b.path),
+  const releaseEntry = entries.find(
+    (entry) => entry.path === "release.signed.json",
   );
-  const localParts = [];
-  const centralParts = [];
-  let offset = 0;
-
-  for (const entry of sortedEntries) {
-    const name = Buffer.from(entry.path);
-    const data = Buffer.from(entry.data);
-    const crc32 = crc32For(data);
-    const local = Buffer.alloc(30);
-    local.writeUInt32LE(0x04034b50, 0);
-    local.writeUInt16LE(20, 4);
-    local.writeUInt16LE(0, 6);
-    local.writeUInt16LE(0, 8);
-    local.writeUInt16LE(0, 10);
-    local.writeUInt16LE(0, 12);
-    local.writeUInt32LE(crc32, 14);
-    local.writeUInt32LE(data.byteLength, 18);
-    local.writeUInt32LE(data.byteLength, 22);
-    local.writeUInt16LE(name.byteLength, 26);
-    local.writeUInt16LE(0, 28);
-    localParts.push(local, name, data);
-
-    const central = Buffer.alloc(46);
-    central.writeUInt32LE(0x02014b50, 0);
-    central.writeUInt16LE(20, 4);
-    central.writeUInt16LE(20, 6);
-    central.writeUInt16LE(0, 8);
-    central.writeUInt16LE(0, 10);
-    central.writeUInt16LE(0, 12);
-    central.writeUInt16LE(0, 14);
-    central.writeUInt32LE(crc32, 16);
-    central.writeUInt32LE(data.byteLength, 20);
-    central.writeUInt32LE(data.byteLength, 24);
-    central.writeUInt16LE(name.byteLength, 28);
-    central.writeUInt16LE(0, 30);
-    central.writeUInt16LE(0, 32);
-    central.writeUInt16LE(0, 34);
-    central.writeUInt16LE(0, 36);
-    central.writeUInt32LE(0, 38);
-    central.writeUInt32LE(offset, 42);
-    centralParts.push(central, name);
-
-    offset += local.byteLength + name.byteLength + data.byteLength;
-  }
-
-  const centralOffset = offset;
-  const centralSize = centralParts.reduce(
-    (sum, part) => sum + part.byteLength,
-    0,
-  );
-  const end = Buffer.alloc(22);
-  end.writeUInt32LE(0x06054b50, 0);
-  end.writeUInt16LE(0, 4);
-  end.writeUInt16LE(0, 6);
-  end.writeUInt16LE(sortedEntries.length, 8);
-  end.writeUInt16LE(sortedEntries.length, 10);
-  end.writeUInt32LE(centralSize, 12);
-  end.writeUInt32LE(centralOffset, 16);
-  end.writeUInt16LE(0, 20);
-  return Buffer.concat([...localParts, ...centralParts, end]);
-}
-
-function crc32For(bytes) {
-  let crc = 0xffffffff;
-  for (const byte of bytes) {
-    crc ^= byte;
-    for (let bit = 0; bit < 8; bit += 1) {
-      crc = crc & 1 ? 0xedb88320 ^ (crc >>> 1) : crc >>> 1;
+  const pluginEntries = entries
+    .filter((entry) => entry.path !== "release.signed.json")
+    .sort((a, b) => a.path.localeCompare(b.path));
+  const chunks = [];
+  let zipError = null;
+  const zip = new Zip((error, chunk) => {
+    if (error) {
+      zipError = error;
+      return;
     }
+    chunks.push(Buffer.from(chunk));
+  });
+  const bundleMtime = new Date(1980, 0, 1, 0, 0, 0);
+  const releaseStream = new ZipPassThrough("release.signed.json");
+  releaseStream.mtime = bundleMtime;
+  zip.add(releaseStream);
+  releaseStream.push(Buffer.from(releaseEntry.data), true);
+
+  for (const entry of pluginEntries) {
+    const stream = new ZipDeflate(entry.path, { level: 6 });
+    stream.mtime = bundleMtime;
+    zip.add(stream);
+    stream.push(Buffer.from(entry.data), true);
   }
-  return (crc ^ 0xffffffff) >>> 0;
+  zip.end();
+  if (zipError) {
+    throw zipError;
+  }
+  return Buffer.concat(chunks);
 }
 
 async function fixtureDir() {
