@@ -1,5 +1,5 @@
 ---
-import { titleCase, type SitePlugin } from "../lib/registry-data";
+import { formatBytes, titleCase, type SitePlugin } from "../lib/registry-data";
 import CategoryIcon from "./CategoryIcon.astro";
 import StatusBadge from "./StatusBadge.astro";
 
@@ -29,6 +29,7 @@ const primaryCategory = plugin.categories[0] ?? "package";
     <div class="plugin-meta">
       <StatusBadge status={plugin.status} />
       <span>{plugin.latestVersion}</span>
+      <span>{formatBytes(plugin.latestRelease.bundle.size)}</span>
       <span>{plugin.platforms.map(titleCase).join(", ")}</span>
     </div>
 

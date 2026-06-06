@@ -21,22 +21,21 @@ signing, and validation before metadata is considered published.
 Expected Forgejo release asset names:
 
 ```text
-<plugin-id>-<version>-release.json
-<plugin-id>-<version>-release.signed.json
-<plugin-id>-<version>-artifact.json
-<plugin-id>-<version>.zip
-<plugin-id>-<version>-file-<base64url-path>
+<plugin-id>-<version>.lapis-plugin
 ```
 
-The signed release manifest lists the installable file URLs, hashes, and sizes.
-`manifest.json` and `main.js` are required by app-side release packaging.
+The `.lapis-plugin` bundle is a deterministic ZIP-compatible archive containing
+`release.signed.json` and every installable plugin file. The signed release
+manifest records each bundled file path, hash, and size. `manifest.json` and
+`main.js` are required by app-side release packaging.
 
 ## Registry Update Flow
 
 1. Build and package the plugin from `lapis-notes`.
 2. Sign `release.json` as `release.signed.json` with the official plugin release
-   key.
-3. Upload assets to the deterministic Forgejo release in `lapis-notes/lapis`.
+   key and package it with the plugin files as `<plugin-id>-<version>.lapis-plugin`.
+3. Upload the single bundle to the deterministic Forgejo release in
+   `lapis-notes/lapis`.
 4. Sync registry entries from Forgejo:
 
 ```sh
@@ -50,17 +49,13 @@ pnpm registry:validate:remote
 
 `registry:sync:forgejo -- --plugin-versions <plugin@version,...>` resolves each
 pair to `official-plugin-assets-<plugin-id>-<version>`, fetches that Forgejo
-release by tag, verifies the signed official release manifest, fetches release
-files, computes hashes and sizes, updates `entries/official/*.jsonc`, and
-activates only plugins with verified remote assets. Existing registry entries
-that point at historical shared batch releases stay valid and are not migrated.
-Bundled app-default functionality is intentionally outside this installable
-registry flow.
-
-Legacy compatibility remains available: `--release-tag <tag>` restricts sync to
-one historical shared release, and running without `--plugin-versions` or
-`--release-tag` scans recent Forgejo releases for the latest compatible asset.
-Use deterministic `--plugin-versions` for normal new official publishes.
+release by tag, downloads the `.lapis-plugin` bundle, verifies the bundle hash
+and size, verifies the embedded signed official release manifest, validates each
+signed file against the bundled bytes, updates `entries/official/*.jsonc`, and
+activates only plugins with verified bundles. Entries that still point at
+historical multi-asset releases must be removed or republished as bundles before
+publication. Bundled app-default functionality is intentionally outside this
+installable registry flow.
 
 Official entries may also include a mutable `readmeUrl` that points at an
 HTTPS README, usually the package-local README in `lapis-notes`. The URL is
@@ -74,6 +69,8 @@ Published registry metadata and README artifacts are served with permissive CORS
 headers from Cloudflare Pages middleware so browser and PWA clients can fetch
 them directly.
 
-The default `registry:validate` command allows pending entries for local
-bootstrap work. The publish workflow uses `registry:validate:remote`, which
-fails if pending release manifests remain.
+The default `registry:validate` command checks schemas and local registry rules
+without requiring the Forgejo assets to exist yet. The publish workflow uses
+`registry:validate:remote`, which fetches each bundle, verifies the embedded
+release signature and signed file hashes, and fails if pending plugin bundles
+remain.

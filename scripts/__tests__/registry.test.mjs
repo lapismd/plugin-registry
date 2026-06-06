@@ -46,13 +46,12 @@ function validEntry(overrides = {}) {
         minAppVersion: "1.7.7",
         releasedAt: "2026-05-31T00:00:00.000Z",
         platforms: ["web", "electron"],
-        releaseManifest: {
-          url: "https://registry.lapis.md/assets/lapis-docs/0.1.0/release.signed.json",
+        bundle: {
+          url: "https://registry.lapis.md/assets/lapis-docs/0.1.0/lapis-docs-0.1.0.lapis-plugin",
           sha256: "0".repeat(64),
           size: 0,
           pending: true,
         },
-        files: [],
       },
     },
     __sourcePath: "entries/official/lapis-docs.jsonc",
@@ -88,8 +87,8 @@ test("rejects invalid plugin ids", () => {
 
 test("rejects non-HTTPS release URLs", () => {
   const entry = validEntry();
-  entry.versions["0.1.0"].releaseManifest.url =
-    "http://example.test/release.signed.json";
+  entry.versions["0.1.0"].bundle.url =
+    "http://example.test/lapis-docs-0.1.0.lapis-plugin";
   const errors = validateEntryRules([entry]);
   assert.match(errors.join("\n"), /URL must use HTTPS/);
 });
@@ -101,19 +100,11 @@ test("rejects non-HTTPS readmeUrl", () => {
   assert.match(errors.join("\n"), /readmeUrl must use HTTPS/);
 });
 
-test("rejects path traversal in release files", () => {
+test("rejects non-pending bundles without real hash and size", () => {
   const entry = validEntry();
-  entry.versions["0.1.0"].files = [
-    {
-      path: "../main.js",
-      url: "https://registry.lapis.md/assets/lapis-docs/0.1.0/main.js",
-      sha256: "0".repeat(64),
-      size: 0,
-      pending: true,
-    },
-  ];
+  delete entry.versions["0.1.0"].bundle.pending;
   const errors = validateEntryRules([entry]);
-  assert.match(errors.join("\n"), /invalid relative path/);
+  assert.match(errors.join("\n"), /real sha256 and size/);
 });
 
 test("builds deterministic registry metadata with Docs contribution summary", () => {

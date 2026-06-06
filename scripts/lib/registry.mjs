@@ -10,6 +10,11 @@ import path from "node:path";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import { parse } from "jsonc-parser";
+import {
+  assertSafePluginRelativePath,
+  parsePluginBundle,
+  pluginBundleReleaseManifestPath,
+} from "./plugin-bundle.mjs";
 
 export const repoRoot = new URL("../../", import.meta.url);
 export const generatedDir = new URL("../../generated/v1/", import.meta.url);
@@ -136,20 +141,10 @@ export function validateEntryRules(entries) {
           `${entry.__sourcePath}: versions key ${version} does not match release version ${release.version}`,
         );
       }
-      validateHttpsFile(errors, entry.__sourcePath, release.releaseManifest);
-      for (const file of release.files) {
-        validateRelativePath(errors, entry.__sourcePath, file.path);
-        validateHttpsFile(errors, entry.__sourcePath, file);
-      }
+      validateHttpsFile(errors, entry.__sourcePath, release.bundle);
     }
   }
   return errors;
-}
-
-export function validateRelativePath(errors, sourcePath, value) {
-  if (value.startsWith("/") || value.split("/").includes("..")) {
-    errors.push(`${sourcePath}: invalid relative path ${value}`);
-  }
 }
 
 export function validateHttpsFile(errors, sourcePath, file) {
@@ -161,7 +156,7 @@ export function validateHttpsFile(errors, sourcePath, file) {
   }
   if (file.sha256 === "0".repeat(64) || file.size === 0) {
     errors.push(
-      `${sourcePath}: non-pending release files must provide real sha256 and size`,
+      `${sourcePath}: non-pending remote files must provide real sha256 and size`,
     );
   }
 }
@@ -174,20 +169,30 @@ export async function validateRemoteAssets(
   const trustRoot = strictRemote ? await loadTrustRoot() : null;
   for (const entry of entries) {
     for (const release of Object.values(entry.versions)) {
-      if (release.releaseManifest.pending) {
+      if (release.bundle.pending) {
         if (strictRemote) {
           errors.push(
-            `${entry.__sourcePath}: pending release manifest cannot be published`,
+            `${entry.__sourcePath}: pending plugin bundle cannot be published`,
           );
         }
         continue;
       }
-      const manifest = await fetchHashedJson(release.releaseManifest);
-      if (!manifest.ok) {
-        errors.push(`${entry.__sourcePath}: ${manifest.error}`);
+      const bundle = await fetchHashedBytes(release.bundle);
+      if (!bundle.ok) {
+        errors.push(`${entry.__sourcePath}: ${bundle.error}`);
         continue;
       }
-      const signed = manifest.value;
+      let bundledFiles;
+      try {
+        bundledFiles = parsePluginBundle(bundle.bytes);
+      } catch (error) {
+        errors.push(`${entry.__sourcePath}: ${error.message}`);
+        continue;
+      }
+      const signedReleaseBytes = bundledFiles.get(
+        pluginBundleReleaseManifestPath,
+      );
+      const signed = JSON.parse(signedReleaseBytes.toString("utf8"));
       const releaseJson = signed.signed ?? signed;
       if (strictRemote && entry.channel === "official") {
         errors.push(
@@ -204,18 +209,39 @@ export async function validateRemoteAssets(
       if (releaseJson.version !== release.version) {
         errors.push(`${entry.__sourcePath}: release manifest version mismatch`);
       }
-      for (const file of release.files) {
-        if (file.pending) {
-          if (strictRemote) {
-            errors.push(
-              `${entry.__sourcePath}: pending release file cannot be published: ${file.path}`,
-            );
-          }
+      const expectedPaths = new Set();
+      for (const file of releaseJson.files ?? []) {
+        try {
+          assertSafePluginRelativePath(file.path);
+        } catch (error) {
+          errors.push(`${entry.__sourcePath}: ${error.message}`);
           continue;
         }
-        const result = await fetchHashedBytes(file);
-        if (!result.ok) {
-          errors.push(`${entry.__sourcePath}: ${result.error}`);
+        expectedPaths.add(file.path);
+        const bytes = bundledFiles.get(file.path);
+        if (!bytes) {
+          errors.push(`${entry.__sourcePath}: bundle is missing ${file.path}`);
+          continue;
+        }
+        if (sha256(bytes) !== file.sha256) {
+          errors.push(
+            `${entry.__sourcePath}: sha256 mismatch for bundled file ${file.path}`,
+          );
+        }
+        if (bytes.byteLength !== file.size) {
+          errors.push(
+            `${entry.__sourcePath}: size mismatch for bundled file ${file.path}`,
+          );
+        }
+      }
+      for (const entryPath of bundledFiles.keys()) {
+        if (
+          entryPath !== pluginBundleReleaseManifestPath &&
+          !expectedPaths.has(entryPath)
+        ) {
+          errors.push(
+            `${entry.__sourcePath}: unsigned bundled file ${entryPath}`,
+          );
         }
       }
     }
@@ -245,18 +271,6 @@ function verifyReleaseManifestSignature(envelope, trustRoot) {
   return validSignature
     ? []
     : ["official release manifest does not have a valid release signature"];
-}
-
-async function fetchHashedJson(file) {
-  const result = await fetchHashedBytes(file);
-  if (!result.ok) {
-    return result;
-  }
-  try {
-    return { ok: true, value: JSON.parse(result.bytes.toString("utf8")) };
-  } catch {
-    return { ok: false, error: `invalid JSON at ${file.url}` };
-  }
 }
 
 async function fetchHashedBytes(file) {

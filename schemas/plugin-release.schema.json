@@ -50,8 +50,7 @@
         "properties": {
           "path": { "type": "string" },
           "sha256": { "type": "string" },
-          "size": { "type": "integer" },
-          "optional": { "type": "boolean" }
+          "size": { "type": "integer" }
         }
       }
     }

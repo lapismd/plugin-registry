@@ -3,6 +3,7 @@ import CategoryIcon from "../../components/CategoryIcon.astro";
 import StatusBadge from "../../components/StatusBadge.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import {
+  formatBytes,
   getRegistrySiteData,
   readGeneratedReadmeHtml,
   relatedPlugins,
@@ -28,7 +29,7 @@ const releases = Object.values(plugin.detailData.versions).sort((a, b) =>
 const installDisabled = plugin.status !== "active";
 const release = plugin.latestRelease;
 const primaryCategory = plugin.categories[0] ?? "package";
-const assetHealth = release.releaseManifest.pending ? 24 : 100;
+const assetHealth = release.bundle.pending ? 24 : 100;
 const readmeUrl = plugin.detailData.readmeUrl;
 const readmeHtml = readmeUrl ? await readGeneratedReadmeHtml(plugin.id) : null;
 ---
@@ -75,8 +76,8 @@ const readmeHtml = readmeUrl ? await readGeneratedReadmeHtml(plugin.id) : null;
           >
             {installDisabled ? "Install pending" : "Install in Lapis"}
           </button>
-          <a class="button-secondary" href={release.releaseManifest.url}>
-            Release manifest
+          <a class="button-secondary" href={release.bundle.url}>
+            Download .lapis-plugin
           </a>
           <button class="button-icon" type="button" aria-label="More actions">
             ...
@@ -153,10 +154,11 @@ const readmeHtml = readmeUrl ? await readGeneratedReadmeHtml(plugin.id) : null;
                       <h3>{item.version}</h3>
                       <p>
                         Lapis {item.minAppVersion}+ · {item.platforms.map(titleCase).join(", ")}
+                        · {formatBytes(item.bundle.size)}
                       </p>
                     </div>
                     <span class="detail-chip">
-                      {item.releaseManifest.pending ? "Pending assets" : "Signed"}
+                      {item.bundle.pending ? "Pending bundle" : "Signed bundle"}
                     </span>
                   </article>
                 ))
@@ -175,7 +177,7 @@ const readmeHtml = readmeUrl ? await readGeneratedReadmeHtml(plugin.id) : null;
               <div class="health-bar"><i style="width: 100%"></i></div>
             </div>
             <div class="health-row">
-              <span><b>Release assets</b><b>{release.releaseManifest.pending ? "Pending" : "Ready"}</b></span>
+              <span><b>Plugin bundle</b><b>{release.bundle.pending ? "Pending" : "Ready"}</b></span>
               <div class="health-bar"><i style={`width: ${assetHealth}%`}></i></div>
             </div>
           </div>
@@ -243,10 +245,16 @@ const readmeHtml = readmeUrl ? await readGeneratedReadmeHtml(plugin.id) : null;
               </dd>
             </div>
             <div>
-              <dt>Release manifest</dt>
+              <dt>Bundle size</dt>
               <dd>
-                <a href={release.releaseManifest.url}>
-                  {release.releaseManifest.pending ? "Pending upload" : "Signed manifest"}
+                {formatBytes(release.bundle.size)}
+              </dd>
+            </div>
+            <div>
+              <dt>Plugin bundle</dt>
+              <dd>
+                <a href={release.bundle.url}>
+                  {release.bundle.pending ? "Pending upload" : ".lapis-plugin"}
                 </a>
               </dd>
             </div>

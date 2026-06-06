@@ -1,5 +1,5 @@
 ---
-import { type SitePlugin } from "../lib/registry-data";
+import { formatBytes, type SitePlugin } from "../lib/registry-data";
 import CategoryIcon from "./CategoryIcon.astro";
 
 interface Props {
@@ -18,20 +18,24 @@ const href = `/plugins/${plugin.id}/`;
       <span class="plugin-icon plugin-icon--compact">
         <CategoryIcon id={primaryCategory} size={18} />
       </span>
-      <span class="dense-plugin-row__body">
-        <span class="dense-plugin-row__title">{plugin.name}</span>
-        <span class="dense-plugin-row__description">{plugin.description}</span>
-      </span>
+        <span class="dense-plugin-row__body">
+          <span class="dense-plugin-row__title">{plugin.name}</span>
+          <span class="dense-plugin-row__description">
+            {plugin.description} · {formatBytes(plugin.latestRelease.bundle.size)}
+          </span>
+        </span>
     </article>
   ) : (
     <a class="dense-plugin-row" href={href}>
       <span class="plugin-icon plugin-icon--compact">
         <CategoryIcon id={primaryCategory} size={18} />
       </span>
-      <span class="dense-plugin-row__body">
-        <span class="dense-plugin-row__title">{plugin.name}</span>
-        <span class="dense-plugin-row__description">{plugin.description}</span>
-      </span>
+        <span class="dense-plugin-row__body">
+          <span class="dense-plugin-row__title">{plugin.name}</span>
+          <span class="dense-plugin-row__description">
+            {plugin.description} · {formatBytes(plugin.latestRelease.bundle.size)}
+          </span>
+        </span>
     </a>
   )
 }

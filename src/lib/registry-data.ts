@@ -43,20 +43,12 @@ export interface PluginVersion {
   minAppVersion: string;
   releasedAt: string;
   platforms: string[];
-  releaseManifest: {
+  bundle: {
     url: string;
     sha256: string;
     size: number;
     pending?: boolean;
   };
-  files: Array<{
-    path: string;
-    url: string;
-    sha256: string;
-    size: number;
-    optional?: boolean;
-    pending?: boolean;
-  }>;
 }
 
 export interface PluginDetail {
@@ -187,6 +179,24 @@ export function titleCase(value: string) {
     .split("-")
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
+}
+
+export function formatBytes(size: number) {
+  if (!Number.isFinite(size) || size < 0) {
+    return "Unknown size";
+  }
+  if (size < 1024) {
+    return `${size} B`;
+  }
+  const units = ["KB", "MB", "GB"];
+  let value = size / 1024;
+  for (const unit of units) {
+    if (value < 1024 || unit === units.at(-1)) {
+      return `${value >= 10 ? value.toFixed(0) : value.toFixed(1)} ${unit}`;
+    }
+    value /= 1024;
+  }
+  return `${size} B`;
 }
 
 function collectFilePatterns(contributes?: PluginContributions) {

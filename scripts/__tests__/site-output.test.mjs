@@ -42,7 +42,9 @@ test("site build emits pages and registry metadata", async () => {
     new URL("plugins/lapis-docs/index.html", dist),
     "utf8",
   );
-  assert.match(detail, /Signed manifest/);
+  assert.match(detail, /Signed bundle/);
+  assert.match(detail, /Download \.lapis-plugin/);
+  assert.match(detail, /Bundle size/);
   assert.match(detail, /\*\.lapisdoc/);
   assert.match(detail, /data-plugin-readme/);
   assert.match(detail, /View source README/);

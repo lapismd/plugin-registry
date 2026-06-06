@@ -25,7 +25,9 @@ for (const entry of entries) {
 }
 
 errors.push(...validateEntryRules(entries));
-errors.push(...(await validateRemoteAssets(entries, { strictRemote })));
+if (strictRemote) {
+  errors.push(...(await validateRemoteAssets(entries, { strictRemote })));
+}
 
 if (errors.length > 0) {
   console.error(errors.join("\n"));

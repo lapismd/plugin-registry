@@ -7,6 +7,7 @@ import path from "node:path";
 import test from "node:test";
 
 import {
+  bundleAssetName,
   discoverForgejoReleaseAssetsForPluginVersions,
   discoverForgejoReleaseAssets,
   officialPluginReleaseTag,
@@ -79,7 +80,7 @@ test("parseArgs accepts deterministic plugin version selections", () => {
   );
 });
 
-test("parseArgs rejects incompatible deterministic and legacy tag inputs", () => {
+test("parseArgs rejects incompatible deterministic and release tag inputs", () => {
   assert.throws(
     () =>
       parseArgs([
@@ -119,9 +120,9 @@ test("parseArgs accepts explicit Forgejo source overrides", () => {
 test("selectLatestPluginReleaseAssets picks latest semver-compatible CalVer", () => {
   const selected = selectLatestPluginReleaseAssets(
     [
-      asset("lapis-pdf-2026.6.1-release.signed.json"),
-      asset("lapis-pdf-2026.6.1-patch.1-release.signed.json"),
-      asset("lapis-pdf-2026.6.2-release.signed.json"),
+      asset("lapis-pdf-2026.6.1.lapis-plugin"),
+      asset("lapis-pdf-2026.6.1-patch.1.lapis-plugin"),
+      asset("lapis-pdf-2026.6.2.lapis-plugin"),
     ],
     ["lapis-pdf"],
   );
@@ -134,7 +135,7 @@ test("discoverForgejoReleaseAssets reads assets from a specific release tag", as
       tag_name: "official-plugin-assets-1",
       assets: [
         {
-          name: "lapis-pdf-2026.6.1-release.signed.json",
+          name: "lapis-pdf-2026.6.1.lapis-plugin",
           size: 100,
           browser_download_url: `${url}/download`,
         },
@@ -147,7 +148,7 @@ test("discoverForgejoReleaseAssets reads assets from a specific release tag", as
     releaseTag: "official-plugin-assets-1",
   });
   assert.equal(assets[0].releaseTag, "official-plugin-assets-1");
-  assert.equal(assets[0].name, "lapis-pdf-2026.6.1-release.signed.json");
+  assert.equal(assets[0].name, "lapis-pdf-2026.6.1.lapis-plugin");
 });
 
 test("officialPluginReleaseTag renders deterministic plugin version tags", () => {
@@ -169,9 +170,9 @@ test("discoverForgejoReleaseAssetsForPluginVersions fetches exact deterministic 
         tag_name: "official-plugin-assets-lapis-pdf-2026.6.1",
         assets: [
           {
-            name: "lapis-pdf-2026.6.1-release.signed.json",
+            name: "lapis-pdf-2026.6.1.lapis-plugin",
             size: 100,
-            browser_download_url: "https://example.test/pdf.signed.json",
+            browser_download_url: "https://example.test/pdf.lapis-plugin",
           },
         ],
       });
@@ -181,9 +182,9 @@ test("discoverForgejoReleaseAssetsForPluginVersions fetches exact deterministic 
         tag_name: "official-plugin-assets-lapis-graph-2026.6.2",
         assets: [
           {
-            name: "lapis-graph-2026.6.2-release.signed.json",
+            name: "lapis-graph-2026.6.2.lapis-plugin",
             size: 200,
-            browser_download_url: "https://example.test/graph.signed.json",
+            browser_download_url: "https://example.test/graph.lapis-plugin",
           },
         ],
       });
@@ -235,9 +236,9 @@ test("discoverForgejoReleaseAssetsForPluginVersions falls back to release asset 
     if (String(url).includes("/releases/42/assets?")) {
       return jsonResponse([
         {
-          name: "lapis-pdf-2026.6.1-release.signed.json",
+          name: "lapis-pdf-2026.6.1.lapis-plugin",
           size: 100,
-          browser_download_url: "https://example.test/pdf.signed.json",
+          browser_download_url: "https://example.test/pdf.lapis-plugin",
         },
       ]);
     }
@@ -251,7 +252,7 @@ test("discoverForgejoReleaseAssetsForPluginVersions falls back to release asset 
     pluginVersions: [{ pluginId: "lapis-pdf", version: "2026.6.1" }],
   });
 
-  assert.equal(assets[0].name, "lapis-pdf-2026.6.1-release.signed.json");
+  assert.equal(assets[0].name, "lapis-pdf-2026.6.1.lapis-plugin");
   assert.equal(
     urls.some((url) => url.includes("/releases/42/assets?limit=50&page=1")),
     true,
@@ -293,7 +294,7 @@ test("explicit sync rejects missing releases", async () => {
   await rm(fixture.root, { recursive: true, force: true });
 });
 
-test("sync writes active markdown lint entry with release hashes and files", async () => {
+test("sync writes active markdown lint entry with bundle hashes and signed file count", async () => {
   const fixture = await fixtureDir();
   const releaseFixture = signedReleaseFixture({
     pluginId: "lapis-markdown-lint",
@@ -316,14 +317,15 @@ test("sync writes active markdown lint entry with release hashes and files", asy
   assert.equal(entry.status, "active");
   assert.equal(entry.latestVersion, "2026.6.1");
   assert.equal(
-    entry.versions["2026.6.1"].releaseManifest.sha256,
-    sha256(releaseFixture.envelopeBytes),
+    entry.versions["2026.6.1"].bundle.sha256,
+    sha256(releaseFixture.bundleBytes),
   );
-  assert.equal(entry.versions["2026.6.1"].releaseManifest.pending, undefined);
-  assert.deepEqual(
-    entry.versions["2026.6.1"].files.map((file) => file.path),
-    ["manifest.json", "main.js"],
+  assert.equal(entry.versions["2026.6.1"].bundle.pending, undefined);
+  assert.equal(
+    entry.versions["2026.6.1"].bundle.size,
+    releaseFixture.bundleBytes.byteLength,
   );
+  assert.equal(result.updates[0].signedFiles, 2);
   await rm(fixture.root, { recursive: true, force: true });
 });
 
@@ -426,13 +428,12 @@ test("sync preserves curated readmeUrl values", async () => {
           minAppVersion: "1.7.7",
           releasedAt: "2026-05-31T00:00:00.000Z",
           platforms: ["web", "electron"],
-          releaseManifest: {
+          bundle: {
             url: "https://example.test/pending.json",
             sha256: "0".repeat(64),
             size: 0,
             pending: true,
           },
-          files: [],
         },
       },
     }),
@@ -545,14 +546,17 @@ function signedReleaseFixture({
     JSON.stringify({ id: pluginId, version, name: pluginId }),
   );
   const mainBytes = Buffer.from("export default class Plugin {}\n");
-  const manifestUrl = `https://code.ju.ma/lapis-notes/lapis/releases/download/${releaseTag}/manifest-asset`;
-  const mainUrl = `https://code.ju.ma/lapis-notes/lapis/releases/download/${releaseTag}/main-asset`;
   const signed = {
     schemaVersion: 1,
     type: "lapis.plugin.release",
     pluginId,
     version,
     channel: "official",
+    source: {
+      repo: "lapis-notes/lapis",
+      commit: "test",
+      package: `packages/plugins/${pluginId}`,
+    },
     compatibility: {
       minAppVersion: "1.7.7",
       platforms: ["web", "electron"],
@@ -560,13 +564,11 @@ function signedReleaseFixture({
     files: [
       {
         path: "manifest.json",
-        url: manifestUrl,
         sha256: sha256(manifestBytes),
         size: manifestBytes.byteLength,
       },
       {
         path: "main.js",
-        url: mainUrl,
         sha256: sha256(mainBytes),
         size: mainBytes.byteLength,
       },
@@ -582,26 +584,106 @@ function signedReleaseFixture({
     signatures: [signature.sidecar],
   };
   const envelopeBytes = Buffer.from(canonicalize(envelope));
-  const releaseUrl = `https://code.ju.ma/lapis-notes/lapis/releases/download/${releaseTag}/${pluginId}-${version}-release.signed.json`;
+  const bundleBytes = buildPluginBundle([
+    { path: "release.signed.json", data: envelopeBytes },
+    { path: "manifest.json", data: manifestBytes },
+    { path: "main.js", data: mainBytes },
+  ]);
+  const bundleUrl = `https://code.ju.ma/lapis-notes/lapis/releases/download/${releaseTag}/${bundleAssetName(pluginId, version)}`;
   const fetchImpl = async (url) => {
     if (String(url).includes("/api/v1/")) {
       return jsonResponse({
         tag_name: releaseTag,
         assets: [
           {
-            name: `${pluginId}-${version}-release.signed.json`,
-            size: envelopeBytes.byteLength,
-            browser_download_url: releaseUrl,
+            name: bundleAssetName(pluginId, version),
+            size: bundleBytes.byteLength,
+            browser_download_url: bundleUrl,
           },
         ],
       });
     }
-    if (url === releaseUrl) return byteResponse(envelopeBytes);
-    if (url === manifestUrl) return byteResponse(manifestBytes);
-    if (url === mainUrl) return byteResponse(mainBytes);
+    if (url === bundleUrl) return byteResponse(bundleBytes);
     return { ok: false, status: 404 };
   };
-  return { publicKeyPem, envelopeBytes, fetchImpl, releaseTag };
+  return { publicKeyPem, bundleBytes, envelopeBytes, fetchImpl, releaseTag };
+}
+
+function buildPluginBundle(entries) {
+  const sortedEntries = [...entries].sort((a, b) =>
+    a.path.localeCompare(b.path),
+  );
+  const localParts = [];
+  const centralParts = [];
+  let offset = 0;
+
+  for (const entry of sortedEntries) {
+    const name = Buffer.from(entry.path);
+    const data = Buffer.from(entry.data);
+    const crc32 = crc32For(data);
+    const local = Buffer.alloc(30);
+    local.writeUInt32LE(0x04034b50, 0);
+    local.writeUInt16LE(20, 4);
+    local.writeUInt16LE(0, 6);
+    local.writeUInt16LE(0, 8);
+    local.writeUInt16LE(0, 10);
+    local.writeUInt16LE(0, 12);
+    local.writeUInt32LE(crc32, 14);
+    local.writeUInt32LE(data.byteLength, 18);
+    local.writeUInt32LE(data.byteLength, 22);
+    local.writeUInt16LE(name.byteLength, 26);
+    local.writeUInt16LE(0, 28);
+    localParts.push(local, name, data);
+
+    const central = Buffer.alloc(46);
+    central.writeUInt32LE(0x02014b50, 0);
+    central.writeUInt16LE(20, 4);
+    central.writeUInt16LE(20, 6);
+    central.writeUInt16LE(0, 8);
+    central.writeUInt16LE(0, 10);
+    central.writeUInt16LE(0, 12);
+    central.writeUInt16LE(0, 14);
+    central.writeUInt32LE(crc32, 16);
+    central.writeUInt32LE(data.byteLength, 20);
+    central.writeUInt32LE(data.byteLength, 24);
+    central.writeUInt16LE(name.byteLength, 28);
+    central.writeUInt16LE(0, 30);
+    central.writeUInt16LE(0, 32);
+    central.writeUInt16LE(0, 34);
+    central.writeUInt16LE(0, 36);
+    central.writeUInt32LE(0, 38);
+    central.writeUInt32LE(offset, 42);
+    centralParts.push(central, name);
+
+    offset += local.byteLength + name.byteLength + data.byteLength;
+  }
+
+  const centralOffset = offset;
+  const centralSize = centralParts.reduce(
+    (sum, part) => sum + part.byteLength,
+    0,
+  );
+  const end = Buffer.alloc(22);
+  end.writeUInt32LE(0x06054b50, 0);
+  end.writeUInt16LE(0, 4);
+  end.writeUInt16LE(0, 6);
+  end.writeUInt16LE(sortedEntries.length, 8);
+  end.writeUInt16LE(sortedEntries.length, 10);
+  end.writeUInt32LE(centralSize, 12);
+  end.writeUInt32LE(centralOffset, 16);
+  end.writeUInt16LE(0, 20);
+  return Buffer.concat([...localParts, ...centralParts, end]);
+}
+
+function crc32For(bytes) {
+  let crc = 0xffffffff;
+  for (const byte of bytes) {
+    crc ^= byte;
+    for (let bit = 0; bit < 8; bit += 1) {
+      crc = crc & 1 ? 0xedb88320 ^ (crc >>> 1) : crc >>> 1;
+    }
+  }
+  return (crc ^ 0xffffffff) >>> 0;
 }
 
 async function fixtureDir() {

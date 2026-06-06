@@ -3,6 +3,7 @@ import { SlidersHorizontal, X } from "@lucide/astro";
 import CategoryIcon from "../../components/CategoryIcon.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import {
+  formatBytes,
   getRegistrySiteData,
   statusLabel,
   titleCase,
@@ -234,7 +235,7 @@ for (const plugin of plugins) {
                 <span class="dense-plugin-row__body">
                   <span class="dense-plugin-row__title">{plugin.name}</span>
                   <span class="dense-plugin-row__description">
-                    {plugin.description}
+                    {plugin.description} · {formatBytes(plugin.latestRelease.bundle.size)}
                   </span>
                 </span>
               </a>

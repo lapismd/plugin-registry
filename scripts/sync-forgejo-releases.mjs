@@ -16,6 +16,11 @@ import {
   publicKeyPemToRawBase64,
   readDefaultPluginReleaseKey,
 } from "./lib/keys.mjs";
+import {
+  assertSafePluginRelativePath,
+  parsePluginBundle,
+  pluginBundleReleaseManifestPath,
+} from "./lib/plugin-bundle.mjs";
 
 const defaultForgejoServer = "https://code.ju.ma";
 const defaultForgejoRepo = "lapis-notes/lapis";
@@ -233,10 +238,10 @@ export async function syncForgejoReleases(options = {}) {
     updates: updates.map((update) => ({
       pluginId: update.entry.id,
       version: update.release.version,
-      releaseManifestUrl: update.release.releaseManifest.url,
-      releaseManifestSha256: update.release.releaseManifest.sha256,
-      releaseManifestSize: update.release.releaseManifest.size,
-      files: update.release.files.length,
+      bundleUrl: update.release.bundle.url,
+      bundleSha256: update.release.bundle.sha256,
+      bundleSize: update.release.bundle.size,
+      signedFiles: update.signedFileCount,
       entryPath: update.entryPath,
       localKeyUsed: update.localKeyUsed,
     })),
@@ -296,7 +301,7 @@ export async function discoverForgejoReleaseAssetsForPluginVersions({
   const assets = [];
   for (const { pluginId, version } of pluginVersions) {
     const releaseTag = officialPluginReleaseTag(pluginId, version);
-    const expectedAssetName = `${pluginId}-${version}-release.signed.json`;
+    const expectedAssetName = bundleAssetName(pluginId, version);
     const release = await fetchForgejoReleaseByTag({
       fetchImpl,
       token,
@@ -345,11 +350,16 @@ export function officialPluginReleaseTag(pluginId, version) {
   return `official-plugin-assets-${pluginId}-${version}`;
 }
 
+export function bundleAssetName(pluginId, version) {
+  assertSemver(version);
+  return `${pluginId}-${version}.lapis-plugin`;
+}
+
 export function selectLatestPluginReleaseAssets(assets, plugins) {
   const selected = new Map();
   for (const asset of assets) {
     for (const pluginId of plugins) {
-      const match = parseReleaseManifestAssetName(asset.name, pluginId);
+      const match = parsePluginBundleAssetName(asset.name, pluginId);
       if (!match) continue;
       const candidate = { ...asset, pluginId, version: match.version };
       const current = selected.get(pluginId);
@@ -365,9 +375,9 @@ export function selectExactPluginReleaseAssets(assets) {
   return new Map(assets.map((asset) => [asset.pluginId, asset]));
 }
 
-export function parseReleaseManifestAssetName(assetName, pluginId) {
+export function parsePluginBundleAssetName(assetName, pluginId) {
   const prefix = `${pluginId}-`;
-  const suffix = "-release.signed.json";
+  const suffix = ".lapis-plugin";
   if (!assetName.startsWith(prefix) || !assetName.endsWith(suffix)) {
     return null;
   }
@@ -383,9 +393,14 @@ export async function buildEntryUpdate({
   trust,
   entriesDir = new URL("entries/official/", repoRoot),
 }) {
-  const manifestBytes = await fetchBytes(fetchImpl, asset.url);
-  const manifestSha256 = sha256(manifestBytes);
-  const envelope = JSON.parse(manifestBytes.toString("utf8"));
+  const bundleBytes = await fetchBytes(fetchImpl, asset.url);
+  if (typeof asset.size === "number" && bundleBytes.byteLength !== asset.size) {
+    throw new Error(`${pluginId}: bundle size mismatch.`);
+  }
+  const bundleSha256 = sha256(bundleBytes);
+  const bundledFiles = parsePluginBundle(bundleBytes);
+  const signedReleaseBytes = bundledFiles.get(pluginBundleReleaseManifestPath);
+  const envelope = JSON.parse(signedReleaseBytes.toString("utf8"));
   const release = envelope.signed;
   if (!release || !Array.isArray(envelope.signatures)) {
     throw new Error(`${pluginId}: release manifest must be a signed envelope.`);
@@ -407,9 +422,14 @@ export async function buildEntryUpdate({
   }
 
   const signature = verifyReleaseEnvelope(envelope, trust);
-  const files = [];
+  const expectedPaths = new Set();
   for (const file of release.files ?? []) {
-    const bytes = await fetchBytes(fetchImpl, file.url);
+    assertSafePluginRelativePath(file.path);
+    expectedPaths.add(file.path);
+    const bytes = bundledFiles.get(file.path);
+    if (!bytes) {
+      throw new Error(`${pluginId}: bundle is missing ${file.path}.`);
+    }
     const digest = sha256(bytes);
     if (digest !== file.sha256) {
       throw new Error(`${pluginId}: sha256 mismatch for ${file.path}.`);
@@ -417,13 +437,16 @@ export async function buildEntryUpdate({
     if (bytes.byteLength !== file.size) {
       throw new Error(`${pluginId}: size mismatch for ${file.path}.`);
     }
-    files.push({
-      path: file.path,
-      url: file.url,
-      sha256: file.sha256,
-      size: file.size,
-      ...(file.optional ? { optional: true } : {}),
-    });
+  }
+  const extraPaths = [...bundledFiles.keys()].filter(
+    (entryPath) =>
+      entryPath !== pluginBundleReleaseManifestPath &&
+      !expectedPaths.has(entryPath),
+  );
+  if (extraPaths.length) {
+    throw new Error(
+      `${pluginId}: bundle includes unsigned files: ${extraPaths.join(", ")}.`,
+    );
   }
 
   const existingEntry = await readExistingEntry(pluginId, entriesDir);
@@ -431,18 +454,19 @@ export async function buildEntryUpdate({
     pluginId,
     existingEntry,
     release,
-    releaseManifest: {
+    releasedAt: release.releasedAt ?? asset.publishedAt ?? generatedAt,
+    bundle: {
       url: asset.url,
-      sha256: manifestSha256,
-      size: manifestBytes.byteLength,
+      sha256: bundleSha256,
+      size: bundleBytes.byteLength,
     },
-    files,
   });
   return {
     entry,
     release: entry.versions[release.version],
     entryPath: `entries/official/${pluginId}.jsonc`,
     localKeyUsed: signature.source === "local",
+    signedFileCount: release.files?.length ?? 0,
   };
 }
 
@@ -450,8 +474,8 @@ export function buildUpdatedEntry({
   pluginId,
   existingEntry,
   release,
-  releaseManifest,
-  files,
+  releasedAt,
+  bundle,
 }) {
   const seed = pluginSeeds[pluginId];
   if (!seed) {
@@ -460,10 +484,9 @@ export function buildUpdatedEntry({
   const versionEntry = {
     version: release.version,
     minAppVersion: release.compatibility.minAppVersion,
-    releasedAt: release.releasedAt ?? generatedAt,
+    releasedAt,
     platforms: release.compatibility.platforms,
-    releaseManifest,
-    files,
+    bundle,
   };
   const entry = {
     $schema: "../../schemas/catalog-entry.schema.json",
@@ -487,19 +510,10 @@ export function buildUpdatedEntry({
       ? { contributes: existingEntry?.contributes ?? seed.contributes }
       : {}),
     versions: {
-      ...nonPendingVersions(existingEntry?.versions ?? {}),
       [release.version]: versionEntry,
     },
   };
   return entry;
-}
-
-function nonPendingVersions(versions) {
-  return Object.fromEntries(
-    Object.entries(versions).filter(
-      ([, version]) => !version.releaseManifest?.pending,
-    ),
-  );
 }
 
 export async function loadSyncTrustRoot({

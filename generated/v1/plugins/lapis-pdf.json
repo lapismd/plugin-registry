@@ -13,7 +13,7 @@
   },
   "description": "PDF viewing for Lapis.",
   "id": "lapis-pdf",
-  "latestVersion": "2026.6.1",
+  "latestVersion": "2026.6.6",
   "name": "PDF",
   "owner": {
     "name": "Lapis Notes",
@@ -25,117 +25,24 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "ewyRkYF0FHaQQwdJ+dHDn9fBD5WZ+13b/SrxVB29nuyRBqHPyspVST97Pg+w1sQrzTIHLDY824Oz1vu6N3mVDg=="
+      "sig": "9/0pvwyabhXxwojIAHMq3DqaPMCebHkF1rB/VzG3r7fSz0HgqLQ1iTpEor9JDebYqVi3RJL8jpZyaBFxW3KODg=="
     }
   ],
   "status": "active",
   "versions": {
-    "2026.6.1": {
-      "files": [
-        {
-          "path": "app.css",
-          "sha256": "a4b46475c3932581e8f92daf0ba27dc3064297028f19045f30eea432a121871c",
-          "size": 6468,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-YXBwLmNzcw"
-        },
-        {
-          "path": "browser-BKLM0ThC-IAuFUahz-B-oiBDWI.cjs",
-          "sha256": "8994cc0b02dfce57588d0043f3168d0ab7cad87a1d8380b3fa4e224111984ea1",
-          "size": 19577,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-YnJvd3Nlci1CS0xNMFRoQy1JQXVGVWFoei1CLW9pQkRXSS5janM"
-        },
-        {
-          "path": "browser-BKLM0ThC-IAuFUahz-DRmIc70m.js",
-          "sha256": "13bed8b7ecc808abc4637528320a0c6ca0842e263bb0286e74f55617abed35cb",
-          "size": 24045,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-YnJvd3Nlci1CS0xNMFRoQy1JQXVGVWFoei1EUm1JYzcwbS5qcw"
-        },
-        {
-          "path": "direct-engine-CzzT8DSZ-D2XtQrcd.cjs",
-          "sha256": "1fde356389bca2d6c955e4f3ebdc16424818231b2095116079828fba6470ce55",
-          "size": 6474642,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-ZGlyZWN0LWVuZ2luZS1DenpUOERTWi1EMlh0UXJjZC5janM"
-        },
-        {
-          "path": "direct-engine-CzzT8DSZ-nErw80dE.js",
-          "sha256": "c1d8ba805780930659270de4f80186e15c128988faa9076811aa709c7bccf3bb",
-          "size": 6531509,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-ZGlyZWN0LWVuZ2luZS1DenpUOERTWi1uRXJ3ODBkRS5qcw"
-        },
-        {
-          "path": "embedpdf-Cg-DRZWE.js",
-          "sha256": "c00ce55a73d08ec48a46362493360c3b1cc8dadf3587387a8dbfd2e09f8a330d",
-          "size": 1323689,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-ZW1iZWRwZGYtQ2ctRFJaV0UuanM"
-        },
-        {
-          "path": "embedpdf-rJ7APCKh.cjs",
-          "sha256": "70c8be0c7d8e92558118afc8a4e9d3ec7229a00cae2839cef752ea1f62f4539c",
-          "size": 1091616,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-ZW1iZWRwZGYtcko3QVBDS2guY2pz"
-        },
-        {
-          "path": "main.es.js",
-          "sha256": "5b7343fdf76afa974d4177bb7a5187161d0a63721c52ce9184db860840e926d8",
-          "size": 13682,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-bWFpbi5lcy5qcw"
-        },
-        {
-          "path": "main.js",
-          "sha256": "1cd87bd17ccd3f237df9089e8a32c0052db56ea15cfce4993a0f69e45c274d11",
-          "size": 10601,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-bWFpbi5qcw"
-        },
-        {
-          "path": "main.umd.js",
-          "sha256": "aabe059f0190716ac1dfa235a8bd65356fb68f1c42186c68fb0405e9bba13b36",
-          "size": 8294751,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-bWFpbi51bWQuanM"
-        },
-        {
-          "path": "manifest.json",
-          "sha256": "a0e26635ac8a4534ee477f1efd3e07797c3e303d383bcac84747add3f0719054",
-          "size": 235,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-bWFuaWZlc3QuanNvbg"
-        },
-        {
-          "path": "styles-entry.js",
-          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
-          "size": 1,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-c3R5bGVzLWVudHJ5Lmpz"
-        },
-        {
-          "optional": true,
-          "path": "styles.css",
-          "sha256": "40845998998903579ebfcc9f42b72f4781f7eb51e6753591387d9e057d9d2b3a",
-          "size": 103548,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-c3R5bGVzLmNzcw"
-        },
-        {
-          "path": "worker-engine-BZRBQvei-ByyGHqir.js",
-          "sha256": "2ce760c0cf8cf2ae8b2765316f69334cc3b020e5d95b6b8bd1aaee1e8472a643",
-          "size": 700762,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-d29ya2VyLWVuZ2luZS1CWlJCUXZlaS1CeXlHSHFpci5qcw"
-        },
-        {
-          "path": "worker-engine-BZRBQvei-J3vuTGSs.cjs",
-          "sha256": "927f616237ad924c060bf5f6c0e9e33b4e8b441c7020b14ed0d49fba418ae1ae",
-          "size": 698819,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-file-d29ya2VyLWVuZ2luZS1CWlJCUXZlaS1KM3Z1VEdTcy5janM"
-        }
-      ],
+    "2026.6.6": {
+      "bundle": {
+        "sha256": "9c716cc1588dcc39c4c4f0fefb5622bfdad3f82acbd3706b40b0402cedf28485",
+        "size": 25300193,
+        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-pdf-2026.6.6/lapis-pdf-2026.6.6.lapis-plugin"
+      },
       "minAppVersion": "1.7.7",
       "platforms": [
         "web",
         "electron"
       ],
-      "releaseManifest": {
-        "sha256": "d7bce02a5e1ee4caded51822c14fc7eed4902a19fd86ca6bf8487b01796a1c22",
-        "size": 4555,
-        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-pdf-2026.6.1-release.signed.json"
-      },
-      "releasedAt": "2026-05-31T00:00:00.000Z",
-      "version": "2026.6.1"
+      "releasedAt": "2026-06-06T00:00:00.000Z",
+      "version": "2026.6.6"
     }
   }
 }

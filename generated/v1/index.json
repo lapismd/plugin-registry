@@ -27,7 +27,7 @@
       "description": "Infinite canvas view with JSON Canvas support.",
       "detail": "plugins/lapis-canvas.json",
       "id": "lapis-canvas",
-      "latestVersion": "2026.6.1",
+      "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "Canvas",
       "owner": {
@@ -69,7 +69,7 @@
       "description": "Rich document and spreadsheet editing for Lapis.",
       "detail": "plugins/lapis-docs.json",
       "id": "lapis-docs",
-      "latestVersion": "2026.6.1",
+      "latestVersion": "2026.6.6",
       "minAppVersion": "0.20.0",
       "name": "Docs",
       "owner": {
@@ -100,7 +100,7 @@
       "description": "Graph and local graph views powered by the metadata cache.",
       "detail": "plugins/lapis-graph.json",
       "id": "lapis-graph",
-      "latestVersion": "2026.6.1",
+      "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "Graph",
       "owner": {
@@ -131,7 +131,7 @@
       "description": "Markdown linting diagnostics for Lapis notes.",
       "detail": "plugins/lapis-markdown-lint.json",
       "id": "lapis-markdown-lint",
-      "latestVersion": "2026.6.1",
+      "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "Markdown Lint",
       "owner": {
@@ -162,7 +162,7 @@
       "description": "Reactive notebook support for markdown notes.",
       "detail": "plugins/lapis-notebook.json",
       "id": "lapis-notebook",
-      "latestVersion": "2026.6.1",
+      "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "Notebook",
       "owner": {
@@ -203,7 +203,7 @@
       "description": "PDF viewing for Lapis.",
       "detail": "plugins/lapis-pdf.json",
       "id": "lapis-pdf",
-      "latestVersion": "2026.6.1",
+      "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "PDF",
       "owner": {
@@ -234,7 +234,7 @@
       "description": "Presentation mode for markdown notes.",
       "detail": "plugins/lapis-slides.json",
       "id": "lapis-slides",
-      "latestVersion": "2026.6.1",
+      "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "Slides",
       "owner": {
@@ -265,7 +265,7 @@
       "description": "Telemetry diagnostics view.",
       "detail": "plugins/lapis-telemetry.json",
       "id": "lapis-telemetry",
-      "latestVersion": "2026.6.1",
+      "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "Telemetry Diagnostics",
       "owner": {
@@ -292,7 +292,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "Up060TSs8Lh434qKtXrKB6WW8ElDCbjzsqkRovQZNkyu3LJlrbBYoUTITRsFQpyvP1IPgTHN8XLtHv8XKdG2AQ=="
+      "sig": "JZUD0z/lgB5h5tkmcXYiCnUPAjCt6EUkWpbsqMMW53uSpLZJGUQ25KShPO+0okmV2hf40VOEYecMlGYwHjSwDQ=="
     }
   ]
 }

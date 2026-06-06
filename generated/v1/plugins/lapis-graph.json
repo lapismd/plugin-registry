@@ -2,7 +2,7 @@
   "channel": "official",
   "description": "Graph and local graph views powered by the metadata cache.",
   "id": "lapis-graph",
-  "latestVersion": "2026.6.1",
+  "latestVersion": "2026.6.6",
   "name": "Graph",
   "owner": {
     "name": "Lapis Notes",
@@ -14,69 +14,24 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "ya68DgoUb3FaArAPo3l6dOOZcYLL5avhbNDcIakuf+pjbLdE/r2l0HD75hHvbFMjK3oLvMEo9ha1Nn9ZEgeTAQ=="
+      "sig": "vHesetltE0zN6byf9ajCqyEVcI4VMSAH1fczweuhtj2pFrdxFdhOfDNhrMAiNnto1wuep/W2AWak5UUobXatDg=="
     }
   ],
   "status": "active",
   "versions": {
-    "2026.6.1": {
-      "files": [
-        {
-          "path": "app.css",
-          "sha256": "d6c09928ffb38f2db29831ec465a05670f16be572711bfc4c373e97da61e3232",
-          "size": 5572,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-graph-2026.6.1-file-YXBwLmNzcw"
-        },
-        {
-          "path": "main.es.js",
-          "sha256": "f80b09d113d40c06d5235d6538b457562a5dd5426c09f06a3e57fcc2f154f217",
-          "size": 96498,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-graph-2026.6.1-file-bWFpbi5lcy5qcw"
-        },
-        {
-          "path": "main.js",
-          "sha256": "062763b59e5d7819ab6d56a53526e0643637089a86f662a091ffdd782e4b2015",
-          "size": 66507,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-graph-2026.6.1-file-bWFpbi5qcw"
-        },
-        {
-          "path": "main.umd.js",
-          "sha256": "d142260e47631230ed2e059985c41967d61fc722fe0d2b28fb5185be607cf0ab",
-          "size": 66918,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-graph-2026.6.1-file-bWFpbi51bWQuanM"
-        },
-        {
-          "path": "manifest.json",
-          "sha256": "03e1bb0ff2f4e7e0cad025c56bc6b4e4a5ed983c0143fddc5aa1932a3b1f7a5f",
-          "size": 268,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-graph-2026.6.1-file-bWFuaWZlc3QuanNvbg"
-        },
-        {
-          "path": "styles-entry.js",
-          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
-          "size": 1,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-graph-2026.6.1-file-c3R5bGVzLWVudHJ5Lmpz"
-        },
-        {
-          "optional": true,
-          "path": "styles.css",
-          "sha256": "a2e9a38ce97acb6cffd04d88877294e7fe3a4cb6a6a4b4d63434ec90a8cd0c23",
-          "size": 102042,
-          "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-graph-2026.6.1-file-c3R5bGVzLmNzcw"
-        }
-      ],
+    "2026.6.6": {
+      "bundle": {
+        "sha256": "bd9967701bb54074bbde42ab52ceb95aee197320abfb70ff4270ff1348b1eb82",
+        "size": 343067,
+        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin"
+      },
       "minAppVersion": "1.7.7",
       "platforms": [
         "web",
         "electron"
       ],
-      "releaseManifest": {
-        "sha256": "438c4807e001d88ba8b5e131a450f9d38edf5327f02e0b9012c97b27a71f5bd4",
-        "size": 2181,
-        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-2026-06-01/lapis-graph-2026.6.1-release.signed.json"
-      },
-      "releasedAt": "2026-05-31T00:00:00.000Z",
-      "version": "2026.6.1"
+      "releasedAt": "2026-06-06T00:00:00.000Z",
+      "version": "2026.6.6"
     }
   }
 }
