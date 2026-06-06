@@ -5,8 +5,8 @@ Static plugin registry metadata for Lapis Notes.
 The V1 registry publishes inline-signed JSON metadata for official installable
 plugins.
 Generated files under `generated/v1/` are intended to be deployed as static
-assets, while immutable official plugin release assets are published by the
-`lapis-notes` app repo as Forgejo release downloads.
+assets, while official plugin release assets are published by the `lapis-notes`
+app repo as deterministic per-plugin-version Forgejo release downloads.
 
 ## Commands
 
@@ -14,7 +14,7 @@ assets, while immutable official plugin release assets are published by the
 pnpm install
 pnpm check
 pnpm registry:validate
-pnpm registry:sync:forgejo -- --dry-run
+pnpm registry:sync:forgejo -- --plugin-versions lapis-pdf@2026.6.6 --dry-run
 pnpm registry:generate
 pnpm registry:verify-signatures
 ```

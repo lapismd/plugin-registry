@@ -106,6 +106,7 @@ export function parseArgs(argv, env = process.env) {
   const parsed = {
     plugins: officialForgejoPluginIds,
     pluginsExplicit: false,
+    pluginVersions: [],
     releaseTag: "",
     dryRun: false,
     forgejoServer: env.FORGEJO_SERVER ?? defaultForgejoServer,
@@ -122,6 +123,11 @@ export function parseArgs(argv, env = process.env) {
     switch (arg) {
       case "--plugins":
         parsed.plugins = parsePluginList(next());
+        parsed.pluginsExplicit = true;
+        break;
+      case "--plugin-versions":
+        parsed.pluginVersions = parsePluginVersions(next());
+        parsed.plugins = parsed.pluginVersions.map(({ pluginId }) => pluginId);
         parsed.pluginsExplicit = true;
         break;
       case "--release-tag":
@@ -144,6 +150,9 @@ export function parseArgs(argv, env = process.env) {
         throw new Error(`Unknown argument: ${arg}`);
     }
   }
+  if (parsed.pluginVersions.length > 0 && parsed.releaseTag) {
+    throw new Error("--plugin-versions cannot be combined with --release-tag.");
+  }
   return parsed;
 }
 
@@ -161,17 +170,28 @@ export async function syncForgejoReleases(options = {}) {
   const plugins = options.plugins ?? officialForgejoPluginIds;
   const dryRun = Boolean(options.dryRun);
   const explicit = Boolean(options.pluginsExplicit);
-  const releaseAssets = await discoverForgejoReleaseAssets({
-    fetchImpl,
-    forgejoServer,
-    forgejoRepo,
-    releaseTag: options.releaseTag ?? "",
-    token: env.FORGEJO_TOKEN,
-  });
-  const latestByPlugin = selectLatestPluginReleaseAssets(
-    releaseAssets,
-    plugins,
-  );
+  const pluginVersions = options.pluginVersions ?? [];
+  const latestByPlugin =
+    pluginVersions.length > 0
+      ? selectExactPluginReleaseAssets(
+          await discoverForgejoReleaseAssetsForPluginVersions({
+            fetchImpl,
+            forgejoServer,
+            forgejoRepo,
+            pluginVersions,
+            token: env.FORGEJO_TOKEN,
+          }),
+        )
+      : selectLatestPluginReleaseAssets(
+          await discoverForgejoReleaseAssets({
+            fetchImpl,
+            forgejoServer,
+            forgejoRepo,
+            releaseTag: options.releaseTag ?? "",
+            token: env.FORGEJO_TOKEN,
+          }),
+          plugins,
+        );
   const trust = await loadSyncTrustRoot({ env, trustRootPath });
   const updates = [];
   const skipped = [];
@@ -266,6 +286,65 @@ export async function discoverForgejoReleaseAssets({
   );
 }
 
+export async function discoverForgejoReleaseAssetsForPluginVersions({
+  fetchImpl,
+  forgejoServer,
+  forgejoRepo,
+  pluginVersions,
+  token = "",
+}) {
+  const assets = [];
+  for (const { pluginId, version } of pluginVersions) {
+    const releaseTag = officialPluginReleaseTag(pluginId, version);
+    const expectedAssetName = `${pluginId}-${version}-release.signed.json`;
+    const release = await fetchForgejoReleaseByTag({
+      fetchImpl,
+      token,
+      forgejoServer,
+      forgejoRepo,
+      releaseTag,
+    });
+    if (!release) continue;
+
+    const releaseAssets = await collectReleaseAssets({
+      fetchImpl,
+      token,
+      forgejoServer,
+      forgejoRepo,
+      release,
+      releaseTag,
+      expectedAssetName,
+    });
+    const asset = releaseAssets.find(
+      (candidate) => candidate.name === expectedAssetName,
+    );
+    if (!asset) continue;
+    assets.push({
+      name: asset.name,
+      size: asset.size,
+      pluginId,
+      version,
+      releaseTag,
+      publishedAt: release.published_at ?? release.created_at ?? "",
+      url:
+        asset.browser_download_url ??
+        asset.download_url ??
+        forgejoReleaseDownloadUrl({
+          forgejoServer,
+          forgejoRepo,
+          releaseTag,
+          assetName: asset.name,
+        }),
+    });
+  }
+  return assets;
+}
+
+export function officialPluginReleaseTag(pluginId, version) {
+  assertSemver(version);
+  return `official-plugin-assets-${pluginId}-${version}`;
+}
+
 export function selectLatestPluginReleaseAssets(assets, plugins) {
   const selected = new Map();
   for (const asset of assets) {
@@ -280,6 +359,10 @@ export function selectLatestPluginReleaseAssets(assets, plugins) {
     }
   }
   return selected;
+}
+
+export function selectExactPluginReleaseAssets(assets) {
+  return new Map(assets.map((asset) => [asset.pluginId, asset]));
 }
 
 export function parseReleaseManifestAssetName(assetName, pluginId) {
@@ -524,12 +607,76 @@ async function fetchForgejoReleasePages({
   return releases;
 }
 
+async function fetchForgejoReleaseByTag({
+  fetchImpl,
+  token,
+  forgejoServer,
+  forgejoRepo,
+  releaseTag,
+}) {
+  try {
+    return await fetchForgejoJson({
+      fetchImpl,
+      token,
+      url: `${forgejoServer}/api/v1/repos/${forgejoRepo}/releases/tags/${encodeURIComponent(releaseTag)}`,
+    });
+  } catch (error) {
+    if (error?.status === 404) return null;
+    throw error;
+  }
+}
+
+async function collectReleaseAssets({
+  fetchImpl,
+  token,
+  forgejoServer,
+  forgejoRepo,
+  release,
+  releaseTag,
+  expectedAssetName,
+}) {
+  const assets = Array.isArray(release.assets) ? [...release.assets] : [];
+  if (assets.some((asset) => asset.name === expectedAssetName)) {
+    return assets;
+  }
+  if (!release.id) return assets;
+
+  for (let page = 1; page <= 20; page += 1) {
+    const pageAssets = await fetchForgejoJson({
+      fetchImpl,
+      token,
+      url: `${forgejoServer}/api/v1/repos/${forgejoRepo}/releases/${encodeURIComponent(release.id)}/assets?limit=50&page=${page}`,
+    });
+    if (!Array.isArray(pageAssets) || pageAssets.length === 0) break;
+    assets.push(...pageAssets);
+    if (pageAssets.some((asset) => asset.name === expectedAssetName)) break;
+    if (pageAssets.length < 50) break;
+  }
+
+  return assets.map((asset) => ({
+    ...asset,
+    browser_download_url:
+      asset.browser_download_url ??
+      asset.download_url ??
+      forgejoReleaseDownloadUrl({
+        forgejoServer,
+        forgejoRepo,
+        releaseTag,
+        assetName: asset.name,
+      }),
+  }));
+}
+
 async function fetchForgejoJson({ fetchImpl, token, url }) {
   const response = await fetchImpl(url, {
     headers: token ? { Authorization: `token ${token}` } : {},
   });
   if (!response.ok) {
-    throw new Error(`Forgejo request failed: ${url} HTTP ${response.status}`);
+    const error = new Error(
+      `Forgejo request failed: ${url} HTTP ${response.status}`,
+    );
+    error.status = response.status;
+    throw error;
   }
   return response.json();
 }
@@ -585,6 +732,46 @@ function parsePluginList(value) {
   return plugins;
 }
 
+function parsePluginVersions(value) {
+  const pairs = value
+    .split(",")
+    .map((pair) => pair.trim())
+    .filter(Boolean)
+    .map((pair) => {
+      const separator = pair.lastIndexOf("@");
+      if (separator <= 0 || separator === pair.length - 1) {
+        throw new Error(
+          "--plugin-versions entries must use <plugin-id>@<version>.",
+        );
+      }
+      const pluginId = pair.slice(0, separator);
+      const version = pair.slice(separator + 1);
+      parsePluginList(pluginId);
+      assertSemver(version);
+      return { pluginId, version };
+    });
+
+  if (pairs.length === 0) {
+    throw new Error(
+      "--plugin-versions must include at least one plugin@version pair.",
+    );
+  }
+
+  const seen = new Set();
+  const duplicates = [];
+  for (const pair of pairs) {
+    if (seen.has(pair.pluginId)) duplicates.push(pair.pluginId);
+    seen.add(pair.pluginId);
+  }
+  if (duplicates.length > 0) {
+    throw new Error(
+      `--plugin-versions cannot include duplicate plugin ids: ${duplicates.join(", ")}`,
+    );
+  }
+
+  return pairs;
+}
+
 function assertSemver(version) {
   if (
     !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?$/.test(
@@ -637,7 +824,8 @@ Sync official registry entries from app repo Forgejo release assets.
 
 Options:
   --plugins <ids>          Comma-separated official plugin ids. Defaults to all publishable official plugins.
-  --release-tag <tag>      Restrict discovery to one Forgejo release tag.
+  --plugin-versions <list> Target exact plugin@version pairs using deterministic release tags.
+  --release-tag <tag>      Legacy compatibility: restrict discovery to one Forgejo release tag.
   --dry-run                Print planned updates without writing entries or trust metadata.
   --forgejo-server <url>   Forgejo server. Defaults to https://code.ju.ma.
   --forgejo-repo <repo>    Forgejo repo. Defaults to lapis-notes/lapis.
