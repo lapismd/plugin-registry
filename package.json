@@ -10,7 +10,9 @@
   "scripts": {
     "registry:validate": "node scripts/validate-registry.mjs",
     "registry:validate:remote": "node scripts/validate-registry.mjs --strict-remote",
-    "registry:sync:forgejo": "node scripts/sync-forgejo-releases.mjs",
+    "registry:sync:github": "node scripts/sync-github-release.mjs",
+    "registry:sync:forgejo:migration": "node scripts/sync-forgejo-releases.mjs",
+    "registry:preview:release-plan": "node scripts/preview-release-plan.mjs",
     "registry:generate": "node scripts/generate-registry.mjs",
     "registry:sign": "node scripts/sign-registry.mjs",
     "registry:keygen": "node scripts/generate-registry-key.mjs",

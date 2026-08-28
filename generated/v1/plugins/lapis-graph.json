@@ -14,15 +14,15 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "0TeueQZMErGLaU3wqnNsg2aC120VaPIoh/o+vs0KOrlepOKMP1htsYOORUYKyezAejjgs/rER0Ti/8axpms2DQ=="
+      "sig": "pIGa8sUmLzod4UGfVTcfCWL3FRBr55CemBtrGJVASqH3XxiMQp2/PSKsF9pOumWTVFM+csThBQ1zYhOVau4XCw=="
     }
   ],
   "status": "active",
   "versions": {
     "2026.6.6": {
       "bundle": {
-        "sha256": "32f9a2225934c6c0c1dbd945b27c8d58df6785544abb9a4c793cd6cf337980dc",
-        "size": 343119,
+        "sha256": "5bc56ce3ebcf76d17888d793e031a5dd6e7d519ffbce221b339fa6df3967b66f",
+        "size": 116157,
         "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin"
       },
       "minAppVersion": "1.7.7",

@@ -26,15 +26,15 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "o525suErtTkL6ssvvELyp7oD80RF5RaK9NK2dmFU4dGxyZKjH3wRuxp4QXS8FV0PjfGEGZSdlgZyOvjfpEX4Cg=="
+      "sig": "CkiNo15/dQJfHZR3BOOUsc64phP0iuxtl7aQVS7SJ+My5vt3sWWpyeTQIZfD8CYAmJSg3H/WKsa+08k5mDvNCA=="
     }
   ],
   "status": "active",
   "versions": {
     "2026.6.6": {
       "bundle": {
-        "sha256": "9d52f9495c9cff26c07f88d9bc6311ba8fc563cc4b8c02c35be38599f2dd1e86",
-        "size": 36011257,
+        "sha256": "dacf9ae28c86a58e4ad8d9d580e39ce472519dc4a5142785176843dabedc3eb0",
+        "size": 3138148,
         "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-docs-2026.6.6/lapis-docs-2026.6.6.lapis-plugin"
       },
       "minAppVersion": "0.20.0",

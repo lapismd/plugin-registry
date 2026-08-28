@@ -21,8 +21,8 @@
   "versions": {
     "2026.6.6": {
       "bundle": {
-        "sha256": "4466ef823e45898d7c422db2d6fbf87d9dd16d0b1d6c947bc6c2b768e34cd48d",
-        "size": 157803930,
+        "sha256": "54768708b2d00fa5c6d02fa97300a84a89eeb2345eea28312a7e3365821969fc",
+        "size": 26762727,
         "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-notebook-2026.6.6/lapis-notebook-2026.6.6.lapis-plugin",
       },
       "minAppVersion": "1.7.7",

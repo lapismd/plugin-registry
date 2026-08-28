@@ -1,0 +1,99 @@
+name: Sync plugin release
+
+on:
+  repository_dispatch:
+    types: [plugin_release]
+
+permissions: {}
+
+concurrency:
+  group: registry-${{ github.event.client_payload.plugin_id }}-${{ github.event.client_payload.version }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Create registry GitHub App token
+        id: registry-app
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.LAPIS_REGISTRY_APP_ID }}
+          private-key: ${{ secrets.LAPIS_REGISTRY_APP_PRIVATE_KEY }}
+          owner: lapismd
+          repositories: |
+            lapis-plugins
+            plugin-registry
+          permission-contents: write
+          permission-pull-requests: write
+
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.registry-app.outputs.token }}
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify and sync GitHub release
+        run: pnpm registry:sync:github -- --event-path "$GITHUB_EVENT_PATH"
+        env:
+          GITHUB_TOKEN: ${{ steps.registry-app.outputs.token }}
+          LAPIS_PLUGIN_RELEASE_KEY_ID: ${{ secrets.LAPIS_PLUGIN_RELEASE_KEY_ID }}
+          LAPIS_PLUGIN_RELEASE_PUBLIC_KEY_PEM: ${{ secrets.LAPIS_PLUGIN_RELEASE_PUBLIC_KEY_PEM }}
+
+      - name: Format curated source
+        run: pnpm fmt
+
+      - name: Validate registry
+        run: pnpm registry:validate
+
+      - name: Generate registry
+        run: pnpm registry:generate
+
+      - name: Sign registry metadata
+        run: pnpm registry:sign
+        env:
+          LAPIS_REGISTRY_KEY_ID: ${{ secrets.LAPIS_REGISTRY_KEY_ID }}
+          LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64: ${{ secrets.LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64 }}
+
+      - name: Verify registry signatures and remote bundles
+        run: pnpm registry:verify-signatures && pnpm registry:validate:remote
+
+      - name: Check site and automation fixtures
+        run: pnpm site:check && pnpm site:build && pnpm test && pnpm check:format
+
+      - name: Create or update registry pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ steps.registry-app.outputs.token }}
+          branch-token: ${{ steps.registry-app.outputs.token }}
+          base: main
+          branch: automation/plugin-${{ github.event.client_payload.plugin_id }}-${{ github.event.client_payload.version }}
+          delete-branch: true
+          commit-message: >-
+            chore(registry): index ${{ github.event.client_payload.plugin_id }}
+            ${{ github.event.client_payload.version }}
+          title: >-
+            Index ${{ github.event.client_payload.plugin_id }}
+            ${{ github.event.client_payload.version }}
+          body: |
+            Automated, verified registry update for `${{ github.event.client_payload.package_name }}`.
+
+            - Source: `${{ github.event.client_payload.repository }}@${{ github.event.client_payload.source_commit }}`
+            - Release: `${{ github.event.client_payload.release_tag }}`
+            - Asset: `${{ github.event.client_payload.asset_name }}`
+
+            The archive, checksum, embedded release signature, signed file list,
+            runtime descriptor, package coordinates, and source commit were
+            verified before this pull request was generated.

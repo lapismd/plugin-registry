@@ -1,12 +1,17 @@
 name: Publish Registry
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      approval:
+        description: Enter REGISTRY_DEPLOY_APPROVED after the release gate
+        required: true
 
 jobs:
   publish:
+    if: >-
+      vars.FIRST_REGISTRY_RELEASE_APPROVED == 'true' &&
+      inputs.approval == 'REGISTRY_DEPLOY_APPROVED'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:

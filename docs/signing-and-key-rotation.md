@@ -58,7 +58,7 @@ private/public key files. `pnpm registry:sign` still prefers
 `LAPIS_REGISTRY_PRIVATE_KEY_PEM`; if those are not set, it reads the default
 local registry key.
 
-Plugin release signing keys remain separate. During `pnpm registry:sync:forgejo`,
+Plugin release signing keys remain separate. During `pnpm registry:sync:github`,
 release manifests are trusted when signed by a release key already listed in
 `generated/v1/trust/root.json`, or by a local operator key from
 `~/.lapis/lapis-plugin-release-key.json` / release public-key env vars. When a
@@ -69,6 +69,10 @@ that public key under `roles.release`.
 
 - `LAPIS_REGISTRY_KEY_ID`
 - `LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64`
+- `LAPIS_PLUGIN_RELEASE_KEY_ID`
+- `LAPIS_PLUGIN_RELEASE_PUBLIC_KEY_PEM`
+- `LAPIS_REGISTRY_APP_ID`
+- `LAPIS_REGISTRY_APP_PRIVATE_KEY`
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
 

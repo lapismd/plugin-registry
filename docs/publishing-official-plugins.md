@@ -1,78 +1,88 @@
 # Publishing Official Plugins
 
-This registry accepts official plugin metadata through `entries/official/*.jsonc`.
-The app repo owns official plugin asset builds and publishes assets to
-deterministic Forgejo releases. This registry repo owns metadata sync, review,
-signing, and site publication.
+This registry accepts official plugin metadata through
+`entries/official/*.jsonc`. Each plugin source repository owns its npm package,
+deterministic archive, release signature, and GitHub release. This repository
+owns release verification, curated metadata review, registry signing, and site
+publication.
 
 ## Release Asset Requirements
 
-Official plugin releases use one release tag per plugin version:
+Official plugins use one package-scoped tag per version:
 
 ```text
-official-plugin-assets-<plugin-id>-<version>
+<package-directory>@<version>
 ```
 
-Default publishing is immutable: do not overwrite assets for an existing plugin
-version. `--force-overwrite` in the app repo publish workflow is reserved for
-exceptional repair work and must be followed by registry sync, generation,
-signing, and validation before metadata is considered published.
-
-Expected Forgejo release asset names:
+The GitHub release must contain exactly named assets:
 
 ```text
 <plugin-id>-<version>.lapis-plugin
+<plugin-id>-<version>.lapis-plugin.sha256
 ```
 
-The `.lapis-plugin` bundle is a deterministic ZIP-compatible archive containing
-`release.signed.json` and every installable plugin file. `release.signed.json`
-is stored as the first archive entry; plugin files are DEFLATE-compressed with
-deterministic settings. The signed release manifest records each bundled file
-path, uncompressed hash, and uncompressed size. `manifest.json` and `main.js`
-are required by app-side release packaging.
+Publishing is immutable. Never replace assets for an existing plugin version;
+publish a new patch version instead. The `.lapis-plugin` file is a deterministic
+ZIP-compatible archive containing `release.signed.json`, `manifest.json`,
+`main.mjs`, `styles.css`, workers, and traced assets. The embedded signed release
+manifest records each installable path, SHA-256, and size and binds the archive
+to the npm package name and source commit.
 
 ## Registry Update Flow
 
-1. Build and package the plugin from `lapis-notes`.
-2. Sign `release.json` as `release.signed.json` with the official plugin release
-   key and package it with the plugin files as `<plugin-id>-<version>.lapis-plugin`.
-3. Upload the single bundle to the deterministic Forgejo release in
-   `lapis-notes/lapis`.
-4. Sync registry entries from Forgejo:
+1. Publish the verified npm package.
+2. Create the package-scoped GitHub release and attach the archive and checksum.
+3. Send a `repository_dispatch` request with action `plugin_release` and this
+   exact payload:
 
-```sh
-pnpm registry:sync:forgejo -- --plugin-versions lapis-pdf@2026.6.6 --dry-run
-pnpm registry:sync:forgejo -- --plugin-versions lapis-pdf@2026.6.6
-pnpm registry:generate
-pnpm registry:sign
-pnpm registry:verify-signatures
-pnpm registry:validate:remote
+```json
+{
+  "repository": "lapismd/lapis-plugins",
+  "package_name": "@lapis-notes/graph",
+  "plugin_id": "lapis-graph",
+  "version": "0.1.0",
+  "release_tag": "graph@0.1.0",
+  "asset_name": "lapis-graph-0.1.0.lapis-plugin",
+  "source_commit": "0123456789abcdef0123456789abcdef01234567"
+}
 ```
 
-`registry:sync:forgejo -- --plugin-versions <plugin@version,...>` resolves each
-pair to `official-plugin-assets-<plugin-id>-<version>`, fetches that Forgejo
-release by tag, downloads the `.lapis-plugin` bundle, verifies the bundle hash
-and size, verifies the embedded signed official release manifest, validates each
-signed file against the bundled bytes, updates `entries/official/*.jsonc`, and
-activates only plugins with verified bundles. Entries that still point at
-historical multi-asset releases must be removed or republished as bundles before
-publication. Bundled app-default functionality is intentionally outside this
-installable registry flow.
+4. The dispatch workflow downloads both assets and rejects malformed payloads,
+   missing or extra signed files, unsafe paths, coordinate mismatches, invalid
+   signatures, checksums, sizes, or runtime descriptors.
+5. It updates the source entry without removing prior versions, regenerates and
+   signs V1 metadata, runs remote validation and the Astro site tests, then opens
+   or updates `automation/plugin-<plugin-id>-<version>`.
+6. A maintainer reviews and merges the registry pull request. Checks validate
+   every referenced remote bundle; visual tests are not required and do not
+   block merging or deployment.
 
-Official entries may also include a mutable `readmeUrl` that points at an
-HTTPS README, usually the package-local README in `lapis-notes`. The URL is
-signed in registry metadata, but the README content is fetched by the registry
-site build and published under `v1/readmes/<plugin-id>/` so clients render
-registry-hosted markdown without depending on source host CORS. Documentation
-edits require a site rebuild, but do not require metadata or release
-republishing.
-`registry:sync:forgejo` preserves curated `readmeUrl` values.
-Published registry metadata and README artifacts are served with permissive CORS
-headers from Cloudflare Pages middleware so browser and PWA clients can fetch
-them directly.
+The workflow uses a narrowly scoped GitHub App installed only on the plugin and
+registry repositories. It needs repository contents read/write for the release
+and automation branch, pull-request write access in the registry, and access to
+send/receive repository dispatch events. Store its ID and private key as
+`LAPIS_REGISTRY_APP_ID` and `LAPIS_REGISTRY_APP_PRIVATE_KEY` secrets.
 
-The default `registry:validate` command checks schemas and local registry rules
-without requiring the Forgejo assets to exist yet. The publish workflow uses
-`registry:validate:remote`, which fetches each bundle, verifies the embedded
-release signature and signed file hashes, and fails if pending plugin bundles
-remain.
+## README Mirroring and CORS
+
+The sync records the package-local README at the verified source commit. The
+site build mirrors that content under `v1/readmes/<plugin-id>/`, allowing clients
+to render registry-hosted Markdown without depending on source-host CORS.
+Documentation updates require a new registry/site change but no plugin binary
+republishing. Cloudflare Pages middleware serves registry metadata and README
+artifacts with permissive CORS headers.
+
+## Migration Source
+
+The former Forgejo repository remains a read-only migration remote. Existing
+catalog entries and versions remain available until verified GitHub releases
+supersede them. For an audited migration refresh only:
+
+```sh
+pnpm registry:sync:forgejo:migration -- --plugin-versions lapis-graph@2026.6.6 --dry-run
+```
+
+The default `registry:validate` command checks schemas and local rules. Pull
+requests and the manual production workflow run `registry:validate:remote`,
+which downloads every active archive and verifies its embedded official release
+signature and signed files.

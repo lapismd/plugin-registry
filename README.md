@@ -5,8 +5,9 @@ Static plugin registry metadata for Lapis Notes.
 The V1 registry publishes inline-signed JSON metadata for official installable
 plugins.
 Generated files under `generated/v1/` are intended to be deployed as static
-assets, while official plugin release assets are published by the `lapis-notes`
-app repo as deterministic per-plugin-version Forgejo release downloads.
+assets. Official plugins publish deterministic, per-package-version GitHub
+release downloads from their owning repositories and npm packages for static
+application composition.
 
 ## Commands
 
@@ -14,7 +15,9 @@ app repo as deterministic per-plugin-version Forgejo release downloads.
 pnpm install
 pnpm check
 pnpm registry:validate
-pnpm registry:sync:forgejo -- --plugin-versions lapis-pdf@2026.6.6 --dry-run
+pnpm registry:sync:github -- --event-path /path/to/repository-dispatch.json --dry-run
+pnpm registry:sync:forgejo:migration -- --plugin-versions lapis-pdf@2026.6.6 --dry-run
+pnpm registry:preview:release-plan -- --release-plan ../lapis-plugins/.release/release-plan.json --public-key ../lapis-plugins/.release/plugin-release-public.pem --output tmp/registry-preview.json
 pnpm registry:generate
 pnpm registry:verify-signatures
 ```
@@ -41,14 +44,27 @@ so verification can run in CI before production keys are installed.
   signatures plus matching signature sidecars.
 - `scripts/**`: validation, generation, signing, and verification tooling.
 
-Official plugin asset builds, release signing, and Forgejo upload live in the
-`lapis-notes` repository. This registry syncs those published releases into
-reviewed metadata with `pnpm registry:sync:forgejo`. Plugin detail metadata can
-also include a signed mutable `readmeUrl`; the site build fetches those README
-sources and publishes deterministic artifacts under `v1/readmes/<plugin-id>/`
-so browser clients render registry-hosted markdown without depending on source
-host CORS. Documentation copy changes require a site rebuild, but not metadata
-or release republishing.
+Official plugin asset builds and release signing live in each plugin source
+repository. A successful npm and GitHub release sends a `plugin_release`
+repository dispatch. The registry verifies the GitHub checksum, archive,
+embedded release signature, source coordinates, signed file list, and runtime
+descriptor before an idempotent automation branch and pull request are created.
+The original Forgejo source and sync command remain read-only migration inputs;
+existing catalog versions stay present until verified replacements supersede
+them.
+
+Plugin detail metadata can also include a signed mutable `readmeUrl`; the site
+build fetches those README sources and publishes deterministic artifacts under
+`v1/readmes/<plugin-id>/` so browser clients render registry-hosted markdown
+without depending on source-host CORS. Documentation copy changes require a site
+rebuild, but not metadata or release republishing.
 Cloudflare Pages middleware adds `Access-Control-Allow-Origin: *` to published
 registry files and README artifacts so the Lapis app can fetch them from web,
 PWA, and Electron surfaces.
+
+Production deployment is manual-only during the first-publication gate. The
+`Publish registry` workflow requires the protected `registry-production`
+environment, the `FIRST_REGISTRY_RELEASE_APPROVED` repository variable, and the
+exact `REGISTRY_DEPLOY_APPROVED` input. Deploy-on-merge may be enabled only after
+the first cutover is explicitly accepted. Visual tests are intentionally not a
+registry deployment gate.

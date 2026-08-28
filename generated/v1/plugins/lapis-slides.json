@@ -14,15 +14,15 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "f7lxbFbbOVRq4dnh3Itq/F+m0UFrHcqZn2pnkfkYnLIbNa4dBpu7mbrC0iguvSPXoW6dEKGkAXVyJH8xs7oEDg=="
+      "sig": "IPEA4oVuS0HOys8D0HkcIiSJFZvw98bm+iKFB71XYss5QGz2Efcw4FSaYT2/vKai8UGIpohTwzGRBDtsSNvhDQ=="
     }
   ],
   "status": "active",
   "versions": {
     "2026.6.6": {
       "bundle": {
-        "sha256": "694967020962ffc302192d42e67d3093ddb21871787e70b77d77fafd11d6c5d2",
-        "size": 1846533,
+        "sha256": "d820c0eea660dcd18120ae404c750b3e9c287553f0db23a528a1d4ce6e68cf3b",
+        "size": 434234,
         "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-slides-2026.6.6/lapis-slides-2026.6.6.lapis-plugin"
       },
       "minAppVersion": "1.7.7",
