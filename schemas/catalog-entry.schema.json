@@ -54,7 +54,8 @@
       "required": ["name", "verified"],
       "properties": {
         "name": { "type": "string", "minLength": 1 },
-        "verified": { "type": "boolean" }
+        "verified": { "type": "boolean" },
+        "url": { "$ref": "#/$defs/httpsUrl" }
       }
     },
     "source": {
@@ -71,10 +72,20 @@
           "pattern": "^@[a-z0-9][a-z0-9-]*/[a-z0-9][a-z0-9-]*$"
         },
         "releaseTag": { "type": "string", "minLength": 1 },
-        "sourceCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+        "sourceCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "metadataPath": { "$ref": "#/$defs/relativePath" }
       }
     },
     "readme": { "$ref": "#/$defs/hashedRemoteFile" },
+    "license": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "links": { "$ref": "#/$defs/links" },
+    "highlights": {
+      "type": "array",
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 160 }
+    },
+    "content": { "$ref": "#/$defs/content" },
     "contributes": { "$ref": "#/$defs/contributes" },
     "versions": {
       "type": "object",
@@ -112,6 +123,36 @@
         "sha256": { "$ref": "#/$defs/sha256" },
         "size": { "type": "integer", "minimum": 0 },
         "pending": { "type": "boolean" }
+      }
+    },
+    "markdownReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "sourceUrl", "sha256", "size", "mediaType"],
+      "properties": {
+        "url": { "$ref": "#/$defs/httpsUrl" },
+        "sourceUrl": { "$ref": "#/$defs/httpsUrl" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "size": { "type": "integer", "minimum": 0 },
+        "mediaType": { "const": "text/markdown" }
+      }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "overview": { "$ref": "#/$defs/markdownReference" },
+        "changelog": { "$ref": "#/$defs/markdownReference" }
+      }
+    },
+    "links": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "homepage": { "$ref": "#/$defs/httpsUrl" },
+        "repository": { "$ref": "#/$defs/httpsUrl" },
+        "documentation": { "$ref": "#/$defs/httpsUrl" },
+        "issues": { "$ref": "#/$defs/httpsUrl" }
       }
     },
     "contributes": {

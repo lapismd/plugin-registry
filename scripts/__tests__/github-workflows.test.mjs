@@ -30,6 +30,8 @@ test("release dispatch verifies assets before opening an idempotent PR", async (
   assert.ok(pullRequestIndex > remoteValidationIndex);
   assert.match(workflow, /automation\/plugin-\$\{\{/);
   assert.match(workflow, /actions\/create-github-app-token@v3/);
+  assert.match(workflow, /types: \[plugin_release, plugin_metadata\]/);
+  assert.match(workflow, /version \|\| 'metadata'/);
   assert.doesNotMatch(workflow, /visual|baseline/i);
 });
 

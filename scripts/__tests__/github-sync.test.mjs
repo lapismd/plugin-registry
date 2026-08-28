@@ -9,8 +9,11 @@ import { Zip, ZipDeflate, ZipPassThrough } from "fflate";
 
 import {
   parseDispatchEvent,
+  parseMetadataDispatchEvent,
   syncGitHubRelease,
+  syncGitHubMetadata,
   validateDispatchPayload,
+  validateMetadataDispatchPayload,
 } from "../sync-github-release.mjs";
 import { canonicalize, sha256, signJson } from "../lib/registry.mjs";
 import { publicKeyPemToRawBase64 } from "../lib/keys.mjs";
@@ -60,6 +63,35 @@ test("repository_dispatch validation rejects missing, extra, and mismatched coor
   );
 });
 
+test("metadata dispatch accepts source coordinates without release fields", () => {
+  const metadataPayload = {
+    repository: payload.repository,
+    package_name: payload.package_name,
+    plugin_id: payload.plugin_id,
+    source_commit: sourceCommit,
+  };
+  assert.deepEqual(
+    parseMetadataDispatchEvent({
+      action: "plugin_metadata",
+      client_payload: metadataPayload,
+    }),
+    {
+      repository: payload.repository,
+      packageName: payload.package_name,
+      pluginId: payload.plugin_id,
+      sourceCommit,
+    },
+  );
+  assert.throws(
+    () =>
+      validateMetadataDispatchPayload({
+        ...metadataPayload,
+        version: payload.version,
+      }),
+    /Unknown GitHub dispatch fields/,
+  );
+});
+
 test("GitHub sync verifies release assets and updates one curated entry idempotently", async () => {
   const fixture = await fixtureDir();
   const release = signedReleaseFixture();
@@ -73,6 +105,7 @@ test("GitHub sync verifies release assets and updates one curated entry idempote
     payload: validateDispatchPayload(payload),
     entriesDir: fixture.entriesDir,
     trustRootPath: fixture.trustRootPath,
+    contentDir: fixture.contentDir,
     fetchImpl: release.fetchImpl,
   });
   const entry = JSON.parse(
@@ -86,6 +119,7 @@ test("GitHub sync verifies release assets and updates one curated entry idempote
     packageName: payload.package_name,
     releaseTag: payload.release_tag,
     sourceCommit,
+    metadataPath: "packages/graph/registry.json",
   });
   assert.equal(entry.latestVersion, "0.1.0");
   assert.equal(entry.versions["2026.6.6"].version, "2026.6.6");
@@ -97,11 +131,28 @@ test("GitHub sync verifies release assets and updates one curated entry idempote
     entry.readmeUrl,
     `https://raw.githubusercontent.com/lapismd/lapis-plugins/${sourceCommit}/packages/graph/README.md`,
   );
+  assert.deepEqual(entry.highlights, [
+    "Explore note and tag relationships.",
+    "Open graph nodes directly in the workspace.",
+  ]);
+  assert.equal(entry.content.overview.mediaType, "text/markdown");
+  assert.equal(
+    entry.links.repository,
+    "https://github.com/lapismd/lapis-plugins",
+  );
+  assert.equal(
+    await readFile(
+      new URL("lapis-graph/overview.md", fixture.contentDir),
+      "utf8",
+    ),
+    "# Graph\n\nExplore connected notes.\n",
+  );
 
   const second = await syncGitHubRelease({
     payload: validateDispatchPayload(payload),
     entriesDir: fixture.entriesDir,
     trustRootPath: fixture.trustRootPath,
+    contentDir: fixture.contentDir,
     fetchImpl: release.fetchImpl,
   });
   assert.equal(second.changed, false);
@@ -117,6 +168,7 @@ test("GitHub sync rejects a checksum asset that does not match the bundle", asyn
       payload: validateDispatchPayload(payload),
       entriesDir: fixture.entriesDir,
       trustRootPath: fixture.trustRootPath,
+      contentDir: fixture.contentDir,
       fetchImpl: release.fetchImpl,
     }),
     /GitHub checksum does not match/,
@@ -135,6 +187,7 @@ test("GitHub sync rejects signed package and commit coordinates that differ from
       payload: validateDispatchPayload(payload),
       entriesDir: fixture.entriesDir,
       trustRootPath: fixture.trustRootPath,
+      contentDir: fixture.contentDir,
       fetchImpl: release.fetchImpl,
     }),
     /signed source coordinates do not match dispatch/,
@@ -156,6 +209,7 @@ test("GitHub sync rejects unsigned extra archive files", async () => {
       payload: validateDispatchPayload(payload),
       entriesDir: fixture.entriesDir,
       trustRootPath: fixture.trustRootPath,
+      contentDir: fixture.contentDir,
       fetchImpl: release.fetchImpl,
     }),
     /bundle includes unsigned files: unexpected\.js/,
@@ -172,10 +226,43 @@ test("GitHub sync rejects unsafe signed paths", async () => {
       payload: validateDispatchPayload(payload),
       entriesDir: fixture.entriesDir,
       trustRootPath: fixture.trustRootPath,
+      contentDir: fixture.contentDir,
       fetchImpl: release.fetchImpl,
     }),
     /unsafe|relative|path/i,
   );
+  await rm(fixture.root, { recursive: true, force: true });
+});
+
+test("metadata-only sync updates content without changing release versions", async () => {
+  const fixture = await fixtureDir();
+  const release = signedReleaseFixture();
+  await writeFile(
+    new URL("lapis-graph.jsonc", fixture.entriesDir),
+    `${JSON.stringify(existingGraphEntry(), null, 2)}\n`,
+  );
+  const metadataPayload = validateMetadataDispatchPayload({
+    repository: payload.repository,
+    package_name: payload.package_name,
+    plugin_id: payload.plugin_id,
+    source_commit: sourceCommit,
+  });
+  const first = await syncGitHubMetadata({
+    payload: metadataPayload,
+    entriesDir: fixture.entriesDir,
+    contentDir: fixture.contentDir,
+    fetchImpl: release.fetchImpl,
+  });
+  assert.equal(first.changed, true);
+  assert.equal(first.entry.latestVersion, "2026.6.6");
+  assert.deepEqual(Object.keys(first.entry.versions), ["2026.6.6"]);
+  const second = await syncGitHubMetadata({
+    payload: metadataPayload,
+    entriesDir: fixture.entriesDir,
+    contentDir: fixture.contentDir,
+    fetchImpl: release.fetchImpl,
+  });
+  assert.equal(second.changed, false);
   await rm(fixture.root, { recursive: true, force: true });
 });
 
@@ -266,6 +353,36 @@ function signedReleaseFixture(options = {}) {
   const bundleUrl =
     "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.0/lapis-graph-0.1.0.lapis-plugin";
   const checksumUrl = `${bundleUrl}.sha256`;
+  const rawBase = `https://raw.githubusercontent.com/lapismd/lapis-plugins/${sourceCommit}/packages/graph/`;
+  const packageBytes = Buffer.from(
+    `${JSON.stringify({
+      name: payload.package_name,
+      version: payload.version,
+      license: "MIT",
+      homepage: "https://lapis.md/plugins/graph",
+      repository: {
+        type: "git",
+        url: "git+https://github.com/lapismd/lapis-plugins.git",
+      },
+      bugs: { url: "https://github.com/lapismd/lapis-plugins/issues" },
+    })}\n`,
+  );
+  const sourceBytes = Buffer.from(
+    `${JSON.stringify({
+      schemaVersion: 1,
+      categories: ["graph", "visualization"],
+      highlights: [
+        "Explore note and tag relationships.",
+        "Open graph nodes directly in the workspace.",
+      ],
+      documentationUrl: "https://lapis.md/plugins/graph/docs",
+      content: { overview: "README.md", changelog: "CHANGELOG.md" },
+    })}\n`,
+  );
+  const readmeBytes = Buffer.from("# Graph\n\nExplore connected notes.\n");
+  const changelogBytes = Buffer.from(
+    "# Changelog\n\n## 0.1.0\n\nInitial release.\n",
+  );
   const fetchImpl = async (url) => {
     if (String(url).startsWith("https://api.github.com/")) {
       return jsonResponse({
@@ -289,6 +406,11 @@ function signedReleaseFixture(options = {}) {
     if (url === checksumUrl) {
       return byteResponse(Buffer.from(`${checksum}  ${payload.asset_name}\n`));
     }
+    if (url === `${rawBase}registry.json`) return byteResponse(sourceBytes);
+    if (url === `${rawBase}package.json`) return byteResponse(packageBytes);
+    if (url === `${rawBase}manifest.json`) return byteResponse(manifestBytes);
+    if (url === `${rawBase}README.md`) return byteResponse(readmeBytes);
+    if (url === `${rawBase}CHANGELOG.md`) return byteResponse(changelogBytes);
     return { ok: false, status: 404 };
   };
   return { publicKeyPem, bundleBytes, fetchImpl };
@@ -362,9 +484,11 @@ async function fixtureDir() {
     "generated/v1/trust/root.json",
     `file://${root}/`,
   );
+  const contentDir = new URL("generated/v1/content/", `file://${root}/`);
   await mkdir(entriesDir, { recursive: true });
   await mkdir(new URL("./", trustRootPath), { recursive: true });
-  return { root, entriesDir, trustRootPath };
+  await mkdir(contentDir, { recursive: true });
+  return { root, entriesDir, trustRootPath, contentDir };
 }
 
 async function writeTrustRoot(trustRootPath, publicKeyPem) {
@@ -401,6 +525,7 @@ function byteResponse(bytes) {
   return {
     ok: true,
     status: 200,
+    headers: { get: () => String(bytes.byteLength) },
     arrayBuffer: async () =>
       bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength),
   };

@@ -48,16 +48,27 @@ Official plugin asset builds and release signing live in each plugin source
 repository. A successful npm and GitHub release sends a `plugin_release`
 repository dispatch. The registry verifies the GitHub checksum, archive,
 embedded release signature, source coordinates, signed file list, and runtime
-descriptor before an idempotent automation branch and pull request are created.
+descriptor plus source-owned metadata before an idempotent automation branch
+and pull request are created. A `plugin_metadata` dispatch accepts repository,
+package, plugin, and source-commit coordinates and refreshes documentation
+without changing any catalog release version or bundle.
 The original Forgejo source and sync command remain read-only migration inputs;
 existing catalog versions stay present until verified replacements supersede
 them.
 
-Plugin detail metadata can also include a signed mutable `readmeUrl`; the site
-build fetches those README sources and publishes deterministic artifacts under
-`v1/readmes/<plugin-id>/` so browser clients render registry-hosted markdown
-without depending on source-host CORS. Documentation copy changes require a site
-rebuild, but not metadata or release republishing.
+New plugin sources own a validated `registry.json` beside their package
+manifest. It supplies curated categories and short highlights plus safe relative
+Overview and Changelog Markdown paths. The registry fetches those files from the
+exact source commit, validates package/repository ownership, and mirrors them
+under `v1/content/<plugin-id>/`. Signed detail metadata records each mirror and
+source URL with its SHA-256, byte size, and `text/markdown` media type. The
+public site and Lapis clients consume the same references. Legacy `readmeUrl`
+and `readme` fields remain supported while older catalog entries migrate.
+
+Source metadata is intentionally bounded: links must use HTTPS, Markdown paths
+must remain inside the package, highlights are plain text, and content is valid
+UTF-8 no larger than 256 KiB per file. Registry badges and verified-owner claims
+remain curated in this repository rather than being accepted from plugin source.
 Cloudflare Pages middleware adds `Access-Control-Allow-Origin: *` to published
 registry files and README artifacts so the Lapis app can fetch them from web,
 PWA, and Electron surfaces.

@@ -111,6 +111,10 @@ test("builds deterministic registry metadata with Docs contribution summary", ()
   const registry = buildRegistry([validEntry()]);
   assert.equal(registry.index.plugins[0].id, "lapis-docs");
   assert.equal(registry.index.plugins[0].detail, "plugins/lapis-docs.json");
+  assert.deepEqual(registry.index.plugins[0].latestRelease, {
+    releasedAt: "2026-05-31T00:00:00.000Z",
+    bundleSize: 0,
+  });
   assert.equal(
     registry.details["lapis-docs"].readmeUrl,
     "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-docs/README.md",

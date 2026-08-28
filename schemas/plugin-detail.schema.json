@@ -29,17 +29,46 @@
       "required": ["name", "verified"],
       "properties": {
         "name": { "type": "string" },
-        "verified": { "type": "boolean" }
+        "verified": { "type": "boolean" },
+        "url": { "type": "string", "pattern": "^https://.+" }
       }
     },
     "latestVersion": { "type": "string" },
     "readme": { "type": "object" },
+    "license": { "type": "string" },
+    "links": { "type": "object" },
+    "highlights": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "overview": { "$ref": "#/$defs/markdownReference" },
+        "changelog": { "$ref": "#/$defs/markdownReference" }
+      }
+    },
     "contributes": { "type": "object" },
     "versions": { "type": "object" },
     "signatures": {
       "type": "array",
       "minItems": 1,
       "items": { "$ref": "signed-envelope.schema.json" }
+    }
+  },
+  "$defs": {
+    "markdownReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "sourceUrl", "sha256", "size", "mediaType"],
+      "properties": {
+        "url": { "type": "string", "pattern": "^https://.+" },
+        "sourceUrl": { "type": "string", "pattern": "^https://.+" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "size": { "type": "integer", "minimum": 0 },
+        "mediaType": { "const": "text/markdown" }
+      }
     }
   }
 }

@@ -21,6 +21,10 @@ export async function publishRegistryReadmes({
     const detail = plugin.detail
       ? await readJson(new URL(plugin.detail, registryDir))
       : {};
+    if (detail.content?.overview) {
+      skipped.push({ pluginId: plugin.id, reason: "structured-content" });
+      continue;
+    }
     const readmeUrl = detail.readmeUrl ?? plugin.readmeUrl;
     if (!readmeUrl) {
       skipped.push({ pluginId: plugin.id, reason: "missing-readme-url" });

@@ -1,5 +1,8 @@
 import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import path from "node:path";
+// The site and registry automation intentionally share one safe Markdown renderer.
+import { renderMarkdownToSafeHtml } from "../../scripts/lib/readmes.mjs";
 
 export interface RegistryIndex {
   schemaVersion: 1;
@@ -25,6 +28,11 @@ export interface RegistryPluginSummary {
   owner: {
     name: string;
     verified: boolean;
+    url?: string;
+  };
+  latestRelease?: {
+    releasedAt: string;
+    bundleSize: number;
   };
   detail: string;
   contributes?: PluginContributions;
@@ -62,13 +70,39 @@ export interface PluginDetail {
   owner: {
     name: string;
     verified: boolean;
+    url?: string;
   };
   latestVersion: string;
+  license?: string;
+  links?: PluginLinks;
+  highlights?: string[];
+  content?: PluginCatalogContent;
   contributes?: PluginContributions;
   versions: Record<string, PluginVersion>;
 }
 
-export interface SitePlugin extends RegistryPluginSummary {
+export interface PluginLinks {
+  homepage?: string;
+  repository?: string;
+  documentation?: string;
+  issues?: string;
+}
+
+export interface PluginMarkdownReference {
+  url: string;
+  sourceUrl: string;
+  sha256: string;
+  size: number;
+  mediaType: "text/markdown";
+}
+
+export interface PluginCatalogContent {
+  overview?: PluginMarkdownReference;
+  changelog?: PluginMarkdownReference;
+}
+
+export interface SitePlugin
+  extends Omit<RegistryPluginSummary, "latestRelease"> {
   detailData: PluginDetail;
   searchText: string;
   filePatterns: string[];
@@ -161,6 +195,44 @@ export async function readGeneratedReadmeHtml(pluginId: string) {
     );
   } catch {
     return null;
+  }
+}
+
+export async function readStructuredMarkdownHtml(
+  pluginId: string,
+  kind: keyof PluginCatalogContent,
+  reference?: PluginMarkdownReference,
+) {
+  if (!reference) return { html: null, error: null };
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(pluginId)) {
+    return { html: null, error: "Invalid plugin content path." };
+  }
+  try {
+    const bytes = await readFile(
+      path.join(siteRegistryRoot, "content", pluginId, `${kind}.md`),
+    );
+    if (bytes.byteLength !== reference.size) {
+      return {
+        html: null,
+        error: "Mirrored content size does not match signed metadata.",
+      };
+    }
+    const digest = createHash("sha256").update(bytes).digest("hex");
+    if (digest !== reference.sha256) {
+      return {
+        html: null,
+        error: "Mirrored content hash does not match signed metadata.",
+      };
+    }
+    return {
+      html: renderMarkdownToSafeHtml(bytes.toString("utf8")),
+      error: null,
+    };
+  } catch (error) {
+    return {
+      html: null,
+      error: error instanceof Error ? error.message : "Content is unavailable.",
+    };
   }
 }
 

@@ -304,25 +304,32 @@ export function buildRegistry(entries) {
   const normalized = entries
     .map((entry) => stripInternal(entry))
     .sort((a, b) => a.id.localeCompare(b.id));
-  const indexPlugins = normalized.map((entry) => ({
-    schemaVersion: 1,
-    id: entry.id,
-    name: entry.name,
-    description: entry.description,
-    readmeUrl: entry.readmeUrl,
-    author: entry.author,
-    authorUrl: entry.authorUrl,
-    channel: entry.channel,
-    status: entry.status,
-    latestVersion: entry.latestVersion,
-    minAppVersion: entry.minAppVersion,
-    platforms: entry.platforms,
-    categories: entry.categories,
-    badges: entry.badges ?? [],
-    owner: entry.owner,
-    detail: `plugins/${entry.id}.json`,
-    contributes: entry.contributes ?? {},
-  }));
+  const indexPlugins = normalized.map((entry) => {
+    const latestRelease = entry.versions[entry.latestVersion];
+    return {
+      schemaVersion: 1,
+      id: entry.id,
+      name: entry.name,
+      description: entry.description,
+      readmeUrl: entry.readmeUrl,
+      author: entry.author,
+      authorUrl: entry.authorUrl,
+      channel: entry.channel,
+      status: entry.status,
+      latestVersion: entry.latestVersion,
+      minAppVersion: entry.minAppVersion,
+      platforms: entry.platforms,
+      categories: entry.categories,
+      badges: entry.badges ?? [],
+      owner: entry.owner,
+      latestRelease: {
+        releasedAt: latestRelease.releasedAt,
+        bundleSize: latestRelease.bundle.size,
+      },
+      detail: `plugins/${entry.id}.json`,
+      contributes: entry.contributes ?? {},
+    };
+  });
   return {
     index: {
       schemaVersion: 1,
@@ -349,6 +356,10 @@ export function buildRegistry(entries) {
           owner: entry.owner,
           latestVersion: entry.latestVersion,
           ...(entry.readme ? { readme: entry.readme } : {}),
+          ...(entry.license ? { license: entry.license } : {}),
+          ...(entry.links ? { links: entry.links } : {}),
+          ...(entry.highlights ? { highlights: entry.highlights } : {}),
+          ...(entry.content ? { content: entry.content } : {}),
           ...(entry.contributes ? { contributes: entry.contributes } : {}),
           versions: entry.versions,
         },

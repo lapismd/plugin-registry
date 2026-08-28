@@ -2,12 +2,12 @@ name: Sync plugin release
 
 on:
   repository_dispatch:
-    types: [plugin_release]
+    types: [plugin_release, plugin_metadata]
 
 permissions: {}
 
 concurrency:
-  group: registry-${{ github.event.client_payload.plugin_id }}-${{ github.event.client_payload.version }}
+  group: registry-${{ github.event.client_payload.plugin_id }}-${{ github.event.client_payload.version || github.event.client_payload.source_commit }}
   cancel-in-progress: false
 
 jobs:
@@ -79,21 +79,19 @@ jobs:
           token: ${{ steps.registry-app.outputs.token }}
           branch-token: ${{ steps.registry-app.outputs.token }}
           base: main
-          branch: automation/plugin-${{ github.event.client_payload.plugin_id }}-${{ github.event.client_payload.version }}
+          branch: automation/plugin-${{ github.event.client_payload.plugin_id }}-${{ github.event.client_payload.version || 'metadata' }}
           delete-branch: true
           commit-message: >-
             chore(registry): index ${{ github.event.client_payload.plugin_id }}
             ${{ github.event.client_payload.version }}
           title: >-
             Index ${{ github.event.client_payload.plugin_id }}
-            ${{ github.event.client_payload.version }}
+            ${{ github.event.client_payload.version || 'metadata' }}
           body: |
             Automated, verified registry update for `${{ github.event.client_payload.package_name }}`.
 
             - Source: `${{ github.event.client_payload.repository }}@${{ github.event.client_payload.source_commit }}`
-            - Release: `${{ github.event.client_payload.release_tag }}`
-            - Asset: `${{ github.event.client_payload.asset_name }}`
+            - Release: `${{ github.event.client_payload.release_tag || 'metadata-only' }}`
+            - Asset: `${{ github.event.client_payload.asset_name || 'unchanged' }}`
 
-            The archive, checksum, embedded release signature, signed file list,
-            runtime descriptor, package coordinates, and source commit were
-            verified before this pull request was generated.
+            ${{ github.event.action == 'plugin_release' && 'The archive, checksum, embedded release signature, signed file list, runtime descriptor, package coordinates, source metadata, and source commit were verified before this pull request was generated.' || 'The package coordinates, structured metadata, Markdown content, ownership, and source commit were verified before this metadata-only pull request was generated. Release versions and assets are unchanged.' }}

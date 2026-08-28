@@ -27,6 +27,10 @@
       "description": "Infinite canvas view with JSON Canvas support.",
       "detail": "plugins/lapis-canvas.json",
       "id": "lapis-canvas",
+      "latestRelease": {
+        "bundleSize": 164184,
+        "releasedAt": "2026-06-06T22:47:29Z"
+      },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "Canvas",
@@ -69,6 +73,10 @@
       "description": "Rich document and spreadsheet editing for Lapis.",
       "detail": "plugins/lapis-docs.json",
       "id": "lapis-docs",
+      "latestRelease": {
+        "bundleSize": 3138148,
+        "releasedAt": "2026-06-06T22:47:06Z"
+      },
       "latestVersion": "2026.6.6",
       "minAppVersion": "0.20.0",
       "name": "Docs",
@@ -100,6 +108,10 @@
       "description": "Graph and local graph views powered by the metadata cache.",
       "detail": "plugins/lapis-graph.json",
       "id": "lapis-graph",
+      "latestRelease": {
+        "bundleSize": 116157,
+        "releasedAt": "2026-06-06T22:47:38Z"
+      },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "Graph",
@@ -131,6 +143,10 @@
       "description": "Markdown linting diagnostics for Lapis notes.",
       "detail": "plugins/lapis-markdown-lint.json",
       "id": "lapis-markdown-lint",
+      "latestRelease": {
+        "bundleSize": 51432,
+        "releasedAt": "2026-06-06T22:48:25Z"
+      },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "Markdown Lint",
@@ -162,6 +178,10 @@
       "description": "Reactive notebook support for markdown notes.",
       "detail": "plugins/lapis-notebook.json",
       "id": "lapis-notebook",
+      "latestRelease": {
+        "bundleSize": 26762727,
+        "releasedAt": "2026-06-06T22:47:40Z"
+      },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "Notebook",
@@ -203,6 +223,10 @@
       "description": "PDF viewing for Lapis.",
       "detail": "plugins/lapis-pdf.json",
       "id": "lapis-pdf",
+      "latestRelease": {
+        "bundleSize": 3302567,
+        "releasedAt": "2026-06-06T22:47:18Z"
+      },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "PDF",
@@ -234,6 +258,10 @@
       "description": "Presentation mode for markdown notes.",
       "detail": "plugins/lapis-slides.json",
       "id": "lapis-slides",
+      "latestRelease": {
+        "bundleSize": 434234,
+        "releasedAt": "2026-06-06T22:47:26Z"
+      },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "Slides",
@@ -265,6 +293,10 @@
       "description": "Telemetry diagnostics view.",
       "detail": "plugins/lapis-telemetry.json",
       "id": "lapis-telemetry",
+      "latestRelease": {
+        "bundleSize": 91109,
+        "releasedAt": "2026-06-06T22:48:22Z"
+      },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
       "name": "Telemetry Diagnostics",
@@ -292,7 +324,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "JZUD0z/lgB5h5tkmcXYiCnUPAjCt6EUkWpbsqMMW53uSpLZJGUQ25KShPO+0okmV2hf40VOEYecMlGYwHjSwDQ=="
+      "sig": "HdbGPRLwhtQuLNgf6G8B18RDCz/LPZN2vdVBCXt0Tbi4cI9vF1cTL7SawI05HBR1UhEj5UZjxEczPW0SiTD0AA=="
     }
   ]
 }

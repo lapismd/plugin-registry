@@ -20,9 +20,14 @@ import {
   parsePluginBundle,
   pluginBundleReleaseManifestPath,
 } from "./lib/plugin-bundle.mjs";
+import {
+  applyPluginSourceMetadata,
+  fetchPluginSourceMetadata,
+} from "./lib/source-metadata.mjs";
 
 const githubApi = "https://api.github.com";
 const dispatchAction = "plugin_release";
+const metadataDispatchAction = "plugin_metadata";
 const payloadKeys = new Set([
   "repository",
   "package_name",
@@ -32,6 +37,12 @@ const payloadKeys = new Set([
   "asset_name",
   "source_commit",
 ]);
+const metadataPayloadKeys = new Set([
+  "repository",
+  "package_name",
+  "plugin_id",
+  "source_commit",
+]);
 
 export async function syncGitHubRelease(options = {}) {
   const {
@@ -39,6 +50,7 @@ export async function syncGitHubRelease(options = {}) {
     fetchImpl = fetch,
     entriesDir = new URL("entries/official/", repoRoot),
     trustRootPath = new URL("trust/root.json", generatedDir),
+    contentDir = new URL("content/", generatedDir),
     dryRun = false,
   } = options;
   const payload =
@@ -76,7 +88,7 @@ export async function syncGitHubRelease(options = {}) {
     trust,
   });
   const existingEntry = await readExistingEntry(payload.pluginId, entriesDir);
-  const entry = buildUpdatedEntry({
+  const releaseEntry = buildUpdatedEntry({
     payload,
     existingEntry,
     manifest: verified.manifest,
@@ -88,6 +100,12 @@ export async function syncGitHubRelease(options = {}) {
       size: bundleBytes.byteLength,
     },
   });
+  const sourceMetadata = await fetchPluginSourceMetadata({
+    payload,
+    fetchImpl,
+    outputDir: contentDir,
+  });
+  const entry = applyPluginSourceMetadata(releaseEntry, sourceMetadata);
   const changed =
     !existingEntry ||
     stableStringify(existingEntry, 2) !== stableStringify(entry, 2);
@@ -117,6 +135,50 @@ export async function syncGitHubRelease(options = {}) {
   };
 }
 
+export async function syncGitHubMetadata(options = {}) {
+  const {
+    env = process.env,
+    fetchImpl = fetch,
+    entriesDir = new URL("entries/official/", repoRoot),
+    contentDir = new URL("content/", generatedDir),
+    dryRun = false,
+  } = options;
+  const payload =
+    options.payload ??
+    parseMetadataDispatchEvent(
+      JSON.parse(
+        await readFile(options.eventPath ?? env.GITHUB_EVENT_PATH, "utf8"),
+      ),
+    );
+  const existingEntry = await readExistingEntry(payload.pluginId, entriesDir);
+  if (!existingEntry) {
+    throw new Error(
+      `${payload.pluginId}: metadata-only sync requires an existing registry entry.`,
+    );
+  }
+  const sourceMetadata = await fetchPluginSourceMetadata({
+    payload,
+    fetchImpl,
+    outputDir: contentDir,
+  });
+  const entry = applyPluginSourceMetadata(existingEntry, sourceMetadata);
+  const changed =
+    stableStringify(existingEntry, 2) !== stableStringify(entry, 2);
+  if (!dryRun && changed) await writeEntry(entry, entriesDir);
+
+  return {
+    action: metadataDispatchAction,
+    dryRun: Boolean(dryRun),
+    changed,
+    repository: payload.repository,
+    packageName: payload.packageName,
+    pluginId: payload.pluginId,
+    sourceCommit: payload.sourceCommit,
+    entryPath: `entries/official/${payload.pluginId}.jsonc`,
+    entry,
+  };
+}
+
 export function parseDispatchEvent(event) {
   if (!event || typeof event !== "object") {
     throw new Error("GitHub dispatch event must be an object.");
@@ -125,6 +187,18 @@ export function parseDispatchEvent(event) {
     throw new Error(`Expected repository_dispatch action ${dispatchAction}.`);
   }
   return validateDispatchPayload(event.client_payload);
+}
+
+export function parseMetadataDispatchEvent(event) {
+  if (!event || typeof event !== "object") {
+    throw new Error("GitHub dispatch event must be an object.");
+  }
+  if (event.action !== metadataDispatchAction) {
+    throw new Error(
+      `Expected repository_dispatch action ${metadataDispatchAction}.`,
+    );
+  }
+  return validateMetadataDispatchPayload(event.client_payload);
 }
 
 export function validateDispatchPayload(input) {
@@ -170,6 +244,47 @@ export function validateDispatchPayload(input) {
     version: input.version,
     releaseTag: input.release_tag,
     assetName: input.asset_name,
+    sourceCommit: input.source_commit,
+  };
+}
+
+export function validateMetadataDispatchPayload(input) {
+  if (!input || typeof input !== "object" || Array.isArray(input)) {
+    throw new Error("GitHub dispatch client_payload must be an object.");
+  }
+  const unknown = Object.keys(input).filter(
+    (key) => !metadataPayloadKeys.has(key),
+  );
+  if (unknown.length) {
+    throw new Error(`Unknown GitHub dispatch fields: ${unknown.join(", ")}.`);
+  }
+  for (const key of metadataPayloadKeys) {
+    if (typeof input[key] !== "string" || !input[key].trim()) {
+      throw new Error(
+        `GitHub dispatch field ${key} must be a non-empty string.`,
+      );
+    }
+  }
+  if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(input.repository)) {
+    throw new Error("GitHub dispatch repository must use owner/name.");
+  }
+  if (!/^@[a-z0-9][a-z0-9-]*\/[a-z0-9][a-z0-9-]*$/.test(input.package_name)) {
+    throw new Error(
+      "GitHub dispatch package_name must be a scoped npm package.",
+    );
+  }
+  if (!/^[a-z0-9][a-z0-9-]{1,62}$/.test(input.plugin_id)) {
+    throw new Error("GitHub dispatch plugin_id is invalid.");
+  }
+  if (!/^[0-9a-f]{40}$/.test(input.source_commit)) {
+    throw new Error(
+      "GitHub dispatch source_commit must be a full Git commit ID.",
+    );
+  }
+  return {
+    repository: input.repository,
+    packageName: input.package_name,
+    pluginId: input.plugin_id,
     sourceCommit: input.source_commit,
   };
 }
@@ -527,7 +642,20 @@ function parseArgs(args) {
 }
 
 async function main() {
-  const result = await syncGitHubRelease(parseArgs(process.argv.slice(2)));
+  const options = parseArgs(process.argv.slice(2));
+  const event = JSON.parse(
+    await readFile(options.eventPath ?? process.env.GITHUB_EVENT_PATH, "utf8"),
+  );
+  const result =
+    event.action === metadataDispatchAction
+      ? await syncGitHubMetadata({
+          ...options,
+          payload: parseMetadataDispatchEvent(event),
+        })
+      : await syncGitHubRelease({
+          ...options,
+          payload: parseDispatchEvent(event),
+        });
   console.log(JSON.stringify(result, null, 2));
 }
 

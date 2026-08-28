@@ -6,6 +6,7 @@ import {
   formatBytes,
   getRegistrySiteData,
   readGeneratedReadmeHtml,
+  readStructuredMarkdownHtml,
   relatedPlugins,
   titleCase,
   type SitePlugin,
@@ -31,7 +32,24 @@ const release = plugin.latestRelease;
 const primaryCategory = plugin.categories[0] ?? "package";
 const assetHealth = release.bundle.pending ? 24 : 100;
 const readmeUrl = plugin.detailData.readmeUrl;
-const readmeHtml = readmeUrl ? await readGeneratedReadmeHtml(plugin.id) : null;
+const overviewReference = plugin.detailData.content?.overview;
+const changelogReference = plugin.detailData.content?.changelog;
+const overviewContent = await readStructuredMarkdownHtml(
+  plugin.id,
+  "overview",
+  overviewReference,
+);
+const changelogContent = await readStructuredMarkdownHtml(
+  plugin.id,
+  "changelog",
+  changelogReference,
+);
+const legacyReadmeHtml =
+  !overviewReference && readmeUrl
+    ? await readGeneratedReadmeHtml(plugin.id)
+    : null;
+const readmeHtml = overviewContent.html ?? legacyReadmeHtml;
+const overviewSourceUrl = overviewReference?.sourceUrl ?? readmeUrl;
 ---
 
 <SiteLayout title={`${plugin.name} - Lapis Plugin Registry`} description={plugin.description}>
@@ -93,6 +111,9 @@ const readmeHtml = readmeUrl ? await readGeneratedReadmeHtml(plugin.id) : null;
             <button type="button" role="tab" aria-selected="true" data-tab="overview">
               Overview
             </button>
+            <button type="button" role="tab" aria-selected="false" data-tab="changelog">
+              Changelog
+            </button>
             <button type="button" role="tab" aria-selected="false" data-tab="releases">
               Releases <span>{releases.length}</span>
             </button>
@@ -100,22 +121,33 @@ const readmeHtml = readmeUrl ? await readGeneratedReadmeHtml(plugin.id) : null;
 
           <div class="tab-panel" data-panel="overview">
             {
+              plugin.detailData.highlights?.length ? (
+                <section class="plugin-highlights" aria-labelledby="plugin-highlights-heading">
+                  <h2 id="plugin-highlights-heading">Highlights</h2>
+                  <ul>
+                    {plugin.detailData.highlights.map((highlight) => <li>{highlight}</li>)}
+                  </ul>
+                </section>
+              ) : null
+            }
+            {
               readmeHtml ? (
                 <>
                   <section class="readme-panel" data-plugin-readme set:html={readmeHtml} />
                   <p class="readme-source">
-                    <a href={readmeUrl}>View source README</a>
+                    <a href={overviewSourceUrl}>View source README</a>
                   </p>
                 </>
-              ) : readmeUrl ? (
+              ) : overviewSourceUrl ? (
                 <>
                   <section class="readme-panel" data-plugin-readme-error>
                     <div class="readme-panel__status" data-readme-status>
                       README details are unavailable. Use the source README link for the latest documentation.
+                      {overviewContent.error ? <details><summary>Diagnostic</summary><code>{overviewContent.error}</code></details> : null}
                     </div>
                   </section>
                   <p class="readme-source">
-                    <a href={readmeUrl}>View source README</a>
+                    <a href={overviewSourceUrl}>View source README</a>
                   </p>
                 </>
               ) : (
@@ -143,6 +175,29 @@ const readmeHtml = readmeUrl ? await readGeneratedReadmeHtml(plugin.id) : null;
                 ))
               }
             </div>
+          </div>
+
+          <div class="tab-panel" data-panel="changelog" hidden>
+            {
+              changelogContent.html ? (
+                <>
+                  <section class="readme-panel" data-plugin-changelog set:html={changelogContent.html} />
+                  <p class="readme-source">
+                    <a href={changelogReference?.sourceUrl}>View source changelog</a>
+                  </p>
+                </>
+              ) : changelogReference ? (
+                <section class="readme-panel" data-plugin-changelog-error>
+                  <div class="readme-panel__status">
+                    Changelog details are unavailable.
+                    <details><summary>Diagnostic</summary><code>{changelogContent.error}</code></details>
+                    <a href={changelogReference.sourceUrl}>View source changelog</a>
+                  </div>
+                </section>
+              ) : (
+                <p>No structured changelog is available for this plugin yet.</p>
+              )
+            }
           </div>
 
           <div class="tab-panel" data-panel="releases" hidden>
@@ -244,6 +299,26 @@ const readmeHtml = readmeUrl ? await readGeneratedReadmeHtml(plugin.id) : null;
                 </span>
               </dd>
             </div>
+            {
+              plugin.detailData.license && (
+                <div>
+                  <dt>License</dt>
+                  <dd>{plugin.detailData.license}</dd>
+                </div>
+              )
+            }
+            {
+              plugin.detailData.links && Object.keys(plugin.detailData.links).length > 0 && (
+                <div>
+                  <dt>Links</dt>
+                  <dd class="detail-links">
+                    {Object.entries(plugin.detailData.links).map(([label, href]) => (
+                      <a href={href}>{titleCase(label)}</a>
+                    ))}
+                  </dd>
+                </div>
+              )
+            }
             <div>
               <dt>Bundle size</dt>
               <dd>

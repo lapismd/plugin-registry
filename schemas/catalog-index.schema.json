@@ -81,7 +81,17 @@
             "required": ["name", "verified"],
             "properties": {
               "name": { "type": "string" },
-              "verified": { "type": "boolean" }
+              "verified": { "type": "boolean" },
+              "url": { "type": "string", "pattern": "^https://.+" }
+            }
+          },
+          "latestRelease": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["releasedAt", "bundleSize"],
+            "properties": {
+              "releasedAt": { "type": "string", "format": "date-time" },
+              "bundleSize": { "type": "integer", "minimum": 0 }
             }
           },
           "detail": { "type": "string" },
