@@ -1,0 +1,72 @@
+{
+  "channel": "official",
+  "content": {
+    "changelog": {
+      "mediaType": "text/markdown",
+      "sha256": "fd562f01698e261d804f68c993aca11e7ba4afe8f605260b1fbc87dfaa9fb002",
+      "size": 138,
+      "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/markdown/CHANGELOG.md",
+      "url": "https://registry.lapis.md/v1/content/markdown/changelog.md"
+    },
+    "overview": {
+      "mediaType": "text/markdown",
+      "sha256": "4696d8d6260fb16bcbaecb21016adde42615c0322a77c70c043890c3e1491980",
+      "size": 682,
+      "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/markdown/README.md",
+      "url": "https://registry.lapis.md/v1/content/markdown/overview.md"
+    }
+  },
+  "description": "Mira-powered Markdown editing with source, live preview, and reading modes.",
+  "highlights": [
+    "Edit Markdown in source, live preview, and reading modes.",
+    "Use Mira-powered authoring, metadata, embeds, and workspace panels.",
+    "Keep files portable as ordinary Markdown in the active vault."
+  ],
+  "id": "markdown",
+  "latestVersion": "0.1.3",
+  "license": "AGPL-3.0-or-later",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/markdown#readme",
+    "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/markdown#readme",
+    "issues": "https://github.com/lapismd/lapis-plugins/issues",
+    "repository": "https://github.com/lapismd/lapis-plugins"
+  },
+  "name": "Markdown",
+  "owner": {
+    "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugins",
+    "verified": true
+  },
+  "readme": {
+    "sha256": "4696d8d6260fb16bcbaecb21016adde42615c0322a77c70c043890c3e1491980",
+    "size": 682,
+    "url": "https://registry.lapis.md/v1/content/markdown/overview.md"
+  },
+  "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/markdown/README.md",
+  "schemaVersion": 1,
+  "signatures": [
+    {
+      "alg": "ed25519",
+      "keyId": "lapis-registry-2026-06",
+      "sig": "4zC/n+igQ5lojp9k7raN+Ef64FggQnPEDOJdI1oo/xwLmF5pXfvBwvahrm6c2X0fdMK6A2puhV2mhcIPL6fACw=="
+    }
+  ],
+  "status": "active",
+  "versions": {
+    "0.1.3": {
+      "bundle": {
+        "downloadUrl": "../../download/markdown/0.1.3",
+        "sha256": "24ab4ae15f7ea17880df46f61fb580dca0fcd2193361e7397ca7b8cb0a685459",
+        "size": 6265198,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/markdown%400.1.3/markdown-0.1.3.lapis-plugin"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "electron"
+      ],
+      "releasedAt": "2026-08-29T09:36:38.000Z",
+      "version": "0.1.3"
+    }
+  }
+}
