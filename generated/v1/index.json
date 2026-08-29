@@ -560,6 +560,42 @@
       "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/search/README.md",
       "schemaVersion": 1,
       "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "diagnostics",
+        "writing"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Harper grammar and spelling diagnostics for open notes",
+      "detail": "plugins/spellcheck.json",
+      "id": "spellcheck",
+      "latestRelease": {
+        "bundleSize": 9999885,
+        "releasedAt": "2026-08-29T09:37:08.000Z"
+      },
+      "latestVersion": "0.1.1",
+      "minAppVersion": "0.1.0",
+      "name": "Spell Check",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "electron"
+      ],
+      "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/spellcheck/README.md",
+      "schemaVersion": 1,
+      "status": "active"
     }
   ],
   "registries": {
@@ -573,7 +609,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "glmr/cvaG6vKVDYSCpHO0deXb6x7HSjXZwkKt/6yVpmDxqUfui8VXelXz/h/yvUWaH6Tf8y4+jerPo1xy1QtDg=="
+      "sig": "T+TlsD712V+NYPoQnfRezYeopjDz5RScKGIOO/qN0vELj32K5Ml5MSDBuxKBfjiggVy786sIip3b+7eqUTQ5BA=="
     }
   ]
 }
