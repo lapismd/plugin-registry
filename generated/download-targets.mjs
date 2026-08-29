@@ -103,6 +103,12 @@ export const downloadTargets = {
       "pluginId": "search",
       "status": "active",
       "version": "0.1.2"
+    },
+    "spellcheck@0.1.1": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/spellcheck%400.1.1/spellcheck-0.1.1.lapis-plugin",
+      "pluginId": "spellcheck",
+      "status": "active",
+      "version": "0.1.1"
     }
   }
 };
