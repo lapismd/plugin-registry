@@ -273,36 +273,37 @@
     },
     {
       "author": "Lapis Notes",
-      "authorUrl": "https://app.lapis.md",
+      "authorUrl": "https://github.com/lapismd",
       "badges": [
         "official",
         "verified"
       ],
       "categories": [
-        "markdown",
-        "quality"
+        "diagnostics",
+        "linting"
       ],
       "channel": "official",
       "contributes": {},
-      "description": "Markdown linting diagnostics for Lapis notes.",
+      "description": "Markdown diagnostics provider",
       "detail": "plugins/lapis-markdown-lint.json",
       "id": "lapis-markdown-lint",
       "latestRelease": {
-        "bundleSize": 51432,
-        "releasedAt": "2026-06-06T22:48:26Z"
+        "bundleSize": 149673,
+        "releasedAt": "2026-08-29T09:36:46.000Z"
       },
-      "latestVersion": "2026.6.6",
-      "minAppVersion": "1.7.7",
+      "latestVersion": "0.1.1",
+      "minAppVersion": "0.1.0",
       "name": "Markdown Lint",
       "owner": {
         "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
         "verified": true
       },
       "platforms": [
         "web",
         "electron"
       ],
-      "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/main/packages/markdown-lint/README.md",
+      "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/markdown-lint/README.md",
       "schemaVersion": 1,
       "status": "active"
     },
@@ -500,7 +501,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "R8AOs/leeNt0UwL0vQcY+uoQR4kxyOfzEtCOxLPnN8AGIdMgGl5RUl5DUAV+udyJN9u7O53YKFQdkxgfJcilDA=="
+      "sig": "/SkQll0osMd6HdJHKeglltJQlAs8sbMFkvOS8EeQEhweYH8Lk765ckUV6IW1NqDKlCPeKyKcgnb4dr3Qcc5eAg=="
     }
   ]
 }

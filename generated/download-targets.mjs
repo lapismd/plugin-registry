@@ -50,6 +50,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "2026.6.6"
     },
+    "lapis-markdown-lint@0.1.1": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/markdown-lint%400.1.1/lapis-markdown-lint-0.1.1.lapis-plugin",
+      "pluginId": "lapis-markdown-lint",
+      "status": "active",
+      "version": "0.1.1"
+    },
     "lapis-markdown-lint@2026.6.6": {
       "originUrl": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-markdown-lint-2026.6.6/lapis-markdown-lint-2026.6.6.lapis-plugin",
       "pluginId": "lapis-markdown-lint",

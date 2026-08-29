@@ -1,24 +1,73 @@
 {
   "channel": "official",
-  "description": "Markdown linting diagnostics for Lapis notes.",
+  "content": {
+    "changelog": {
+      "mediaType": "text/markdown",
+      "sha256": "a09982b90359ad6e6c85190fd3e8ddb9ebc088ff5d4adf7939a75d3f3fe7edb2",
+      "size": 143,
+      "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/markdown-lint/CHANGELOG.md",
+      "url": "https://registry.lapis.md/v1/content/lapis-markdown-lint/changelog.md"
+    },
+    "overview": {
+      "mediaType": "text/markdown",
+      "sha256": "71c7c4ae144bb2173f673725daf9549f758f155437548bfcc9d95a8c5a1f4fd5",
+      "size": 673,
+      "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/markdown-lint/README.md",
+      "url": "https://registry.lapis.md/v1/content/lapis-markdown-lint/overview.md"
+    }
+  },
+  "description": "Markdown diagnostics provider",
+  "highlights": [
+    "Show Markdown diagnostics for open documents.",
+    "Apply supported code actions from editor and Problems surfaces.",
+    "Configure rule exclusions and path filters per vault."
+  ],
   "id": "lapis-markdown-lint",
-  "latestVersion": "2026.6.6",
+  "latestVersion": "0.1.1",
+  "license": "AGPL-3.0-or-later",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/markdown-lint#readme",
+    "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/markdown-lint#readme",
+    "issues": "https://github.com/lapismd/lapis-plugins/issues",
+    "repository": "https://github.com/lapismd/lapis-plugins"
+  },
   "name": "Markdown Lint",
   "owner": {
     "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugins",
     "verified": true
   },
-  "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/main/packages/markdown-lint/README.md",
+  "readme": {
+    "sha256": "71c7c4ae144bb2173f673725daf9549f758f155437548bfcc9d95a8c5a1f4fd5",
+    "size": 673,
+    "url": "https://registry.lapis.md/v1/content/lapis-markdown-lint/overview.md"
+  },
+  "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/markdown-lint/README.md",
   "schemaVersion": 1,
   "signatures": [
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "T160dHkkOzUnaBv3vuRIIpWUR6YH3RxxlMZ+bWOwcyr978bPb+oBE9sM7a+A2z0cfV4uQ6qNGNwh6iAFzXF8Dw=="
+      "sig": "689apGcZUQorJjEOTGvn7clW+ZrxSOxS3/EuyOPiK4HmqudUBIkvVmUfvIz+9WBzxXLvNyt0Jzevzot0XNdcAw=="
     }
   ],
   "status": "active",
   "versions": {
+    "0.1.1": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-markdown-lint/0.1.1",
+        "sha256": "be30dd401baca721890a2df723f336f055eb0c30d473dd0ed4f0bbf70a255432",
+        "size": 149673,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/markdown-lint%400.1.1/lapis-markdown-lint-0.1.1.lapis-plugin"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "electron"
+      ],
+      "releasedAt": "2026-08-29T09:36:46.000Z",
+      "version": "0.1.1"
+    },
     "2026.6.6": {
       "bundle": {
         "downloadUrl": "../../download/lapis-markdown-lint/2026.6.6",
