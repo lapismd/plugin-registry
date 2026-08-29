@@ -421,6 +421,42 @@
     },
     {
       "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "editor",
+        "source"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Source editing for text, JSON, and YAML files",
+      "detail": "plugins/lapis-source-editor.json",
+      "id": "lapis-source-editor",
+      "latestRelease": {
+        "bundleSize": 152766,
+        "releasedAt": "2026-08-29T09:37:01.000Z"
+      },
+      "latestVersion": "0.1.1",
+      "minAppVersion": "0.1.0",
+      "name": "Source Editor",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "electron"
+      ],
+      "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/source-editor/README.md",
+      "schemaVersion": 1,
+      "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
       "authorUrl": "https://app.lapis.md",
       "badges": [
         "official",
@@ -537,7 +573,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "KL62sL+OOaemGEbJOWtrnsXR4fFmwOu7HGkkBFnQocim9sEzaYpfENjJgka1EXLQaDLz2xtlMnkz/zFaXdBDBw=="
+      "sig": "glmr/cvaG6vKVDYSCpHO0deXb6x7HSjXZwkKt/6yVpmDxqUfui8VXelXz/h/yvUWaH6Tf8y4+jerPo1xy1QtDg=="
     }
   ]
 }

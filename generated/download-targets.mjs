@@ -80,6 +80,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "2026.6.6"
     },
+    "lapis-source-editor@0.1.1": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/source-editor%400.1.1/lapis-source-editor-0.1.1.lapis-plugin",
+      "pluginId": "lapis-source-editor",
+      "status": "active",
+      "version": "0.1.1"
+    },
     "lapis-telemetry@2026.6.6": {
       "originUrl": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-telemetry-2026.6.6/lapis-telemetry-2026.6.6.lapis-plugin",
       "pluginId": "lapis-telemetry",
