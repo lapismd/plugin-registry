@@ -19,7 +19,7 @@ jobs:
         id: registry-app
         uses: actions/create-github-app-token@v3
         with:
-          app-id: ${{ secrets.LAPIS_REGISTRY_APP_ID }}
+          client-id: ${{ secrets.LAPIS_REGISTRY_APP_CLIENT_ID }}
           private-key: ${{ secrets.LAPIS_REGISTRY_APP_PRIVATE_KEY }}
           owner: lapismd
           repositories: |

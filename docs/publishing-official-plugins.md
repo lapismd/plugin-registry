@@ -60,8 +60,8 @@ to the npm package name and source commit.
 The workflow uses a narrowly scoped GitHub App installed only on the plugin and
 registry repositories. It needs repository contents read/write for the release
 and automation branch, pull-request write access in the registry, and access to
-send/receive repository dispatch events. Store its ID and private key as
-`LAPIS_REGISTRY_APP_ID` and `LAPIS_REGISTRY_APP_PRIVATE_KEY` secrets.
+send/receive repository dispatch events. Store its client ID and private key as
+`LAPIS_REGISTRY_APP_CLIENT_ID` and `LAPIS_REGISTRY_APP_PRIVATE_KEY` secrets.
 
 ## README Mirroring and CORS
 

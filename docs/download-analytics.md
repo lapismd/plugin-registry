@@ -74,7 +74,7 @@ The scheduled workflow requires:
   Read, for Analytics Engine SQL queries.
 - Existing secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` for the
   separate Pages deployment lookup and deployment.
-- Existing GitHub App secrets `LAPIS_REGISTRY_APP_ID` and
+- Existing GitHub App secrets `LAPIS_REGISTRY_APP_CLIENT_ID` and
   `LAPIS_REGISTRY_APP_PRIVATE_KEY`, with contents write access limited to this
   repository.
 - Repository variable `DOWNLOAD_STATS_CUTOVER_DATE` in `YYYY-MM-DD` form.

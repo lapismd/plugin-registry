@@ -34,6 +34,11 @@ test("release dispatch verifies assets before opening an idempotent PR", async (
   assert.ok(pullRequestIndex > remoteValidationIndex);
   assert.match(workflow, /automation\/plugin-\$\{\{/);
   assert.match(workflow, /actions\/create-github-app-token@v3/);
+  assert.match(
+    workflow,
+    /client-id: \$\{\{ secrets\.LAPIS_REGISTRY_APP_CLIENT_ID \}\}/,
+  );
+  assert.doesNotMatch(workflow, /app-id:|LAPIS_REGISTRY_APP_ID/);
   assert.match(workflow, /types: \[plugin_release, plugin_metadata\]/);
   assert.match(workflow, /version \|\| 'metadata'/);
   assert.doesNotMatch(workflow, /visual|baseline/i);
@@ -63,6 +68,11 @@ test("download statistics use delayed immutable snapshots and a stats-only deplo
   assert.match(workflow, /DOWNLOAD_STATS_AUTOMATION_APPROVED == 'true'/);
   assert.match(workflow, /CLOUDFLARE_ANALYTICS_API_TOKEN/);
   assert.match(workflow, /actions\/create-github-app-token@v3/);
+  assert.match(
+    workflow,
+    /client-id: \$\{\{ secrets\.LAPIS_REGISTRY_APP_CLIENT_ID \}\}/,
+  );
+  assert.doesNotMatch(workflow, /app-id:|LAPIS_REGISTRY_APP_ID/);
   assert.match(workflow, /git push origin HEAD:main/);
   assert.ok(productionLookup >= 0);
   assert.ok(aggregation > productionLookup);
@@ -82,6 +92,11 @@ test("registry metadata signing is reviewable and separate from deployment", asy
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /inputs\.approval == 'REGISTRY_SIGN_APPROVED'/);
   assert.match(workflow, /environment: registry-production/);
+  assert.match(
+    workflow,
+    /client-id: \$\{\{ secrets\.LAPIS_REGISTRY_APP_CLIENT_ID \}\}/,
+  );
+  assert.doesNotMatch(workflow, /app-id:|LAPIS_REGISTRY_APP_ID/);
   assert.ok(generation >= 0);
   assert.ok(signing > generation);
   assert.ok(pullRequest > signing);
