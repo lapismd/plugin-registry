@@ -1,0 +1,72 @@
+{
+  "channel": "official",
+  "content": {
+    "changelog": {
+      "mediaType": "text/markdown",
+      "sha256": "31c94b93f0e40348b3a72cf75a07ef6eefcaca0b32cf27fed0627bfa4b309ce5",
+      "size": 135,
+      "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/bases/CHANGELOG.md",
+      "url": "https://registry.lapis.md/v1/content/bases/changelog.md"
+    },
+    "overview": {
+      "mediaType": "text/markdown",
+      "sha256": "344ac28b75c67ea3a5977d57184a0d8de56cba5cf59b63786e3fb116319c57d0",
+      "size": 597,
+      "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/bases/README.md",
+      "url": "https://registry.lapis.md/v1/content/bases/overview.md"
+    }
+  },
+  "description": "Bases",
+  "highlights": [
+    "Create structured views over notes and front matter.",
+    "Filter and organize vault data without leaving the workspace.",
+    "Keep editable views backed by ordinary Lapis content."
+  ],
+  "id": "bases",
+  "latestVersion": "0.1.2",
+  "license": "AGPL-3.0-or-later",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/bases#readme",
+    "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/bases#readme",
+    "issues": "https://github.com/lapismd/lapis-plugins/issues",
+    "repository": "https://github.com/lapismd/lapis-plugins"
+  },
+  "name": "Bases",
+  "owner": {
+    "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugins",
+    "verified": true
+  },
+  "readme": {
+    "sha256": "344ac28b75c67ea3a5977d57184a0d8de56cba5cf59b63786e3fb116319c57d0",
+    "size": 597,
+    "url": "https://registry.lapis.md/v1/content/bases/overview.md"
+  },
+  "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/bases/README.md",
+  "schemaVersion": 1,
+  "signatures": [
+    {
+      "alg": "ed25519",
+      "keyId": "lapis-registry-2026-06",
+      "sig": "WLNidjTsVcuK/0mabPvWacBfnzdAbOpnqqZvM8Rkt9lZabxuHPywaQE2p1a3ydWZHCZaO3+ryhdA9v6r1emMAQ=="
+    }
+  ],
+  "status": "active",
+  "versions": {
+    "0.1.2": {
+      "bundle": {
+        "downloadUrl": "../../download/bases/0.1.2",
+        "sha256": "aa719835bb6562e5c15e025e57fd68166691fad75c8f06e763835647310d54fa",
+        "size": 645112,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/bases%400.1.2/bases-0.1.2.lapis-plugin"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "electron"
+      ],
+      "releasedAt": "2026-08-29T09:36:02.000Z",
+      "version": "0.1.2"
+    }
+  }
+}
