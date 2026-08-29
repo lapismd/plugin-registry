@@ -79,6 +79,12 @@ export const downloadTargets = {
       "pluginId": "lapis-telemetry",
       "status": "active",
       "version": "2026.6.6"
+    },
+    "markdown@0.1.3": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/markdown%400.1.3/markdown-0.1.3.lapis-plugin",
+      "pluginId": "markdown",
+      "status": "active",
+      "version": "0.1.3"
     }
   }
 };
