@@ -87,3 +87,24 @@ test("registry metadata signing is reviewable and separate from deployment", asy
   assert.ok(pullRequest > signing);
   assert.doesNotMatch(workflow, /wrangler pages deploy/);
 });
+
+test("every GitHub workflow uses Node 24 builds and Node 24 action runtimes", async () => {
+  const workflowNames = [
+    "checks.yml",
+    "download-stats.yml",
+    "publish.yml",
+    "sign-registry-metadata.yml",
+    "sync-plugin-release.yml",
+  ];
+  for (const name of workflowNames) {
+    const workflow = await readFile(
+      new URL(`.github/workflows/${name}`, repoRoot),
+      "utf8",
+    );
+    assert.match(workflow, /actions\/checkout@v7/);
+    assert.match(workflow, /pnpm\/action-setup@v6/);
+    assert.match(workflow, /actions\/setup-node@v7/);
+    assert.match(workflow, /node-version:\s*["']?24/);
+    assert.doesNotMatch(workflow, /@v4|node-version:\s*["']?(20|22)/);
+  }
+});
