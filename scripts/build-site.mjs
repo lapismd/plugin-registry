@@ -33,6 +33,8 @@ const required = [
   "v1/index.sig",
   "v1/revoked.json",
   "v1/trust/root.json",
+  "_routes.json",
+  "_headers",
 ];
 
 for (const relativePath of required) {

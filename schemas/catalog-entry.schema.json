@@ -190,6 +190,7 @@
       ],
       "properties": {
         "version": { "$ref": "#/$defs/semver" },
+        "status": { "enum": ["active", "pending", "revoked"] },
         "minAppVersion": { "$ref": "#/$defs/semver" },
         "releasedAt": { "type": "string", "format": "date-time" },
         "platforms": {

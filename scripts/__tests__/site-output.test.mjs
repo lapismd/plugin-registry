@@ -10,7 +10,8 @@ const dist = new URL("../../dist/", import.meta.url);
 test("site build emits pages and registry metadata", async () => {
   if (
     !existsSync(new URL("index.html", dist)) ||
-    !existsSync(new URL("v1/readmes/lapis-docs/README.html", dist))
+    !existsSync(new URL("v1/readmes/lapis-docs/README.html", dist)) ||
+    !existsSync(new URL("_routes.json", dist))
   ) {
     const result = spawnSync("pnpm", ["site:build"], {
       cwd: root.pathname,
@@ -32,6 +33,8 @@ test("site build emits pages and registry metadata", async () => {
     "v1/readmes/lapis-docs/README.html",
     "v1/readmes/lapis-docs/manifest.json",
     "v1/trust/root.json",
+    "_routes.json",
+    "_headers",
   ];
 
   for (const file of requiredFiles) {
@@ -50,4 +53,16 @@ test("site build emits pages and registry metadata", async () => {
   assert.match(detail, /View source README/);
   assert.doesNotMatch(detail, /Loading README/);
   assert.doesNotMatch(detail, /fetch\(endpoint/);
+
+  const routes = JSON.parse(
+    await readFile(new URL("_routes.json", dist), "utf8"),
+  );
+  assert.deepEqual(routes, {
+    version: 1,
+    include: ["/download/*"],
+    exclude: [],
+  });
+  const headers = await readFile(new URL("_headers", dist), "utf8");
+  assert.match(headers, /\/v1\/\*/);
+  assert.match(headers, /\/stats\/\*/);
 });

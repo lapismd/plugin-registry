@@ -18,6 +18,10 @@ import {
 
 export const repoRoot = new URL("../../", import.meta.url);
 export const generatedDir = new URL("../../generated/v1/", import.meta.url);
+export const downloadTargetsFile = new URL(
+  "../../generated/download-targets.mjs",
+  import.meta.url,
+);
 export const generatedAt = "2026-05-31T00:00:00.000Z";
 export const pluginIdPattern = /^[a-z0-9][a-z0-9-]{1,62}$/;
 
@@ -330,6 +334,55 @@ export function buildRegistry(entries) {
       contributes: entry.contributes ?? {},
     };
   });
+  const details = Object.fromEntries(
+    normalized.map((entry) => [
+      entry.id,
+      {
+        schemaVersion: 1,
+        id: entry.id,
+        name: entry.name,
+        description: entry.description,
+        ...(entry.readmeUrl ? { readmeUrl: entry.readmeUrl } : {}),
+        channel: entry.channel,
+        status: entry.status,
+        owner: entry.owner,
+        latestVersion: entry.latestVersion,
+        ...(entry.readme ? { readme: entry.readme } : {}),
+        ...(entry.license ? { license: entry.license } : {}),
+        ...(entry.links ? { links: entry.links } : {}),
+        ...(entry.highlights ? { highlights: entry.highlights } : {}),
+        ...(entry.content ? { content: entry.content } : {}),
+        ...(entry.contributes ? { contributes: entry.contributes } : {}),
+        versions: Object.fromEntries(
+          Object.entries(entry.versions).map(([version, release]) => [
+            version,
+            {
+              ...release,
+              bundle: {
+                ...release.bundle,
+                downloadUrl: downloadUrlFor(entry.id, version),
+              },
+            },
+          ]),
+        ),
+      },
+    ]),
+  );
+  const targets = Object.fromEntries(
+    normalized.flatMap((entry) =>
+      Object.entries(entry.versions).map(([version, release]) => [
+        `${entry.id}@${version}`,
+        {
+          pluginId: entry.id,
+          version,
+          originUrl: release.bundle.url,
+          status:
+            release.status ??
+            (release.bundle.pending ? "pending" : entry.status),
+        },
+      ]),
+    ),
+  );
   return {
     index: {
       schemaVersion: 1,
@@ -342,35 +395,22 @@ export function buildRegistry(entries) {
       },
       plugins: indexPlugins,
     },
-    details: Object.fromEntries(
-      normalized.map((entry) => [
-        entry.id,
-        {
-          schemaVersion: 1,
-          id: entry.id,
-          name: entry.name,
-          description: entry.description,
-          ...(entry.readmeUrl ? { readmeUrl: entry.readmeUrl } : {}),
-          channel: entry.channel,
-          status: entry.status,
-          owner: entry.owner,
-          latestVersion: entry.latestVersion,
-          ...(entry.readme ? { readme: entry.readme } : {}),
-          ...(entry.license ? { license: entry.license } : {}),
-          ...(entry.links ? { links: entry.links } : {}),
-          ...(entry.highlights ? { highlights: entry.highlights } : {}),
-          ...(entry.content ? { content: entry.content } : {}),
-          ...(entry.contributes ? { contributes: entry.contributes } : {}),
-          versions: entry.versions,
-        },
-      ]),
-    ),
+    details,
+    downloadTargets: {
+      schemaVersion: 1,
+      generatedAt,
+      targets,
+    },
     revoked: {
       schemaVersion: 1,
       generatedAt,
       revoked: [],
     },
   };
+}
+
+export function downloadUrlFor(pluginId, version) {
+  return `../../download/${encodeURIComponent(pluginId)}/${encodeURIComponent(version)}`;
 }
 
 export function stripInternal(value) {

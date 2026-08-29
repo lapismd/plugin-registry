@@ -14,6 +14,8 @@ test("production deployment stays manual and explicitly approved", async () => {
   assert.match(workflow, /FIRST_REGISTRY_RELEASE_APPROVED == 'true'/);
   assert.match(workflow, /inputs\.approval == 'REGISTRY_DEPLOY_APPROVED'/);
   assert.match(workflow, /environment: registry-production/);
+  assert.match(workflow, /pnpm exec wrangler pages deploy dist/);
+  assert.doesNotMatch(workflow, /npx --yes wrangler/);
   assert.doesNotMatch(workflow, /visual|baseline/i);
 });
 

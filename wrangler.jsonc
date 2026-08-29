@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "lapis-plugin-registry",
+  "compatibility_date": "2026-08-29",
+  "pages_build_output_dir": "./dist",
+  "analytics_engine_datasets": [
+    {
+      "binding": "PLUGIN_DOWNLOADS",
+      "dataset": "lapis_plugin_downloads_v1",
+    },
+  ],
+}

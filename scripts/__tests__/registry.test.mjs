@@ -124,6 +124,29 @@ test("builds deterministic registry metadata with Docs contribution summary", ()
     ["*.lapisdoc", "*.lapissheet"],
   );
   assert.deepEqual(registry.revoked.revoked, []);
+  assert.equal(
+    registry.details["lapis-docs"].versions["0.1.0"].bundle.downloadUrl,
+    "../../download/lapis-docs/0.1.0",
+  );
+  assert.deepEqual(registry.downloadTargets.targets["lapis-docs@0.1.0"], {
+    pluginId: "lapis-docs",
+    version: "0.1.0",
+    originUrl:
+      "https://registry.lapis.md/assets/lapis-docs/0.1.0/lapis-docs-0.1.0.lapis-plugin",
+    status: "pending",
+  });
+});
+
+test("release status overrides plugin status in the download target map", () => {
+  const entry = validEntry({ status: "active" });
+  entry.versions["0.1.0"].status = "revoked";
+
+  const registry = buildRegistry([entry]);
+
+  assert.equal(
+    registry.downloadTargets.targets["lapis-docs@0.1.0"].status,
+    "revoked",
+  );
 });
 
 test("canonicalization sorts object keys", () => {

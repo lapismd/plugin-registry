@@ -52,7 +52,7 @@ jobs:
 
       - name: Deploy site and registry to Cloudflare Pages
         run: >-
-          npx --yes wrangler@4 pages deploy dist
+          pnpm exec wrangler pages deploy dist
           --project-name=lapis-plugin-registry
           --branch=main
           --commit-hash="${GITHUB_SHA}"

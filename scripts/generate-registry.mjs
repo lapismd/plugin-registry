@@ -2,9 +2,11 @@
 import { promises as fs } from "node:fs";
 import {
   buildRegistry,
+  downloadTargetsFile,
   generatedDir,
   loadEntries,
   readJsonIfExists,
+  stableStringify,
   writeJson,
 } from "./lib/registry.mjs";
 
@@ -20,6 +22,10 @@ for (const [pluginId, detail] of Object.entries(registry.details)) {
   await writeSignedJsonIfSidecarExists(`plugins/${pluginId}.json`, detail);
 }
 await writeSignedJsonIfSidecarExists("revoked.json", registry.revoked);
+await fs.writeFile(
+  downloadTargetsFile,
+  `export const downloadTargets = ${stableStringify(registry.downloadTargets, 2)};\n`,
+);
 
 try {
   await fs.access(new URL("trust/root.json", generatedDir));
