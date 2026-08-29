@@ -26,18 +26,6 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.2"
     },
-    "lapis-canvas@2026.6.6": {
-      "originUrl": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-canvas-2026.6.6/lapis-canvas-2026.6.6.lapis-plugin",
-      "pluginId": "lapis-canvas",
-      "status": "active",
-      "version": "2026.6.6"
-    },
-    "lapis-docs@2026.6.6": {
-      "originUrl": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-docs-2026.6.6/lapis-docs-2026.6.6.lapis-plugin",
-      "pluginId": "lapis-docs",
-      "status": "active",
-      "version": "2026.6.6"
-    },
     "lapis-graph@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.2/lapis-graph-0.1.2.lapis-plugin",
       "pluginId": "lapis-graph",
@@ -62,35 +50,11 @@ export const downloadTargets = {
       "status": "active",
       "version": "2026.6.6"
     },
-    "lapis-notebook@2026.6.6": {
-      "originUrl": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-notebook-2026.6.6/lapis-notebook-2026.6.6.lapis-plugin",
-      "pluginId": "lapis-notebook",
-      "status": "active",
-      "version": "2026.6.6"
-    },
-    "lapis-pdf@2026.6.6": {
-      "originUrl": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-pdf-2026.6.6/lapis-pdf-2026.6.6.lapis-plugin",
-      "pluginId": "lapis-pdf",
-      "status": "active",
-      "version": "2026.6.6"
-    },
-    "lapis-slides@2026.6.6": {
-      "originUrl": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-slides-2026.6.6/lapis-slides-2026.6.6.lapis-plugin",
-      "pluginId": "lapis-slides",
-      "status": "active",
-      "version": "2026.6.6"
-    },
     "lapis-source-editor@0.1.1": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/source-editor%400.1.1/lapis-source-editor-0.1.1.lapis-plugin",
       "pluginId": "lapis-source-editor",
       "status": "active",
       "version": "0.1.1"
-    },
-    "lapis-telemetry@2026.6.6": {
-      "originUrl": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-telemetry-2026.6.6/lapis-telemetry-2026.6.6.lapis-plugin",
-      "pluginId": "lapis-telemetry",
-      "status": "active",
-      "version": "2026.6.6"
     },
     "markdown@0.1.3": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/markdown%400.1.3/markdown-0.1.3.lapis-plugin",

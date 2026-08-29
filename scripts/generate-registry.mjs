@@ -14,8 +14,11 @@ const entries = await loadEntries();
 const registry = buildRegistry(entries);
 
 await fs.mkdir(generatedDir, { recursive: true });
-await fs.mkdir(new URL("plugins/", generatedDir), { recursive: true });
+const generatedPluginsDir = new URL("plugins/", generatedDir);
+await fs.mkdir(generatedPluginsDir, { recursive: true });
 await fs.mkdir(new URL("trust/", generatedDir), { recursive: true });
+
+await pruneRemovedPluginMetadata(Object.keys(registry.details));
 
 await writeSignedJsonIfSidecarExists("index.json", registry.index);
 for (const [pluginId, detail] of Object.entries(registry.details)) {
@@ -51,5 +54,25 @@ async function writeSignedJsonIfSidecarExists(relativePath, value) {
   await writeJson(
     new URL(relativePath, generatedDir),
     sidecar ? { ...value, signatures: [sidecar] } : value,
+  );
+}
+
+async function pruneRemovedPluginMetadata(pluginIds) {
+  const expectedFiles = new Set(
+    pluginIds.flatMap((pluginId) => [`${pluginId}.json`, `${pluginId}.sig`]),
+  );
+  const existingFiles = await fs.readdir(generatedPluginsDir, {
+    withFileTypes: true,
+  });
+
+  await Promise.all(
+    existingFiles
+      .filter(
+        (entry) =>
+          entry.isFile() &&
+          /\.(?:json|sig)$/.test(entry.name) &&
+          !expectedFiles.has(entry.name),
+      )
+      .map((entry) => fs.rm(new URL(entry.name, generatedPluginsDir))),
   );
 }

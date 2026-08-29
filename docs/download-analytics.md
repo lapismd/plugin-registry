@@ -42,8 +42,8 @@ metadata and sorted rows shaped as:
 
 ```json
 {
-  "pluginId": "lapis-docs",
-  "version": "2026.6.6",
+  "pluginId": "lapis-graph",
+  "version": "0.1.1",
   "action": "install",
   "platform": "desktop",
   "os": "macos",

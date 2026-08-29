@@ -39,14 +39,17 @@ test("hydrates list and detail surfaces without changing ordering", () => {
   const lifetime = {};
   const recent = {};
   const note = {};
+  const values = { hidden: true };
+  const unavailable = { hidden: false };
   const detail = {
     dataset: { pluginId: "lapis-docs" },
-    hidden: true,
     querySelector(selector) {
       return {
         "[data-download-lifetime]": lifetime,
         "[data-download-30d]": recent,
         "[data-download-tracked-since]": note,
+        "[data-download-stats-values]": values,
+        "[data-download-stats-unavailable]": unavailable,
       }[selector];
     },
   };
@@ -68,7 +71,8 @@ test("hydrates list and detail surfaces without changing ordering", () => {
     note.textContent,
     "Tracked downloads since 2026-01-01. Approximate redirect requests.",
   );
-  assert.equal(detail.hidden, false);
+  assert.equal(values.hidden, false);
+  assert.equal(unavailable.hidden, true);
 });
 
 test("unavailable and malformed summaries leave the page unchanged", async () => {

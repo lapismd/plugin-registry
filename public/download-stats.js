@@ -75,11 +75,16 @@ export function hydrateDownloadStats(root, summary) {
     const lifetime = element.querySelector("[data-download-lifetime]");
     const recent = element.querySelector("[data-download-30d]");
     const note = element.querySelector("[data-download-tracked-since]");
-    if (!lifetime || !recent || !note) continue;
+    const values = element.querySelector("[data-download-stats-values]");
+    const unavailable = element.querySelector(
+      "[data-download-stats-unavailable]",
+    );
+    if (!lifetime || !recent || !note || !values || !unavailable) continue;
     lifetime.textContent = `~${stats.lifetimeLabel}`;
     recent.textContent = `~${stats.recentLabel}`;
     note.textContent = `Tracked downloads since ${summary.trackedSince}. Approximate redirect requests.`;
-    element.hidden = false;
+    values.hidden = false;
+    unavailable.hidden = true;
   }
 }
 

@@ -148,95 +148,6 @@
     },
     {
       "author": "Lapis Notes",
-      "authorUrl": "https://app.lapis.md",
-      "badges": [
-        "official",
-        "verified"
-      ],
-      "categories": [
-        "canvas",
-        "visualization"
-      ],
-      "channel": "official",
-      "contributes": {
-        "editorViews": [
-          {
-            "filenamePatterns": [
-              "*.canvas"
-            ],
-            "id": "lapis-canvas.editor",
-            "label": "Canvas"
-          }
-        ]
-      },
-      "description": "Infinite canvas view with JSON Canvas support.",
-      "detail": "plugins/lapis-canvas.json",
-      "id": "lapis-canvas",
-      "latestRelease": {
-        "bundleSize": 164184,
-        "releasedAt": "2026-06-06T22:47:33Z"
-      },
-      "latestVersion": "2026.6.6",
-      "minAppVersion": "1.7.7",
-      "name": "Canvas",
-      "owner": {
-        "name": "Lapis Notes",
-        "verified": true
-      },
-      "platforms": [
-        "web",
-        "electron"
-      ],
-      "schemaVersion": 1,
-      "status": "active"
-    },
-    {
-      "author": "Lapis Notes",
-      "authorUrl": "https://app.lapis.md",
-      "badges": [
-        "official",
-        "verified"
-      ],
-      "categories": [
-        "editor",
-        "documents"
-      ],
-      "channel": "official",
-      "contributes": {
-        "editorViews": [
-          {
-            "filenamePatterns": [
-              "*.lapisdoc",
-              "*.lapissheet"
-            ],
-            "id": "lapis-docs.document",
-            "label": "Lapis Document"
-          }
-        ]
-      },
-      "description": "Rich document and spreadsheet editing for Lapis.",
-      "detail": "plugins/lapis-docs.json",
-      "id": "lapis-docs",
-      "latestRelease": {
-        "bundleSize": 3138148,
-        "releasedAt": "2026-06-06T22:47:12Z"
-      },
-      "latestVersion": "2026.6.6",
-      "minAppVersion": "0.20.0",
-      "name": "Docs",
-      "owner": {
-        "name": "Lapis Notes",
-        "verified": true
-      },
-      "platforms": [
-        "web",
-        "electron"
-      ],
-      "schemaVersion": 1,
-      "status": "active"
-    },
-    {
-      "author": "Lapis Notes",
       "authorUrl": "https://github.com/lapismd",
       "badges": [
         "official",
@@ -309,118 +220,6 @@
     },
     {
       "author": "Lapis Notes",
-      "authorUrl": "https://app.lapis.md",
-      "badges": [
-        "official",
-        "verified"
-      ],
-      "categories": [
-        "notebook",
-        "markdown"
-      ],
-      "channel": "official",
-      "contributes": {},
-      "description": "Reactive notebook support for markdown notes.",
-      "detail": "plugins/lapis-notebook.json",
-      "id": "lapis-notebook",
-      "latestRelease": {
-        "bundleSize": 26762727,
-        "releasedAt": "2026-06-06T22:48:01Z"
-      },
-      "latestVersion": "2026.6.6",
-      "minAppVersion": "1.7.7",
-      "name": "Notebook",
-      "owner": {
-        "name": "Lapis Notes",
-        "verified": true
-      },
-      "platforms": [
-        "web",
-        "electron"
-      ],
-      "schemaVersion": 1,
-      "status": "active"
-    },
-    {
-      "author": "Lapis Notes",
-      "authorUrl": "https://app.lapis.md",
-      "badges": [
-        "official",
-        "verified"
-      ],
-      "categories": [
-        "viewer",
-        "documents"
-      ],
-      "channel": "official",
-      "contributes": {
-        "editorViews": [
-          {
-            "filenamePatterns": [
-              "*.pdf"
-            ],
-            "id": "lapis-pdf.viewer",
-            "label": "PDF"
-          }
-        ]
-      },
-      "description": "PDF viewing for Lapis.",
-      "detail": "plugins/lapis-pdf.json",
-      "id": "lapis-pdf",
-      "latestRelease": {
-        "bundleSize": 3302567,
-        "releasedAt": "2026-06-06T22:47:22Z"
-      },
-      "latestVersion": "2026.6.6",
-      "minAppVersion": "1.7.7",
-      "name": "PDF",
-      "owner": {
-        "name": "Lapis Notes",
-        "verified": true
-      },
-      "platforms": [
-        "web",
-        "electron"
-      ],
-      "schemaVersion": 1,
-      "status": "active"
-    },
-    {
-      "author": "Lapis Notes",
-      "authorUrl": "https://app.lapis.md",
-      "badges": [
-        "official",
-        "verified"
-      ],
-      "categories": [
-        "presentation",
-        "markdown"
-      ],
-      "channel": "official",
-      "contributes": {},
-      "description": "Presentation mode for markdown notes.",
-      "detail": "plugins/lapis-slides.json",
-      "id": "lapis-slides",
-      "latestRelease": {
-        "bundleSize": 434234,
-        "releasedAt": "2026-06-06T22:47:27Z"
-      },
-      "latestVersion": "2026.6.6",
-      "minAppVersion": "1.7.7",
-      "name": "Slides",
-      "owner": {
-        "name": "Lapis Notes",
-        "verified": true
-      },
-      "platforms": [
-        "web",
-        "electron"
-      ],
-      "schemaVersion": 1,
-      "status": "active"
-    },
-    {
-      "author": "Lapis Notes",
       "authorUrl": "https://github.com/lapismd",
       "badges": [
         "official",
@@ -452,40 +251,6 @@
         "electron"
       ],
       "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/source-editor/README.md",
-      "schemaVersion": 1,
-      "status": "active"
-    },
-    {
-      "author": "Lapis Notes",
-      "authorUrl": "https://app.lapis.md",
-      "badges": [
-        "official",
-        "verified"
-      ],
-      "categories": [
-        "diagnostics",
-        "developer-tools"
-      ],
-      "channel": "official",
-      "contributes": {},
-      "description": "Telemetry diagnostics view.",
-      "detail": "plugins/lapis-telemetry.json",
-      "id": "lapis-telemetry",
-      "latestRelease": {
-        "bundleSize": 91109,
-        "releasedAt": "2026-06-06T22:48:24Z"
-      },
-      "latestVersion": "2026.6.6",
-      "minAppVersion": "1.7.7",
-      "name": "Telemetry Diagnostics",
-      "owner": {
-        "name": "Lapis Notes",
-        "verified": true
-      },
-      "platforms": [
-        "web",
-        "electron"
-      ],
       "schemaVersion": 1,
       "status": "active"
     },
@@ -645,7 +410,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "vueEPua0Hy9qg3Cm+xe1CJaR+fjVi21g9HSZgbpLO5XzoqJqWPsMpBfHyAagerjkVqh5HXD69yZPlUcyNt7tCg=="
+      "sig": "O8bfJZteX0rngpwMww3XP8tkn19gVQfDNejuAwxa/qifNK3vfmIw/L3P0gVQ1D2RcQFyXELGG2HT4AHO9c/jBw=="
     }
   ]
 }

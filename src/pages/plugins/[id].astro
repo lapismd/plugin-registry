@@ -327,12 +327,15 @@ const downloadHref = pluginDownloadHref(release);
                 {formatBytes(release.bundle.size)}
               </dd>
             </div>
-            <div data-download-detail data-plugin-id={plugin.id} hidden>
+            <div data-download-detail data-plugin-id={plugin.id}>
               <dt>Tracked downloads</dt>
-              <dd>
-                <span data-download-lifetime></span> lifetime · <span
-                  data-download-30d
-                ></span> in 30 days
+              <dd aria-live="polite">
+                <span data-download-stats-values hidden>
+                  <span data-download-lifetime></span> lifetime · <span
+                    data-download-30d
+                  ></span> in 30 days
+                </span>
+                <span data-download-stats-unavailable>Statistics unavailable</span>
                 <small class="download-stats-note" data-download-tracked-since
                 ></small>
               </dd>

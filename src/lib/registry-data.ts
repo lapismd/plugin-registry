@@ -248,9 +248,14 @@ export function statusLabel(status: SitePlugin["status"]) {
 }
 
 export function titleCase(value: string) {
+  const initialisms = new Map([["ai", "AI"]]);
   return value
     .split("-")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .map(
+      (part) =>
+        initialisms.get(part.toLowerCase()) ??
+        part.charAt(0).toUpperCase() + part.slice(1),
+    )
     .join(" ");
 }
 
