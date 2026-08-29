@@ -1,24 +1,73 @@
 {
   "channel": "official",
-  "description": "Graph and local graph views powered by the metadata cache.",
+  "content": {
+    "changelog": {
+      "mediaType": "text/markdown",
+      "sha256": "3bdf1425cb82925d373c4e094fcbe60cd40eedb2e618f09e232e613f7170c0e7",
+      "size": 135,
+      "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/graph/CHANGELOG.md",
+      "url": "https://registry.lapis.md/v1/content/lapis-graph/changelog.md"
+    },
+    "overview": {
+      "mediaType": "text/markdown",
+      "sha256": "5a8f4a8aaafc268fbcfa0f29df64fb3f6bd2e278588a9abc950a779b910b0c94",
+      "size": 660,
+      "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/graph/README.md",
+      "url": "https://registry.lapis.md/v1/content/lapis-graph/overview.md"
+    }
+  },
+  "description": "Global and local graph views powered by indexed metadata",
+  "highlights": [
+    "Explore global and local relationships across notes, tags, and attachments.",
+    "Open connected notes directly from an interactive canvas.",
+    "Tune grouping, forces, and time-lapse views for large vaults."
+  ],
   "id": "lapis-graph",
-  "latestVersion": "2026.6.6",
+  "latestVersion": "0.1.2",
+  "license": "AGPL-3.0-or-later",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/graph#readme",
+    "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/graph#readme",
+    "issues": "https://github.com/lapismd/lapis-plugins/issues",
+    "repository": "https://github.com/lapismd/lapis-plugins"
+  },
   "name": "Graph",
   "owner": {
     "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugins",
     "verified": true
   },
-  "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/main/packages/graph/README.md",
+  "readme": {
+    "sha256": "5a8f4a8aaafc268fbcfa0f29df64fb3f6bd2e278588a9abc950a779b910b0c94",
+    "size": 660,
+    "url": "https://registry.lapis.md/v1/content/lapis-graph/overview.md"
+  },
+  "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/graph/README.md",
   "schemaVersion": 1,
   "signatures": [
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "RWX9SvuEaixQJAZMWbGPoeMma9g3idD4BB/lwylefvBP9rZfBfw52neE17+AnuK5Atc1FRUn1tjfjWia3haKAQ=="
+      "sig": "QCv4Wrb5IUgxT+imXqCTUY83V+9oDxVtArOK9gHtq8duJvp0vhN3ifKPG0sEg4o/nBf4FPEiEsWy9U13aHvoCA=="
     }
   ],
   "status": "active",
   "versions": {
+    "0.1.2": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-graph/0.1.2",
+        "sha256": "67ea1bcb090e9e82f329ef6f78b2ce0ab1eb728399b9ad9a9912ef576e869ba3",
+        "size": 476698,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.2/lapis-graph-0.1.2.lapis-plugin"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "electron"
+      ],
+      "releasedAt": "2026-08-29T09:36:18.000Z",
+      "version": "0.1.2"
+    },
     "2026.6.6": {
       "bundle": {
         "downloadUrl": "../../download/lapis-graph/2026.6.6",

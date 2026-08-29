@@ -201,7 +201,7 @@
     },
     {
       "author": "Lapis Notes",
-      "authorUrl": "https://app.lapis.md",
+      "authorUrl": "https://github.com/lapismd",
       "badges": [
         "official",
         "verified"
@@ -212,25 +212,26 @@
       ],
       "channel": "official",
       "contributes": {},
-      "description": "Graph and local graph views powered by the metadata cache.",
+      "description": "Global and local graph views powered by indexed metadata",
       "detail": "plugins/lapis-graph.json",
       "id": "lapis-graph",
       "latestRelease": {
-        "bundleSize": 116157,
-        "releasedAt": "2026-06-06T22:47:39Z"
+        "bundleSize": 476698,
+        "releasedAt": "2026-08-29T09:36:18.000Z"
       },
-      "latestVersion": "2026.6.6",
-      "minAppVersion": "1.7.7",
+      "latestVersion": "0.1.2",
+      "minAppVersion": "0.1.0",
       "name": "Graph",
       "owner": {
         "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
         "verified": true
       },
       "platforms": [
         "web",
         "electron"
       ],
-      "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/main/packages/graph/README.md",
+      "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/graph/README.md",
       "schemaVersion": 1,
       "status": "active"
     },
@@ -427,7 +428,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "6uxiY01pmjV3OTz3FtSF0vS4AeTfs1NFddHoe+2hSSr3pkNZyIddVnu5P1qTgbbGA2vGpu0v3Gs8Y0NOhNT+DA=="
+      "sig": "NdrG/eZTwpRb+VDnYQjANPdoimrB7bjlJmzcCwhNhYTeRH6rJ7MgUdHbukP3zSd7+u0vuXyiTA+1OVLfm3/hAA=="
     }
   ]
 }

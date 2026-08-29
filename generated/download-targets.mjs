@@ -32,6 +32,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "2026.6.6"
     },
+    "lapis-graph@0.1.2": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.2/lapis-graph-0.1.2.lapis-plugin",
+      "pluginId": "lapis-graph",
+      "status": "active",
+      "version": "0.1.2"
+    },
     "lapis-graph@2026.6.6": {
       "originUrl": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin",
       "pluginId": "lapis-graph",
