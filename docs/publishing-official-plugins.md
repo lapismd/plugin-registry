@@ -40,9 +40,9 @@ to the npm package name and source commit.
   "repository": "lapismd/lapis-plugins",
   "package_name": "@lapis-notes/graph",
   "plugin_id": "lapis-graph",
-  "version": "0.1.0",
-  "release_tag": "graph@0.1.0",
-  "asset_name": "lapis-graph-0.1.0.lapis-plugin",
+  "version": "0.1.2",
+  "release_tag": "graph@0.1.2",
+  "asset_name": "lapis-graph-0.1.2.lapis-plugin",
   "source_commit": "0123456789abcdef0123456789abcdef01234567"
 }
 ```
@@ -69,18 +69,8 @@ The sync records the package-local README at the verified source commit. The
 site build mirrors that content under `v1/readmes/<plugin-id>/`, allowing clients
 to render registry-hosted Markdown without depending on source-host CORS.
 Documentation updates require a new registry/site change but no plugin binary
-republishing. Cloudflare Pages middleware serves registry metadata and README
-artifacts with permissive CORS headers.
-
-## Migration Source
-
-The former Forgejo repository remains a read-only migration remote. Existing
-catalog entries and versions remain available until verified GitHub releases
-supersede them. For an audited migration refresh only:
-
-```sh
-pnpm registry:sync:forgejo:migration -- --plugin-versions lapis-graph@2026.6.6 --dry-run
-```
+republishing. Static Cloudflare Pages headers serve registry metadata and
+README artifacts with permissive CORS headers.
 
 The default `registry:validate` command checks schemas and local rules. Pull
 requests and the manual production workflow run `registry:validate:remote`,

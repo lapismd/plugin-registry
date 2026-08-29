@@ -23,9 +23,9 @@ const payload = {
   repository: "lapismd/lapis-plugins",
   package_name: "@lapis-notes/graph",
   plugin_id: "lapis-graph",
-  version: "0.1.0",
-  release_tag: "graph@0.1.0",
-  asset_name: "lapis-graph-0.1.0.lapis-plugin",
+  version: "0.1.2",
+  release_tag: "graph@0.1.2",
+  asset_name: "lapis-graph-0.1.2.lapis-plugin",
   source_commit: sourceCommit,
 };
 
@@ -36,9 +36,9 @@ test("repository_dispatch validation accepts the complete release payload", () =
       repository: "lapismd/lapis-plugins",
       packageName: "@lapis-notes/graph",
       pluginId: "lapis-graph",
-      version: "0.1.0",
-      releaseTag: "graph@0.1.0",
-      assetName: "lapis-graph-0.1.0.lapis-plugin",
+      version: "0.1.2",
+      releaseTag: "graph@0.1.2",
+      assetName: "lapis-graph-0.1.2.lapis-plugin",
       sourceCommit,
     },
   );
@@ -55,7 +55,7 @@ test("repository_dispatch validation rejects missing, extra, and mismatched coor
   );
   assert.throws(
     () => validateDispatchPayload({ ...payload, asset_name: "graph.zip" }),
-    /asset_name must be lapis-graph-0.1.0.lapis-plugin/,
+    /asset_name must be lapis-graph-0.1.2.lapis-plugin/,
   );
   assert.throws(
     () => parseDispatchEvent({ action: "other", client_payload: payload }),
@@ -121,10 +121,10 @@ test("GitHub sync verifies release assets and updates one curated entry idempote
     sourceCommit,
     metadataPath: "packages/graph/registry.json",
   });
-  assert.equal(entry.latestVersion, "0.1.0");
+  assert.equal(entry.latestVersion, "0.1.2");
   assert.equal(entry.versions["2026.6.6"].version, "2026.6.6");
   assert.equal(
-    entry.versions["0.1.0"].bundle.sha256,
+    entry.versions["0.1.2"].bundle.sha256,
     sha256(release.bundleBytes),
   );
   assert.equal(
@@ -351,7 +351,7 @@ function signedReleaseFixture(options = {}) {
   ]);
   const checksum = options.checksum ?? sha256(bundleBytes);
   const bundleUrl =
-    "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.0/lapis-graph-0.1.0.lapis-plugin";
+    "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.2/lapis-graph-0.1.2.lapis-plugin";
   const checksumUrl = `${bundleUrl}.sha256`;
   const rawBase = `https://raw.githubusercontent.com/lapismd/lapis-plugins/${sourceCommit}/packages/graph/`;
   const packageBytes = Buffer.from(
@@ -465,12 +465,13 @@ function existingGraphEntry() {
       "2026.6.6": {
         version: "2026.6.6",
         minAppVersion: "1.7.7",
-        releasedAt: "2026-06-06T22:47:38Z",
+        releasedAt: "2026-06-06T22:47:39Z",
         platforms: ["web", "electron"],
         bundle: {
-          url: "https://code.ju.ma/old.lapis-plugin",
-          sha256: "1".repeat(64),
-          size: 100,
+          url: "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin",
+          sha256:
+            "5bc56ce3ebcf76d17888d793e031a5dd6e7d519ffbce221b339fa6df3967b66f",
+          size: 116157,
         },
       },
     },

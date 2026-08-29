@@ -10,7 +10,7 @@ const dist = new URL("../../dist/", import.meta.url);
 test("site build emits pages and registry metadata", async () => {
   if (
     !existsSync(new URL("index.html", dist)) ||
-    !existsSync(new URL("v1/readmes/lapis-docs/README.html", dist)) ||
+    !existsSync(new URL("v1/readmes/lapis-graph/README.html", dist)) ||
     !existsSync(new URL("_routes.json", dist)) ||
     !existsSync(new URL("download-stats.js", dist))
   ) {
@@ -30,9 +30,9 @@ test("site build emits pages and registry metadata", async () => {
     "v1/index.sig",
     "v1/plugins/lapis-docs.json",
     "v1/plugins/lapis-docs.sig",
-    "v1/readmes/lapis-docs/README.md",
-    "v1/readmes/lapis-docs/README.html",
-    "v1/readmes/lapis-docs/manifest.json",
+    "v1/readmes/lapis-graph/README.md",
+    "v1/readmes/lapis-graph/README.html",
+    "v1/readmes/lapis-graph/manifest.json",
     "v1/trust/root.json",
     "_routes.json",
     "_headers",
@@ -51,12 +51,19 @@ test("site build emits pages and registry metadata", async () => {
   assert.match(detail, /Download \.lapis-plugin/);
   assert.match(detail, /Bundle size/);
   assert.match(detail, /\*\.lapisdoc/);
-  assert.match(detail, /data-plugin-readme/);
   assert.match(detail, /data-download-detail/);
   assert.match(detail, /data-download-link/);
-  assert.match(detail, /View source README/);
+  assert.doesNotMatch(detail, /data-plugin-readme/);
+  assert.doesNotMatch(detail, /View source README/);
   assert.doesNotMatch(detail, /Loading README/);
   assert.doesNotMatch(detail, /fetch\(endpoint/);
+
+  const graphDetail = await readFile(
+    new URL("plugins/lapis-graph/index.html", dist),
+    "utf8",
+  );
+  assert.match(graphDetail, /data-plugin-readme/);
+  assert.match(graphDetail, /View source README/);
 
   const listing = await readFile(new URL("plugins/index.html", dist), "utf8");
   const names = [...listing.matchAll(/data-name="([^"]+)"/g)].map(

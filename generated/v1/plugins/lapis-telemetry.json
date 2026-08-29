@@ -8,29 +8,29 @@
     "name": "Lapis Notes",
     "verified": true
   },
-  "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-telemetry/README.md",
   "schemaVersion": 1,
   "signatures": [
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "x77MW0gre7E2sbEg3NbNkDwtkXAMKHQeylBADd7dCDohdg4RA/uNYsJC1lRTLKdcGrZjhBVOOiMoaGVOYZF/AQ=="
+      "sig": "tfy/5HarTJJPKPExegFsSGv4piQs7fvbLtYWrrLIGi/quqApQgaC9CASQSwwhD6JVigMVxXILg9cpD8alOpbCg=="
     }
   ],
   "status": "active",
   "versions": {
     "2026.6.6": {
       "bundle": {
+        "downloadUrl": "../../download/lapis-telemetry/2026.6.6",
         "sha256": "d10a1c660c6abe972c9174cce0f4ee863fb542104f0358e4e7074366e049afff",
         "size": 91109,
-        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-telemetry-2026.6.6/lapis-telemetry-2026.6.6.lapis-plugin"
+        "url": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-telemetry-2026.6.6/lapis-telemetry-2026.6.6.lapis-plugin"
       },
       "minAppVersion": "1.7.7",
       "platforms": [
         "web",
         "electron"
       ],
-      "releasedAt": "2026-06-06T22:48:22Z",
+      "releasedAt": "2026-06-06T22:48:24Z",
       "version": "2026.6.6"
     }
   }

@@ -6,7 +6,7 @@ import { handleDownloadRequest } from "../../functions/download/[plugin]/[versio
 import { readJsonc } from "../lib/registry.mjs";
 
 const originUrl =
-  "https://github.com/lapismd/plugin-registry/releases/download/lapis-docs-0.1.0/lapis-docs-0.1.0.lapis-plugin";
+  "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-docs-2026.6.6/lapis-docs-2026.6.6.lapis-plugin";
 const targets = {
   schemaVersion: 1,
   targets: {

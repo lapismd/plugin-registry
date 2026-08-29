@@ -15,7 +15,6 @@
     "verified": true,
   },
   "platforms": ["web", "electron"],
-  "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/notebook/README.md",
   "schemaVersion": 1,
   "status": "active",
   "versions": {
@@ -23,11 +22,11 @@
       "bundle": {
         "sha256": "54768708b2d00fa5c6d02fa97300a84a89eeb2345eea28312a7e3365821969fc",
         "size": 26762727,
-        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-notebook-2026.6.6/lapis-notebook-2026.6.6.lapis-plugin",
+        "url": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-notebook-2026.6.6/lapis-notebook-2026.6.6.lapis-plugin",
       },
       "minAppVersion": "1.7.7",
       "platforms": ["web", "electron"],
-      "releasedAt": "2026-06-06T22:47:40Z",
+      "releasedAt": "2026-06-06T22:48:01Z",
       "version": "2026.6.6",
     },
   },

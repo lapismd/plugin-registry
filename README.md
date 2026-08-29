@@ -16,7 +16,6 @@ pnpm install
 pnpm check
 pnpm registry:validate
 pnpm registry:sync:github -- --event-path /path/to/repository-dispatch.json --dry-run
-pnpm registry:sync:forgejo:migration -- --plugin-versions lapis-pdf@2026.6.6 --dry-run
 pnpm registry:preview:release-plan -- --release-plan ../lapis-plugins/.release/release-plan.json --public-key ../lapis-plugins/.release/plugin-release-public.pem --output tmp/registry-preview.json
 pnpm registry:generate
 pnpm registry:verify-signatures
@@ -55,9 +54,10 @@ descriptor plus source-owned metadata before an idempotent automation branch
 and pull request are created. A `plugin_metadata` dispatch accepts repository,
 package, plugin, and source-commit coordinates and refreshes documentation
 without changing any catalog release version or bundle.
-The original Forgejo source and sync command remain read-only migration inputs;
-existing catalog versions stay present until verified replacements supersede
-them.
+Existing catalog versions use immutable assets from the public
+`lapis-notes/releases` GitHub repository. New package-scoped plugin releases are
+published from `lapismd/lapis-plugins` and indexed through the verified GitHub
+dispatch workflow.
 
 New plugin sources own a validated `registry.json` beside their package
 manifest. It supplies curated categories and short highlights plus safe relative

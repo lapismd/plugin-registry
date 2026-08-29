@@ -29,7 +29,7 @@
       "id": "lapis-canvas",
       "latestRelease": {
         "bundleSize": 164184,
-        "releasedAt": "2026-06-06T22:47:29Z"
+        "releasedAt": "2026-06-06T22:47:33Z"
       },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
@@ -42,7 +42,6 @@
         "web",
         "electron"
       ],
-      "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-canvas/README.md",
       "schemaVersion": 1,
       "status": "active"
     },
@@ -75,7 +74,7 @@
       "id": "lapis-docs",
       "latestRelease": {
         "bundleSize": 3138148,
-        "releasedAt": "2026-06-06T22:47:06Z"
+        "releasedAt": "2026-06-06T22:47:12Z"
       },
       "latestVersion": "2026.6.6",
       "minAppVersion": "0.20.0",
@@ -88,7 +87,6 @@
         "web",
         "electron"
       ],
-      "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-docs/README.md",
       "schemaVersion": 1,
       "status": "active"
     },
@@ -110,7 +108,7 @@
       "id": "lapis-graph",
       "latestRelease": {
         "bundleSize": 116157,
-        "releasedAt": "2026-06-06T22:47:38Z"
+        "releasedAt": "2026-06-06T22:47:39Z"
       },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
@@ -123,7 +121,7 @@
         "web",
         "electron"
       ],
-      "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-graph/README.md",
+      "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/main/packages/graph/README.md",
       "schemaVersion": 1,
       "status": "active"
     },
@@ -145,7 +143,7 @@
       "id": "lapis-markdown-lint",
       "latestRelease": {
         "bundleSize": 51432,
-        "releasedAt": "2026-06-06T22:48:25Z"
+        "releasedAt": "2026-06-06T22:48:26Z"
       },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
@@ -158,7 +156,7 @@
         "web",
         "electron"
       ],
-      "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-markdown-lint/README.md",
+      "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/main/packages/markdown-lint/README.md",
       "schemaVersion": 1,
       "status": "active"
     },
@@ -180,7 +178,7 @@
       "id": "lapis-notebook",
       "latestRelease": {
         "bundleSize": 26762727,
-        "releasedAt": "2026-06-06T22:47:40Z"
+        "releasedAt": "2026-06-06T22:48:01Z"
       },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
@@ -193,7 +191,6 @@
         "web",
         "electron"
       ],
-      "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/notebook/README.md",
       "schemaVersion": 1,
       "status": "active"
     },
@@ -225,7 +222,7 @@
       "id": "lapis-pdf",
       "latestRelease": {
         "bundleSize": 3302567,
-        "releasedAt": "2026-06-06T22:47:18Z"
+        "releasedAt": "2026-06-06T22:47:22Z"
       },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
@@ -238,7 +235,6 @@
         "web",
         "electron"
       ],
-      "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-pdf/README.md",
       "schemaVersion": 1,
       "status": "active"
     },
@@ -260,7 +256,7 @@
       "id": "lapis-slides",
       "latestRelease": {
         "bundleSize": 434234,
-        "releasedAt": "2026-06-06T22:47:26Z"
+        "releasedAt": "2026-06-06T22:47:27Z"
       },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
@@ -273,7 +269,6 @@
         "web",
         "electron"
       ],
-      "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-slides/README.md",
       "schemaVersion": 1,
       "status": "active"
     },
@@ -295,7 +290,7 @@
       "id": "lapis-telemetry",
       "latestRelease": {
         "bundleSize": 91109,
-        "releasedAt": "2026-06-06T22:48:22Z"
+        "releasedAt": "2026-06-06T22:48:24Z"
       },
       "latestVersion": "2026.6.6",
       "minAppVersion": "1.7.7",
@@ -308,7 +303,6 @@
         "web",
         "electron"
       ],
-      "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-telemetry/README.md",
       "schemaVersion": 1,
       "status": "active"
     }
@@ -324,7 +318,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "HdbGPRLwhtQuLNgf6G8B18RDCz/LPZN2vdVBCXt0Tbi4cI9vF1cTL7SawI05HBR1UhEj5UZjxEczPW0SiTD0AA=="
+      "sig": "7/eeL/jsPBth56IxrwUgf8zZLkXiOXmdVI2FLQ/4K2TcZOk8Q7Wl1TO+3A5L6ZLIISwdPHEUmkQfAUslqH7oBQ=="
     }
   ]
 }

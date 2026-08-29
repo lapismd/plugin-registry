@@ -1,4 +1,5 @@
 generated/v1/
+generated/download-targets.mjs
 dist/
 .astro/
 tmp/

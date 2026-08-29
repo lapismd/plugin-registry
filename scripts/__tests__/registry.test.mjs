@@ -16,50 +16,41 @@ import {
 function validEntry(overrides = {}) {
   return {
     schemaVersion: 1,
-    id: "lapis-docs",
-    name: "Docs",
-    description: "Rich document and spreadsheet editing for Lapis.",
+    id: "lapis-graph",
+    name: "Graph",
+    description: "Graph and local graph views powered by the metadata cache.",
     readmeUrl:
-      "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-docs/README.md",
+      "https://raw.githubusercontent.com/lapismd/lapis-plugins/main/packages/graph/README.md",
     author: "Lapis Notes",
     authorUrl: "https://app.lapis.md",
     channel: "official",
-    status: "pending",
-    latestVersion: "0.1.0",
+    status: "active",
+    latestVersion: "2026.6.6",
     minAppVersion: "1.7.7",
     platforms: ["web", "electron"],
-    categories: ["editor", "documents"],
+    categories: ["graph", "visualization"],
     badges: ["official", "verified"],
     owner: { name: "Lapis Notes", verified: true },
-    contributes: {
-      editorViews: [
-        {
-          id: "lapis-docs.document",
-          label: "Lapis Document",
-          filenamePatterns: ["*.lapisdoc", "*.lapissheet"],
-        },
-      ],
-    },
     versions: {
-      "0.1.0": {
-        version: "0.1.0",
+      "2026.6.6": {
+        version: "2026.6.6",
         minAppVersion: "1.7.7",
-        releasedAt: "2026-05-31T00:00:00.000Z",
+        releasedAt: "2026-06-06T22:47:39Z",
         platforms: ["web", "electron"],
         bundle: {
-          url: "https://registry.lapis.md/assets/lapis-docs/0.1.0/lapis-docs-0.1.0.lapis-plugin",
-          sha256: "0".repeat(64),
-          size: 0,
-          pending: true,
+          url: "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin",
+          sha256:
+            "5bc56ce3ebcf76d17888d793e031a5dd6e7d519ffbce221b339fa6df3967b66f",
+          size: 116157,
         },
       },
     },
-    __sourcePath: "entries/official/lapis-docs.jsonc",
+    __sourcePath: "entries/official/lapis-graph.jsonc",
     ...overrides,
   };
 }
 
-test("valid Docs entry passes schema and custom validation", async () => {
+test("valid Graph entry passes schema and custom validation", async () => {
   const ajv = await createAjv();
   const validate = ajv.getSchema(
     "https://registry.lapis.md/schemas/catalog-entry.schema.json",
@@ -77,7 +68,7 @@ test("rejects duplicate plugin ids", () => {
     validEntry({ __sourcePath: "a.jsonc" }),
     validEntry({ __sourcePath: "b.jsonc" }),
   ]);
-  assert.match(errors.join("\n"), /duplicate plugin id lapis-docs/);
+  assert.match(errors.join("\n"), /duplicate plugin id lapis-graph/);
 });
 
 test("rejects invalid plugin ids", () => {
@@ -87,8 +78,8 @@ test("rejects invalid plugin ids", () => {
 
 test("rejects non-HTTPS release URLs", () => {
   const entry = validEntry();
-  entry.versions["0.1.0"].bundle.url =
-    "http://example.test/lapis-docs-0.1.0.lapis-plugin";
+  entry.versions["2026.6.6"].bundle.url =
+    "http://example.test/lapis-graph-2026.6.6.lapis-plugin";
   const errors = validateEntryRules([entry]);
   assert.match(errors.join("\n"), /URL must use HTTPS/);
 });
@@ -102,49 +93,46 @@ test("rejects non-HTTPS readmeUrl", () => {
 
 test("rejects non-pending bundles without real hash and size", () => {
   const entry = validEntry();
-  delete entry.versions["0.1.0"].bundle.pending;
+  entry.versions["2026.6.6"].bundle.sha256 = "0".repeat(64);
+  entry.versions["2026.6.6"].bundle.size = 0;
   const errors = validateEntryRules([entry]);
   assert.match(errors.join("\n"), /real sha256 and size/);
 });
 
-test("builds deterministic registry metadata with Docs contribution summary", () => {
+test("builds deterministic registry metadata with real GitHub references", () => {
   const registry = buildRegistry([validEntry()]);
-  assert.equal(registry.index.plugins[0].id, "lapis-docs");
-  assert.equal(registry.index.plugins[0].detail, "plugins/lapis-docs.json");
+  assert.equal(registry.index.plugins[0].id, "lapis-graph");
+  assert.equal(registry.index.plugins[0].detail, "plugins/lapis-graph.json");
   assert.deepEqual(registry.index.plugins[0].latestRelease, {
-    releasedAt: "2026-05-31T00:00:00.000Z",
-    bundleSize: 0,
+    releasedAt: "2026-06-06T22:47:39Z",
+    bundleSize: 116157,
   });
   assert.equal(
-    registry.details["lapis-docs"].readmeUrl,
-    "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-docs/README.md",
-  );
-  assert.deepEqual(
-    registry.index.plugins[0].contributes.editorViews[0].filenamePatterns,
-    ["*.lapisdoc", "*.lapissheet"],
+    registry.details["lapis-graph"].readmeUrl,
+    "https://raw.githubusercontent.com/lapismd/lapis-plugins/main/packages/graph/README.md",
   );
   assert.deepEqual(registry.revoked.revoked, []);
   assert.equal(
-    registry.details["lapis-docs"].versions["0.1.0"].bundle.downloadUrl,
-    "../../download/lapis-docs/0.1.0",
+    registry.details["lapis-graph"].versions["2026.6.6"].bundle.downloadUrl,
+    "../../download/lapis-graph/2026.6.6",
   );
-  assert.deepEqual(registry.downloadTargets.targets["lapis-docs@0.1.0"], {
-    pluginId: "lapis-docs",
-    version: "0.1.0",
+  assert.deepEqual(registry.downloadTargets.targets["lapis-graph@2026.6.6"], {
+    pluginId: "lapis-graph",
+    version: "2026.6.6",
     originUrl:
-      "https://registry.lapis.md/assets/lapis-docs/0.1.0/lapis-docs-0.1.0.lapis-plugin",
-    status: "pending",
+      "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin",
+    status: "active",
   });
 });
 
 test("release status overrides plugin status in the download target map", () => {
-  const entry = validEntry({ status: "active" });
-  entry.versions["0.1.0"].status = "revoked";
+  const entry = validEntry();
+  entry.versions["2026.6.6"].status = "revoked";
 
   const registry = buildRegistry([entry]);
 
   assert.equal(
-    registry.downloadTargets.targets["lapis-docs@0.1.0"].status,
+    registry.downloadTargets.targets["lapis-graph@2026.6.6"].status,
     "revoked",
   );
 });

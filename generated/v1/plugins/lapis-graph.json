@@ -8,29 +8,30 @@
     "name": "Lapis Notes",
     "verified": true
   },
-  "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-graph/README.md",
+  "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/main/packages/graph/README.md",
   "schemaVersion": 1,
   "signatures": [
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "pIGa8sUmLzod4UGfVTcfCWL3FRBr55CemBtrGJVASqH3XxiMQp2/PSKsF9pOumWTVFM+csThBQ1zYhOVau4XCw=="
+      "sig": "RWX9SvuEaixQJAZMWbGPoeMma9g3idD4BB/lwylefvBP9rZfBfw52neE17+AnuK5Atc1FRUn1tjfjWia3haKAQ=="
     }
   ],
   "status": "active",
   "versions": {
     "2026.6.6": {
       "bundle": {
+        "downloadUrl": "../../download/lapis-graph/2026.6.6",
         "sha256": "5bc56ce3ebcf76d17888d793e031a5dd6e7d519ffbce221b339fa6df3967b66f",
         "size": 116157,
-        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin"
+        "url": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin"
       },
       "minAppVersion": "1.7.7",
       "platforms": [
         "web",
         "electron"
       ],
-      "releasedAt": "2026-06-06T22:47:38Z",
+      "releasedAt": "2026-06-06T22:47:39Z",
       "version": "2026.6.6"
     }
   }

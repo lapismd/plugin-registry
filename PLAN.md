@@ -165,7 +165,7 @@ This makes the registry auditable in normal code review.
 
 ## 6. Hosted registry layout
 
-Publish `generated/v1` as static files through Forgejo Pages, GitHub Pages, Cloudflare Pages, S3/R2, or another static host.
+Publish `generated/v1` as static files through GitHub Pages, Cloudflare Pages, S3/R2, or another static host.
 
 Public layout:
 
@@ -613,8 +613,6 @@ jobs:
       - run: git diff --exit-code generated/v1
       - run: pnpm registry:verify-signatures
 ```
-
-Adjust for Forgejo Actions if the registry is hosted on Forgejo.
 
 ### Step 7: Publish static registry
 

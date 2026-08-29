@@ -19,29 +19,29 @@
     "name": "Lapis Notes",
     "verified": true
   },
-  "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-canvas/README.md",
   "schemaVersion": 1,
   "signatures": [
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "y8Nc7WEhyPF45gKM5KHyJzk27nGBt/JSDD4hOeV6Rl3706/MZfgb0VwqfDw/+kqm/K4OvZKtp6RWleYnYxpGAA=="
+      "sig": "+XiGl3lb+Ux9os+BL9o4Ek2O4H5cpZ1e2sLuOcs/L5caqYHfrxHj5twsji9H3BUeaOwTfND73bH6uxrnZbfiBw=="
     }
   ],
   "status": "active",
   "versions": {
     "2026.6.6": {
       "bundle": {
+        "downloadUrl": "../../download/lapis-canvas/2026.6.6",
         "sha256": "f8ab63f9c2b258e94d1824a169009e64bf3c5bbdb9b874729c96235b63e66ef3",
         "size": 164184,
-        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-canvas-2026.6.6/lapis-canvas-2026.6.6.lapis-plugin"
+        "url": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-canvas-2026.6.6/lapis-canvas-2026.6.6.lapis-plugin"
       },
       "minAppVersion": "1.7.7",
       "platforms": [
         "web",
         "electron"
       ],
-      "releasedAt": "2026-06-06T22:47:29Z",
+      "releasedAt": "2026-06-06T22:47:33Z",
       "version": "2026.6.6"
     }
   }

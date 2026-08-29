@@ -20,29 +20,29 @@
     "name": "Lapis Notes",
     "verified": true
   },
-  "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-docs/README.md",
   "schemaVersion": 1,
   "signatures": [
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "CkiNo15/dQJfHZR3BOOUsc64phP0iuxtl7aQVS7SJ+My5vt3sWWpyeTQIZfD8CYAmJSg3H/WKsa+08k5mDvNCA=="
+      "sig": "VExeix1X5GQDjnZMKQypo7zWFnNJNoCMtu6g8NzjoMz1ylt7VTV9DLUgx9JRB3ENPvQ8BnU1NOMQyCELvZ0pBg=="
     }
   ],
   "status": "active",
   "versions": {
     "2026.6.6": {
       "bundle": {
+        "downloadUrl": "../../download/lapis-docs/2026.6.6",
         "sha256": "dacf9ae28c86a58e4ad8d9d580e39ce472519dc4a5142785176843dabedc3eb0",
         "size": 3138148,
-        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-docs-2026.6.6/lapis-docs-2026.6.6.lapis-plugin"
+        "url": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-docs-2026.6.6/lapis-docs-2026.6.6.lapis-plugin"
       },
       "minAppVersion": "0.20.0",
       "platforms": [
         "web",
         "electron"
       ],
-      "releasedAt": "2026-06-06T22:47:06Z",
+      "releasedAt": "2026-06-06T22:47:12Z",
       "version": "2026.6.6"
     }
   }

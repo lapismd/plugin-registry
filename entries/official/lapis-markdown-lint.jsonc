@@ -15,7 +15,7 @@
     "verified": true,
   },
   "platforms": ["web", "electron"],
-  "readmeUrl": "https://code.ju.ma/lapis-notes/lapis/raw/branch/main/packages/plugins/plugin-markdown-lint/README.md",
+  "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/main/packages/markdown-lint/README.md",
   "schemaVersion": 1,
   "status": "active",
   "versions": {
@@ -23,11 +23,11 @@
       "bundle": {
         "sha256": "2791b1e8ae25352c587090d7853d29d6802b8b725c1d7793ea8b5d960ec6b1bc",
         "size": 51432,
-        "url": "https://code.ju.ma/lapis-notes/lapis/releases/download/official-plugin-assets-lapis-markdown-lint-2026.6.6/lapis-markdown-lint-2026.6.6.lapis-plugin",
+        "url": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-markdown-lint-2026.6.6/lapis-markdown-lint-2026.6.6.lapis-plugin",
       },
       "minAppVersion": "1.7.7",
       "platforms": ["web", "electron"],
-      "releasedAt": "2026-06-06T22:48:25Z",
+      "releasedAt": "2026-06-06T22:48:26Z",
       "version": "2026.6.6",
     },
   },
