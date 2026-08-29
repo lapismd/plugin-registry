@@ -76,6 +76,42 @@
     },
     {
       "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "navigation",
+        "productivity"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Bookmark files, folders, searches, and groups",
+      "detail": "plugins/bookmarks.json",
+      "id": "bookmarks",
+      "latestRelease": {
+        "bundleSize": 457091,
+        "releasedAt": "2026-08-29T09:36:10.000Z"
+      },
+      "latestVersion": "0.1.2",
+      "minAppVersion": "0.1.0",
+      "name": "Bookmarks",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "electron"
+      ],
+      "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/bookmarks/README.md",
+      "schemaVersion": 1,
+      "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
       "authorUrl": "https://app.lapis.md",
       "badges": [
         "official",
@@ -391,7 +427,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "jarEMiD1aDiL2kN8XPXKyMUJuZaLc4gYM4S3HDW75/8QLAN3uuUlPnGg/5wuy76jIdA1yPvuf7uxJXJV0rbeCw=="
+      "sig": "6uxiY01pmjV3OTz3FtSF0vS4AeTfs1NFddHoe+2hSSr3pkNZyIddVnu5P1qTgbbGA2vGpu0v3Gs8Y0NOhNT+DA=="
     }
   ]
 }
