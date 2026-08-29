@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://registry.lapis.md/schemas/download-stats-daily.schema.json",
+  "title": "Lapis plugin download daily statistics",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "date",
+    "generatedAt",
+    "dataset",
+    "metric",
+    "rows"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "date": { "type": "string", "format": "date" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "dataset": { "const": "lapis_plugin_downloads_v1" },
+    "metric": { "const": "approximate_redirect_requests" },
+    "rows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/row" }
+    }
+  },
+  "$defs": {
+    "row": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pluginId", "version", "action", "platform", "os", "count"],
+      "properties": {
+        "pluginId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{1,62}$"
+        },
+        "version": { "type": "string", "minLength": 1 },
+        "action": {
+          "enum": ["install", "update", "download", "unknown"]
+        },
+        "platform": {
+          "enum": ["web", "desktop", "electron", "unknown"]
+        },
+        "os": {
+          "enum": ["macos", "windows", "linux", "ios", "android", "unknown"]
+        },
+        "count": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

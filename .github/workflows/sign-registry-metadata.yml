@@ -1,0 +1,90 @@
+name: Sign registry metadata
+
+on:
+  workflow_dispatch:
+    inputs:
+      approval:
+        description: Enter REGISTRY_SIGN_APPROVED to generate signed metadata
+        required: true
+
+permissions: {}
+
+jobs:
+  sign:
+    if: inputs.approval == 'REGISTRY_SIGN_APPROVED'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: registry-production
+    steps:
+      - name: Create registry GitHub App token
+        id: registry-app
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.LAPIS_REGISTRY_APP_ID }}
+          private-key: ${{ secrets.LAPIS_REGISTRY_APP_PRIVATE_KEY }}
+          owner: lapismd
+          repositories: plugin-registry
+          permission-contents: write
+          permission-pull-requests: write
+
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ steps.registry-app.outputs.token }}
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate artifact origins
+        run: pnpm registry:validate:remote
+
+      - name: Generate and sign registry metadata
+        run: pnpm registry:generate && pnpm registry:sign
+        env:
+          LAPIS_REGISTRY_KEY_ID: ${{ secrets.LAPIS_REGISTRY_KEY_ID }}
+          LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64: ${{ secrets.LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64 }}
+
+      - name: Verify signed candidate
+        run: >-
+          pnpm registry:verify-signatures &&
+          pnpm stats:validate &&
+          pnpm site:check &&
+          pnpm site:build &&
+          pnpm test &&
+          pnpm check:format
+
+      - name: Enforce generated-only changes
+        shell: bash
+        run: |
+          unexpected="$(git diff --name-only | grep -v '^generated/' || true)"
+          if [[ -n "$unexpected" ]]; then
+            echo "Signing changed files outside generated/:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Create signed metadata pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ steps.registry-app.outputs.token }}
+          branch-token: ${{ steps.registry-app.outputs.token }}
+          base: main
+          branch: automation/sign-registry-download-urls
+          delete-branch: true
+          add-paths: generated/**
+          commit-message: "chore(registry): sign download metadata"
+          title: Sign plugin download metadata
+          body: |
+            Protected signing refresh for generated V1 registry metadata.
+
+            The pull request preserves each signed artifact origin and adds the registry-owned download redirect reference.

@@ -17,6 +17,9 @@
     "registry:sign": "node scripts/sign-registry.mjs",
     "registry:keygen": "node scripts/generate-registry-key.mjs",
     "registry:verify-signatures": "node scripts/verify-signatures.mjs",
+    "stats:aggregate": "node scripts/aggregate-download-stats.mjs",
+    "stats:summary": "node scripts/rebuild-download-stats-summary.mjs",
+    "stats:validate": "node scripts/validate-download-stats.mjs",
     "site:dev": "astro dev",
     "site:build": "node scripts/build-site.mjs",
     "site:check": "astro check",
@@ -24,7 +27,7 @@
     "test": "node --test scripts/__tests__/*.test.mjs",
     "check:format": "prettier . --check --log-level warn",
     "fmt": "prettier . --write --log-level warn",
-    "check": "pnpm registry:validate && pnpm registry:generate && pnpm registry:verify-signatures && pnpm site:check && pnpm site:build && pnpm test && pnpm check:format"
+    "check": "pnpm registry:validate && pnpm registry:generate && pnpm registry:verify-signatures && pnpm stats:validate && pnpm site:check && pnpm site:build && pnpm test && pnpm check:format"
   },
   "dependencies": {
     "ajv": "^8.17.1",

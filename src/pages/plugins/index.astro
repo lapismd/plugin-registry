@@ -236,6 +236,7 @@ for (const plugin of plugins) {
                   <span class="dense-plugin-row__title">{plugin.name}</span>
                   <span class="dense-plugin-row__description">
                     {plugin.description} · {formatBytes(plugin.latestRelease.bundle.size)}
+                    <span data-download-count data-plugin-id={plugin.id} hidden></span>
                   </span>
                 </span>
               </a>

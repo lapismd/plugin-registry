@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://registry.lapis.md/schemas/download-stats-summary.schema.json",
+  "title": "Lapis plugin download statistics summary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "dataset",
+    "metric",
+    "trackedSince",
+    "through",
+    "periods"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "dataset": { "const": "lapis_plugin_downloads_v1" },
+    "metric": { "const": "approximate_redirect_requests" },
+    "trackedSince": { "type": "string", "format": "date" },
+    "through": {
+      "oneOf": [{ "type": "string", "format": "date" }, { "type": "null" }]
+    },
+    "periods": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lifetime", "7d", "30d"],
+      "properties": {
+        "lifetime": { "$ref": "#/$defs/period" },
+        "7d": { "$ref": "#/$defs/period" },
+        "30d": { "$ref": "#/$defs/period" }
+      }
+    }
+  },
+  "$defs": {
+    "nullableDate": {
+      "oneOf": [{ "type": "string", "format": "date" }, { "type": "null" }]
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "plugin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "versions"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "versions": { "$ref": "#/$defs/counts" }
+      }
+    },
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "through",
+        "total",
+        "plugins",
+        "versions",
+        "actions",
+        "platforms",
+        "os"
+      ],
+      "properties": {
+        "from": { "$ref": "#/$defs/nullableDate" },
+        "through": { "$ref": "#/$defs/nullableDate" },
+        "total": { "type": "integer", "minimum": 0 },
+        "plugins": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/plugin" }
+        },
+        "versions": { "$ref": "#/$defs/counts" },
+        "actions": { "$ref": "#/$defs/counts" },
+        "platforms": { "$ref": "#/$defs/counts" },
+        "os": { "$ref": "#/$defs/counts" }
+      }
+    }
+  }
+}

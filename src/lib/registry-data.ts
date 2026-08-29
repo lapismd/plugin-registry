@@ -53,6 +53,7 @@ export interface PluginVersion {
   platforms: string[];
   bundle: {
     url: string;
+    downloadUrl?: string;
     sha256: string;
     size: number;
     pending?: boolean;
@@ -269,6 +270,23 @@ export function formatBytes(size: number) {
     value /= 1024;
   }
   return `${size} B`;
+}
+
+export function pluginDownloadHref(release: PluginVersion) {
+  if (!release.bundle.downloadUrl) return release.bundle.url;
+  try {
+    const endpoint = new URL(
+      release.bundle.downloadUrl,
+      "https://registry.lapis.md/v1/plugins/plugin.json",
+    );
+    if (!endpoint.pathname.startsWith("/download/")) return release.bundle.url;
+    endpoint.searchParams.set("action", "download");
+    endpoint.searchParams.set("platform", "web");
+    endpoint.searchParams.set("os", "unknown");
+    return `${endpoint.pathname}${endpoint.search}`;
+  } catch {
+    return release.bundle.url;
+  }
 }
 
 function collectFilePatterns(contributes?: PluginContributions) {

@@ -36,15 +36,13 @@ jobs:
       - name: Validate production registry
         run: pnpm registry:validate:remote
 
-      - name: Generate and sign registry
-        run: pnpm registry:generate && pnpm registry:sign
-        env:
-          LAPIS_REGISTRY_KEY_ID: ${{ secrets.LAPIS_REGISTRY_KEY_ID }}
-          LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64: ${{ secrets.LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64 }}
+      - name: Verify committed registry generation
+        run: pnpm registry:generate && git diff --exit-code generated
 
       - name: Verify release candidate
         run: >-
           pnpm registry:verify-signatures &&
+          pnpm stats:validate &&
           pnpm site:check &&
           pnpm site:build &&
           pnpm test &&

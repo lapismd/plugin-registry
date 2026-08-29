@@ -31,6 +31,7 @@ const primaryCategory = plugin.categories[0] ?? "package";
       <span>{plugin.latestVersion}</span>
       <span>{formatBytes(plugin.latestRelease.bundle.size)}</span>
       <span>{plugin.platforms.map(titleCase).join(", ")}</span>
+      <span data-download-count data-plugin-id={plugin.id} hidden></span>
     </div>
 
     <div class="plugin-chip-row" aria-label="Categories">

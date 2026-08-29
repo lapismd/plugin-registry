@@ -2,6 +2,7 @@
 import { spawn } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { publishDownloadStats } from "./lib/download-stats.mjs";
 import { publishRegistryReadmes } from "./lib/readmes.mjs";
 
 const root = new URL("../", import.meta.url);
@@ -10,6 +11,8 @@ const siteBuild = new URL("../tmp/site-build/", import.meta.url);
 const registrySource = new URL("../generated/v1/", import.meta.url);
 const siteRegistry = new URL("v1/", siteBuild);
 const registryTarget = new URL("v1/", dist);
+const statsSource = new URL("../stats/", import.meta.url);
+const statsTarget = new URL("stats/", dist);
 
 await fs.rm(siteBuild, { recursive: true, force: true });
 await fs.mkdir(siteRegistry, { recursive: true });
@@ -25,6 +28,10 @@ await run("pnpm", ["exec", "astro", "build"], root.pathname, {
 await fs.rm(registryTarget, { recursive: true, force: true });
 await fs.mkdir(path.dirname(registryTarget.pathname), { recursive: true });
 await fs.cp(siteRegistry, registryTarget, { recursive: true });
+const publishedStats = await publishDownloadStats({
+  sourceDirectory: statsSource,
+  targetDirectory: statsTarget,
+});
 
 const required = [
   "index.html",
@@ -39,6 +46,9 @@ const required = [
 
 for (const relativePath of required) {
   await fs.access(new URL(relativePath, dist));
+}
+if (publishedStats) {
+  await fs.access(new URL("stats/summary.json", dist));
 }
 
 console.log(

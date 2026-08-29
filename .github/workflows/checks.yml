@@ -37,6 +37,9 @@ jobs:
       - name: Verify signatures
         run: pnpm registry:verify-signatures
 
+      - name: Validate download statistics
+        run: pnpm stats:validate
+
       - name: Check Astro site
         run: pnpm site:check
 
@@ -50,4 +53,4 @@ jobs:
         run: pnpm check:format
 
       - name: Check generated files are committed
-        run: git diff --exit-code generated/v1
+        run: git diff --exit-code generated

@@ -1066,6 +1066,13 @@ button {
   font-size: 14px;
 }
 
+.download-stats-note {
+  display: block;
+  margin-top: 4px;
+  color: var(--lapis-ink-subtle);
+  font-size: 11px;
+}
+
 .health-list {
   display: grid;
   gap: 12px;

@@ -20,6 +20,7 @@ pnpm registry:sync:forgejo:migration -- --plugin-versions lapis-pdf@2026.6.6 --d
 pnpm registry:preview:release-plan -- --release-plan ../lapis-plugins/.release/release-plan.json --public-key ../lapis-plugins/.release/plugin-release-public.pem --output tmp/registry-preview.json
 pnpm registry:generate
 pnpm registry:verify-signatures
+pnpm stats:validate
 ```
 
 Registry signing uses protected CI secrets or a local key generated under
@@ -42,6 +43,8 @@ so verification can run in CI before production keys are installed.
 - `schemas/**`: strict JSON schemas for source and generated metadata.
 - `generated/v1/**`: deterministic generated registry files with inline
   signatures plus matching signature sidecars.
+- `stats/daily/**`: immutable UTC download aggregates once production tracking
+  is enabled; `stats/summary.json` is rebuilt only from these files.
 - `scripts/**`: validation, generation, signing, and verification tooling.
 
 Official plugin asset builds and release signing live in each plugin source
@@ -69,9 +72,12 @@ Source metadata is intentionally bounded: links must use HTTPS, Markdown paths
 must remain inside the package, highlights are plain text, and content is valid
 UTF-8 no larger than 256 KiB per file. Registry badges and verified-owner claims
 remain curated in this repository rather than being accepted from plugin source.
-Cloudflare Pages middleware adds `Access-Control-Allow-Origin: *` to published
-registry files and README artifacts so the Lapis app can fetch them from web,
-PWA, and Electron surfaces.
+Static Cloudflare Pages `_headers` rules add `Access-Control-Allow-Origin: *` to
+published registry files, README artifacts, and optional statistics. Only the
+anonymous `/download/*` redirect is handled by a Pages Function; ordinary
+registry pages and assets remain static. See
+[Anonymous plugin download analytics](docs/download-analytics.md) for metric,
+privacy, mirroring, recovery, and rollout details.
 
 Production deployment is manual-only during the first-publication gate. The
 `Publish registry` workflow requires the protected `registry-production`

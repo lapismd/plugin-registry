@@ -5,6 +5,7 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
 import {
   formatBytes,
   getRegistrySiteData,
+  pluginDownloadHref,
   readGeneratedReadmeHtml,
   readStructuredMarkdownHtml,
   relatedPlugins,
@@ -50,6 +51,7 @@ const legacyReadmeHtml =
     : null;
 const readmeHtml = overviewContent.html ?? legacyReadmeHtml;
 const overviewSourceUrl = overviewReference?.sourceUrl ?? readmeUrl;
+const downloadHref = pluginDownloadHref(release);
 ---
 
 <SiteLayout title={`${plugin.name} - Lapis Plugin Registry`} description={plugin.description}>
@@ -94,7 +96,7 @@ const overviewSourceUrl = overviewReference?.sourceUrl ?? readmeUrl;
           >
             {installDisabled ? "Install pending" : "Install in Lapis"}
           </button>
-          <a class="button-secondary" href={release.bundle.url}>
+          <a class="button-secondary" href={downloadHref} data-download-link>
             Download .lapis-plugin
           </a>
           <button class="button-icon" type="button" aria-label="More actions">
@@ -325,10 +327,20 @@ const overviewSourceUrl = overviewReference?.sourceUrl ?? readmeUrl;
                 {formatBytes(release.bundle.size)}
               </dd>
             </div>
+            <div data-download-detail data-plugin-id={plugin.id} hidden>
+              <dt>Tracked downloads</dt>
+              <dd>
+                <span data-download-lifetime></span> lifetime · <span
+                  data-download-30d
+                ></span> in 30 days
+                <small class="download-stats-note" data-download-tracked-since
+                ></small>
+              </dd>
+            </div>
             <div>
               <dt>Plugin bundle</dt>
               <dd>
-                <a href={release.bundle.url}>
+                <a href={downloadHref} data-download-link>
                   {release.bundle.pending ? "Pending upload" : ".lapis-plugin"}
                 </a>
               </dd>

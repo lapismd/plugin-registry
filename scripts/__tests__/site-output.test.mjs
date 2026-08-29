@@ -11,7 +11,8 @@ test("site build emits pages and registry metadata", async () => {
   if (
     !existsSync(new URL("index.html", dist)) ||
     !existsSync(new URL("v1/readmes/lapis-docs/README.html", dist)) ||
-    !existsSync(new URL("_routes.json", dist))
+    !existsSync(new URL("_routes.json", dist)) ||
+    !existsSync(new URL("download-stats.js", dist))
   ) {
     const result = spawnSync("pnpm", ["site:build"], {
       cwd: root.pathname,
@@ -35,6 +36,7 @@ test("site build emits pages and registry metadata", async () => {
     "v1/trust/root.json",
     "_routes.json",
     "_headers",
+    "download-stats.js",
   ];
 
   for (const file of requiredFiles) {
@@ -50,9 +52,21 @@ test("site build emits pages and registry metadata", async () => {
   assert.match(detail, /Bundle size/);
   assert.match(detail, /\*\.lapisdoc/);
   assert.match(detail, /data-plugin-readme/);
+  assert.match(detail, /data-download-detail/);
+  assert.match(detail, /data-download-link/);
   assert.match(detail, /View source README/);
   assert.doesNotMatch(detail, /Loading README/);
   assert.doesNotMatch(detail, /fetch\(endpoint/);
+
+  const listing = await readFile(new URL("plugins/index.html", dist), "utf8");
+  const names = [...listing.matchAll(/data-name="([^"]+)"/g)].map(
+    (match) => match[1],
+  );
+  assert.deepEqual(
+    names,
+    [...names].sort((a, b) => a.localeCompare(b)),
+  );
+  assert.doesNotMatch(listing, /data-sort-value="(?:downloads|popularity)"/);
 
   const routes = JSON.parse(
     await readFile(new URL("_routes.json", dist), "utf8"),
@@ -65,4 +79,8 @@ test("site build emits pages and registry metadata", async () => {
   const headers = await readFile(new URL("_headers", dist), "utf8");
   assert.match(headers, /\/v1\/\*/);
   assert.match(headers, /\/stats\/\*/);
+
+  if (existsSync(new URL("../../stats/summary.json", import.meta.url))) {
+    assert.equal(existsSync(new URL("stats/summary.json", dist)), true);
+  }
 });
