@@ -488,6 +488,42 @@
       "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/markdown/README.md",
       "schemaVersion": 1,
       "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "navigation",
+        "search"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Search files, metadata, tags, and note content.",
+      "detail": "plugins/search.json",
+      "id": "search",
+      "latestRelease": {
+        "bundleSize": 366330,
+        "releasedAt": "2026-08-29T09:36:53.000Z"
+      },
+      "latestVersion": "0.1.2",
+      "minAppVersion": "0.1.0",
+      "name": "Search",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "electron"
+      ],
+      "readmeUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/search/README.md",
+      "schemaVersion": 1,
+      "status": "active"
     }
   ],
   "registries": {
@@ -501,7 +537,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "/SkQll0osMd6HdJHKeglltJQlAs8sbMFkvOS8EeQEhweYH8Lk765ckUV6IW1NqDKlCPeKyKcgnb4dr3Qcc5eAg=="
+      "sig": "KL62sL+OOaemGEbJOWtrnsXR4fFmwOu7HGkkBFnQocim9sEzaYpfENjJgka1EXLQaDLz2xtlMnkz/zFaXdBDBw=="
     }
   ]
 }
