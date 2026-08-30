@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { Zip, ZipDeflate, ZipPassThrough } from "fflate";
+import sharp from "sharp";
 
 import {
   parseDispatchEvent,
@@ -94,7 +95,7 @@ test("metadata dispatch accepts source coordinates without release fields", () =
 
 test("GitHub sync verifies release assets and updates one curated entry idempotently", async () => {
   const fixture = await fixtureDir();
-  const release = signedReleaseFixture();
+  const release = await signedReleaseFixture();
   await writeTrustRoot(fixture.trustRootPath, release.publicKeyPem);
   await writeFile(
     new URL("lapis-graph.jsonc", fixture.entriesDir),
@@ -135,6 +136,13 @@ test("GitHub sync verifies release assets and updates one curated entry idempote
     "Explore note and tag relationships.",
     "Open graph nodes directly in the workspace.",
   ]);
+  assert.deepEqual(entry.appearance, {
+    icon: "network",
+    accent: "#8B5CF6",
+  });
+  assert.equal(entry.gallery[0].id, "overview");
+  assert.equal(entry.gallery[0].width, 1200);
+  assert.equal(entry.gallery[0].height, 800);
   assert.equal(entry.content.overview.mediaType, "text/markdown");
   assert.equal(
     entry.links.repository,
@@ -161,7 +169,7 @@ test("GitHub sync verifies release assets and updates one curated entry idempote
 
 test("GitHub sync rejects a checksum asset that does not match the bundle", async () => {
   const fixture = await fixtureDir();
-  const release = signedReleaseFixture({ checksum: "f".repeat(64) });
+  const release = await signedReleaseFixture({ checksum: "f".repeat(64) });
   await writeTrustRoot(fixture.trustRootPath, release.publicKeyPem);
   await assert.rejects(
     syncGitHubRelease({
@@ -178,7 +186,7 @@ test("GitHub sync rejects a checksum asset that does not match the bundle", asyn
 
 test("GitHub sync rejects signed package and commit coordinates that differ from dispatch", async () => {
   const fixture = await fixtureDir();
-  const release = signedReleaseFixture({
+  const release = await signedReleaseFixture({
     packageName: "@lapis-notes/not-graph",
   });
   await writeTrustRoot(fixture.trustRootPath, release.publicKeyPem);
@@ -197,7 +205,7 @@ test("GitHub sync rejects signed package and commit coordinates that differ from
 
 test("GitHub sync rejects unsigned extra archive files", async () => {
   const fixture = await fixtureDir();
-  const release = signedReleaseFixture({
+  const release = await signedReleaseFixture({
     extraBundleFile: {
       path: "unexpected.js",
       data: Buffer.from("export const unexpected = true;\n"),
@@ -219,7 +227,9 @@ test("GitHub sync rejects unsigned extra archive files", async () => {
 
 test("GitHub sync rejects unsafe signed paths", async () => {
   const fixture = await fixtureDir();
-  const release = signedReleaseFixture({ unsafeSignedPath: "../escape.js" });
+  const release = await signedReleaseFixture({
+    unsafeSignedPath: "../escape.js",
+  });
   await writeTrustRoot(fixture.trustRootPath, release.publicKeyPem);
   await assert.rejects(
     syncGitHubRelease({
@@ -236,7 +246,7 @@ test("GitHub sync rejects unsafe signed paths", async () => {
 
 test("metadata-only sync updates content without changing release versions", async () => {
   const fixture = await fixtureDir();
-  const release = signedReleaseFixture();
+  const release = await signedReleaseFixture();
   await writeFile(
     new URL("lapis-graph.jsonc", fixture.entriesDir),
     `${JSON.stringify(existingGraphEntry(), null, 2)}\n`,
@@ -266,7 +276,7 @@ test("metadata-only sync updates content without changing release versions", asy
   await rm(fixture.root, { recursive: true, force: true });
 });
 
-function signedReleaseFixture(options = {}) {
+async function signedReleaseFixture(options = {}) {
   const { privateKey, publicKey } = generateKeyPairSync("ed25519");
   const privateKeyPem = privateKey.export({ type: "pkcs8", format: "pem" });
   const publicKeyPem = publicKey.export({ type: "spki", format: "pem" });
@@ -376,9 +386,30 @@ function signedReleaseFixture(options = {}) {
         "Open graph nodes directly in the workspace.",
       ],
       documentationUrl: "https://lapis.md/plugins/graph/docs",
+      appearance: { icon: "network", accent: "#8B5CF6" },
+      gallery: [
+        {
+          id: "overview",
+          path: "registry-assets/gallery/overview.png",
+          surface: "desktop",
+          alt: "Graph plugin showing connected notes and tags.",
+          caption: "Explore note relationships in the graph workspace.",
+          capture: { storyId: "plugins-graph--registry-overview" },
+        },
+      ],
       content: { overview: "README.md", changelog: "CHANGELOG.md" },
     })}\n`,
   );
+  const galleryBytes = await sharp({
+    create: {
+      width: 1200,
+      height: 800,
+      channels: 4,
+      background: { r: 31, g: 25, b: 52, alpha: 1 },
+    },
+  })
+    .png()
+    .toBuffer();
   const readmeBytes = Buffer.from("# Graph\n\nExplore connected notes.\n");
   const changelogBytes = Buffer.from(
     "# Changelog\n\n## 0.1.0\n\nInitial release.\n",
@@ -411,6 +442,9 @@ function signedReleaseFixture(options = {}) {
     if (url === `${rawBase}manifest.json`) return byteResponse(manifestBytes);
     if (url === `${rawBase}README.md`) return byteResponse(readmeBytes);
     if (url === `${rawBase}CHANGELOG.md`) return byteResponse(changelogBytes);
+    if (url === `${rawBase}registry-assets/gallery/overview.png`) {
+      return byteResponse(galleryBytes);
+    }
     return { ok: false, status: 404 };
   };
   return { publicKeyPem, bundleBytes, fetchImpl };

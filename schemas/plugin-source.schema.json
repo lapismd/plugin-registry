@@ -21,6 +21,8 @@
       "items": { "type": "string", "minLength": 1, "maxLength": 160 }
     },
     "documentationUrl": { "$ref": "#/$defs/httpsUrl" },
+    "appearance": { "$ref": "#/$defs/sourceAppearance" },
+    "gallery": { "$ref": "#/$defs/sourceGallery" },
     "content": {
       "type": "object",
       "additionalProperties": false,
@@ -39,6 +41,74 @@
     "safeRelativePath": {
       "type": "string",
       "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+\\.md$"
+    },
+    "safeAssetPath": {
+      "type": "string",
+      "pattern": "^registry-assets/(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+\\.(?:png|webp|svg)$"
+    },
+    "iconName": {
+      "enum": [
+        "bookmark",
+        "file-code-2",
+        "file-text",
+        "history",
+        "list-checks",
+        "network",
+        "package",
+        "search",
+        "sparkles",
+        "spell-check-2",
+        "table-2",
+        "whole-word"
+      ]
+    },
+    "sourceAppearance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["icon", "accent"],
+      "properties": {
+        "icon": { "$ref": "#/$defs/iconName" },
+        "accent": { "type": "string", "pattern": "^#[A-Fa-f0-9]{6}$" },
+        "logo": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "alt"],
+          "properties": {
+            "path": { "$ref": "#/$defs/safeAssetPath" },
+            "alt": { "type": "string", "minLength": 1, "maxLength": 120 }
+          }
+        }
+      }
+    },
+    "sourceGallery": {
+      "type": "array",
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "path", "surface", "alt"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,31}$"
+          },
+          "path": { "$ref": "#/$defs/safeAssetPath" },
+          "surface": { "enum": ["desktop", "mobile"] },
+          "alt": { "type": "string", "minLength": 1, "maxLength": 240 },
+          "caption": { "type": "string", "minLength": 1, "maxLength": 240 },
+          "capture": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["storyId"],
+            "properties": {
+              "storyId": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]*--[a-z0-9-]+$"
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

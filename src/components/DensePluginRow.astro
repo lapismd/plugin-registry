@@ -1,23 +1,27 @@
 ---
 import { formatBytes, type SitePlugin } from "../lib/registry-data";
-import CategoryIcon from "./CategoryIcon.astro";
+import PluginIdentity from "./PluginIdentity.astro";
 
 interface Props {
   plugin: SitePlugin;
   as?: "a" | "article";
+  popularCandidate?: boolean;
 }
 
-const { plugin, as = "a" } = Astro.props as Props;
+const { plugin, as = "a", popularCandidate = false } = Astro.props as Props;
 const primaryCategory = plugin.categories[0] ?? "package";
 const href = `/plugins/${plugin.id}/`;
 ---
 
 {
   as === "article" ? (
-    <article class="dense-plugin-row">
-      <span class="plugin-icon plugin-icon--compact">
-        <CategoryIcon id={primaryCategory} size={18} />
-      </span>
+    <article
+      class="dense-plugin-row"
+      data-popular-item={popularCandidate || undefined}
+      data-plugin-id={popularCandidate ? plugin.id : undefined}
+      data-plugin-name={popularCandidate ? plugin.name : undefined}
+    >
+      <PluginIdentity appearance={plugin.appearance} fallbackIcon={primaryCategory} size="compact" />
         <span class="dense-plugin-row__body">
           <span class="dense-plugin-row__title">{plugin.name}</span>
           <span class="dense-plugin-row__description">
@@ -27,10 +31,14 @@ const href = `/plugins/${plugin.id}/`;
         </span>
     </article>
   ) : (
-    <a class="dense-plugin-row" href={href}>
-      <span class="plugin-icon plugin-icon--compact">
-        <CategoryIcon id={primaryCategory} size={18} />
-      </span>
+    <a
+      class="dense-plugin-row"
+      href={href}
+      data-popular-item={popularCandidate || undefined}
+      data-plugin-id={popularCandidate ? plugin.id : undefined}
+      data-plugin-name={popularCandidate ? plugin.name : undefined}
+    >
+      <PluginIdentity appearance={plugin.appearance} fallbackIcon={primaryCategory} size="compact" />
         <span class="dense-plugin-row__body">
           <span class="dense-plugin-row__title">{plugin.name}</span>
           <span class="dense-plugin-row__description">

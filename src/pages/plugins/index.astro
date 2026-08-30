@@ -1,6 +1,7 @@
 ---
-import { SlidersHorizontal, X } from "@lucide/astro";
+import { ChevronsUpDown, SlidersHorizontal, X } from "@lucide/astro";
 import CategoryIcon from "../../components/CategoryIcon.astro";
+import PluginIdentity from "../../components/PluginIdentity.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import {
   formatBytes,
@@ -197,7 +198,12 @@ for (const plugin of plugins) {
                 aria-expanded="false"
               >
                 <span data-sort-label>Name</span>
-                <span class="sort-chevrons" aria-hidden="true"></span>
+                <ChevronsUpDown
+                  class="sort-chevrons"
+                  size={14}
+                  stroke-width="1.75"
+                  aria-hidden="true"
+                />
               </button>
               <div class="sort-options" data-sort-options role="listbox" hidden>
                 <button type="button" role="option" data-sort-value="name" aria-selected="true">
@@ -229,9 +235,11 @@ for (const plugin of plugins) {
                 data-name={plugin.name}
                 data-updated={plugin.latestRelease.releasedAt}
               >
-                <span class="plugin-icon plugin-icon--compact">
-                  <CategoryIcon id={plugin.categories[0]} size={18} />
-                </span>
+                <PluginIdentity
+                  appearance={plugin.appearance}
+                  fallbackIcon={plugin.categories[0]}
+                  size="compact"
+                />
                 <span class="dense-plugin-row__body">
                   <span class="dense-plugin-row__title">{plugin.name}</span>
                   <span class="dense-plugin-row__description">

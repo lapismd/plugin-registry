@@ -1,0 +1,115 @@
+---
+import { ChevronLeft, ChevronRight } from "@lucide/astro";
+import type { PluginGalleryItem } from "../lib/registry-data";
+
+interface Props {
+  items: PluginGalleryItem[];
+  pluginName: string;
+}
+
+const { items, pluginName } = Astro.props as Props;
+const first = items[0];
+---
+
+{
+  first && (
+    <section class="detail-panel plugin-gallery" aria-labelledby="plugin-gallery-heading" data-plugin-gallery>
+      <div class="plugin-gallery__heading">
+        <div>
+          <p class="plugin-gallery__eyebrow">Plugin preview</p>
+          <h2 id="plugin-gallery-heading">See {pluginName} in Lapis</h2>
+        </div>
+        <span class="plugin-gallery__counter" aria-live="polite" data-gallery-counter>
+          1 / {items.length}
+        </span>
+      </div>
+
+      <figure class="plugin-gallery__stage">
+        <img
+          src={first.url}
+          width={first.width}
+          height={first.height}
+          alt={first.alt}
+          loading="lazy"
+          decoding="async"
+          data-gallery-image
+        />
+        <figcaption data-gallery-caption>{first.caption ?? first.alt}</figcaption>
+      </figure>
+
+      <div class="plugin-gallery__controls">
+        <button type="button" aria-label="Show previous image" data-gallery-previous disabled={items.length === 1}>
+          <ChevronLeft size={18} stroke-width="2" aria-hidden="true" />
+        </button>
+        <div class="plugin-gallery__thumbnails" role="group" aria-label="Choose plugin preview">
+          {items.map((item, index) => (
+            <button
+              type="button"
+              class="plugin-gallery__thumbnail"
+              aria-label={`Show image ${index + 1}: ${item.alt}`}
+              aria-pressed={index === 0 ? "true" : "false"}
+              data-gallery-thumbnail
+              data-src={item.url}
+              data-width={item.width}
+              data-height={item.height}
+              data-alt={item.alt}
+              data-caption={item.caption ?? item.alt}
+              data-surface={item.surface}
+            >
+              <img
+                src={item.url}
+                width={item.width}
+                height={item.height}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+              <span>{item.surface}</span>
+            </button>
+          ))}
+        </div>
+        <button type="button" aria-label="Show next image" data-gallery-next disabled={items.length === 1}>
+          <ChevronRight size={18} stroke-width="2" aria-hidden="true" />
+        </button>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  for (const gallery of document.querySelectorAll<HTMLElement>("[data-plugin-gallery]")) {
+    const image = gallery.querySelector<HTMLImageElement>("[data-gallery-image]");
+    const caption = gallery.querySelector<HTMLElement>("[data-gallery-caption]");
+    const counter = gallery.querySelector<HTMLElement>("[data-gallery-counter]");
+    const previous = gallery.querySelector<HTMLButtonElement>("[data-gallery-previous]");
+    const next = gallery.querySelector<HTMLButtonElement>("[data-gallery-next]");
+    const thumbnails = [
+      ...gallery.querySelectorAll<HTMLButtonElement>("[data-gallery-thumbnail]"),
+    ];
+    let selectedIndex = 0;
+
+    function select(index: number) {
+      if (!image || thumbnails.length === 0) return;
+      selectedIndex = (index + thumbnails.length) % thumbnails.length;
+      const selected = thumbnails[selectedIndex];
+      image.src = selected.dataset.src || image.src;
+      image.width = Number(selected.dataset.width) || image.width;
+      image.height = Number(selected.dataset.height) || image.height;
+      image.alt = selected.dataset.alt || "";
+      if (caption) caption.textContent = selected.dataset.caption || image.alt;
+      if (counter) counter.textContent = `${selectedIndex + 1} / ${thumbnails.length}`;
+      for (const [candidateIndex, thumbnail] of thumbnails.entries()) {
+        thumbnail.setAttribute(
+          "aria-pressed",
+          candidateIndex === selectedIndex ? "true" : "false",
+        );
+      }
+    }
+
+    thumbnails.forEach((thumbnail, index) => {
+      thumbnail.addEventListener("click", () => select(index));
+    });
+    previous?.addEventListener("click", () => select(selectedIndex - 1));
+    next?.addEventListener("click", () => select(selectedIndex + 1));
+  }
+</script>

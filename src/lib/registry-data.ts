@@ -18,6 +18,7 @@ export interface RegistryPluginSummary {
   readmeUrl?: string;
   author: string;
   authorUrl?: string;
+  appearance?: PluginAppearance;
   channel: "official" | "community";
   status: "active" | "pending" | "revoked";
   latestVersion: string;
@@ -66,6 +67,8 @@ export interface PluginDetail {
   name: string;
   description: string;
   readmeUrl?: string;
+  appearance?: PluginAppearance;
+  gallery?: PluginGalleryItem[];
   channel: "official" | "community";
   status: "active" | "pending" | "revoked";
   owner: {
@@ -80,6 +83,45 @@ export interface PluginDetail {
   content?: PluginCatalogContent;
   contributes?: PluginContributions;
   versions: Record<string, PluginVersion>;
+}
+
+export interface PluginImageReference {
+  url: string;
+  sourceUrl: string;
+  sha256: string;
+  size: number;
+  mediaType: "image/png" | "image/webp" | "image/svg+xml";
+  width: number;
+  height: number;
+}
+
+export interface PluginLogoReference extends PluginImageReference {
+  alt: string;
+}
+
+export interface PluginAppearance {
+  icon:
+    | "bookmark"
+    | "file-code-2"
+    | "file-text"
+    | "history"
+    | "list-checks"
+    | "network"
+    | "package"
+    | "search"
+    | "sparkles"
+    | "spell-check-2"
+    | "table-2"
+    | "whole-word";
+  accent: string;
+  logo?: PluginLogoReference;
+}
+
+export interface PluginGalleryItem extends PluginImageReference {
+  id: string;
+  surface: "desktop" | "mobile";
+  alt: string;
+  caption?: string;
 }
 
 export interface PluginLinks {
@@ -108,6 +150,7 @@ export interface SitePlugin
   searchText: string;
   filePatterns: string[];
   latestRelease: PluginVersion;
+  firstReleasedAt: string;
 }
 
 const registryRoot = path.join(process.cwd(), "generated", "v1");
@@ -129,6 +172,9 @@ export async function getRegistrySiteData() {
       const filePatterns = collectFilePatterns(
         plugin.contributes ?? detail.contributes,
       );
+      const firstReleasedAt = Object.values(detail.versions)
+        .map((release) => release.releasedAt)
+        .sort()[0];
       const searchText = [
         plugin.name,
         plugin.description,
@@ -142,8 +188,10 @@ export async function getRegistrySiteData() {
         .toLowerCase();
       return {
         ...plugin,
+        appearance: detail.appearance ?? plugin.appearance,
         detailData: detail,
         filePatterns,
+        firstReleasedAt,
         latestRelease,
         searchText,
       };

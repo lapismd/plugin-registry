@@ -86,6 +86,39 @@ export function hydrateDownloadStats(root, summary) {
     values.hidden = false;
     unavailable.hidden = true;
   }
+
+  hydratePopularPlugins(root, summary);
+}
+
+export function hydratePopularPlugins(root, summary) {
+  for (const lane of root.querySelectorAll("[data-popular-lane]")) {
+    const list = lane.querySelector("[data-popular-list]");
+    if (!list) continue;
+    const candidates = [
+      ...list.querySelectorAll("[data-popular-item][data-plugin-id]"),
+    ];
+    for (const element of candidates) element.hidden = true;
+    const ranked = candidates
+      .map((element) => ({
+        element,
+        name: element.dataset.pluginName || "",
+        stats: statsForPlugin(summary, element.dataset.pluginId),
+      }))
+      .filter((entry) => entry.stats && entry.stats.lifetime > 0)
+      .sort(
+        (a, b) =>
+          b.stats.recent - a.stats.recent ||
+          b.stats.lifetime - a.stats.lifetime ||
+          a.name.localeCompare(b.name),
+      );
+    if (ranked.length === 0) continue;
+    for (const [index, entry] of ranked.entries()) {
+      entry.element.hidden = index >= 5;
+      list.append(entry.element);
+    }
+    lane.hidden = false;
+    lane.setAttribute("aria-busy", "false");
+  }
 }
 
 export async function loadDownloadStats({

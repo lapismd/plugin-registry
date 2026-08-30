@@ -1,0 +1,85 @@
+---
+import {
+  Bookmark,
+  FileCode,
+  FileText,
+  History,
+  ListChecks,
+  Network,
+  Package,
+  Search,
+  Sparkles,
+  SpellCheck2,
+  Table2,
+  WholeWord,
+} from "@lucide/astro";
+import type { PluginAppearance } from "../lib/registry-data";
+
+interface Props {
+  appearance?: PluginAppearance;
+  fallbackIcon?: string;
+  size?: "compact" | "card" | "hero";
+}
+
+const {
+  appearance,
+  fallbackIcon = "package",
+  size = "card",
+} = Astro.props as Props;
+
+const icons = {
+  bookmark: Bookmark,
+  "file-code-2": FileCode,
+  "file-text": FileText,
+  history: History,
+  "list-checks": ListChecks,
+  network: Network,
+  package: Package,
+  search: Search,
+  sparkles: Sparkles,
+  "spell-check-2": SpellCheck2,
+  "table-2": Table2,
+  "whole-word": WholeWord,
+};
+const fallbackIcons: Record<string, keyof typeof icons> = {
+  ai: "sparkles",
+  automation: "list-checks",
+  database: "table-2",
+  documents: "file-text",
+  editor: "file-code-2",
+  graph: "network",
+  markdown: "file-text",
+  search: "search",
+  visualization: "network",
+};
+const iconName =
+  appearance?.icon ?? fallbackIcons[fallbackIcon] ?? "package";
+const Icon = icons[iconName];
+const accent = appearance?.accent ?? "#8A5CF5";
+const iconSize = size === "hero" ? 48 : size === "compact" ? 17 : 20;
+---
+
+<span
+  class:list={[
+    "plugin-identity",
+    `plugin-identity--${size}`,
+    appearance?.logo && "plugin-identity--logo",
+  ]}
+  style={`--plugin-accent: ${accent}`}
+  aria-hidden="true"
+>
+  {
+    appearance?.logo ? (
+      <img
+        src={appearance.logo.url}
+        width={appearance.logo.width}
+        height={appearance.logo.height}
+        alt=""
+        loading={size === "hero" ? "eager" : "lazy"}
+        decoding="async"
+      />
+    ) : (
+      <Icon size={iconSize} stroke-width={size === "hero" ? "1.75" : "2"} />
+    )
+  }
+</span>

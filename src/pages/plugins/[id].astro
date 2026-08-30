@@ -1,5 +1,7 @@
 ---
 import CategoryIcon from "../../components/CategoryIcon.astro";
+import PluginGallery from "../../components/PluginGallery.astro";
+import PluginIdentity from "../../components/PluginIdentity.astro";
 import StatusBadge from "../../components/StatusBadge.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import {
@@ -65,9 +67,7 @@ const downloadHref = pluginDownloadHref(release);
     </nav>
 
     <section class="plugin-detail-hero">
-      <div class="plugin-icon--large" aria-hidden="true">
-        <CategoryIcon id={primaryCategory} size={48} />
-      </div>
+      <PluginIdentity appearance={plugin.appearance} fallbackIcon={primaryCategory} size="hero" />
       <div class="plugin-title">
         <div class="hero-meta">
           <span>By {plugin.owner.name}</span>
@@ -108,6 +108,11 @@ const downloadHref = pluginDownloadHref(release);
 
     <section class="detail-grid">
       <div class="plugin-content">
+        {
+          plugin.detailData.gallery?.length ? (
+            <PluginGallery items={plugin.detailData.gallery} pluginName={plugin.name} />
+          ) : null
+        }
         <section class="detail-panel detail-tabs" data-tabs>
           <div class="tab-list" role="tablist" aria-label="Plugin sections">
             <button type="button" role="tab" aria-selected="true" data-tab="overview">
@@ -360,9 +365,11 @@ const downloadHref = pluginDownloadHref(release);
           <div class="related-list">
             {related.map((item) => (
               <a class="related-item" href={`/plugins/${item.id}/`}>
-                <span class="plugin-icon plugin-icon--compact">
-                  <CategoryIcon id={item.categories[0]} size={18} />
-                </span>
+                <PluginIdentity
+                  appearance={item.appearance}
+                  fallbackIcon={item.categories[0]}
+                  size="compact"
+                />
                 <span>
                   <span class="related-item__title">{item.name}</span>
                   <span class="related-item__description">{item.description}</span>

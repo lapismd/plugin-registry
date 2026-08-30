@@ -1,6 +1,6 @@
 ---
 import { formatBytes, titleCase, type SitePlugin } from "../lib/registry-data";
-import CategoryIcon from "./CategoryIcon.astro";
+import PluginIdentity from "./PluginIdentity.astro";
 import StatusBadge from "./StatusBadge.astro";
 
 interface Props {
@@ -19,8 +19,8 @@ const primaryCategory = plugin.categories[0] ?? "package";
   data-status={plugin.status}
   data-categories={plugin.categories.join(" ")}
 >
-  <a class="plugin-icon" href={`/plugins/${plugin.id}/`} aria-hidden="true">
-    <CategoryIcon id={primaryCategory} size={18} />
+  <a class="plugin-identity-link" href={`/plugins/${plugin.id}/`} aria-hidden="true" tabindex="-1">
+    <PluginIdentity appearance={plugin.appearance} fallbackIcon={primaryCategory} />
   </a>
   <div>
     <h3><a href={`/plugins/${plugin.id}/`}>{plugin.name}</a></h3>

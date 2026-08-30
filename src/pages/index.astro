@@ -9,6 +9,9 @@ const pendingPlugins = plugins.filter((plugin) => plugin.status === "pending");
 const recentlyUpdated = [...plugins].sort((a, b) =>
   b.latestRelease.releasedAt.localeCompare(a.latestRelease.releasedAt),
 );
+const newlyReleased = [...plugins].sort((a, b) =>
+  b.firstReleasedAt.localeCompare(a.firstReleasedAt),
+);
 const generatedDate = new Date(generatedAt).toLocaleDateString("en-GB");
 ---
 
@@ -22,35 +25,65 @@ const generatedDate = new Date(generatedAt).toLocaleDateString("en-GB");
       <p>Browse {plugins.length} official plugins built for Lapis Notes.</p>
     </section>
 
+    <section class="home-directory-grid home-discovery-grid" aria-label="Discover plugins">
+      <div class="directory-column">
+        <div class="section-heading">
+          <h2>New</h2>
+          <a href="/plugins/">View all</a>
+        </div>
+        <div class="dense-list">
+          {newlyReleased.slice(0, 5).map((plugin) => <DensePluginRow plugin={plugin} />)}
+        </div>
+      </div>
+
+      <div class="directory-column">
+        <div class="section-heading">
+          <h2>Updated</h2>
+          <a href="/plugins/">View all</a>
+        </div>
+        <div class="dense-list">
+          {recentlyUpdated.slice(0, 5).map((plugin) => <DensePluginRow plugin={plugin} />)}
+        </div>
+      </div>
+
+      <div class="directory-column" data-popular-lane hidden aria-busy="true">
+        <div class="section-heading">
+          <h2>Popular</h2>
+          <span class="text-link">Last 30 days</span>
+        </div>
+        <div class="dense-list" data-popular-list>
+          {plugins.filter((plugin) => plugin.status === "active").map((plugin) => (
+            <DensePluginRow plugin={plugin} popularCandidate />
+          ))}
+        </div>
+      </div>
+    </section>
+
     <section
-      class={`home-directory-grid ${pendingPlugins.length === 0 ? "home-directory-grid--two" : ""}`}
+      class={`home-directory-grid home-directory-grid--secondary ${pendingPlugins.length === 0 ? "home-directory-grid--two" : ""}`}
       aria-label="Registry directory"
     >
       <div class="directory-column">
         <div class="section-heading">
           <h2>Plugins</h2>
-          <a href="/plugins/">View all</a>
+          <a href="/plugins/">Browse registry</a>
         </div>
         <div class="dense-list">
           {plugins.slice(0, 5).map((plugin) => <DensePluginRow plugin={plugin} />)}
         </div>
       </div>
 
-      {
-        pendingPlugins.length > 0 && (
-          <div class="directory-column">
-            <div class="section-heading">
-              <h2>Coming soon</h2>
-              <a href="/plugins/?status=pending">View all</a>
-            </div>
-            <div class="dense-list">
-              {pendingPlugins
-                .slice(0, 5)
-                .map((plugin) => <DensePluginRow plugin={plugin} />)}
-            </div>
+      {pendingPlugins.length > 0 && (
+        <div class="directory-column">
+          <div class="section-heading">
+            <h2>Coming soon</h2>
+            <a href="/plugins/?status=pending">View all</a>
           </div>
-        )
-      }
+          <div class="dense-list">
+            {pendingPlugins.slice(0, 5).map((plugin) => <DensePluginRow plugin={plugin} />)}
+          </div>
+        </div>
+      )}
 
       <div class="directory-column">
         <div class="section-heading">
@@ -77,20 +110,6 @@ const generatedDate = new Date(generatedAt).toLocaleDateString("en-GB");
             ))
           }
         </div>
-      </div>
-    </section>
-
-    <section class="directory-section">
-      <div class="section-heading">
-        <h2>Recently updated</h2>
-        <a href="/plugins/">Browse registry</a>
-      </div>
-      <div class="dense-list dense-list--wide">
-        {
-          recentlyUpdated
-            .slice(0, 5)
-            .map((plugin) => <DensePluginRow plugin={plugin} />)
-        }
       </div>
     </section>
   </main>

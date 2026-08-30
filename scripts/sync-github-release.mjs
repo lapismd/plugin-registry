@@ -53,6 +53,11 @@ export async function syncGitHubRelease(options = {}) {
     contentDir = new URL("content/", generatedDir),
     dryRun = false,
   } = options;
+  const assetDir =
+    options.assetDir ??
+    (options.contentDir
+      ? new URL("../assets/", contentDir)
+      : new URL("assets/", generatedDir));
   const payload =
     options.payload ??
     parseDispatchEvent(
@@ -104,6 +109,7 @@ export async function syncGitHubRelease(options = {}) {
     payload,
     fetchImpl,
     outputDir: contentDir,
+    assetOutputDir: assetDir,
   });
   const entry = applyPluginSourceMetadata(releaseEntry, sourceMetadata);
   const changed =
@@ -143,6 +149,11 @@ export async function syncGitHubMetadata(options = {}) {
     contentDir = new URL("content/", generatedDir),
     dryRun = false,
   } = options;
+  const assetDir =
+    options.assetDir ??
+    (options.contentDir
+      ? new URL("../assets/", contentDir)
+      : new URL("assets/", generatedDir));
   const payload =
     options.payload ??
     parseMetadataDispatchEvent(
@@ -160,6 +171,7 @@ export async function syncGitHubMetadata(options = {}) {
     payload,
     fetchImpl,
     outputDir: contentDir,
+    assetOutputDir: assetDir,
   });
   const entry = applyPluginSourceMetadata(existingEntry, sourceMetadata);
   const changed =

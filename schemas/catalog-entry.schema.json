@@ -27,6 +27,10 @@
     "readmeUrl": { "$ref": "#/$defs/httpsUrl" },
     "author": { "type": "string", "minLength": 1 },
     "authorUrl": { "type": "string", "format": "uri" },
+    "appearance": {
+      "$ref": "plugin-media.schema.json#/$defs/appearance"
+    },
+    "gallery": { "$ref": "plugin-media.schema.json#/$defs/gallery" },
     "channel": { "enum": ["official", "community"] },
     "status": { "enum": ["active", "pending", "revoked"] },
     "latestVersion": { "$ref": "#/$defs/semver" },

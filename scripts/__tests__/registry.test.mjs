@@ -29,6 +29,26 @@ function validEntry(overrides = {}) {
     minAppVersion: "1.7.7",
     platforms: ["web", "electron"],
     categories: ["graph", "visualization"],
+    appearance: {
+      icon: "network",
+      accent: "#8B5CF6",
+    },
+    gallery: [
+      {
+        id: "overview",
+        surface: "desktop",
+        alt: "A settled note graph",
+        caption: "Explore linked notes",
+        url: "https://registry.lapis.md/v1/assets/lapis-graph/graph.png",
+        sourceUrl:
+          "https://raw.githubusercontent.com/lapismd/lapis-plugins/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/packages/graph/registry-assets/overview.desktop.png",
+        sha256: "a".repeat(64),
+        size: 1024,
+        mediaType: "image/png",
+        width: 1200,
+        height: 800,
+      },
+    ],
     badges: ["official", "verified"],
     owner: { name: "Lapis Notes", verified: true },
     versions: {
@@ -107,6 +127,11 @@ test("builds deterministic registry metadata with real GitHub references", () =>
     releasedAt: "2026-06-06T22:47:39Z",
     bundleSize: 116157,
   });
+  assert.deepEqual(registry.index.plugins[0].appearance, {
+    icon: "network",
+    accent: "#8B5CF6",
+  });
+  assert.equal(registry.details["lapis-graph"].gallery[0].id, "overview");
   assert.equal(
     registry.details["lapis-graph"].readmeUrl,
     "https://raw.githubusercontent.com/lapismd/lapis-plugins/main/packages/graph/README.md",

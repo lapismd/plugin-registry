@@ -1,7 +1,7 @@
 ---
 import { Command, Search } from "@lucide/astro";
 import { type SitePlugin } from "../lib/registry-data";
-import CategoryIcon from "./CategoryIcon.astro";
+import PluginIdentity from "./PluginIdentity.astro";
 
 interface Props {
   plugins: SitePlugin[];
@@ -44,9 +44,7 @@ const searchData = plugins.map((plugin) => ({
           data-command-result
           data-search-text={plugin.searchText}
         >
-          <span class="plugin-icon plugin-icon--compact">
-            <CategoryIcon id={plugin.categories[0]} size={18} />
-          </span>
+          <PluginIdentity appearance={plugin.appearance} fallbackIcon={plugin.categories[0]} size="compact" />
           <span class="command-result__body">
             <span class="command-result__title">{plugin.name}</span>
             <span class="command-result__description">{plugin.description}</span>

@@ -59,6 +59,9 @@
           "readmeUrl": { "type": "string", "pattern": "^https://.+" },
           "author": { "type": "string" },
           "authorUrl": { "type": "string" },
+          "appearance": {
+            "$ref": "plugin-media.schema.json#/$defs/appearance"
+          },
           "channel": { "enum": ["official", "community"] },
           "status": { "enum": ["active", "pending", "revoked"] },
           "latestVersion": { "type": "string" },

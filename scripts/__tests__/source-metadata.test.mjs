@@ -3,8 +3,10 @@ import { mkdir, mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
+import sharp from "sharp";
 
 import {
+  assertSafeAssetPath,
   assertSafeMarkdownPath,
   fetchPluginSourceMetadata,
   maxPluginMarkdownBytes,
@@ -21,21 +23,36 @@ const payload = {
 
 test("source metadata is validated, derived, hashed, and mirrored deterministically", async () => {
   const fixture = await fixtureDir();
-  const fetchImpl = sourceFetch();
+  const fetchImpl = await sourceFetch();
   const first = await fetchPluginSourceMetadata({
     payload,
     fetchImpl,
     outputDir: fixture.contentDir,
+    assetOutputDir: fixture.assetDir,
   });
   const second = await fetchPluginSourceMetadata({
     payload,
     fetchImpl,
     outputDir: fixture.contentDir,
+    assetOutputDir: fixture.assetDir,
   });
   assert.deepEqual(first, second);
   assert.equal(first.license, "MIT");
   assert.equal(first.links.documentation, "https://lapis.md/plugins/search");
   assert.equal(first.content.overview.mediaType, "text/markdown");
+  assert.deepEqual(first.appearance, {
+    icon: "search",
+    accent: "#F59E0B",
+  });
+  assert.equal(first.gallery[0].width, 1200);
+  assert.equal(first.gallery[0].height, 800);
+  assert.equal(first.gallery[0].mediaType, "image/png");
+  assert.equal(
+    await readFile(
+      new URL(`lapis-search/${first.gallery[0].sha256}.png`, fixture.assetDir),
+    ).then((bytes) => bytes.byteLength),
+    first.gallery[0].size,
+  );
   assert.equal(first.content.overview.size, Buffer.byteLength("# Search\n"));
   assert.equal(
     await readFile(
@@ -59,7 +76,8 @@ test("standalone repositories resolve source metadata from their root", async ()
   await fetchPluginSourceMetadata({
     payload: standalonePayload,
     outputDir: fixture.contentDir,
-    fetchImpl: sourceFetch({
+    assetOutputDir: fixture.assetDir,
+    fetchImpl: await sourceFetch({
       payload: standalonePayload,
       onFetch: (url) => urls.push(url),
     }),
@@ -74,10 +92,11 @@ test("standalone repositories resolve source metadata from their root", async ()
 
 test("source metadata rejects unsafe paths, insecure links, ownership mismatches, and oversized Markdown", async () => {
   assert.throws(() => assertSafeMarkdownPath("../README.md"), /Unsafe/);
+  assert.throws(() => assertSafeAssetPath("../logo.svg"), /Unsafe/);
   await assert.rejects(
     fetchPluginSourceMetadata({
       payload,
-      fetchImpl: sourceFetch({
+      fetchImpl: await sourceFetch({
         source: { documentationUrl: "http://example.test/docs" },
       }),
     }),
@@ -86,14 +105,16 @@ test("source metadata rejects unsafe paths, insecure links, ownership mismatches
   await assert.rejects(
     fetchPluginSourceMetadata({
       payload,
-      fetchImpl: sourceFetch({ packageJson: { name: "@lapis-notes/other" } }),
+      fetchImpl: await sourceFetch({
+        packageJson: { name: "@lapis-notes/other" },
+      }),
     }),
     /package\.json name does not match/,
   );
   await assert.rejects(
     fetchPluginSourceMetadata({
       payload,
-      fetchImpl: sourceFetch({
+      fetchImpl: await sourceFetch({
         readme: Buffer.alloc(maxPluginMarkdownBytes + 1, "a"),
       }),
     }),
@@ -101,7 +122,39 @@ test("source metadata rejects unsafe paths, insecure links, ownership mismatches
   );
 });
 
-function sourceFetch(options = {}) {
+test("source metadata rejects unsafe logos and incorrect gallery dimensions", async () => {
+  const unsafeSvg = Buffer.from(
+    '<svg viewBox="0 0 128 128"><script>alert(1)</script></svg>',
+  );
+  await assert.rejects(
+    fetchPluginSourceMetadata({
+      payload,
+      fetchImpl: await sourceFetch({
+        source: {
+          appearance: {
+            icon: "search",
+            accent: "#F59E0B",
+            logo: { path: "registry-assets/logo.svg", alt: "Search logo" },
+          },
+        },
+        logo: unsafeSvg,
+      }),
+    }),
+    /unsafe content/,
+  );
+
+  await assert.rejects(
+    fetchPluginSourceMetadata({
+      payload,
+      fetchImpl: await sourceFetch({
+        gallery: await png(640, 480),
+      }),
+    }),
+    /must be 1200x800/,
+  );
+});
+
+async function sourceFetch(options = {}) {
   const activePayload = options.payload ?? payload;
   const packageRoot =
     activePayload.repository === "lapismd/lapis-plugins"
@@ -113,6 +166,17 @@ function sourceFetch(options = {}) {
     categories: ["search", "navigation"],
     highlights: ["Search vault content quickly."],
     documentationUrl: "https://lapis.md/plugins/search",
+    appearance: { icon: "search", accent: "#F59E0B" },
+    gallery: [
+      {
+        id: "overview",
+        path: "registry-assets/overview.desktop.png",
+        surface: "desktop",
+        alt: "Search results in Lapis Notes",
+        caption: "Search indexed notes",
+        capture: { storyId: "plugins-search--registry-showcase" },
+      },
+    ],
     content: { overview: "README.md", changelog: "CHANGELOG.md" },
     ...options.source,
   };
@@ -141,7 +205,17 @@ function sourceFetch(options = {}) {
     [`${base}manifest.json`, jsonBytes(manifest)],
     [`${base}README.md`, options.readme ?? Buffer.from("# Search\n")],
     [`${base}CHANGELOG.md`, Buffer.from("# Changelog\n")],
+    [
+      `${base}registry-assets/overview.desktop.png`,
+      options.gallery ?? (await png(1200, 800)),
+    ],
   ]);
+  if (source.appearance?.logo) {
+    files.set(
+      `${base}${source.appearance.logo.path}`,
+      options.logo ?? (await png(128, 128)),
+    );
+  }
   return async (url) => {
     options.onFetch?.(String(url));
     const bytes = files.get(String(url));
@@ -166,6 +240,21 @@ function jsonBytes(value) {
 async function fixtureDir() {
   const root = await mkdtemp(path.join(tmpdir(), "lapis-source-metadata-"));
   const contentDir = new URL("generated/v1/content/", `file://${root}/`);
+  const assetDir = new URL("generated/v1/assets/", `file://${root}/`);
   await mkdir(contentDir, { recursive: true });
-  return { root, contentDir };
+  await mkdir(assetDir, { recursive: true });
+  return { root, contentDir, assetDir };
+}
+
+function png(width, height) {
+  return sharp({
+    create: {
+      width,
+      height,
+      channels: 4,
+      background: { r: 139, g: 92, b: 246, alpha: 1 },
+    },
+  })
+    .png()
+    .toBuffer();
 }

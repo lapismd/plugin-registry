@@ -1,10 +1,13 @@
 import { TextDecoder } from "node:util";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
+import sharp from "sharp";
 
 import { createAjv, formatAjvErrors, sha256 } from "./registry.mjs";
 
 export const maxSourceMetadataBytes = 64 * 1024;
 export const maxPluginMarkdownBytes = 256 * 1024;
+export const maxPluginLogoBytes = 512 * 1024;
+export const maxPluginGalleryBytes = 5 * 1024 * 1024;
 
 const sourceSchemaId =
   "https://registry.lapis.md/schemas/plugin-source.schema.json";
@@ -13,6 +16,7 @@ export async function fetchPluginSourceMetadata({
   payload,
   fetchImpl = fetch,
   outputDir,
+  assetOutputDir = outputDir ? new URL("../assets/", outputDir) : undefined,
   registryBaseUrl = "https://registry.lapis.md/v1/",
 }) {
   const packageRoot = sourcePackageRoot(payload);
@@ -37,6 +41,7 @@ export async function fetchPluginSourceMetadata({
 
   await validatePluginSource(source);
   validateSourceOwnership({ payload, packageJson, manifest });
+  validateFirstPartyMediaSource(payload, source);
 
   const contentEntries = await Promise.all(
     Object.entries(source.content).map(async ([kind, relativePath]) => {
@@ -71,6 +76,31 @@ export async function fetchPluginSourceMetadata({
   );
 
   const repositoryUrl = `https://github.com/${payload.repository}`;
+  const appearance = source.appearance
+    ? await resolveSourceAppearance({
+        appearance: source.appearance,
+        fetchImpl,
+        sourceBaseUrl,
+        assetOutputDir,
+        registryBaseUrl,
+        pluginId: payload.pluginId,
+      })
+    : undefined;
+  const gallery = source.gallery
+    ? await resolveSourceGallery({
+        gallery: source.gallery,
+        fetchImpl,
+        sourceBaseUrl,
+        assetOutputDir,
+        registryBaseUrl,
+        pluginId: payload.pluginId,
+      })
+    : undefined;
+  await pruneMirroredAssets(
+    assetOutputDir,
+    payload.pluginId,
+    [appearance?.logo, ...(gallery ?? [])].filter(Boolean),
+  );
   const links = compactObject({
     homepage: normalizeHttpsUrl(packageJson.homepage, "package homepage"),
     repository: normalizeRepositoryUrl(packageJson.repository),
@@ -101,6 +131,8 @@ export async function fetchPluginSourceMetadata({
       (manifest.isDesktopOnly ? ["electron"] : ["web", "electron"]),
     categories: source.categories,
     highlights: source.highlights,
+    ...(appearance ? { appearance } : {}),
+    ...(gallery ? { gallery } : {}),
     license: packageJson.license,
     links,
     content: Object.fromEntries(contentEntries),
@@ -117,8 +149,9 @@ export async function fetchPluginSourceMetadata({
 }
 
 export function applyPluginSourceMetadata(entry, metadata) {
+  const { appearance: _appearance, gallery: _gallery, ...baseEntry } = entry;
   return {
-    ...entry,
+    ...baseEntry,
     name: metadata.name,
     description: metadata.description,
     readmeUrl: metadata.readmeUrl,
@@ -139,6 +172,8 @@ export function applyPluginSourceMetadata(entry, metadata) {
     links: metadata.links,
     highlights: metadata.highlights,
     content: metadata.content,
+    ...(metadata.appearance ? { appearance: metadata.appearance } : {}),
+    ...(metadata.gallery ? { gallery: metadata.gallery } : {}),
     readme: metadata.content.overview
       ? {
           url: metadata.content.overview.url,
@@ -198,6 +233,209 @@ export function assertSafeMarkdownPath(value) {
   ) {
     throw new Error(`Unsafe plugin Markdown path: ${String(value)}.`);
   }
+}
+
+export function assertSafeAssetPath(value) {
+  if (
+    typeof value !== "string" ||
+    !/^registry-assets\/[A-Za-z0-9._/-]+\.(?:png|webp|svg)$/.test(value) ||
+    value.startsWith("/") ||
+    value.includes("\\") ||
+    value
+      .split("/")
+      .some((segment) => !segment || segment === "." || segment === "..")
+  ) {
+    throw new Error(`Unsafe plugin asset path: ${String(value)}.`);
+  }
+}
+
+function validateFirstPartyMediaSource(payload, source) {
+  if (payload.repository !== "lapismd/lapis-plugins") return;
+  if (!source.appearance) {
+    throw new Error(
+      `${payload.pluginId}: first-party registry metadata requires appearance.`,
+    );
+  }
+  if (!source.gallery?.some((item) => item.surface === "desktop")) {
+    throw new Error(
+      `${payload.pluginId}: first-party registry metadata requires a desktop gallery image.`,
+    );
+  }
+  for (const item of source.gallery) {
+    if (!item.capture?.storyId) {
+      throw new Error(
+        `${payload.pluginId}: first-party gallery images require a Storybook capture.`,
+      );
+    }
+  }
+}
+
+async function resolveSourceAppearance(options) {
+  const { appearance } = options;
+  const logo = appearance.logo
+    ? await resolveSourceImage({
+        ...options,
+        sourceAsset: appearance.logo,
+        maxBytes: maxPluginLogoBytes,
+        role: "logo",
+        allowSvg: true,
+      })
+    : undefined;
+  return {
+    icon: appearance.icon,
+    accent: appearance.accent.toUpperCase(),
+    ...(logo ? { logo: { ...logo, alt: appearance.logo.alt } } : {}),
+  };
+}
+
+async function resolveSourceGallery(options) {
+  const ids = new Set();
+  const surfaceCounts = { desktop: 0, mobile: 0 };
+  for (const item of options.gallery) {
+    if (ids.has(item.id)) {
+      throw new Error(`${options.pluginId}: duplicate gallery id ${item.id}.`);
+    }
+    ids.add(item.id);
+    surfaceCounts[item.surface] += 1;
+    if (surfaceCounts[item.surface] > 5) {
+      throw new Error(
+        `${options.pluginId}: gallery permits at most five ${item.surface} images.`,
+      );
+    }
+  }
+  return Promise.all(
+    options.gallery.map(async (item) => {
+      const image = await resolveSourceImage({
+        ...options,
+        sourceAsset: item,
+        maxBytes: maxPluginGalleryBytes,
+        role: `${item.surface} gallery image`,
+        allowSvg: false,
+        expectedDimensions:
+          item.surface === "desktop"
+            ? { width: 1200, height: 800 }
+            : { width: 900, height: 1600 },
+      });
+      return {
+        id: item.id,
+        surface: item.surface,
+        alt: item.alt,
+        ...(item.caption ? { caption: item.caption } : {}),
+        ...image,
+      };
+    }),
+  );
+}
+
+async function resolveSourceImage({
+  sourceAsset,
+  fetchImpl,
+  sourceBaseUrl,
+  assetOutputDir,
+  registryBaseUrl,
+  pluginId,
+  maxBytes,
+  role,
+  allowSvg,
+  expectedDimensions,
+}) {
+  assertSafeAssetPath(sourceAsset.path);
+  const sourceUrl = new URL(sourceAsset.path, sourceBaseUrl).href;
+  const bytes = await fetchBytes(fetchImpl, sourceUrl, maxBytes);
+  if (sourceAsset.path.endsWith(".svg")) assertSafeSvg(bytes, sourceUrl);
+  const metadata = await sharp(bytes, {
+    limitInputPixels: 20_000_000,
+    failOn: "warning",
+  }).metadata();
+  const expectedFormat = sourceAsset.path.split(".").at(-1);
+  const actualFormat = metadata.format === "jpeg" ? "jpg" : metadata.format;
+  if (actualFormat !== expectedFormat) {
+    throw new Error(`${sourceUrl}: extension does not match image content.`);
+  }
+  if (metadata.format === "svg" && !allowSvg) {
+    throw new Error(`${sourceUrl}: SVG is not permitted for ${role}.`);
+  }
+  const width = metadata.width;
+  const height = metadata.height;
+  if (!Number.isInteger(width) || !Number.isInteger(height)) {
+    throw new Error(`${sourceUrl}: image dimensions are unavailable.`);
+  }
+  if (role === "logo" && (width !== height || width < 64 || width > 1024)) {
+    throw new Error(
+      `${sourceUrl}: logo must be square and between 64 and 1024 pixels.`,
+    );
+  }
+  if (
+    expectedDimensions &&
+    (width !== expectedDimensions.width || height !== expectedDimensions.height)
+  ) {
+    throw new Error(
+      `${sourceUrl}: ${role} must be ${expectedDimensions.width}x${expectedDimensions.height}.`,
+    );
+  }
+  const digest = sha256(bytes);
+  const extension = metadata.format === "svg" ? "svg" : metadata.format;
+  const fileName = `${digest}.${extension}`;
+  if (assetOutputDir) {
+    const target = new URL(`${pluginId}/${fileName}`, assetOutputDir);
+    await mkdir(new URL("./", target), { recursive: true });
+    await writeFile(target, bytes);
+  }
+  return {
+    url: new URL(`assets/${pluginId}/${fileName}`, registryBaseUrl).href,
+    sourceUrl,
+    sha256: digest,
+    size: bytes.byteLength,
+    mediaType:
+      metadata.format === "svg" ? "image/svg+xml" : `image/${metadata.format}`,
+    width,
+    height,
+  };
+}
+
+function assertSafeSvg(bytes, sourceUrl) {
+  const source = decodeUtf8(bytes, sourceUrl);
+  const unsafe = [
+    /<script\b/i,
+    /<foreignObject\b/i,
+    /<!DOCTYPE\b/i,
+    /<!ENTITY\b/i,
+    /\bon[a-z]+\s*=/i,
+    /(?:href|xlink:href)\s*=\s*["'](?!#)/i,
+    /url\s*\(\s*["']?(?!#)/i,
+    /@import\b/i,
+    /\bdata:/i,
+  ];
+  if (
+    !/<svg\b/i.test(source) ||
+    unsafe.some((pattern) => pattern.test(source))
+  ) {
+    throw new Error(
+      `${sourceUrl}: SVG contains unsupported or unsafe content.`,
+    );
+  }
+}
+
+async function pruneMirroredAssets(assetOutputDir, pluginId, references) {
+  if (!assetOutputDir) return;
+  const pluginDir = new URL(`${pluginId}/`, assetOutputDir);
+  let files;
+  try {
+    files = await readdir(pluginDir, { withFileTypes: true });
+  } catch (error) {
+    if (error?.code === "ENOENT") return;
+    throw error;
+  }
+  const expected = new Set(
+    references.map((reference) =>
+      new URL(reference.url).pathname.split("/").at(-1),
+    ),
+  );
+  await Promise.all(
+    files
+      .filter((entry) => entry.isFile() && !expected.has(entry.name))
+      .map((entry) => rm(new URL(entry.name, pluginDir))),
+  );
 }
 
 function sourcePackageRoot(payload) {

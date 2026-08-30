@@ -116,6 +116,7 @@ test("site build emits pages and registry metadata", async () => {
   assert.match(detail, />Homepage<\/a>/);
   assert.match(detail, />Issues<\/a>/);
   assert.match(detail, />Repository<\/a>/);
+  assert.match(detail, /class="plugin-identity plugin-identity--hero"/);
 
   const listing = await readFile(new URL("plugins/index.html", dist), "utf8");
   const names = [...listing.matchAll(/data-name="([^"]+)"/g)].map(
@@ -128,6 +129,17 @@ test("site build emits pages and registry metadata", async () => {
   assert.doesNotMatch(listing, /data-sort-value="(?:downloads|popularity)"/);
   assert.match(listing, /data-filter-category="ai" data-filter-label="AI"/);
   assert.doesNotMatch(listing, /data-filter-label="Ai"/);
+  assert.match(listing, /class="lucide lucide-chevrons-up-down sort-chevrons"/);
+  assert.doesNotMatch(listing, /<span class="sort-chevrons"/);
+
+  const landing = await readFile(new URL("index.html", dist), "utf8");
+  assert.match(landing, />New<\/h2>/);
+  assert.match(landing, />Updated<\/h2>/);
+  assert.match(landing, /data-popular-lane hidden aria-busy="true"/);
+  assert.match(landing, />Popular<\/h2>/);
+  assert.match(landing, />Developers<\/h2>/);
+  assert.match(landing, />Registry schemas<\/a>/);
+  assert.match(landing, />LapisMD on GitHub<\/a>/);
 
   const routes = JSON.parse(
     await readFile(new URL("_routes.json", dist), "utf8"),

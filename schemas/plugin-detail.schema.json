@@ -20,6 +20,10 @@
     "id": { "type": "string" },
     "name": { "type": "string" },
     "description": { "type": "string" },
+    "appearance": {
+      "$ref": "plugin-media.schema.json#/$defs/appearance"
+    },
+    "gallery": { "$ref": "plugin-media.schema.json#/$defs/gallery" },
     "readmeUrl": { "type": "string", "pattern": "^https://.+" },
     "channel": { "enum": ["official", "community"] },
     "status": { "enum": ["active", "pending", "revoked"] },

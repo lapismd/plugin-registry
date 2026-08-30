@@ -14,6 +14,7 @@ const {
 } = Astro.props;
 const { plugins } = await getRegistrySiteData();
 const isLandingPage = Astro.url.pathname === "/";
+const currentYear = new Date().getUTCFullYear();
 ---
 
 <!doctype html>
@@ -41,8 +42,40 @@ const isLandingPage = Astro.url.pathname === "/";
       <slot />
       <footer class="site-footer">
         <div class="site-footer__inner">
-          <span>Signed registry metadata for Lapis Notes.</span>
-          <a href="/v1/index.json">Registry JSON</a>
+          <div class="site-footer__brand-column">
+            <a class="site-footer__brand" href="/" aria-label="Lapis Plugin Registry home">
+              <img src="/lapis-logo.svg" alt="" aria-hidden="true" />
+              <span>
+                <strong>Lapis</strong>
+                <small>Plugin Registry</small>
+              </span>
+            </a>
+            <p>Signed community software for Lapis Notes.</p>
+            <p class="site-footer__copyright">© {currentYear} LapisMD</p>
+          </div>
+          <nav class="site-footer__directory" aria-label="Footer">
+            <section>
+              <h2>Registry</h2>
+              <a href="/plugins/">Browse plugins</a>
+              <a href="/v1/index.json">Registry manifest</a>
+              <a href="/v1/trust/root.json">Trust root</a>
+              <a href="/stats/summary.json">Download statistics</a>
+            </section>
+            <section>
+              <h2>Developers</h2>
+              <a href="https://github.com/lapismd/plugin-registry/blob/main/docs/publishing.md">Publishing guide</a>
+              <a href="https://github.com/lapismd/plugin-registry/tree/main/schemas">Registry schemas</a>
+              <a href="https://github.com/lapismd/lapis-plugins">First-party plugins</a>
+              <a href="https://github.com/lapismd/plugin-registry">Registry source</a>
+            </section>
+            <section>
+              <h2>Project</h2>
+              <a href="https://github.com/lapismd/lapis-notes">Lapis Notes</a>
+              <a href="https://github.com/lapismd/lapis-notes/releases">Releases</a>
+              <a href="https://github.com/lapismd/lapis-notes/issues">Issues</a>
+              <a href="https://github.com/lapismd">LapisMD on GitHub</a>
+            </section>
+          </nav>
         </div>
       </footer>
     </div>
