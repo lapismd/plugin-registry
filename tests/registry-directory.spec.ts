@@ -55,6 +55,7 @@ test("plugin directory uses the reference card layout and filter treatment", asy
         groupHeight: group.getBoundingClientRect().height,
         groupRadius: groupStyle.borderRadius,
         activeBackground: style.backgroundColor,
+        activeRadius: style.borderRadius,
         color: style.color,
         font: [style.fontSize, style.lineHeight, style.fontWeight],
       };
@@ -63,6 +64,7 @@ test("plugin directory uses the reference card layout and filter treatment", asy
     groupHeight: 36,
     groupRadius: "8px",
     activeBackground: "rgb(54, 54, 54)",
+    activeRadius: "0px 7px 7px 0px",
     color: "rgb(255, 255, 255)",
     font: ["14px", "20px", "500"],
   });
@@ -117,11 +119,36 @@ test("plugin directory uses the reference card layout and filter treatment", asy
     descriptionClamp: "2",
   });
   await expect(cards.first()).not.toContainText("0 B");
+  await cards.first().hover();
+  await expect(cards.first()).toHaveCSS("background-color", "rgb(38, 38, 38)");
 
   const typeFilter = page.locator(".filter-option--static");
   await expect(typeFilter).toHaveAttribute("aria-pressed", "true");
   await expect(typeFilter).toHaveCSS("background-color", "rgb(138, 92, 245)");
   await expect(typeFilter).toHaveCSS("color", "rgb(255, 255, 255)");
+
+  const categoryFilter = page.locator('[data-filter-category="ai"]');
+  await categoryFilter.focus();
+  await categoryFilter.press("Enter");
+  await expect(categoryFilter).toHaveAttribute("aria-pressed", "true");
+  await expect(categoryFilter).toHaveCSS("background-color", "rgb(30, 30, 30)");
+  await expect(categoryFilter).toHaveCSS("color", "rgb(229, 229, 229)");
+  const categoryCheck = categoryFilter.locator(".filter-option__icon-check");
+  await expect(categoryCheck).toBeVisible();
+  await expect(categoryCheck).toHaveCSS(
+    "background-color",
+    "rgb(138, 92, 245)",
+  );
+  await expect(categoryCheck).toHaveCSS("color", "rgb(255, 255, 255)");
+  expect(
+    await categoryCheck.locator("svg").evaluate((node) => ({
+      size: [
+        node.getBoundingClientRect().width,
+        node.getBoundingClientRect().height,
+      ],
+      strokeWidth: node.getAttribute("stroke-width"),
+    })),
+  ).toEqual({ size: [12, 12], strokeWidth: "3" });
 
   const extraCategories = page.locator("[data-category-extra]");
   expect(await extraCategories.count()).toBeGreaterThan(0);
@@ -137,6 +164,7 @@ test("plugin directory uses the reference card layout and filter treatment", asy
   await expect(resultList).toHaveAttribute("data-view", "list");
   await expect(listButton).toHaveAttribute("aria-pressed", "true");
   await expect(cardsButton).toHaveAttribute("aria-pressed", "false");
+  await expect(listButton).toHaveCSS("border-radius", "7px 0px 0px 7px");
   expect(
     await page.evaluate(
       () =>

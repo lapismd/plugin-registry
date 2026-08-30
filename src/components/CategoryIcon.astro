@@ -59,6 +59,8 @@ const icons = {
 };
 
 const Icon = selected ? Check : icons[id as keyof typeof icons] ?? Package;
+const iconSize = selected ? 12 : size;
+const strokeWidth = selected ? 3 : 2;
 ---
 
-<Icon size={size} stroke-width="2" aria-hidden="true" />
+<Icon size={iconSize} stroke-width={strokeWidth} aria-hidden="true" />

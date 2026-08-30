@@ -831,6 +831,14 @@ html.has-gallery-dialog {
   line-height: 20px;
 }
 
+.view-toggle button:first-child {
+  border-radius: 7px 0 0 7px;
+}
+
+.view-toggle button:last-child {
+  border-radius: 0 7px 7px 0;
+}
+
 .view-toggle button[aria-pressed="true"] {
   background: var(--lapis-surface-3);
   color: #fff;
@@ -1045,14 +1053,14 @@ html.has-gallery-dialog {
 }
 
 .filter-option[aria-pressed="true"] {
-  background: var(--lapis-primary-bold);
+  background: var(--lapis-surface-1);
   border-color: transparent;
-  color: #fff;
+  color: var(--lapis-ink);
 }
 
 .filter-option[aria-pressed="true"] > .filter-count,
 .filter-option[aria-pressed="true"] .filter-option__icon {
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--lapis-ink-muted);
 }
 
 .filter-option[aria-pressed="true"] .filter-option__icon-default {
@@ -1061,6 +1069,21 @@ html.has-gallery-dialog {
 
 .filter-option[aria-pressed="true"] .filter-option__icon-check {
   display: inline-grid;
+  color: var(--lapis-on-primary);
+}
+
+.filter-option[aria-pressed="true"]:hover {
+  background: var(--lapis-surface-2);
+}
+
+.filter-option--static[aria-pressed="true"] {
+  background: var(--lapis-primary-bold);
+  color: #fff;
+}
+
+.filter-option--static[aria-pressed="true"] > .filter-count,
+.filter-option--static[aria-pressed="true"] .filter-option__icon {
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .filter-option--static {
@@ -1172,6 +1195,18 @@ html.has-gallery-dialog {
   border-radius: 12px;
   padding: 12px;
   background: #1f1f1f;
+  transition: background-color 150ms ease;
+}
+
+.result-list[data-view="grid"] .search-result:hover {
+  background: var(--lapis-surface-2);
+  color: var(--lapis-ink);
+}
+
+.result-list[data-view="grid"] .search-result:focus-visible {
+  background: var(--lapis-surface-2);
+  outline: 2px solid #737373;
+  outline-offset: 2px;
 }
 
 .result-list[data-view="grid"] .dense-plugin-row__body {
