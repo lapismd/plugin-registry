@@ -99,7 +99,11 @@ export async function fetchPluginSourceMetadata({
   await pruneMirroredAssets(
     assetOutputDir,
     payload.pluginId,
-    [appearance?.logo, ...(gallery ?? [])].filter(Boolean),
+    [
+      appearance?.logo,
+      ...(gallery?.flatMap((item) => [item.images.preview, item.images.full]) ??
+        []),
+    ].filter(Boolean),
   );
   const links = compactObject({
     homepage: normalizeHttpsUrl(packageJson.homepage, "package homepage"),
@@ -254,17 +258,10 @@ function validateFirstPartyMediaSource(payload, source) {
       `${payload.pluginId}: first-party registry metadata requires appearance.`,
     );
   }
-  if (!source.gallery?.some((item) => item.surface === "desktop")) {
+  if (!source.gallery?.length) {
     throw new Error(
-      `${payload.pluginId}: first-party registry metadata requires a desktop gallery image.`,
+      `${payload.pluginId}: first-party registry metadata requires one to five gallery cards.`,
     );
-  }
-  for (const item of source.gallery) {
-    if (!item.capture?.storyId) {
-      throw new Error(
-        `${payload.pluginId}: first-party gallery images require a Storybook capture.`,
-      );
-    }
   }
 }
 
@@ -288,38 +285,70 @@ async function resolveSourceAppearance(options) {
 
 async function resolveSourceGallery(options) {
   const ids = new Set();
-  const surfaceCounts = { desktop: 0, mobile: 0 };
+  const paths = new Set();
   for (const item of options.gallery) {
     if (ids.has(item.id)) {
       throw new Error(`${options.pluginId}: duplicate gallery id ${item.id}.`);
     }
     ids.add(item.id);
-    surfaceCounts[item.surface] += 1;
-    if (surfaceCounts[item.surface] > 5) {
+    for (const variant of ["preview", "full"]) {
+      const imagePath = item.images[variant].path;
+      const expectedPath = `registry-assets/gallery/${item.id}.${variant}.webp`;
+      if (imagePath !== expectedPath) {
+        throw new Error(
+          `${options.pluginId}: ${item.id} ${variant} image must use ${expectedPath}.`,
+        );
+      }
+      if (paths.has(imagePath)) {
+        throw new Error(
+          `${options.pluginId}: duplicate gallery image path ${imagePath}.`,
+        );
+      }
+      paths.add(imagePath);
+    }
+    const focus = item.capture.focus;
+    if (
+      typeof focus === "object" &&
+      (focus.x + focus.width > 1 || focus.y + focus.height > 1)
+    ) {
       throw new Error(
-        `${options.pluginId}: gallery permits at most five ${item.surface} images.`,
+        `${options.pluginId}: ${item.id} custom focus must stay inside the normalized capture.`,
+      );
+    }
+    const descriptionLength = item.card.description.reduce(
+      (total, segment) => total + segment.text.length,
+      Math.max(0, item.card.description.length - 1),
+    );
+    if (descriptionLength > 180) {
+      throw new Error(
+        `${options.pluginId}: ${item.id} card description exceeds 180 characters.`,
       );
     }
   }
   return Promise.all(
     options.gallery.map(async (item) => {
-      const image = await resolveSourceImage({
-        ...options,
-        sourceAsset: item,
-        maxBytes: maxPluginGalleryBytes,
-        role: `${item.surface} gallery image`,
-        allowSvg: false,
-        expectedDimensions:
-          item.surface === "desktop"
-            ? { width: 1200, height: 800 }
-            : { width: 900, height: 1600 },
-      });
+      const [preview, full] = await Promise.all([
+        resolveSourceImage({
+          ...options,
+          sourceAsset: item.images.preview,
+          maxBytes: maxPluginGalleryBytes,
+          role: "preview gallery image",
+          allowSvg: false,
+          expectedDimensions: { width: 1200, height: 800 },
+        }),
+        resolveSourceImage({
+          ...options,
+          sourceAsset: item.images.full,
+          maxBytes: maxPluginGalleryBytes,
+          role: "full gallery image",
+          allowSvg: false,
+          expectedDimensions: { width: 2400, height: 1600 },
+        }),
+      ]);
       return {
         id: item.id,
-        surface: item.surface,
         alt: item.alt,
-        ...(item.caption ? { caption: item.caption } : {}),
-        ...image,
+        images: { preview, full },
       };
     }),
   );

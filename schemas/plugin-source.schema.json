@@ -46,6 +46,10 @@
       "type": "string",
       "pattern": "^registry-assets/(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+\\.(?:png|webp|svg)$"
     },
+    "safeGalleryAssetPath": {
+      "type": "string",
+      "pattern": "^registry-assets/gallery/[a-z0-9][a-z0-9-]*\\.(?:preview|full)\\.webp$"
+    },
     "iconName": {
       "enum": [
         "bookmark",
@@ -82,31 +86,125 @@
     },
     "sourceGallery": {
       "type": "array",
-      "maxItems": 10,
+      "minItems": 1,
+      "maxItems": 5,
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "path", "surface", "alt"],
+        "required": ["id", "alt", "images", "capture", "card"],
         "properties": {
           "id": {
             "type": "string",
             "pattern": "^[a-z0-9][a-z0-9-]{0,31}$"
           },
-          "path": { "$ref": "#/$defs/safeAssetPath" },
-          "surface": { "enum": ["desktop", "mobile"] },
           "alt": { "type": "string", "minLength": 1, "maxLength": 240 },
-          "caption": { "type": "string", "minLength": 1, "maxLength": 240 },
+          "images": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["preview", "full"],
+            "properties": {
+              "preview": {
+                "$ref": "#/$defs/sourceGalleryImage"
+              },
+              "full": {
+                "$ref": "#/$defs/sourceGalleryImage"
+              }
+            }
+          },
           "capture": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["storyId"],
+            "required": ["storyId", "focus"],
             "properties": {
               "storyId": {
                 "type": "string",
                 "pattern": "^[a-z0-9][a-z0-9-]*--[a-z0-9-]+$"
+              },
+              "focus": {
+                "oneOf": [
+                  {
+                    "enum": [
+                      "full-shell",
+                      "left-sidebar",
+                      "right-sidebar",
+                      "bottom-status"
+                    ]
+                  },
+                  { "$ref": "#/$defs/normalizedCrop" }
+                ]
+              }
+            }
+          },
+          "card": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["headline", "description"],
+            "properties": {
+              "headline": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 4,
+                "items": { "$ref": "#/$defs/headlineSegment" }
+              },
+              "description": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 6,
+                "items": { "$ref": "#/$defs/descriptionSegment" }
               }
             }
           }
+        }
+      }
+    },
+    "sourceGalleryImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path"],
+      "properties": {
+        "path": { "$ref": "#/$defs/safeGalleryAssetPath" }
+      }
+    },
+    "normalizedCrop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 1 },
+        "y": { "type": "number", "minimum": 0, "maximum": 1 },
+        "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+      }
+    },
+    "headlineSegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "tone"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "pattern": "^[^#*`<>]+$"
+        },
+        "tone": {
+          "enum": ["neutral", "violet", "cyan", "green", "amber", "rose"]
+        }
+      }
+    },
+    "descriptionSegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "tone"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "^[^#*`<>]+$"
+        },
+        "tone": {
+          "enum": ["neutral", "violet", "cyan", "green", "amber", "rose"]
         }
       }
     }

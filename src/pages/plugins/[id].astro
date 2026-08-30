@@ -33,7 +33,7 @@ const releases = Object.values(plugin.detailData.versions).sort((a, b) =>
 const release = plugin.latestRelease;
 const installDisabled = plugin.status !== "active" || release.bundle.pending === true;
 const primaryCategory = plugin.categories[0] ?? "package";
-const assetHealth = release.bundle.pending ? 24 : 100;
+const bundleHealthSteps = release.bundle.pending ? 1 : 4;
 const readmeUrl = plugin.detailData.readmeUrl;
 const overviewReference = plugin.detailData.content?.overview;
 const changelogReference = plugin.detailData.content?.changelog;
@@ -60,7 +60,8 @@ const downloadHref = pluginDownloadHref(release);
 ---
 
 <SiteLayout title={`${plugin.name} - Lapis Plugin Registry`} description={plugin.description}>
-  <main class="page-main">
+  <main class="plugin-detail-page">
+    <div class="plugin-detail-container">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Registry</a>
       <span>/</span>
@@ -96,6 +97,7 @@ const downloadHref = pluginDownloadHref(release);
             class="button-primary"
             disabled={installDisabled}
             data-install-disabled={installDisabled ? "true" : "false"}
+            data-install-button
           >
             {installDisabled ? "Install pending" : "Install in Lapis"}
           </button>
@@ -114,14 +116,17 @@ const downloadHref = pluginDownloadHref(release);
         </div>
       </div>
     </section>
+    </div>
 
+    {
+      plugin.detailData.gallery?.length ? (
+        <PluginGallery items={plugin.detailData.gallery} pluginName={plugin.name} />
+      ) : null
+    }
+
+    <div class="plugin-detail-container">
     <section class="detail-grid">
       <div class="plugin-content">
-        {
-          plugin.detailData.gallery?.length ? (
-            <PluginGallery items={plugin.detailData.gallery} pluginName={plugin.name} />
-          ) : null
-        }
         <section class="detail-panel detail-tabs" data-tabs>
           <div class="tab-list" role="tablist" aria-label="Plugin sections">
             <button type="button" role="tab" aria-selected="true" data-tab="overview">
@@ -245,11 +250,35 @@ const downloadHref = pluginDownloadHref(release);
           <div class="health-list">
             <div class="health-row">
               <span><b>Metadata</b><b>Signed</b></span>
-              <div class="health-bar"><i style="width: 100%"></i></div>
+              <div
+                class="health-bar"
+                role="progressbar"
+                aria-label="Metadata health"
+                aria-valuemin="0"
+                aria-valuemax="4"
+                aria-valuenow="4"
+                aria-valuetext="Signed, 4 of 4 checks ready"
+              >
+                {Array.from({ length: 4 }, () => <i data-active="true"></i>)}
+              </div>
             </div>
             <div class="health-row">
               <span><b>Plugin bundle</b><b>{release.bundle.pending ? "Pending" : "Ready"}</b></span>
-              <div class="health-bar"><i style={`width: ${assetHealth}%`}></i></div>
+              <div
+                class="health-bar"
+                role="progressbar"
+                aria-label="Plugin bundle health"
+                aria-valuemin="0"
+                aria-valuemax="4"
+                aria-valuenow={bundleHealthSteps}
+                aria-valuetext={`${release.bundle.pending ? "Pending" : "Ready"}, ${bundleHealthSteps} of 4 checks ready`}
+              >
+                {
+                  Array.from({ length: 4 }, (_, index) => (
+                    <i data-active={index < bundleHealthSteps ? "true" : "false"}></i>
+                  ))
+                }
+              </div>
             </div>
           </div>
         </section>
@@ -393,6 +422,7 @@ const downloadHref = pluginDownloadHref(release);
         </section>
       )
     }
+    </div>
   </main>
 </SiteLayout>
 

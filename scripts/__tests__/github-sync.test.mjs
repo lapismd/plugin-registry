@@ -141,8 +141,10 @@ test("GitHub sync verifies release assets and updates one curated entry idempote
     accent: "#8B5CF6",
   });
   assert.equal(entry.gallery[0].id, "overview");
-  assert.equal(entry.gallery[0].width, 1200);
-  assert.equal(entry.gallery[0].height, 800);
+  assert.equal(entry.gallery[0].images.preview.width, 1200);
+  assert.equal(entry.gallery[0].images.preview.height, 800);
+  assert.equal(entry.gallery[0].images.full.width, 2400);
+  assert.equal(entry.gallery[0].images.full.height, 1600);
   assert.equal(entry.content.overview.mediaType, "text/markdown");
   assert.equal(
     entry.links.repository,
@@ -390,17 +392,31 @@ async function signedReleaseFixture(options = {}) {
       gallery: [
         {
           id: "overview",
-          path: "registry-assets/gallery/overview.png",
-          surface: "desktop",
           alt: "Graph plugin showing connected notes and tags.",
-          caption: "Explore note relationships in the graph workspace.",
-          capture: { storyId: "plugins-graph--registry-overview" },
+          images: {
+            preview: {
+              path: "registry-assets/gallery/overview.preview.webp",
+            },
+            full: { path: "registry-assets/gallery/overview.full.webp" },
+          },
+          capture: {
+            storyId: "plugins-graph-registry-screenshots--global-graph",
+            focus: "full-shell",
+          },
+          card: {
+            headline: [{ text: "Explore every connection", tone: "violet" }],
+            description: [
+              { text: "Move through related notes", tone: "neutral" },
+              { text: "and tags", tone: "violet" },
+              { text: "in one workspace.", tone: "neutral" },
+            ],
+          },
         },
       ],
       content: { overview: "README.md", changelog: "CHANGELOG.md" },
     })}\n`,
   );
-  const galleryBytes = await sharp({
+  const previewBytes = await sharp({
     create: {
       width: 1200,
       height: 800,
@@ -408,7 +424,17 @@ async function signedReleaseFixture(options = {}) {
       background: { r: 31, g: 25, b: 52, alpha: 1 },
     },
   })
-    .png()
+    .webp({ lossless: true })
+    .toBuffer();
+  const fullBytes = await sharp({
+    create: {
+      width: 2400,
+      height: 1600,
+      channels: 4,
+      background: { r: 31, g: 25, b: 52, alpha: 1 },
+    },
+  })
+    .webp({ lossless: true })
     .toBuffer();
   const readmeBytes = Buffer.from("# Graph\n\nExplore connected notes.\n");
   const changelogBytes = Buffer.from(
@@ -442,8 +468,11 @@ async function signedReleaseFixture(options = {}) {
     if (url === `${rawBase}manifest.json`) return byteResponse(manifestBytes);
     if (url === `${rawBase}README.md`) return byteResponse(readmeBytes);
     if (url === `${rawBase}CHANGELOG.md`) return byteResponse(changelogBytes);
-    if (url === `${rawBase}registry-assets/gallery/overview.png`) {
-      return byteResponse(galleryBytes);
+    if (url === `${rawBase}registry-assets/gallery/overview.preview.webp`) {
+      return byteResponse(previewBytes);
+    }
+    if (url === `${rawBase}registry-assets/gallery/overview.full.webp`) {
+      return byteResponse(fullBytes);
     }
     return { ok: false, status: 404 };
   };

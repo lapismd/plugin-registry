@@ -36,17 +36,29 @@ function validEntry(overrides = {}) {
     gallery: [
       {
         id: "overview",
-        surface: "desktop",
         alt: "A settled note graph",
-        caption: "Explore linked notes",
-        url: "https://registry.lapis.md/v1/assets/lapis-graph/graph.png",
-        sourceUrl:
-          "https://raw.githubusercontent.com/lapismd/lapis-plugins/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/packages/graph/registry-assets/overview.desktop.png",
-        sha256: "a".repeat(64),
-        size: 1024,
-        mediaType: "image/png",
-        width: 1200,
-        height: 800,
+        images: {
+          preview: {
+            url: "https://registry.lapis.md/v1/assets/lapis-graph/preview.webp",
+            sourceUrl:
+              "https://raw.githubusercontent.com/lapismd/lapis-plugins/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/packages/graph/registry-assets/gallery/overview.preview.webp",
+            sha256: "a".repeat(64),
+            size: 1024,
+            mediaType: "image/webp",
+            width: 1200,
+            height: 800,
+          },
+          full: {
+            url: "https://registry.lapis.md/v1/assets/lapis-graph/full.webp",
+            sourceUrl:
+              "https://raw.githubusercontent.com/lapismd/lapis-plugins/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/packages/graph/registry-assets/gallery/overview.full.webp",
+            sha256: "b".repeat(64),
+            size: 4096,
+            mediaType: "image/webp",
+            width: 2400,
+            height: 1600,
+          },
+        },
       },
     ],
     badges: ["official", "verified"],
@@ -93,6 +105,32 @@ test("rejects Electron as a registry compatibility platform", async () => {
 
   assert.equal(validate(entry), false);
   assert.match(formatAjvErrors(validate), /platforms/);
+});
+
+test("rejects the removed flattened gallery contract", async () => {
+  const ajv = await createAjv();
+  const validate = ajv.getSchema(
+    "https://registry.lapis.md/schemas/catalog-entry.schema.json",
+  );
+  const entry = validEntry();
+  entry.gallery = [
+    {
+      id: "overview",
+      surface: "desktop",
+      alt: "Legacy image",
+      url: "https://registry.lapis.md/v1/assets/lapis-graph/graph.png",
+      sourceUrl: "https://example.test/graph.png",
+      sha256: "a".repeat(64),
+      size: 1024,
+      mediaType: "image/png",
+      width: 1200,
+      height: 800,
+    },
+  ];
+  delete entry.__sourcePath;
+
+  assert.equal(validate(entry), false);
+  assert.match(formatAjvErrors(validate), /gallery/);
 });
 
 test("rejects duplicate plugin ids", () => {
@@ -144,6 +182,14 @@ test("builds deterministic registry metadata with real GitHub references", () =>
     accent: "#8B5CF6",
   });
   assert.equal(registry.details["lapis-graph"].gallery[0].id, "overview");
+  assert.deepEqual(
+    Object.keys(registry.details["lapis-graph"].gallery[0]).sort(),
+    ["alt", "id", "images"],
+  );
+  assert.equal(
+    registry.details["lapis-graph"].gallery[0].images.full.width,
+    2400,
+  );
   assert.equal(
     registry.details["lapis-graph"].readmeUrl,
     "https://raw.githubusercontent.com/lapismd/lapis-plugins/main/packages/graph/README.md",

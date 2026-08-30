@@ -29,6 +29,9 @@ importers:
       "@lucide/astro":
         specifier: ^1.17.0
         version: 1.17.0(astro@6.4.2(@types/node@25.9.1)(rollup@4.60.4)(yaml@2.9.0))
+      "@playwright/test":
+        specifier: ^1.62.1
+        version: 1.62.1
       "@types/node":
         specifier: ^25.9.1
         version: 25.9.1
@@ -1248,6 +1251,14 @@ packages:
         integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==,
       }
 
+  "@playwright/test@1.62.1":
+    resolution:
+      {
+        integrity: sha512-DTcUc8qii+cpHvtOwggMtBRMjKZHXYWdw8syRYu2vtzuq4Wxphqq4NfCs5Zt44L6mA8rfDfj+PHnxFc/FeK6mQ==,
+      }
+    engines: { node: ">=20" }
+    hasBin: true
+
   "@poppinss/colors@4.1.6":
     resolution:
       {
@@ -2164,6 +2175,14 @@ packages:
       }
     engines: { node: ">=20" }
 
+  fsevents@2.3.2:
+    resolution:
+      {
+        integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==,
+      }
+    engines: { node: ^8.16.0 || ^10.6.0 || >=11.0.0 }
+    os: [darwin]
+
   fsevents@2.3.3:
     resolution:
       {
@@ -2832,6 +2851,22 @@ packages:
         integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==,
       }
     engines: { node: ">=12" }
+
+  playwright-core@1.62.1:
+    resolution:
+      {
+        integrity: sha512-wPYSwEBJY9GHraISXqyqtx0na0LpO3XEX7jNDhntbex7tzUS7kLnZsOlFruFJB4Hi/rhDMjXGqHewDZ68nYZVw==,
+      }
+    engines: { node: ">=20" }
+    hasBin: true
+
+  playwright@1.62.1:
+    resolution:
+      {
+        integrity: sha512-0M+L3LAD8/nm554LOla9Ayx0j0tmFZ0FBcoQ7F1VuVHpM/XpiC8RcDzBQB8W5+hA8L22THxELzeF+2WcUzvcLg==,
+      }
+    engines: { node: ">=20" }
+    hasBin: true
 
   postcss@8.5.15:
     resolution:
@@ -4268,6 +4303,10 @@ snapshots:
 
   "@oslojs/encoding@1.1.0": {}
 
+  "@playwright/test@1.62.1":
+    dependencies:
+      playwright: 1.62.1
+
   "@poppinss/colors@4.1.6":
     dependencies:
       kleur: 4.1.5
@@ -4847,6 +4886,9 @@ snapshots:
     dependencies:
       tiny-inflate: 1.0.3
 
+  fsevents@2.3.2:
+    optional: true
+
   fsevents@2.3.3:
     optional: true
 
@@ -5417,6 +5459,14 @@ snapshots:
   picomatch@2.3.2: {}
 
   picomatch@4.0.4: {}
+
+  playwright-core@1.62.1: {}
+
+  playwright@1.62.1:
+    dependencies:
+      playwright-core: 1.62.1
+    optionalDependencies:
+      fsevents: 2.3.2
 
   postcss@8.5.15:
     dependencies:

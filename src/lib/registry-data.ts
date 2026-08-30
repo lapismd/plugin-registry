@@ -117,11 +117,13 @@ export interface PluginAppearance {
   logo?: PluginLogoReference;
 }
 
-export interface PluginGalleryItem extends PluginImageReference {
+export interface PluginGalleryItem {
   id: string;
-  surface: "desktop" | "mobile";
   alt: string;
-  caption?: string;
+  images: {
+    preview: PluginImageReference;
+    full: PluginImageReference;
+  };
 }
 
 export interface PluginLinks {

@@ -9,7 +9,7 @@ import { buildLocalSourcePreview } from "./lib/local-source-preview.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const options = parseArgs(process.argv.slice(2));
 const sourceDir = path.resolve(root, options.sourceDir);
-const previewRoot = path.join(root, "tmp", "source-preview");
+const previewRoot = path.join(root, "tmp", `source-preview-${options.port}`);
 const publicDir = path.join(previewRoot, "public");
 const registryDir = path.join(publicDir, "v1");
 
@@ -54,7 +54,8 @@ function parseArgs(args) {
   const options = {
     sourceDir: "../lapis-plugins",
     port: 4321,
-    previewHost: "localhost",
+    previewHost: "127.0.0.1",
+    hostConfigured: false,
     astroArgs: [],
   };
   for (let index = 0; index < args.length; index += 1) {
@@ -75,6 +76,7 @@ function parseArgs(args) {
       continue;
     }
     if (arg === "--host") {
+      options.hostConfigured = true;
       const candidate = args[index + 1];
       if (candidate && !candidate.startsWith("--")) {
         index += 1;
@@ -89,6 +91,10 @@ function parseArgs(args) {
     }
     options.astroArgs.push(arg);
   }
+  if (!options.hostConfigured) {
+    options.astroArgs.push("--host", options.previewHost);
+  }
+  delete options.hostConfigured;
   return options;
 }
 

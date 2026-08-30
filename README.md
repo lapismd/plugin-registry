@@ -21,6 +21,7 @@ pnpm registry:generate
 pnpm registry:verify-signatures
 pnpm stats:validate
 pnpm site:dev:source
+pnpm test:browser
 ```
 
 `site:dev:source` starts the catalog with an unsigned overlay from the sibling
@@ -33,6 +34,18 @@ when needed:
 ```sh
 pnpm site:dev:source -- --source ../lapis-plugins-registry-media --port 4322
 ```
+
+Each port uses an isolated temporary overlay, so a browser test server or a
+second working-source preview cannot remove another preview's assets. The
+helper binds to `127.0.0.1` by default so its generated media URLs and review
+address use the same reachable host.
+
+Gallery cards use an atomic responsive-image contract. Source metadata declares
+one to five cards with 1200×800 preview and 2400×1600 full lossless-WebP paths,
+plus source-only Storybook capture and colour-segmented headline and description
+composition instructions. Published
+detail metadata retains only each card's ID, alternative text, and complete
+hashed `images.preview` and `images.full` references.
 
 Registry signing uses protected CI secrets or a local key generated under
 `~/.lapis/`:

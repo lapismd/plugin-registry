@@ -10,6 +10,7 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
+import sharp from "sharp";
 
 import { buildLocalSourcePreview } from "../lib/local-source-preview.mjs";
 
@@ -19,12 +20,44 @@ test("local source preview overlays unsigned manifest and registry-only content"
   const baseRegistryDir = path.join(root, "base", "v1");
   const outputDir = path.join(root, "preview", "v1");
   await mkdir(path.join(sourceDir, "registry-content"), { recursive: true });
+  await mkdir(path.join(sourceDir, "registry-assets", "gallery"), {
+    recursive: true,
+  });
   await mkdir(path.join(baseRegistryDir, "plugins"), { recursive: true });
+
+  const previewImage = await image(1200, 800);
+  const fullImage = await image(2400, 1600);
 
   await writeJson(path.join(sourceDir, "registry.json"), {
     schemaVersion: 1,
     categories: ["productivity"],
     highlights: ["Keeps end-user registry copy separate from package docs."],
+    gallery: [
+      {
+        id: "workspace",
+        alt: "Example Plugin displayed in the Lapis workspace.",
+        images: {
+          preview: {
+            path: "registry-assets/gallery/workspace.preview.webp",
+          },
+          full: { path: "registry-assets/gallery/workspace.full.webp" },
+        },
+        capture: {
+          storyId: "plugins-example-registry-screenshots--workspace",
+          focus: "full-shell",
+        },
+        card: {
+          headline: [{ text: "Focused example", tone: "violet" }],
+          description: [
+            { text: "Registry-only copy", tone: "cyan" },
+            {
+              text: "stays out of package installation docs.",
+              tone: "neutral",
+            },
+          ],
+        },
+      },
+    ],
     content: {
       overview: "registry-content/overview.md",
       changelog: "CHANGELOG.md",
@@ -50,6 +83,19 @@ test("local source preview overlays unsigned manifest and registry-only content"
     "# Example Plugin\n\nEnd-user registry information.\n",
   );
   await writeFile(path.join(sourceDir, "CHANGELOG.md"), "# Changelog\n");
+  await writeFile(
+    path.join(
+      sourceDir,
+      "registry-assets",
+      "gallery",
+      "workspace.preview.webp",
+    ),
+    previewImage,
+  );
+  await writeFile(
+    path.join(sourceDir, "registry-assets", "gallery", "workspace.full.webp"),
+    fullImage,
+  );
   await writeFile(
     path.join(sourceDir, "README.md"),
     "# Package docs\n\npnpm add @example/plugin\n",
@@ -80,6 +126,30 @@ test("local source preview overlays unsigned manifest and registry-only content"
   assert.equal(detail.versions["1.1.0"].bundle.pending, true);
   assert.equal(detail.versions["1.1.0"].bundle.size, 0);
   assert.equal(detail.versions["1.0.0"].bundle.pending, undefined);
+  assert.deepEqual(Object.keys(detail.gallery[0]).sort(), [
+    "alt",
+    "id",
+    "images",
+  ]);
+  assert.equal(detail.gallery[0].images.preview.width, 1200);
+  assert.equal(detail.gallery[0].images.preview.height, 800);
+  assert.equal(detail.gallery[0].images.full.width, 2400);
+  assert.equal(detail.gallery[0].images.full.height, 1600);
+  for (const [variant, sourceBytes] of [
+    ["preview", previewImage],
+    ["full", fullImage],
+  ]) {
+    const reference = detail.gallery[0].images[variant];
+    assert.equal(reference.mediaType, "image/webp");
+    assert.equal(reference.size, sourceBytes.byteLength);
+    const mirroredName = new URL(reference.url).pathname.split("/").at(-1);
+    assert.deepEqual(
+      await readFile(
+        path.join(outputDir, "assets", "example-plugin", mirroredName),
+      ),
+      sourceBytes,
+    );
+  }
   assert.match(
     detail.content.overview.sourceUrl,
     /registry-content\/overview\.md$/,
@@ -138,4 +208,17 @@ async function writeJson(filePath, value) {
 
 async function readJson(filePath) {
   return JSON.parse(await readFile(filePath, "utf8"));
+}
+
+function image(width, height) {
+  return sharp({
+    create: {
+      width,
+      height,
+      channels: 4,
+      background: { r: 139, g: 92, b: 246, alpha: 1 },
+    },
+  })
+    .webp({ lossless: true })
+    .toBuffer();
 }

@@ -1,5 +1,5 @@
 ---
-import { ChevronLeft, ChevronRight } from "@lucide/astro";
+import { ChevronLeft, ChevronRight, X } from "@lucide/astro";
 import type { PluginGalleryItem } from "../lib/registry-data";
 
 interface Props {
@@ -8,108 +8,341 @@ interface Props {
 }
 
 const { items, pluginName } = Astro.props as Props;
-const first = items[0];
+const gallerySizes =
+  "(max-width: 720px) calc(90vw - 48px), (max-width: 1244px) calc((90vw - 8px) / 2), 556px";
 ---
 
 {
-  first && (
-    <section class="detail-panel plugin-gallery" aria-labelledby="plugin-gallery-heading" data-plugin-gallery>
-      <div class="plugin-gallery__heading">
-        <div>
-          <p class="plugin-gallery__eyebrow">Plugin preview</p>
-          <h2 id="plugin-gallery-heading">See {pluginName} in Lapis</h2>
-        </div>
-        <span class="plugin-gallery__counter" aria-live="polite" data-gallery-counter>
-          1 / {items.length}
-        </span>
+  items.length > 0 && (
+    <section
+      class="plugin-gallery"
+      aria-labelledby="plugin-gallery-heading"
+      data-plugin-gallery
+      data-at-start="true"
+      data-at-end={items.length === 1 ? "true" : "false"}
+    >
+      <h2 id="plugin-gallery-heading" class="visually-hidden">
+        {pluginName} screenshots
+      </h2>
+
+      <div
+        class="plugin-gallery__viewport"
+        aria-label={`${pluginName} screenshot carousel`}
+        data-gallery-track
+      >
+        {items.map((item, index) => (
+          <button
+            type="button"
+            class="plugin-gallery__card"
+            aria-label={`Open screenshot ${index + 1} of ${items.length}: ${item.alt}`}
+            data-gallery-card
+            data-gallery-index={index}
+            data-gallery-active={index < 2 ? "true" : "false"}
+          >
+            <img
+              src={item.images.preview.url}
+              srcset={`${item.images.preview.url} ${item.images.preview.width}w, ${item.images.full.url} ${item.images.full.width}w`}
+              sizes={gallerySizes}
+              width={item.images.preview.width}
+              height={item.images.preview.height}
+              alt=""
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+            />
+          </button>
+        ))}
       </div>
 
-      <figure class="plugin-gallery__stage">
-        <img
-          src={first.url}
-          width={first.width}
-          height={first.height}
-          alt={first.alt}
-          loading="lazy"
-          decoding="async"
-          data-gallery-image
-        />
-        <figcaption data-gallery-caption>{first.caption ?? first.alt}</figcaption>
-      </figure>
+      <button
+        type="button"
+        class="plugin-gallery__control plugin-gallery__control--previous"
+        aria-label="Show previous screenshot"
+        data-gallery-previous
+        disabled
+      >
+        <ChevronLeft size={16} stroke-width="2" aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        class="plugin-gallery__control plugin-gallery__control--next"
+        aria-label="Show next screenshot"
+        data-gallery-next
+        disabled={items.length === 1}
+      >
+        <ChevronRight size={16} stroke-width="2" aria-hidden="true" />
+      </button>
 
-      <div class="plugin-gallery__controls">
-        <button type="button" aria-label="Show previous image" data-gallery-previous disabled={items.length === 1}>
-          <ChevronLeft size={18} stroke-width="2" aria-hidden="true" />
-        </button>
-        <div class="plugin-gallery__thumbnails" role="group" aria-label="Choose plugin preview">
+      <dialog
+        class="plugin-lightbox"
+        aria-label={`${pluginName} screenshot viewer`}
+        data-gallery-dialog
+      >
+        <div class="plugin-lightbox__topbar">
+          <button
+            type="button"
+            class="plugin-lightbox__close"
+            aria-label="Close screenshot viewer"
+            data-dialog-close
+          >
+            <X size={20} stroke-width="2" aria-hidden="true" />
+          </button>
+        </div>
+
+        <div
+          class="plugin-lightbox__viewport"
+          aria-label={`${pluginName} fullscreen screenshots`}
+          data-dialog-track
+        >
           {items.map((item, index) => (
-            <button
-              type="button"
-              class="plugin-gallery__thumbnail"
-              aria-label={`Show image ${index + 1}: ${item.alt}`}
-              aria-pressed={index === 0 ? "true" : "false"}
-              data-gallery-thumbnail
-              data-src={item.url}
-              data-width={item.width}
-              data-height={item.height}
-              data-alt={item.alt}
-              data-caption={item.caption ?? item.alt}
-              data-surface={item.surface}
+            <figure
+              class="plugin-lightbox__slide"
+              role="group"
+              aria-label={`${index + 1} of ${items.length}`}
+              data-dialog-slide
             >
               <img
-                src={item.url}
-                width={item.width}
-                height={item.height}
-                alt=""
+                src={item.images.full.url}
+                width={item.images.full.width}
+                height={item.images.full.height}
+                alt={item.alt}
                 loading="lazy"
                 decoding="async"
               />
-              <span>{item.surface}</span>
-            </button>
+            </figure>
           ))}
         </div>
-        <button type="button" aria-label="Show next image" data-gallery-next disabled={items.length === 1}>
-          <ChevronRight size={18} stroke-width="2" aria-hidden="true" />
+
+        <button
+          type="button"
+          class="plugin-lightbox__control plugin-lightbox__control--previous"
+          aria-label="Show previous screenshot"
+          data-dialog-previous
+          disabled
+        >
+          <ChevronLeft size={20} stroke-width="2" aria-hidden="true" />
         </button>
-      </div>
+        <button
+          type="button"
+          class="plugin-lightbox__control plugin-lightbox__control--next"
+          aria-label="Show next screenshot"
+          data-dialog-next
+          disabled={items.length === 1}
+        >
+          <ChevronRight size={20} stroke-width="2" aria-hidden="true" />
+        </button>
+      </dialog>
     </section>
   )
 }
 
 <script>
-  for (const gallery of document.querySelectorAll<HTMLElement>("[data-plugin-gallery]")) {
-    const image = gallery.querySelector<HTMLImageElement>("[data-gallery-image]");
-    const caption = gallery.querySelector<HTMLElement>("[data-gallery-caption]");
-    const counter = gallery.querySelector<HTMLElement>("[data-gallery-counter]");
-    const previous = gallery.querySelector<HTMLButtonElement>("[data-gallery-previous]");
-    const next = gallery.querySelector<HTMLButtonElement>("[data-gallery-next]");
-    const thumbnails = [
-      ...gallery.querySelectorAll<HTMLButtonElement>("[data-gallery-thumbnail]"),
-    ];
-    let selectedIndex = 0;
-
-    function select(index: number) {
-      if (!image || thumbnails.length === 0) return;
-      selectedIndex = (index + thumbnails.length) % thumbnails.length;
-      const selected = thumbnails[selectedIndex];
-      image.src = selected.dataset.src || image.src;
-      image.width = Number(selected.dataset.width) || image.width;
-      image.height = Number(selected.dataset.height) || image.height;
-      image.alt = selected.dataset.alt || "";
-      if (caption) caption.textContent = selected.dataset.caption || image.alt;
-      if (counter) counter.textContent = `${selectedIndex + 1} / ${thumbnails.length}`;
-      for (const [candidateIndex, thumbnail] of thumbnails.entries()) {
-        thumbnail.setAttribute(
-          "aria-pressed",
-          candidateIndex === selectedIndex ? "true" : "false",
-        );
+  function closestIndex(
+    viewport: HTMLElement,
+    slides: HTMLElement[],
+  ): number {
+    const viewportBox = viewport.getBoundingClientRect();
+    const viewportStyle = getComputedStyle(viewport);
+    const scrollPaddingStart =
+      Number.parseFloat(viewportStyle.scrollPaddingInlineStart) || 0;
+    let closest = 0;
+    let distance = Number.POSITIVE_INFINITY;
+    for (const [index, slide] of slides.entries()) {
+      const candidate = Math.abs(
+        slide.getBoundingClientRect().left -
+          viewportBox.left -
+          scrollPaddingStart,
+      );
+      if (candidate < distance) {
+        distance = candidate;
+        closest = index;
       }
     }
+    return closest;
+  }
 
-    thumbnails.forEach((thumbnail, index) => {
-      thumbnail.addEventListener("click", () => select(index));
+  for (const gallery of document.querySelectorAll<HTMLElement>(
+    "[data-plugin-gallery]",
+  )) {
+    const track = gallery.querySelector<HTMLElement>("[data-gallery-track]");
+    const cards = [
+      ...gallery.querySelectorAll<HTMLButtonElement>("[data-gallery-card]"),
+    ];
+    const previous = gallery.querySelector<HTMLButtonElement>(
+      "[data-gallery-previous]",
+    );
+    const next = gallery.querySelector<HTMLButtonElement>(
+      "[data-gallery-next]",
+    );
+    const dialog = gallery.querySelector<HTMLDialogElement>(
+      "[data-gallery-dialog]",
+    );
+    const dialogTrack = gallery.querySelector<HTMLElement>(
+      "[data-dialog-track]",
+    );
+    const dialogSlides = [
+      ...gallery.querySelectorAll<HTMLElement>("[data-dialog-slide]"),
+    ];
+    const dialogPrevious = gallery.querySelector<HTMLButtonElement>(
+      "[data-dialog-previous]",
+    );
+    const dialogNext = gallery.querySelector<HTMLButtonElement>(
+      "[data-dialog-next]",
+    );
+    const dialogClose = gallery.querySelector<HTMLButtonElement>(
+      "[data-dialog-close]",
+    );
+    let galleryIndex = 0;
+    let dialogIndex = 0;
+    let opener: HTMLButtonElement | null = null;
+    let galleryFrame = 0;
+    let dialogFrame = 0;
+    let dialogSettleTimer = 0;
+    let programmaticDialogIndex: number | null = null;
+
+    if (!track || cards.length === 0 || !dialog || !dialogTrack) continue;
+
+    const updateGallery = () => {
+      galleryIndex = closestIndex(track, cards);
+      const activeCount = window.matchMedia("(max-width: 720px)").matches
+        ? 1
+        : 2;
+      for (const [index, card] of cards.entries()) {
+        card.dataset.galleryActive = String(
+          index >= galleryIndex && index < galleryIndex + activeCount,
+        );
+      }
+      const atStart = track.scrollLeft <= 1;
+      const atEnd =
+        track.scrollLeft + track.clientWidth >= track.scrollWidth - 1;
+      gallery.dataset.atStart = String(atStart);
+      gallery.dataset.atEnd = String(atEnd);
+      if (previous) previous.disabled = atStart;
+      if (next) next.disabled = atEnd;
+    };
+
+    const scrollGallery = (index: number) => {
+      const selected = cards[Math.max(0, Math.min(index, cards.length - 1))];
+      if (!selected) return;
+      const trackBox = track.getBoundingClientRect();
+      const selectedBox = selected.getBoundingClientRect();
+      const scrollPaddingStart =
+        Number.parseFloat(getComputedStyle(track).scrollPaddingInlineStart) ||
+        0;
+      track.scrollTo({
+        left:
+          track.scrollLeft +
+          selectedBox.left -
+          trackBox.left -
+          scrollPaddingStart,
+        behavior: "smooth",
+      });
+    };
+
+    const renderDialogIndex = (index: number) => {
+      dialogIndex = index;
+      if (dialogPrevious) dialogPrevious.disabled = dialogIndex === 0;
+      if (dialogNext) {
+        dialogNext.disabled = dialogIndex === dialogSlides.length - 1;
+      }
+    };
+
+    const updateDialog = () => {
+      renderDialogIndex(closestIndex(dialogTrack, dialogSlides));
+    };
+
+    const scrollDialog = (
+      index: number,
+      behavior: ScrollBehavior = "smooth",
+    ) => {
+      const bounded = Math.max(0, Math.min(index, dialogSlides.length - 1));
+      programmaticDialogIndex = bounded;
+      renderDialogIndex(bounded);
+      dialogTrack.scrollTo({
+        left: dialogSlides[bounded]?.offsetLeft ?? 0,
+        behavior,
+      });
+      if (behavior === "auto") {
+        requestAnimationFrame(() => {
+          programmaticDialogIndex = null;
+          updateDialog();
+        });
+      }
+    };
+
+    const openDialog = (index: number, source: HTMLButtonElement) => {
+      opener = source;
+      dialogIndex = index;
+      dialog.showModal();
+      document.documentElement.classList.add("has-gallery-dialog");
+      requestAnimationFrame(() => {
+        scrollDialog(index, "auto");
+        dialogClose?.focus({ preventScroll: true });
+      });
+    };
+
+    cards.forEach((card, index) => {
+      card.addEventListener("click", () => openDialog(index, card));
     });
-    previous?.addEventListener("click", () => select(selectedIndex - 1));
-    next?.addEventListener("click", () => select(selectedIndex + 1));
+    previous?.addEventListener("click", () => scrollGallery(galleryIndex - 1));
+    next?.addEventListener("click", () => scrollGallery(galleryIndex + 1));
+    dialogPrevious?.addEventListener("click", () =>
+      scrollDialog(dialogIndex - 1),
+    );
+    dialogNext?.addEventListener("click", () =>
+      scrollDialog(dialogIndex + 1),
+    );
+    dialogClose?.addEventListener("click", () => dialog.close());
+
+    track.addEventListener(
+      "scroll",
+      () => {
+        cancelAnimationFrame(galleryFrame);
+        galleryFrame = requestAnimationFrame(updateGallery);
+      },
+      { passive: true },
+    );
+    dialogTrack.addEventListener(
+      "scroll",
+      () => {
+        cancelAnimationFrame(dialogFrame);
+        clearTimeout(dialogSettleTimer);
+        dialogSettleTimer = window.setTimeout(() => {
+          programmaticDialogIndex = null;
+          updateDialog();
+        }, 120);
+        if (programmaticDialogIndex === null) {
+          dialogFrame = requestAnimationFrame(updateDialog);
+        }
+      },
+      { passive: true },
+    );
+
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") scrollDialog(dialogIndex - 1);
+      else if (event.key === "ArrowRight") scrollDialog(dialogIndex + 1);
+      else if (event.key === "Home") scrollDialog(0);
+      else if (event.key === "End") scrollDialog(dialogSlides.length - 1);
+      else if (event.key === "Escape") dialog.close();
+      else return;
+      event.preventDefault();
+    });
+    dialog.addEventListener("click", (event) => {
+      const target = event.target;
+      if (
+        target === dialog ||
+        target === dialogTrack ||
+        (target instanceof HTMLElement && target.hasAttribute("data-dialog-slide"))
+      ) {
+        dialog.close();
+      }
+    });
+    dialog.addEventListener("close", () => {
+      document.documentElement.classList.remove("has-gallery-dialog");
+      opener?.focus({ preventScroll: true });
+      opener = null;
+    });
+    window.addEventListener("resize", updateGallery, { passive: true });
+    updateGallery();
+    updateDialog();
   }
 </script>

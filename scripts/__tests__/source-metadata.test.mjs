@@ -9,8 +9,10 @@ import {
   assertSafeAssetPath,
   assertSafeMarkdownPath,
   fetchPluginSourceMetadata,
+  maxPluginGalleryBytes,
   maxPluginMarkdownBytes,
 } from "../lib/source-metadata.mjs";
+import { sha256 } from "../lib/registry.mjs";
 
 const sourceCommit = "b".repeat(40);
 const payload = {
@@ -44,14 +46,29 @@ test("source metadata is validated, derived, hashed, and mirrored deterministica
     icon: "search",
     accent: "#F59E0B",
   });
-  assert.equal(first.gallery[0].width, 1200);
-  assert.equal(first.gallery[0].height, 800);
-  assert.equal(first.gallery[0].mediaType, "image/png");
+  assert.deepEqual(Object.keys(first.gallery[0]).sort(), [
+    "alt",
+    "id",
+    "images",
+  ]);
+  assert.equal(first.gallery[0].images.preview.width, 1200);
+  assert.equal(first.gallery[0].images.preview.height, 800);
+  assert.equal(first.gallery[0].images.preview.mediaType, "image/webp");
+  assert.equal(first.gallery[0].images.full.width, 2400);
+  assert.equal(first.gallery[0].images.full.height, 1600);
+  assert.equal(first.gallery[0].images.full.mediaType, "image/webp");
   assert.equal(
     await readFile(
-      new URL(`lapis-search/${first.gallery[0].sha256}.png`, fixture.assetDir),
+      new URL(
+        `lapis-search/${first.gallery[0].images.preview.sha256}.webp`,
+        fixture.assetDir,
+      ),
     ).then((bytes) => bytes.byteLength),
-    first.gallery[0].size,
+    first.gallery[0].images.preview.size,
+  );
+  assert.equal(
+    first.gallery[0].images.full.sha256,
+    sha256(await webp(2400, 1600)),
   );
   assert.equal(first.content.overview.size, Buffer.byteLength("# Search\n"));
   assert.equal(
@@ -122,7 +139,7 @@ test("source metadata rejects unsafe paths, insecure links, ownership mismatches
   );
 });
 
-test("source metadata rejects unsafe logos and incorrect gallery dimensions", async () => {
+test("source metadata rejects unsafe logos and incorrect gallery variants", async () => {
   const unsafeSvg = Buffer.from(
     '<svg viewBox="0 0 128 128"><script>alert(1)</script></svg>',
   );
@@ -147,10 +164,118 @@ test("source metadata rejects unsafe logos and incorrect gallery dimensions", as
     fetchPluginSourceMetadata({
       payload,
       fetchImpl: await sourceFetch({
-        gallery: await png(640, 480),
+        preview: await webp(640, 480),
       }),
     }),
-    /must be 1200x800/,
+    /preview gallery image must be 1200x800/,
+  );
+
+  await assert.rejects(
+    fetchPluginSourceMetadata({
+      payload,
+      fetchImpl: await sourceFetch({
+        full: await webp(1200, 800),
+      }),
+    }),
+    /full gallery image must be 2400x1600/,
+  );
+
+  await assert.rejects(
+    fetchPluginSourceMetadata({
+      payload,
+      fetchImpl: await sourceFetch({
+        full: Buffer.alloc(maxPluginGalleryBytes + 1),
+      }),
+    }),
+    /exceeds 5242880 bytes/,
+  );
+});
+
+test("source metadata rejects legacy, unsafe, and mismatched gallery paths", async () => {
+  const gallery = registryGallery();
+  gallery[0].images.preview.path = "registry-assets/gallery/other.preview.webp";
+  await assert.rejects(
+    fetchPluginSourceMetadata({
+      payload,
+      fetchImpl: await sourceFetch({ source: { gallery } }),
+    }),
+    /overview preview image must use registry-assets\/gallery\/overview\.preview\.webp/,
+  );
+
+  await assert.rejects(
+    fetchPluginSourceMetadata({
+      payload,
+      fetchImpl: await sourceFetch({
+        source: {
+          gallery: [
+            {
+              id: "overview",
+              path: "registry-assets/gallery/overview.preview.webp",
+              surface: "desktop",
+              alt: "Legacy gallery image",
+            },
+          ],
+        },
+      }),
+    }),
+    /Invalid registry\.json/,
+  );
+
+  const legacyDescriptionGallery = registryGallery();
+  legacyDescriptionGallery[0].card.description =
+    "Legacy single-colour description.";
+  await assert.rejects(
+    fetchPluginSourceMetadata({
+      payload,
+      fetchImpl: await sourceFetch({
+        source: { gallery: legacyDescriptionGallery },
+      }),
+    }),
+    /Invalid registry\.json/,
+  );
+
+  const legacyLayoutGallery = registryGallery();
+  legacyLayoutGallery[0].card.layout = "copy-right";
+  await assert.rejects(
+    fetchPluginSourceMetadata({
+      payload,
+      fetchImpl: await sourceFetch({
+        source: { gallery: legacyLayoutGallery },
+      }),
+    }),
+    /Invalid registry\.json/,
+  );
+
+  const oversizedDescriptionGallery = registryGallery();
+  oversizedDescriptionGallery[0].card.description = [
+    { text: "a".repeat(100), tone: "neutral" },
+    { text: "b".repeat(81), tone: "cyan" },
+  ];
+  await assert.rejects(
+    fetchPluginSourceMetadata({
+      payload,
+      fetchImpl: await sourceFetch({
+        source: { gallery: oversizedDescriptionGallery },
+      }),
+    }),
+    /card description exceeds 180 characters/,
+  );
+
+  const unsafeCropGallery = registryGallery();
+  unsafeCropGallery[0].capture.focus = {
+    x: 0.8,
+    y: 0,
+    width: 0.3,
+    height: 1,
+  };
+  await assert.rejects(
+    fetchPluginSourceMetadata({
+      payload,
+      fetchImpl: await sourceFetch({
+        source: { gallery: unsafeCropGallery },
+      }),
+    }),
+    /custom focus must stay inside/,
   );
 });
 
@@ -167,16 +292,7 @@ async function sourceFetch(options = {}) {
     highlights: ["Search vault content quickly."],
     documentationUrl: "https://lapis.md/plugins/search",
     appearance: { icon: "search", accent: "#F59E0B" },
-    gallery: [
-      {
-        id: "overview",
-        path: "registry-assets/overview.desktop.png",
-        surface: "desktop",
-        alt: "Search results in Lapis Notes",
-        caption: "Search indexed notes",
-        capture: { storyId: "plugins-search--registry-showcase" },
-      },
-    ],
+    gallery: registryGallery(),
     content: { overview: "README.md", changelog: "CHANGELOG.md" },
     ...options.source,
   };
@@ -206,8 +322,12 @@ async function sourceFetch(options = {}) {
     [`${base}README.md`, options.readme ?? Buffer.from("# Search\n")],
     [`${base}CHANGELOG.md`, Buffer.from("# Changelog\n")],
     [
-      `${base}registry-assets/overview.desktop.png`,
-      options.gallery ?? (await png(1200, 800)),
+      `${base}registry-assets/gallery/overview.preview.webp`,
+      options.preview ?? (await webp(1200, 800)),
+    ],
+    [
+      `${base}registry-assets/gallery/overview.full.webp`,
+      options.full ?? (await webp(2400, 1600)),
     ],
   ]);
   if (source.appearance?.logo) {
@@ -257,4 +377,46 @@ function png(width, height) {
   })
     .png()
     .toBuffer();
+}
+
+function webp(width, height) {
+  return sharp({
+    create: {
+      width,
+      height,
+      channels: 4,
+      background: { r: 139, g: 92, b: 246, alpha: 1 },
+    },
+  })
+    .webp({ lossless: true })
+    .toBuffer();
+}
+
+function registryGallery() {
+  return [
+    {
+      id: "overview",
+      alt: "Search results in Lapis Notes",
+      images: {
+        preview: {
+          path: "registry-assets/gallery/overview.preview.webp",
+        },
+        full: { path: "registry-assets/gallery/overview.full.webp" },
+      },
+      capture: {
+        storyId: "plugins-search-registry-screenshots--search-sidebar",
+        focus: "right-sidebar",
+      },
+      card: {
+        headline: [
+          { text: "Search every note", tone: "neutral" },
+          { text: "from one place", tone: "violet" },
+        ],
+        description: [
+          { text: "Filter indexed results", tone: "violet" },
+          { text: "without leaving the workspace.", tone: "neutral" },
+        ],
+      },
+    },
+  ];
 }

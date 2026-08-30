@@ -25,9 +25,10 @@
     "site:check": "astro check",
     "site:preview": "astro preview",
     "test": "node --test scripts/__tests__/*.test.mjs",
+    "test:browser": "playwright test",
     "check:format": "prettier . --check --log-level warn",
     "fmt": "prettier . --write --log-level warn",
-    "check": "pnpm registry:validate && pnpm registry:generate && pnpm registry:verify-signatures && pnpm stats:validate && pnpm site:check && pnpm site:build && pnpm test && pnpm check:format"
+    "check": "pnpm registry:validate && pnpm registry:generate && pnpm registry:verify-signatures && pnpm stats:validate && pnpm site:check && pnpm site:build && pnpm test && pnpm test:browser && pnpm check:format"
   },
   "dependencies": {
     "ajv": "^8.17.1",
@@ -39,6 +40,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@lucide/astro": "^1.17.0",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^25.9.1",
     "astro": "^6.4.2",
     "prettier": "3.3.3",
