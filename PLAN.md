@@ -14,7 +14,7 @@ This document describes how to set up a Lapis plugin registry that mirrors the u
 - Community plugins registered by metadata PRs.
 - Signed registry metadata and signed official releases.
 - A clear distinction between **built-in core**, **official installable**, and **community** plugins.
-- Compatibility with both web and Electron.
+- Compatibility with both web and desktop hosts.
 
 The goal is to make optional first-party plugins downloadable through the app without statically bundling all of them into the main workspace bundle.
 
@@ -27,7 +27,7 @@ The current app already has most of the runtime substrate needed for an Obsidian
 - Optional `styles.css` is loaded from the plugin folder when the plugin is enabled.
 - Enabled community plugin IDs are tracked through `/.obsidian/community-plugins.json`.
 - Plugin manifests already include fields such as `id`, `name`, `author`, `version`, `minAppVersion`, `isDesktopOnly`, `supportedRuntimes`, `requiredCapabilities`, and Lapis-specific metadata.
-- Electron can route privileged plugins through the native desktop sidecar when a manifest requests capabilities, desktop runtimes, or trusted desktop execution.
+- Desktop hosts can route privileged plugins through the native sidecar when a manifest requests capabilities, desktop runtimes, or trusted desktop execution.
 
 The registry should therefore **not replace the existing plugin manager**. It should add a distribution layer that downloads, verifies, and writes plugin folders into the existing plugin directory layout.
 
@@ -230,7 +230,7 @@ Example:
       "channel": "official",
       "latestVersion": "0.1.0",
       "minAppVersion": "0.20.0",
-      "platforms": ["web", "electron"],
+      "platforms": ["web", "desktop"],
       "categories": ["editor", "documents"],
       "badges": ["official", "verified"],
       "detail": "plugins/lapis-docs.json",
@@ -306,7 +306,7 @@ Each plugin gets a detail file with full release history.
       "version": "0.1.0",
       "minAppVersion": "0.20.0",
       "releasedAt": "2026-05-31T00:00:00.000Z",
-      "platforms": ["web", "electron"],
+      "platforms": ["web", "desktop"],
       "releaseManifest": {
         "url": "https://assets.example.com/lapis-docs/0.1.0/release.signed.json",
         "sha256": "...",
@@ -410,7 +410,7 @@ Each official release should include a canonical `release.json`:
   },
   "compatibility": {
     "minAppVersion": "0.20.0",
-    "platforms": ["web", "electron"]
+    "platforms": ["web", "desktop"]
   },
   "files": [
     {
@@ -721,7 +721,7 @@ For Docs, recommended classification:
 runtime source: installed plugin
 provenance: official
 channel: official
-platforms: web, electron
+platforms: web, desktop
 ```
 
 ### Step 2: Reserve the plugin ID
@@ -820,7 +820,7 @@ Create `entries/official/lapis-docs.jsonc`:
   "author": "Lapis Notes",
   "channel": "official",
   "categories": ["editor", "documents"],
-  "platforms": ["web", "electron"],
+  "platforms": ["web", "desktop"],
   "latestVersion": "0.1.0",
   "detail": {
     "versions": {
@@ -875,7 +875,7 @@ In a clean vault:
 7. Verify `installed-plugins.json` records official provenance and hashes.
 8. Open a `.lapisdoc` file.
 9. Restart the app and verify the plugin loads from installed files.
-10. Test web and Electron.
+10. Test web and desktop.
 
 ## 16. Publishing community plugins
 
@@ -1044,7 +1044,7 @@ If an ID changes, record aliases:
 }
 ```
 
-## 21. Web and Electron hosting requirements
+## 21. Web and desktop hosting requirements
 
 ### Web/PWA
 
@@ -1057,7 +1057,7 @@ Requirements:
 - Plugins requesting native capabilities must be rejected or hidden.
 - Signature verification must run in browser-compatible JavaScript.
 
-### Electron
+### Desktop
 
 Requirements:
 
@@ -1108,7 +1108,7 @@ Use this checklist for each first-party plugin release.
 [ ] Registry entry updated.
 [ ] Registry CI passes.
 [ ] App install tested on web.
-[ ] App install tested on Electron.
+[ ] App install tested on desktop.
 [ ] Plugin enable/disable tested.
 [ ] Restart load tested.
 [ ] Update path tested from previous version.
@@ -1157,7 +1157,7 @@ Use Docs as the first pilot because it is optional and comparatively heavy.
 ## Compatibility
 
 - Minimum Lapis version:
-- Platforms: web / electron / both
+- Platforms: web / desktop / both
 - Desktop-only: yes / no
 - Capabilities requested:
 

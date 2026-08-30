@@ -153,7 +153,9 @@ export interface SitePlugin
   firstReleasedAt: string;
 }
 
-const registryRoot = path.join(process.cwd(), "generated", "v1");
+const registryRoot =
+  process.env.LAPIS_REGISTRY_DATA_V1_DIR ??
+  path.join(process.cwd(), "generated", "v1");
 const siteRegistryRoot =
   process.env.LAPIS_REGISTRY_SITE_V1_DIR ??
   path.join(process.cwd(), "dist", "v1");

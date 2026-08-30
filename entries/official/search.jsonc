@@ -43,7 +43,7 @@
     "url": "https://github.com/lapismd/lapis-plugins",
     "verified": true,
   },
-  "platforms": ["web", "electron"],
+  "platforms": ["web", "desktop"],
   "readme": {
     "sha256": "4cf55dc3a7afb8dc59594ebf4075a2f2e215c34ebc2692f869b129cb7d3613a2",
     "size": 644,
@@ -67,7 +67,7 @@
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/search%400.1.2/search-0.1.2.lapis-plugin",
       },
       "minAppVersion": "0.1.0",
-      "platforms": ["web", "electron"],
+      "platforms": ["web", "desktop"],
       "releasedAt": "2026-08-29T09:36:53.000Z",
       "version": "0.1.2",
     },

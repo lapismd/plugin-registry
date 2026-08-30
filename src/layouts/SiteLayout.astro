@@ -15,6 +15,7 @@ const {
 const { plugins } = await getRegistrySiteData();
 const isLandingPage = Astro.url.pathname === "/";
 const currentYear = new Date().getUTCFullYear();
+const sourcePreview = process.env.LAPIS_REGISTRY_SOURCE_PREVIEW;
 ---
 
 <!doctype html>
@@ -28,6 +29,16 @@ const currentYear = new Date().getUTCFullYear();
   </head>
   <body>
     <div class="site-shell">
+      {
+        sourcePreview ? (
+          <aside class="source-preview-banner" role="status">
+            <strong>Unsigned local source preview</strong>
+            <span>
+              Manifest, copy, and media are overlaid from <code>{sourcePreview}</code>.
+            </span>
+          </aside>
+        ) : null
+      }
       <header class:list={["site-header", isLandingPage && "site-header--landing"]}>
         <a class="site-brand" href="/" aria-label="Lapis Plugin Registry">
           <img src="/lapis-logo.svg" alt="" aria-hidden="true" />

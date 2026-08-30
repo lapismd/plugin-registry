@@ -11,7 +11,7 @@
   },
   "compatibility": {
     "minAppVersion": "1.7.7",
-    "platforms": ["web", "electron"]
+    "platforms": ["web", "desktop"]
   },
   "files": [
     {

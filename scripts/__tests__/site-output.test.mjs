@@ -108,7 +108,7 @@ test("site build emits pages and registry metadata", async () => {
   assert.match(detail, /data-download-link/);
   assert.match(detail, /data-plugin-readme/);
   assert.match(detail, /data-plugin-changelog/);
-  assert.match(detail, /View source README/);
+  assert.match(detail, /View source overview/);
   assert.doesNotMatch(detail, /Loading README/);
   assert.doesNotMatch(detail, /fetch\(endpoint/);
   assert.match(detail, /class="detail-links"/);

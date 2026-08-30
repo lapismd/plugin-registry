@@ -43,7 +43,7 @@
     "url": "https://github.com/lapismd/lapis-plugins",
     "verified": true,
   },
-  "platforms": ["web", "electron"],
+  "platforms": ["web", "desktop"],
   "readme": {
     "sha256": "344ac28b75c67ea3a5977d57184a0d8de56cba5cf59b63786e3fb116319c57d0",
     "size": 597,
@@ -67,7 +67,7 @@
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/bases%400.1.2/bases-0.1.2.lapis-plugin",
       },
       "minAppVersion": "0.1.0",
-      "platforms": ["web", "electron"],
+      "platforms": ["web", "desktop"],
       "releasedAt": "2026-08-29T09:36:02.000Z",
       "version": "0.1.2",
     },

@@ -27,7 +27,7 @@ function validEntry(overrides = {}) {
     status: "active",
     latestVersion: "2026.6.6",
     minAppVersion: "1.7.7",
-    platforms: ["web", "electron"],
+    platforms: ["web", "desktop"],
     categories: ["graph", "visualization"],
     appearance: {
       icon: "network",
@@ -56,7 +56,7 @@ function validEntry(overrides = {}) {
         version: "2026.6.6",
         minAppVersion: "1.7.7",
         releasedAt: "2026-06-06T22:47:39Z",
-        platforms: ["web", "electron"],
+        platforms: ["web", "desktop"],
         bundle: {
           url: "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin",
           sha256:
@@ -81,6 +81,18 @@ test("valid Graph entry passes schema and custom validation", async () => {
 
   assert.equal(validate(schemaEntry), true, formatAjvErrors(validate));
   assert.deepEqual(validateEntryRules([entry]), []);
+});
+
+test("rejects Electron as a registry compatibility platform", async () => {
+  const ajv = await createAjv();
+  const validate = ajv.getSchema(
+    "https://registry.lapis.md/schemas/catalog-entry.schema.json",
+  );
+  const entry = validEntry({ platforms: ["web", "electron"] });
+  delete entry.__sourcePath;
+
+  assert.equal(validate(entry), false);
+  assert.match(formatAjvErrors(validate), /platforms/);
 });
 
 test("rejects duplicate plugin ids", () => {

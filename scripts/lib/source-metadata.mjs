@@ -117,6 +117,7 @@ export async function fetchPluginSourceMetadata({
   });
 
   return {
+    version: manifest.version,
     name: manifest.name,
     description: manifest.description,
     author: normalizeAuthorName(manifest.author ?? packageJson.author),
@@ -125,10 +126,7 @@ export async function fetchPluginSourceMetadata({
       repositoryUrl.split("/").slice(0, 4).join("/"),
     minAppVersion:
       manifest.minAppVersion ?? manifest.lapis?.compatibility?.minAppVersion,
-    platforms:
-      manifest.platforms ??
-      manifest.lapis?.compatibility?.platforms ??
-      (manifest.isDesktopOnly ? ["electron"] : ["web", "electron"]),
+    platforms: manifest.isDesktopOnly ? ["desktop"] : ["web", "desktop"],
     categories: source.categories,
     highlights: source.highlights,
     ...(appearance ? { appearance } : {}),

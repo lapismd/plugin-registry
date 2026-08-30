@@ -43,7 +43,7 @@
     "url": "https://github.com/lapismd/lapis-plugins",
     "verified": true,
   },
-  "platforms": ["web", "electron"],
+  "platforms": ["web", "desktop"],
   "readme": {
     "sha256": "95b75c38bed2aabe33db28a10f29a92489d3e6252f086a7be7ec6acb96ecb139",
     "size": 657,
@@ -67,7 +67,7 @@
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/bookmarks%400.1.2/bookmarks-0.1.2.lapis-plugin",
       },
       "minAppVersion": "0.1.0",
-      "platforms": ["web", "electron"],
+      "platforms": ["web", "desktop"],
       "releasedAt": "2026-08-29T09:36:10.000Z",
       "version": "0.1.2",
     },

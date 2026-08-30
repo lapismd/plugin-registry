@@ -323,7 +323,7 @@ async function signedReleaseFixture(options = {}) {
     },
     compatibility: {
       minAppVersion: "0.1.0",
-      platforms: ["web", "electron"],
+      platforms: ["web", "desktop"],
     },
     runtime: {
       entries: {
@@ -491,7 +491,7 @@ function existingGraphEntry() {
     status: "active",
     latestVersion: "2026.6.6",
     minAppVersion: "1.7.7",
-    platforms: ["web", "electron"],
+    platforms: ["web", "desktop"],
     categories: ["graph", "visualization"],
     badges: ["official", "verified"],
     owner: { name: "Lapis Notes", verified: true },
@@ -500,7 +500,7 @@ function existingGraphEntry() {
         version: "2026.6.6",
         minAppVersion: "1.7.7",
         releasedAt: "2026-06-06T22:47:39Z",
-        platforms: ["web", "electron"],
+        platforms: ["web", "desktop"],
         bundle: {
           url: "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin",
           sha256:

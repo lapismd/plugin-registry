@@ -20,6 +20,7 @@
     "stats:summary": "node scripts/rebuild-download-stats-summary.mjs",
     "stats:validate": "node scripts/validate-download-stats.mjs",
     "site:dev": "astro dev",
+    "site:dev:source": "node scripts/dev-site.mjs",
     "site:build": "node scripts/build-site.mjs",
     "site:check": "astro check",
     "site:preview": "astro preview",

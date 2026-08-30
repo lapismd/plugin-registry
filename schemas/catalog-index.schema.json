@@ -68,7 +68,7 @@
           "minAppVersion": { "type": "string" },
           "platforms": {
             "type": "array",
-            "items": { "enum": ["web", "electron"] }
+            "items": { "enum": ["web", "desktop"] }
           },
           "categories": {
             "type": "array",

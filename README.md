@@ -20,6 +20,18 @@ pnpm registry:preview:release-plan -- --release-plan ../lapis-plugins/.release/r
 pnpm registry:generate
 pnpm registry:verify-signatures
 pnpm stats:validate
+pnpm site:dev:source
+```
+
+`site:dev:source` starts the catalog with an unsigned overlay from the sibling
+`../lapis-plugins` checkout. It reads current package manifests,
+`registry.json`, registry-only Markdown, logos, and gallery assets without
+changing `generated/v1` or its signatures. A banner keeps the local preview
+distinct from signed production metadata. Point it at another checkout or port
+when needed:
+
+```sh
+pnpm site:dev:source -- --source ../lapis-plugins-registry-media --port 4322
 ```
 
 Registry signing uses protected CI secrets or a local key generated under
@@ -67,6 +79,11 @@ under `v1/content/<plugin-id>/`. Signed detail metadata records each mirror and
 source URL with its SHA-256, byte size, and `text/markdown` media type. The
 public site and Lapis clients consume the same references. Legacy `readmeUrl`
 and `readme` fields remain supported while older catalog entries migrate.
+
+First-party packages keep end-user catalog copy in
+`registry-content/overview.md`; package-manager installation and static
+composition guidance remains in the package README. Registry compatibility
+uses `web` and `desktop` as its only platform identifiers.
 
 Source metadata is intentionally bounded: links must use HTTPS, Markdown paths
 must remain inside the package, highlights are plain text, and content is valid

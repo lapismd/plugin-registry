@@ -10,7 +10,7 @@ export const downloadStatsMetric = "approximate_redirect_requests";
 export const downloadStatsDelayDays = 2;
 
 const actions = new Set(["install", "update", "download", "unknown"]);
-const platforms = new Set(["web", "desktop", "electron", "unknown"]);
+const platforms = new Set(["web", "desktop", "unknown"]);
 const operatingSystems = new Set([
   "macos",
   "windows",

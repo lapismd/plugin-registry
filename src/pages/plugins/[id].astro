@@ -30,8 +30,8 @@ const related = relatedPlugins(plugin, plugins);
 const releases = Object.values(plugin.detailData.versions).sort((a, b) =>
   b.version.localeCompare(a.version),
 );
-const installDisabled = plugin.status !== "active";
 const release = plugin.latestRelease;
+const installDisabled = plugin.status !== "active" || release.bundle.pending === true;
 const primaryCategory = plugin.categories[0] ?? "package";
 const assetHealth = release.bundle.pending ? 24 : 100;
 const readmeUrl = plugin.detailData.readmeUrl;
@@ -53,6 +53,9 @@ const legacyReadmeHtml =
     : null;
 const readmeHtml = overviewContent.html ?? legacyReadmeHtml;
 const overviewSourceUrl = overviewReference?.sourceUrl ?? readmeUrl;
+const overviewSourceLabel = overviewReference
+  ? "View source overview"
+  : "View source README";
 const downloadHref = pluginDownloadHref(release);
 ---
 
@@ -96,9 +99,15 @@ const downloadHref = pluginDownloadHref(release);
           >
             {installDisabled ? "Install pending" : "Install in Lapis"}
           </button>
-          <a class="button-secondary" href={downloadHref} data-download-link>
-            Download .lapis-plugin
-          </a>
+          {
+            release.bundle.pending ? (
+              <span class="button-secondary" aria-disabled="true">Bundle pending</span>
+            ) : (
+              <a class="button-secondary" href={downloadHref} data-download-link>
+                Download .lapis-plugin
+              </a>
+            )
+          }
           <button class="button-icon" type="button" aria-label="More actions">
             ...
           </button>
@@ -142,19 +151,19 @@ const downloadHref = pluginDownloadHref(release);
                 <>
                   <section class="readme-panel" data-plugin-readme set:html={readmeHtml} />
                   <p class="readme-source">
-                    <a href={overviewSourceUrl}>View source README</a>
+                    <a href={overviewSourceUrl}>{overviewSourceLabel}</a>
                   </p>
                 </>
               ) : overviewSourceUrl ? (
                 <>
                   <section class="readme-panel" data-plugin-readme-error>
                     <div class="readme-panel__status" data-readme-status>
-                      README details are unavailable. Use the source README link for the latest documentation.
+                      Overview details are unavailable. Use the source link for the latest documentation.
                       {overviewContent.error ? <details><summary>Diagnostic</summary><code>{overviewContent.error}</code></details> : null}
                     </div>
                   </section>
                   <p class="readme-source">
-                    <a href={overviewSourceUrl}>View source README</a>
+                    <a href={overviewSourceUrl}>{overviewSourceLabel}</a>
                   </p>
                 </>
               ) : (
@@ -348,9 +357,13 @@ const downloadHref = pluginDownloadHref(release);
             <div>
               <dt>Plugin bundle</dt>
               <dd>
-                <a href={downloadHref} data-download-link>
-                  {release.bundle.pending ? "Pending upload" : ".lapis-plugin"}
-                </a>
+                {
+                  release.bundle.pending ? (
+                    <span>Pending upload</span>
+                  ) : (
+                    <a href={downloadHref} data-download-link>.lapis-plugin</a>
+                  )
+                }
               </dd>
             </div>
           </dl>

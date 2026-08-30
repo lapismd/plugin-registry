@@ -43,7 +43,7 @@
     "url": "https://github.com/lapismd/lapis-plugins",
     "verified": true,
   },
-  "platforms": ["web", "electron"],
+  "platforms": ["web", "desktop"],
   "readme": {
     "sha256": "b7436c4c70b3c638e86e70ba8d62d8d79fbfd7894706898c2188c10dd936a09b",
     "size": 689,
@@ -67,7 +67,7 @@
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/source-editor%400.1.1/lapis-source-editor-0.1.1.lapis-plugin",
       },
       "minAppVersion": "0.1.0",
-      "platforms": ["web", "electron"],
+      "platforms": ["web", "desktop"],
       "releasedAt": "2026-08-29T09:37:01.000Z",
       "version": "0.1.1",
     },

@@ -43,7 +43,7 @@
     "url": "https://github.com/lapismd/lapis-plugins",
     "verified": true,
   },
-  "platforms": ["web", "electron"],
+  "platforms": ["web", "desktop"],
   "readme": {
     "sha256": "7912cf3a7ed9b15b2a635c79352469224b61b2be2a70b958a08a4fa2242cfa3f",
     "size": 614,
@@ -67,7 +67,7 @@
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/history%400.1.2/history-0.1.2.lapis-plugin",
       },
       "minAppVersion": "0.1.0",
-      "platforms": ["web", "electron"],
+      "platforms": ["web", "desktop"],
       "releasedAt": "2026-08-29T09:36:30.000Z",
       "version": "0.1.2",
     },

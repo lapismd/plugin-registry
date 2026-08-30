@@ -39,7 +39,7 @@
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": { "enum": ["web", "electron"] }
+      "items": { "enum": ["web", "desktop"] }
     },
     "categories": {
       "type": "array",
@@ -201,7 +201,7 @@
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": { "enum": ["web", "electron"] }
+          "items": { "enum": ["web", "desktop"] }
         },
         "bundle": { "$ref": "#/$defs/hashedRemoteFile" }
       }

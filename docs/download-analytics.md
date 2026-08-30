@@ -23,7 +23,7 @@ uses `pluginId@version` as the index and exactly five normalized blobs:
 1. Plugin ID
 2. Version
 3. Action: `install`, `update`, `download`, or `unknown`
-4. Platform: `web`, `desktop`, `electron`, or `unknown`
+4. Platform: `web`, `desktop`, or `unknown`
 5. OS: `macos`, `windows`, `linux`, `ios`, `android`, or `unknown`
 
 The endpoint does not record an IP address, raw user agent, referrer, user ID,

@@ -38,7 +38,7 @@
           "enum": ["install", "update", "download", "unknown"]
         },
         "platform": {
-          "enum": ["web", "desktop", "electron", "unknown"]
+          "enum": ["web", "desktop", "unknown"]
         },
         "os": {
           "enum": ["macos", "windows", "linux", "ios", "android", "unknown"]

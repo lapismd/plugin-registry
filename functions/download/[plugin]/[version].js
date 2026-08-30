@@ -1,7 +1,7 @@
 import { downloadTargets } from "../../../generated/download-targets.mjs";
 
 export const DOWNLOAD_ACTIONS = new Set(["install", "update", "download"]);
-export const DOWNLOAD_PLATFORMS = new Set(["web", "desktop", "electron"]);
+export const DOWNLOAD_PLATFORMS = new Set(["web", "desktop"]);
 export const DOWNLOAD_OSES = new Set([
   "macos",
   "windows",
