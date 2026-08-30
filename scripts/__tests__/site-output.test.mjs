@@ -111,12 +111,22 @@ test("site build emits pages and registry metadata", async () => {
   assert.match(detail, /View source overview/);
   assert.doesNotMatch(detail, /Loading README/);
   assert.doesNotMatch(detail, /fetch\(endpoint/);
-  assert.match(detail, /class="detail-links"/);
-  assert.match(detail, />Documentation<\/a>/);
-  assert.match(detail, />Homepage<\/a>/);
-  assert.match(detail, />Issues<\/a>/);
-  assert.match(detail, />Repository<\/a>/);
+  assert.doesNotMatch(detail, /Registry health/);
+  assert.doesNotMatch(detail, /<dt>Links<\/dt>/);
+  assert.match(detail, /data-action-menu-trigger/);
+  assert.match(detail, /data-action-menu-popover/);
+  assert.match(detail, /data-overview-collapse/);
+  assert.match(
+    detail,
+    /data-overview-toggle[^>]*>[\s\S]*?Show more[\s\S]*?<\/button>/,
+  );
+  assert.match(detail, />\s*Homepage\s*<\/a>/);
+  assert.match(detail, />\s*Report bug\s*<\/a>/);
+  assert.match(detail, />\s*Request feature\s*<\/a>/);
+  assert.match(detail, />\s*View repository\s*<\/a>/);
   assert.match(detail, /class="plugin-identity plugin-identity--hero"/);
+  assert.match(detail, /aria-label="Breadcrumb"/);
+  assert.match(detail, /href="\/plugins\/\?categories=productivity"/);
 
   const listing = await readFile(new URL("plugins/index.html", dist), "utf8");
   const names = [...listing.matchAll(/data-name="([^"]+)"/g)].map(
@@ -131,6 +141,11 @@ test("site build emits pages and registry metadata", async () => {
   assert.doesNotMatch(listing, /data-filter-label="Ai"/);
   assert.match(listing, /class="lucide lucide-chevrons-up-down sort-chevrons"/);
   assert.doesNotMatch(listing, /<span class="sort-chevrons"/);
+  assert.match(listing, /data-result-list data-view="grid"/);
+  assert.match(listing, /class="lucide lucide-list"/);
+  assert.match(listing, /class="lucide lucide-layout-grid"/);
+  assert.match(listing, /data-category-toggle/);
+  assert.match(listing, /data-category-extra="true"/);
 
   const landing = await readFile(new URL("index.html", dist), "utf8");
   assert.match(landing, />New<\/h2>/);

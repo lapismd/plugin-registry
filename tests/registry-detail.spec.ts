@@ -143,6 +143,7 @@ test("desktop carousel, health segments, and install geometry match the registry
       fontSize: style.fontSize,
       lineHeight: style.lineHeight,
       fontWeight: style.fontWeight,
+      color: style.color,
     };
   });
   expect(installGeometry).toEqual({
@@ -152,6 +153,7 @@ test("desktop carousel, health segments, and install geometry match the registry
     fontSize: "14px",
     lineHeight: "20px",
     fontWeight: "500",
+    color: "rgb(255, 255, 255)",
   });
   await expect(install).toBeDisabled();
 
@@ -166,6 +168,407 @@ test("desktop carousel, health segments, and install geometry match the registry
   expect(await segmentState(healthBars.nth(1))).toEqual({
     count: 4,
     active: 1,
+  });
+  expect(await segmentColors(healthBars.nth(0))).toEqual([
+    "rgb(52, 211, 153)",
+    "rgb(52, 211, 153)",
+    "rgb(52, 211, 153)",
+    "rgb(52, 211, 153)",
+  ]);
+  expect(await segmentColors(healthBars.nth(1))).toEqual([
+    "rgb(138, 92, 245)",
+    "rgb(54, 54, 54)",
+    "rgb(54, 54, 54)",
+    "rgb(54, 54, 54)",
+  ]);
+});
+
+test("detail content, actions, and collapsed overview follow the reference layout", async ({
+  page,
+}) => {
+  await page.goto(pluginPath);
+
+  const searchInput = page.getByRole("searchbox", { name: "Search plugins" });
+  const searchForm = page.getByRole("search");
+  expect(
+    await searchForm.evaluate((node) => {
+      const style = getComputedStyle(node);
+      const input = node.querySelector<HTMLInputElement>("input")!;
+      const inputStyle = getComputedStyle(input);
+      const box = node.getBoundingClientRect();
+      return {
+        width: box.width,
+        height: box.height,
+        radius: style.borderRadius,
+        background: style.backgroundColor,
+        boxShadow: style.boxShadow,
+        inputBackground: inputStyle.backgroundColor,
+        inputBorder: inputStyle.border,
+        inputColor: inputStyle.color,
+        inputFontSize: inputStyle.fontSize,
+        inputLineHeight: inputStyle.lineHeight,
+      };
+    }),
+  ).toEqual({
+    width: 525,
+    height: 40,
+    radius: "999px",
+    background: "rgb(38, 38, 38)",
+    boxShadow: "none",
+    inputBackground: "rgba(0, 0, 0, 0)",
+    inputBorder: "0px none rgb(255, 255, 255)",
+    inputColor: "rgb(255, 255, 255)",
+    inputFontSize: "14px",
+    inputLineHeight: "20px",
+  });
+  await searchInput.focus();
+  await expect(searchForm).toHaveCSS(
+    "box-shadow",
+    "rgb(115, 115, 115) 0px 0px 0px 2px",
+  );
+  await expect(searchInput).toHaveCSS("outline-style", "none");
+  await searchInput.press("Escape");
+  await expect(searchInput).not.toBeFocused();
+
+  await expect(page.getByText("Registry health", { exact: true })).toHaveCount(
+    0,
+  );
+  await expect(page.locator(".breadcrumbs")).toHaveCount(0);
+
+  const heroGeometry = await page.evaluate(() => {
+    const identity = document
+      .querySelector<HTMLElement>(".plugin-identity--hero")!
+      .getBoundingClientRect();
+    const heading = document
+      .querySelector<HTMLElement>(".plugin-title h1")!
+      .getBoundingClientRect();
+    const description = document
+      .querySelector<HTMLElement>(".plugin-description")!
+      .getBoundingClientRect();
+    const actions = document
+      .querySelector<HTMLElement>(".detail-actions")!
+      .getBoundingClientRect();
+    const headingStyle = getComputedStyle(
+      document.querySelector<HTMLElement>(".plugin-title h1")!,
+    );
+    return {
+      identitySize: [identity.width, identity.height],
+      identityRadius: getComputedStyle(
+        document.querySelector<HTMLElement>(".plugin-identity--hero")!,
+      ).borderRadius,
+      headingSize: headingStyle.fontSize,
+      headingLineHeight: headingStyle.lineHeight,
+      headingInset: heading.left - identity.right,
+      descriptionAligned: description.left - identity.left,
+      actionsAligned: actions.left - identity.left,
+    };
+  });
+  expect(heroGeometry).toEqual({
+    identitySize: [80, 80],
+    identityRadius: "16px",
+    headingSize: "36px",
+    headingLineHeight: "40px",
+    headingInset: 24,
+    descriptionAligned: 0,
+    actionsAligned: 0,
+  });
+
+  const actionsTrigger = page.getByRole("button", { name: "More actions" });
+  expect(
+    await actionsTrigger.evaluate((node) => {
+      const button = node.getBoundingClientRect();
+      const icon = node.querySelector("svg")!.getBoundingClientRect();
+      const style = getComputedStyle(node);
+      return {
+        height: button.height,
+        width: button.width,
+        radius: style.borderRadius,
+        iconOffsetX:
+          icon.left + icon.width / 2 - (button.left + button.width / 2),
+        iconOffsetY:
+          icon.top + icon.height / 2 - (button.top + button.height / 2),
+      };
+    }),
+  ).toEqual({
+    height: 44,
+    width: 48,
+    radius: "8px",
+    iconOffsetX: 0,
+    iconOffsetY: 0,
+  });
+
+  await actionsTrigger.click();
+  const actionMenu = page.getByRole("menu", { name: "AI actions" });
+  await expect(actionMenu).toBeVisible();
+  await expect(actionsTrigger).toHaveAttribute("aria-expanded", "true");
+  await expect(
+    actionMenu.getByRole("menuitem", { name: "View repository" }),
+  ).toBeVisible();
+  await expect(
+    actionMenu.getByRole("menuitem", { name: "Homepage" }),
+  ).toBeVisible();
+  await expect(
+    actionMenu.getByRole("menuitem", { name: "Report bug" }),
+  ).toBeVisible();
+  await expect(
+    actionMenu.getByRole("menuitem", { name: "Request feature" }),
+  ).toBeVisible();
+  await expect(
+    actionMenu.getByRole("menuitem", { name: "Report plugin" }),
+  ).toBeVisible();
+  await expect(
+    actionMenu.getByRole("menuitem", { name: "Bundle pending" }),
+  ).toHaveAttribute("aria-disabled", "true");
+  await expect(
+    page.locator('.detail-metadata dt:text-is("Links")'),
+  ).toHaveCount(0);
+  await actionsTrigger.press("Escape");
+  await expect(actionMenu).not.toBeVisible();
+  await expect(actionsTrigger).toBeFocused();
+
+  const sidebar = page.locator(".detail-sidebar");
+  const details = page.locator('section[aria-label="Plugin details"]');
+  const detailsHeading = details.getByRole("heading", { name: "Details" });
+  expect(
+    await details.evaluate((node) => ({
+      background: getComputedStyle(node).backgroundColor,
+      backgroundImage: getComputedStyle(node).backgroundImage,
+    })),
+  ).toEqual({
+    background: "rgba(0, 0, 0, 0)",
+    backgroundImage: "none",
+  });
+  await expect(sidebar).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  expect(
+    await detailsHeading.evaluate((node) => {
+      const style = getComputedStyle(node);
+      return {
+        borderBottom: style.borderBottom,
+        color: style.color,
+        fontSize: style.fontSize,
+        fontWeight: style.fontWeight,
+        paddingBottom: style.paddingBottom,
+      };
+    }),
+  ).toEqual({
+    borderBottom: "1px solid rgb(38, 38, 38)",
+    color: "rgb(179, 179, 179)",
+    fontSize: "14px",
+    fontWeight: "500",
+    paddingBottom: "12px",
+  });
+  const metadataGeometry = await details.locator("dl").evaluate((node) => {
+    const firstRow = node.children[0];
+    const label = firstRow.querySelector("dt")!.getBoundingClientRect();
+    const value = firstRow.querySelector("dd")!.getBoundingClientRect();
+    const style = getComputedStyle(node);
+    return {
+      columns: style.gridTemplateColumns.split(" ").length,
+      rowAligned: label.top === value.top,
+      rowDisplay: getComputedStyle(firstRow).display,
+    };
+  });
+  expect(metadataGeometry).toEqual({
+    columns: 2,
+    rowAligned: true,
+    rowDisplay: "contents",
+  });
+
+  const overviewPanel = page.locator('[data-panel="overview"]');
+  expect(
+    await overviewPanel.evaluate((node) => {
+      const style = getComputedStyle(node);
+      return {
+        radius: style.borderRadius,
+        background: style.backgroundColor,
+      };
+    }),
+  ).toEqual({ radius: "16px", background: "rgb(30, 30, 30)" });
+  const overviewContent = page.locator("[data-overview-content]");
+  const overviewToggle = page.locator("[data-overview-toggle]");
+  await expect(overviewToggle).toHaveAccessibleName("Show more");
+  await expect(overviewToggle).toBeVisible();
+  await expect(page.locator(".overview-collapse__fade")).toBeVisible();
+  expect(
+    await overviewContent.evaluate((node) => ({
+      clientHeight: node.clientHeight,
+      scrollHeight: node.scrollHeight,
+    })),
+  ).toMatchObject({ clientHeight: 360 });
+  expect(
+    await overviewContent.evaluate((node) => node.scrollHeight),
+  ).toBeGreaterThan(360);
+  await overviewToggle.click();
+  await expect(overviewToggle).toHaveText("Show less");
+  await expect(overviewToggle).toHaveAttribute("aria-expanded", "true");
+  await expect(page.locator(".overview-collapse__fade")).not.toBeVisible();
+  expect(await overviewContent.evaluate((node) => node.clientHeight)).toBe(
+    await overviewContent.evaluate((node) => node.scrollHeight),
+  );
+
+  const releasesTab = page.getByRole("tab", { name: /Releases/ });
+  const releaseCount = releasesTab.locator(".tab-count");
+  expect(
+    await releaseCount.evaluate((node) => {
+      const style = getComputedStyle(node);
+      return {
+        radius: style.borderRadius,
+        background: style.backgroundColor,
+        padding: style.padding,
+      };
+    }),
+  ).toEqual({
+    radius: "999px",
+    background: "rgb(38, 38, 38)",
+    padding: "2px 6px",
+  });
+  await releasesTab.click();
+  await expect(releasesTab).toHaveAttribute("aria-selected", "true");
+  const releaseChip = page.locator(".release-status").first();
+  await expect(releaseChip).toBeVisible();
+  await expect(releaseChip).toHaveCSS("border-radius", "999px");
+
+  const relatedHeading = page.locator(".related-section h2");
+  const relatedItem = page.locator(".related-item").first();
+  await expect(relatedItem).toBeVisible();
+  expect(
+    await relatedHeading.evaluate((node) => {
+      const style = getComputedStyle(node);
+      return {
+        fontSize: style.fontSize,
+        lineHeight: style.lineHeight,
+        fontWeight: style.fontWeight,
+        marginBottom: style.marginBottom,
+        paddingBottom: style.paddingBottom,
+      };
+    }),
+  ).toEqual({
+    fontSize: "24px",
+    lineHeight: "32px",
+    fontWeight: "600",
+    marginBottom: "12px",
+    paddingBottom: "12px",
+  });
+  expect(
+    await page.locator(".related-list").evaluate((node) => ({
+      columns: getComputedStyle(node).gridTemplateColumns.split(" ").length,
+      gap: getComputedStyle(node).columnGap,
+    })),
+  ).toEqual({ columns: 3, gap: "32px" });
+  expect(
+    await relatedItem.evaluate((node) => {
+      const itemStyle = getComputedStyle(node);
+      const icon = node.querySelector<HTMLElement>(".plugin-identity")!;
+      const title = node.querySelector<HTMLElement>(".related-item__title")!;
+      const description = node.querySelector<HTMLElement>(
+        ".related-item__description",
+      )!;
+      const iconBox = icon.getBoundingClientRect();
+      return {
+        itemRadius: itemStyle.borderRadius,
+        itemPadding: itemStyle.padding,
+        iconSize: [iconBox.width, iconBox.height],
+        iconRadius: getComputedStyle(icon).borderRadius,
+        titleFont: [
+          getComputedStyle(title).fontSize,
+          getComputedStyle(title).lineHeight,
+          getComputedStyle(title).fontWeight,
+        ],
+        descriptionFont: [
+          getComputedStyle(description).fontSize,
+          getComputedStyle(description).lineHeight,
+        ],
+      };
+    }),
+  ).toEqual({
+    itemRadius: "12px",
+    itemPadding: "8px 0px 0px",
+    iconSize: [48, 48],
+    iconRadius: "12px",
+    titleFont: ["16px", "24px", "500"],
+    descriptionFont: ["12px", "16px"],
+  });
+
+  const breadcrumb = page.getByRole("navigation", { name: "Breadcrumb" });
+  const breadcrumbCurrent = breadcrumb.locator('[aria-current="page"]');
+  await expect(breadcrumb.getByRole("link", { name: "Lapis" })).toHaveAttribute(
+    "href",
+    "/",
+  );
+  await expect(
+    breadcrumb.getByRole("link", { name: "Plugins" }),
+  ).toHaveAttribute("href", "/plugins/");
+  await expect(
+    breadcrumb.getByRole("link", { name: "Productivity" }),
+  ).toHaveAttribute("href", "/plugins/?categories=productivity");
+  await expect(breadcrumb.locator("svg")).toHaveCount(3);
+  await expect(breadcrumbCurrent).toHaveAttribute("aria-current", "page");
+  expect(
+    await breadcrumb.evaluate((node) => {
+      const container = node.parentElement!;
+      const current = node.querySelector<HTMLElement>('[aria-current="page"]')!;
+      const link = node.querySelector<HTMLAnchorElement>("a")!;
+      const icon = node.querySelector<SVGElement>("svg")!;
+      return {
+        borderTop: getComputedStyle(container).borderTop,
+        marginTop: getComputedStyle(container).marginTop,
+        paddingTop: getComputedStyle(container).paddingTop,
+        currentColor: getComputedStyle(current).color,
+        currentFont: [
+          getComputedStyle(current).fontSize,
+          getComputedStyle(current).lineHeight,
+          getComputedStyle(current).fontWeight,
+        ],
+        linkColor: getComputedStyle(link).color,
+        iconSize: [
+          icon.getBoundingClientRect().width,
+          icon.getBoundingClientRect().height,
+        ],
+      };
+    }),
+  ).toEqual({
+    borderTop: "1px solid rgb(38, 38, 38)",
+    marginTop: "32px",
+    paddingTop: "16px",
+    currentColor: "rgb(188, 188, 188)",
+    currentFont: ["16px", "24px", "500"],
+    linkColor: "rgb(229, 229, 229)",
+    iconSize: [16, 16],
+  });
+
+  const footerHeading = page.locator(".site-footer__directory h2").first();
+  const footerLink = page.locator(".site-footer__directory a").first();
+  expect(
+    await footerHeading.evaluate((node) => {
+      const style = getComputedStyle(node);
+      return {
+        color: style.color,
+        fontSize: style.fontSize,
+        lineHeight: style.lineHeight,
+        fontWeight: style.fontWeight,
+      };
+    }),
+  ).toEqual({
+    color: "rgb(163, 163, 163)",
+    fontSize: "16px",
+    lineHeight: "20px",
+    fontWeight: "400",
+  });
+  expect(
+    await footerLink.evaluate((node) => {
+      const style = getComputedStyle(node);
+      return {
+        color: style.color,
+        fontSize: style.fontSize,
+        lineHeight: style.lineHeight,
+        fontWeight: style.fontWeight,
+      };
+    }),
+  ).toEqual({
+    color: "rgb(238, 238, 238)",
+    fontSize: "16px",
+    lineHeight: "20px",
+    fontWeight: "500",
   });
 });
 
@@ -356,6 +759,14 @@ async function segmentState(locator: Locator) {
       (segment) => segment.getAttribute("data-active") === "true",
     ).length,
   }));
+}
+
+async function segmentColors(locator: Locator) {
+  return locator.evaluate((node) =>
+    [...node.children].map(
+      (segment) => getComputedStyle(segment).backgroundColor,
+    ),
+  );
 }
 
 async function snappedIndex(viewport: Locator) {

@@ -1,8 +1,20 @@
 ---
+import {
+  BookOpen,
+  Bug,
+  ChevronRight,
+  Download,
+  Ellipsis,
+  ExternalLink,
+  FileText,
+  Flag,
+  History,
+  House,
+  Lightbulb,
+} from "@lucide/astro";
 import CategoryIcon from "../../components/CategoryIcon.astro";
 import PluginGallery from "../../components/PluginGallery.astro";
 import PluginIdentity from "../../components/PluginIdentity.astro";
-import StatusBadge from "../../components/StatusBadge.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import {
   formatBytes,
@@ -11,6 +23,7 @@ import {
   readGeneratedReadmeHtml,
   readStructuredMarkdownHtml,
   relatedPlugins,
+  statusLabel,
   titleCase,
   type SitePlugin,
 } from "../../lib/registry-data";
@@ -33,6 +46,10 @@ const releases = Object.values(plugin.detailData.versions).sort((a, b) =>
 const release = plugin.latestRelease;
 const installDisabled = plugin.status !== "active" || release.bundle.pending === true;
 const primaryCategory = plugin.categories[0] ?? "package";
+const breadcrumbCategory =
+  plugin.categories.find(
+    (category) => titleCase(category).toLocaleLowerCase() !== plugin.name.toLocaleLowerCase(),
+  ) ?? primaryCategory;
 const bundleHealthSteps = release.bundle.pending ? 1 : 4;
 const readmeUrl = plugin.detailData.readmeUrl;
 const overviewReference = plugin.detailData.content?.overview;
@@ -57,40 +74,90 @@ const overviewSourceLabel = overviewReference
   ? "View source overview"
   : "View source README";
 const downloadHref = pluginDownloadHref(release);
+const actionMenuId = `plugin-${plugin.id}-actions`;
+const overviewContentId = `plugin-${plugin.id}-overview-content`;
+const actionIconByKey = {
+  documentation: BookOpen,
+  homepage: House,
+  issues: Bug,
+  repository: ExternalLink,
+};
+const actionLabelByKey = {
+  documentation: "Documentation",
+  homepage: "Homepage",
+  issues: "Report bug",
+  repository: "View repository",
+};
+const configuredActionLinks = Object.entries(plugin.detailData.links ?? {})
+  .filter((entry): entry is [string, string] => typeof entry[1] === "string")
+  .map(([key, href]) => ({
+    href,
+    icon: actionIconByKey[key as keyof typeof actionIconByKey] ?? ExternalLink,
+    label: actionLabelByKey[key as keyof typeof actionLabelByKey] ?? titleCase(key),
+  }));
+const issueUrl = plugin.detailData.links?.issues;
+const reportPluginUrl = new URL(
+  "https://github.com/lapismd/plugin-registry/issues/new",
+);
+reportPluginUrl.searchParams.set("title", `Report plugin: ${plugin.name}`);
+const supportActionLinks = [
+  ...(issueUrl
+    ? [{ href: issueUrl, icon: Lightbulb, label: "Request feature" }]
+    : []),
+  { href: reportPluginUrl.toString(), icon: Flag, label: "Report plugin" },
+];
+const sourceActionLinks = [
+  ...(overviewSourceUrl
+    ? [{ href: overviewSourceUrl, icon: FileText, label: overviewSourceLabel }]
+    : []),
+  ...(changelogReference?.sourceUrl
+    ? [
+        {
+          href: changelogReference.sourceUrl,
+          icon: History,
+          label: "View source changelog",
+        },
+      ]
+    : []),
+];
+const dateFormatter = new Intl.DateTimeFormat("en", {
+  dateStyle: "medium",
+  timeZone: "UTC",
+});
+const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value));
 ---
 
 <SiteLayout title={`${plugin.name} - Lapis Plugin Registry`} description={plugin.description}>
   <main class="plugin-detail-page">
     <div class="plugin-detail-container">
-    <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="/">Registry</a>
-      <span>/</span>
-      <a href="/plugins/">Plugins</a>
-      <span>/</span>
-      <span>{plugin.name}</span>
-    </nav>
-
-    <section class="plugin-detail-hero">
-      <PluginIdentity appearance={plugin.appearance} fallbackIcon={primaryCategory} size="hero" />
-      <div class="plugin-title">
-        <div class="hero-meta">
-          <span>By {plugin.owner.name}</span>
-          <span class="detail-chip detail-chip--verified">
-            <CategoryIcon id={plugin.owner.verified ? "verified" : "official"} size={13} />
-            {plugin.owner.verified ? "Verified" : plugin.channel === "official" ? "Official" : "Community"}
-          </span>
-          <span>{plugin.latestVersion}</span>
-          {
-            plugin.platforms.map((platform) => (
-              <span class="detail-chip detail-chip--platform">
-                <CategoryIcon id={platform} size={13} />
-                {titleCase(platform)}
+      <section class="plugin-detail-hero">
+        <div class="plugin-hero-heading">
+          <PluginIdentity
+            appearance={plugin.appearance}
+            fallbackIcon={primaryCategory}
+            size="hero"
+          />
+          <div class="plugin-title">
+            <h1>{plugin.name}</h1>
+            <div class="hero-meta">
+              <span>By {plugin.owner.name}</span>
+              <span class="detail-chip detail-chip--verified">
+                <CategoryIcon id={plugin.owner.verified ? "verified" : "official"} size={13} />
+                {plugin.owner.verified ? "Verified" : plugin.channel === "official" ? "Official" : "Community"}
               </span>
-            ))
-          }
+              <span>{plugin.latestVersion}</span>
+              {
+                plugin.platforms.map((platform) => (
+                  <span class="detail-chip detail-chip--platform">
+                    <CategoryIcon id={platform} size={13} />
+                    {titleCase(platform)}
+                  </span>
+                ))
+              }
+            </div>
+          </div>
         </div>
-        <h1>{plugin.name}</h1>
-        <p>{plugin.description}</p>
+        <p class="plugin-description">{plugin.description}</p>
         <div class="detail-actions">
           <button
             type="button"
@@ -101,21 +168,73 @@ const downloadHref = pluginDownloadHref(release);
           >
             {installDisabled ? "Install pending" : "Install in Lapis"}
           </button>
-          {
-            release.bundle.pending ? (
-              <span class="button-secondary" aria-disabled="true">Bundle pending</span>
-            ) : (
-              <a class="button-secondary" href={downloadHref} data-download-link>
-                Download .lapis-plugin
-              </a>
-            )
-          }
-          <button class="button-icon" type="button" aria-label="More actions">
-            ...
-          </button>
+          <div class="action-menu" data-action-menu>
+            <button
+              class="button-icon"
+              type="button"
+              aria-label="More actions"
+              aria-haspopup="menu"
+              aria-controls={actionMenuId}
+              aria-expanded="false"
+              data-action-menu-trigger
+            >
+              <Ellipsis size={20} stroke-width="2" aria-hidden="true" />
+            </button>
+            <div
+              class="action-menu__popover"
+              id={actionMenuId}
+              role="menu"
+              aria-label={`${plugin.name} actions`}
+              data-action-menu-popover
+              hidden
+            >
+              {
+                configuredActionLinks.map(({ href, icon: ActionIcon, label }) => (
+                  <a href={href} role="menuitem" target="_blank" rel="noopener noreferrer">
+                    <ActionIcon size={16} stroke-width="2" aria-hidden="true" />
+                    {label}
+                  </a>
+                ))
+              }
+              {
+                release.bundle.pending ? (
+                  <span role="menuitem" aria-disabled="true" data-menu-disabled>
+                    <Download size={16} stroke-width="2" aria-hidden="true" />
+                    Bundle pending
+                  </span>
+                ) : (
+                  <a href={downloadHref} role="menuitem" data-download-link>
+                    <Download size={16} stroke-width="2" aria-hidden="true" />
+                    Download .lapis-plugin
+                  </a>
+                )
+              }
+              {
+                sourceActionLinks.length > 0 && (
+                  <div class="action-menu__separator" role="separator"></div>
+                )
+              }
+              {
+                sourceActionLinks.map(({ href, icon: ActionIcon, label }) => (
+                  <a href={href} role="menuitem" target="_blank" rel="noopener noreferrer">
+                    <ActionIcon size={16} stroke-width="2" aria-hidden="true" />
+                    {label}
+                  </a>
+                ))
+              }
+              <div class="action-menu__separator" role="separator"></div>
+              {
+                supportActionLinks.map(({ href, icon: ActionIcon, label }) => (
+                  <a href={href} role="menuitem" target="_blank" rel="noopener noreferrer">
+                    <ActionIcon size={16} stroke-width="2" aria-hidden="true" />
+                    {label}
+                  </a>
+                ))
+              }
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
     </div>
 
     {
@@ -125,131 +244,191 @@ const downloadHref = pluginDownloadHref(release);
     }
 
     <div class="plugin-detail-container">
-    <section class="detail-grid">
-      <div class="plugin-content">
-        <section class="detail-panel detail-tabs" data-tabs>
-          <div class="tab-list" role="tablist" aria-label="Plugin sections">
-            <button type="button" role="tab" aria-selected="true" data-tab="overview">
-              Overview
-            </button>
-            <button type="button" role="tab" aria-selected="false" data-tab="changelog">
-              Changelog
-            </button>
-            <button type="button" role="tab" aria-selected="false" data-tab="releases">
-              Releases <span>{releases.length}</span>
-            </button>
-          </div>
+      <section class="detail-grid">
+        <div class="plugin-content">
+          <section class="detail-tabs" data-tabs>
+            <div class="tab-list" role="tablist" aria-label="Plugin sections">
+              <button
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="plugin-overview-panel"
+                id="plugin-overview-tab"
+                data-tab="overview"
+              >
+                Overview
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="plugin-changelog-panel"
+                id="plugin-changelog-tab"
+                tabindex="-1"
+                data-tab="changelog"
+              >
+                Changelog
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="plugin-releases-panel"
+                id="plugin-releases-tab"
+                tabindex="-1"
+                data-tab="releases"
+              >
+                Releases <span class="tab-count">{releases.length}</span>
+              </button>
+            </div>
 
-          <div class="tab-panel" data-panel="overview">
-            {
-              plugin.detailData.highlights?.length ? (
-                <section class="plugin-highlights" aria-labelledby="plugin-highlights-heading">
-                  <h2 id="plugin-highlights-heading">Highlights</h2>
-                  <ul>
-                    {plugin.detailData.highlights.map((highlight) => <li>{highlight}</li>)}
-                  </ul>
-                </section>
-              ) : null
-            }
-            {
-              readmeHtml ? (
-                <>
-                  <section class="readme-panel" data-plugin-readme set:html={readmeHtml} />
-                  <p class="readme-source">
-                    <a href={overviewSourceUrl}>{overviewSourceLabel}</a>
-                  </p>
-                </>
-              ) : overviewSourceUrl ? (
-                <>
-                  <section class="readme-panel" data-plugin-readme-error>
-                    <div class="readme-panel__status" data-readme-status>
-                      Overview details are unavailable. Use the source link for the latest documentation.
-                      {overviewContent.error ? <details><summary>Diagnostic</summary><code>{overviewContent.error}</code></details> : null}
+            <div
+              class="tab-panel"
+              id="plugin-overview-panel"
+              role="tabpanel"
+              aria-labelledby="plugin-overview-tab"
+              data-panel="overview"
+            >
+              <div class="overview-collapse" data-overview-collapse data-expanded="false">
+                <div
+                  class="overview-collapse__content"
+                  id={overviewContentId}
+                  data-overview-content
+                >
+                  {
+                    plugin.detailData.highlights?.length ? (
+                      <section
+                        class="plugin-highlights"
+                        aria-labelledby="plugin-highlights-heading"
+                      >
+                        <h2 id="plugin-highlights-heading">Highlights</h2>
+                        <ul>
+                          {plugin.detailData.highlights.map((highlight) => (
+                            <li>{highlight}</li>
+                          ))}
+                        </ul>
+                      </section>
+                    ) : null
+                  }
+                  {
+                    readmeHtml ? (
+                      <section
+                        class="readme-panel"
+                        data-plugin-readme
+                        set:html={readmeHtml}
+                      />
+                    ) : overviewSourceUrl ? (
+                      <section class="readme-panel" data-plugin-readme-error>
+                        <div class="readme-panel__status" data-readme-status>
+                          Overview details are unavailable. Use the actions menu for the source documentation.
+                          {overviewContent.error ? (
+                            <details>
+                              <summary>Diagnostic</summary>
+                              <code>{overviewContent.error}</code>
+                            </details>
+                          ) : null}
+                        </div>
+                      </section>
+                    ) : (
+                      <p>{plugin.description}</p>
+                    )
+                  }
+                  {
+                    plugin.filePatterns.length > 0 && (
+                      <>
+                        <h2>File handlers</h2>
+                        <div class="file-list">
+                          {plugin.filePatterns.map((pattern) => (
+                            <code>{pattern}</code>
+                          ))}
+                        </div>
+                      </>
+                    )
+                  }
+                </div>
+                <div class="overview-collapse__fade" aria-hidden="true"></div>
+                <button
+                  class="overview-collapse__toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls={overviewContentId}
+                  data-overview-toggle
+                >
+                  Show more
+                </button>
+              </div>
+            </div>
+
+            <div
+              class="tab-panel"
+              id="plugin-changelog-panel"
+              role="tabpanel"
+              aria-labelledby="plugin-changelog-tab"
+              data-panel="changelog"
+              hidden
+            >
+              {
+                changelogContent.html ? (
+                  <section
+                    class="readme-panel"
+                    data-plugin-changelog
+                    set:html={changelogContent.html}
+                  />
+                ) : changelogReference ? (
+                  <section class="readme-panel" data-plugin-changelog-error>
+                    <div class="readme-panel__status">
+                      Changelog details are unavailable. Use the actions menu for the source changelog.
+                      <details>
+                        <summary>Diagnostic</summary>
+                        <code>{changelogContent.error}</code>
+                      </details>
                     </div>
                   </section>
-                  <p class="readme-source">
-                    <a href={overviewSourceUrl}>{overviewSourceLabel}</a>
-                  </p>
-                </>
-              ) : (
-                <p>{plugin.description}</p>
-              )
-            }
-            {
-              plugin.filePatterns.length > 0 && (
-                <>
-                  <h2>File handlers</h2>
-                  <div class="file-list">
-                    {plugin.filePatterns.map((pattern) => <code>{pattern}</code>)}
-                  </div>
-                </>
-              )
-            }
-            <h2>Tags</h2>
-            <div class="file-list">
-              {
-                plugin.categories.map((category) => (
-                  <a class="detail-chip" href={`/plugins/?categories=${category}`}>
-                    <CategoryIcon id={category} size={13} />
-                    {titleCase(category)}
-                  </a>
-                ))
+                ) : (
+                  <p>No structured changelog is available for this plugin yet.</p>
+                )
               }
             </div>
-          </div>
 
-          <div class="tab-panel" data-panel="changelog" hidden>
-            {
-              changelogContent.html ? (
-                <>
-                  <section class="readme-panel" data-plugin-changelog set:html={changelogContent.html} />
-                  <p class="readme-source">
-                    <a href={changelogReference?.sourceUrl}>View source changelog</a>
-                  </p>
-                </>
-              ) : changelogReference ? (
-                <section class="readme-panel" data-plugin-changelog-error>
-                  <div class="readme-panel__status">
-                    Changelog details are unavailable.
-                    <details><summary>Diagnostic</summary><code>{changelogContent.error}</code></details>
-                    <a href={changelogReference.sourceUrl}>View source changelog</a>
-                  </div>
-                </section>
-              ) : (
-                <p>No structured changelog is available for this plugin yet.</p>
-              )
-            }
-          </div>
-
-          <div class="tab-panel" data-panel="releases" hidden>
-            <div class="release-list">
-              {
-                releases.map((item) => (
-                  <article class="release-row">
-                    <div>
-                      <h3>{item.version}</h3>
-                      <p>
-                        Lapis {item.minAppVersion}+ · {item.platforms.map(titleCase).join(", ")}
-                        · {formatBytes(item.bundle.size)}
-                      </p>
-                    </div>
-                    <span class="detail-chip">
-                      {item.bundle.pending ? "Pending bundle" : "Signed bundle"}
-                    </span>
-                  </article>
-                ))
-              }
+            <div
+              class="tab-panel"
+              id="plugin-releases-panel"
+              role="tabpanel"
+              aria-labelledby="plugin-releases-tab"
+              data-panel="releases"
+              hidden
+            >
+              <div class="release-list">
+                {
+                  releases.map((item) => (
+                    <article class="release-row">
+                      <div>
+                        <h3>{item.version}</h3>
+                        <p>
+                          Lapis {item.minAppVersion}+ · {item.platforms.map(titleCase).join(", ")}
+                          · {formatBytes(item.bundle.size)}
+                        </p>
+                      </div>
+                      <span
+                        class:list={[
+                          "release-status",
+                          item.bundle.pending && "release-status--pending",
+                        ]}
+                      >
+                        {item.bundle.pending ? "Pending bundle" : "Signed bundle"}
+                      </span>
+                    </article>
+                  ))
+                }
+              </div>
             </div>
-          </div>
-        </section>
-      </div>
+          </section>
+        </div>
 
-      <aside class="detail-sidebar">
-        <section class="detail-panel">
-          <h2>Registry health</h2>
-          <div class="health-list">
-            <div class="health-row">
-              <span><b>Metadata</b><b>Signed</b></span>
+        <aside class="detail-sidebar">
+          <div class="health-list" aria-label="Plugin health">
+            <div class="health-row" data-complete="true">
+              <span><b>Metadata</b><b class="health-row__value">Signed</b></span>
               <div
                 class="health-bar"
                 role="progressbar"
@@ -258,12 +437,19 @@ const downloadHref = pluginDownloadHref(release);
                 aria-valuemax="4"
                 aria-valuenow="4"
                 aria-valuetext="Signed, 4 of 4 checks ready"
+                data-complete="true"
               >
                 {Array.from({ length: 4 }, () => <i data-active="true"></i>)}
               </div>
             </div>
-            <div class="health-row">
-              <span><b>Plugin bundle</b><b>{release.bundle.pending ? "Pending" : "Ready"}</b></span>
+            <div
+              class="health-row"
+              data-complete={bundleHealthSteps === 4 ? "true" : "false"}
+            >
+              <span>
+                <b>Plugin bundle</b>
+                <b class="health-row__value">{release.bundle.pending ? "Pending" : "Ready"}</b>
+              </span>
               <div
                 class="health-bar"
                 role="progressbar"
@@ -272,6 +458,7 @@ const downloadHref = pluginDownloadHref(release);
                 aria-valuemax="4"
                 aria-valuenow={bundleHealthSteps}
                 aria-valuetext={`${release.bundle.pending ? "Pending" : "Ready"}, ${bundleHealthSteps} of 4 checks ready`}
+                data-complete={bundleHealthSteps === 4 ? "true" : "false"}
               >
                 {
                   Array.from({ length: 4 }, (_, index) => (
@@ -281,124 +468,95 @@ const downloadHref = pluginDownloadHref(release);
               </div>
             </div>
           </div>
-        </section>
 
-        <section class="detail-panel" aria-label="Plugin details">
-          <h2>Details</h2>
-          <dl>
-            <div>
-              <dt>Status</dt>
-              <dd><StatusBadge status={plugin.status} /></dd>
+          <section class="detail-sidebar-section" aria-labelledby="plugin-about-heading">
+            <h2 class="detail-section-heading" id="plugin-about-heading">About</h2>
+            <p class="detail-about">{plugin.description}</p>
+            <div class="detail-category-list">
+              {
+                plugin.categories.map((category) => (
+                  <a href={`/plugins/?categories=${category}`}>
+                    <CategoryIcon id={category} size={18} />
+                    {titleCase(category)}
+                  </a>
+                ))
+              }
             </div>
-            <div>
-              <dt>Current version</dt>
-              <dd>{plugin.latestVersion}</dd>
-            </div>
-            <div>
-              <dt>Minimum app version</dt>
-              <dd>Lapis {plugin.minAppVersion}+</dd>
-            </div>
-            <div>
-              <dt>Platforms</dt>
-              <dd>
-                <span class="file-list">
-                  {
-                    plugin.platforms.map((platform) => (
-                      <span class="detail-chip detail-chip--platform">
-                        <CategoryIcon id={platform} size={13} />
-                        {titleCase(platform)}
-                      </span>
-                    ))
-                  }
-                </span>
-              </dd>
-            </div>
-            <div>
-              <dt>Categories</dt>
-              <dd>
-                <span class="file-list">
-                  {
-                    plugin.categories.map((category) => (
-                      <a class="detail-chip" href={`/plugins/?categories=${category}`}>
-                        <CategoryIcon id={category} size={13} />
-                        {titleCase(category)}
-                      </a>
-                    ))
-                  }
-                </span>
-              </dd>
-            </div>
-            <div>
-              <dt>Owner</dt>
-              <dd>
-                <span class="file-list">
-                  <span>{plugin.owner.name}</span>
-                  {
-                    plugin.owner.verified && (
-                      <span class="detail-chip detail-chip--verified">
-                        <CategoryIcon id="verified" size={13} />
-                        Verified
-                      </span>
-                    )
-                  }
-                </span>
-              </dd>
-            </div>
-            {
-              plugin.detailData.license && (
-                <div>
-                  <dt>License</dt>
-                  <dd>{plugin.detailData.license}</dd>
-                </div>
-              )
-            }
-            {
-              plugin.detailData.links && Object.keys(plugin.detailData.links).length > 0 && (
-                <div>
-                  <dt>Links</dt>
-                  <dd class="detail-links">
-                    {Object.entries(plugin.detailData.links).map(([label, href]) => (
-                      <a href={href}>{titleCase(label)}</a>
-                    ))}
-                  </dd>
-                </div>
-              )
-            }
-            <div>
-              <dt>Bundle size</dt>
-              <dd>
-                {formatBytes(release.bundle.size)}
-              </dd>
-            </div>
-            <div data-download-detail data-plugin-id={plugin.id}>
-              <dt>Tracked downloads</dt>
-              <dd aria-live="polite">
-                <span data-download-stats-values hidden>
-                  <span data-download-lifetime></span> lifetime · <span
-                    data-download-30d
-                  ></span> in 30 days
-                </span>
-                <span data-download-stats-unavailable>Statistics unavailable</span>
-                <small class="download-stats-note" data-download-tracked-since
-                ></small>
-              </dd>
-            </div>
-            <div>
-              <dt>Plugin bundle</dt>
-              <dd>
-                {
-                  release.bundle.pending ? (
-                    <span>Pending upload</span>
-                  ) : (
-                    <a href={downloadHref} data-download-link>.lapis-plugin</a>
-                  )
-                }
-              </dd>
-            </div>
-          </dl>
-        </section>
-      </aside>
-    </section>
+          </section>
+
+          <section class="detail-sidebar-section" aria-label="Plugin details">
+            <h2 class="detail-section-heading">Details</h2>
+            <dl class="detail-metadata">
+              <div>
+                <dt>Current version</dt>
+                <dd>{plugin.latestVersion}</dd>
+              </div>
+              <div>
+                <dt>Last updated</dt>
+                <dd>
+                  <time datetime={release.releasedAt}>{formatReleaseDate(release.releasedAt)}</time>
+                </dd>
+              </div>
+              <div>
+                <dt>Created</dt>
+                <dd>
+                  <time datetime={plugin.firstReleasedAt}>
+                    {formatReleaseDate(plugin.firstReleasedAt)}
+                  </time>
+                </dd>
+              </div>
+              <div>
+                <dt>Releases</dt>
+                <dd>{releases.length} {releases.length === 1 ? "release" : "releases"}</dd>
+              </div>
+              <div>
+                <dt>Status</dt>
+                <dd>{statusLabel(plugin.status)}</dd>
+              </div>
+              <div>
+                <dt>Compatible with</dt>
+                <dd>Lapis {plugin.minAppVersion}+</dd>
+              </div>
+              <div>
+                <dt>Platforms</dt>
+                <dd>{plugin.platforms.map(titleCase).join(", ")}</dd>
+              </div>
+              {
+                plugin.detailData.license && (
+                  <div>
+                    <dt>License</dt>
+                    <dd>{plugin.detailData.license}</dd>
+                  </div>
+                )
+              }
+              <div>
+                <dt>Owner</dt>
+                <dd>{plugin.owner.name}</dd>
+              </div>
+              <div>
+                <dt>Bundle size</dt>
+                <dd>{formatBytes(release.bundle.size)}</dd>
+              </div>
+              <div data-download-detail data-plugin-id={plugin.id}>
+                <dt>Tracked downloads</dt>
+                <dd aria-live="polite">
+                  <span data-download-stats-values hidden>
+                    <span data-download-lifetime></span> lifetime · <span
+                      data-download-30d
+                    ></span> in 30 days
+                  </span>
+                  <span data-download-stats-unavailable>Statistics unavailable</span>
+                  <small class="download-stats-note" data-download-tracked-since></small>
+                </dd>
+              </div>
+              <div>
+                <dt>Plugin bundle</dt>
+                <dd>{release.bundle.pending ? "Pending upload" : "Available"}</dd>
+              </div>
+            </dl>
+          </section>
+        </aside>
+      </section>
 
     {
       related.length > 0 && (
@@ -410,7 +568,7 @@ const downloadHref = pluginDownloadHref(release);
                 <PluginIdentity
                   appearance={item.appearance}
                   fallbackIcon={item.categories[0]}
-                  size="compact"
+                  size="card"
                 />
                 <span>
                   <span class="related-item__title">{item.name}</span>
@@ -422,6 +580,30 @@ const downloadHref = pluginDownloadHref(release);
         </section>
       )
     }
+
+    <div class="detail-breadcrumb">
+      <nav aria-label="Breadcrumb">
+        <ol>
+          <li>
+            <a href="/">Lapis</a>
+            <ChevronRight aria-hidden="true" />
+          </li>
+          <li>
+            <a href="/plugins/">Plugins</a>
+            <ChevronRight aria-hidden="true" />
+          </li>
+          <li>
+            <a href={`/plugins/?categories=${breadcrumbCategory}`}>
+              {titleCase(breadcrumbCategory)}
+            </a>
+            <ChevronRight aria-hidden="true" />
+          </li>
+          <li>
+            <span aria-current="page">{plugin.name}</span>
+          </li>
+        </ol>
+      </nav>
+    </div>
     </div>
   </main>
 </SiteLayout>
@@ -431,19 +613,133 @@ const downloadHref = pluginDownloadHref(release);
   for (const root of tabRoots) {
     const tabs = [...root.querySelectorAll<HTMLButtonElement>("[data-tab]")];
     const panels = [...root.querySelectorAll<HTMLElement>("[data-panel]")];
+    const selectTab = (tab: HTMLButtonElement, focus = false) => {
+      const selected = tab.dataset.tab;
+      for (const candidate of tabs) {
+        const isSelected = candidate === tab;
+        candidate.setAttribute("aria-selected", isSelected ? "true" : "false");
+        candidate.tabIndex = isSelected ? 0 : -1;
+      }
+      for (const panel of panels) {
+        panel.toggleAttribute("hidden", panel.dataset.panel !== selected);
+      }
+      if (focus) tab.focus();
+    };
+
     for (const tab of tabs) {
-      tab.addEventListener("click", () => {
-        const selected = tab.dataset.tab;
-        for (const candidate of tabs) {
-          candidate.setAttribute(
-            "aria-selected",
-            candidate === tab ? "true" : "false",
-          );
-        }
-        for (const panel of panels) {
-          panel.toggleAttribute("hidden", panel.dataset.panel !== selected);
+      tab.addEventListener("click", () => selectTab(tab));
+      tab.addEventListener("keydown", (event) => {
+        const currentIndex = tabs.indexOf(tab);
+        if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+          event.preventDefault();
+          const direction = event.key === "ArrowRight" ? 1 : -1;
+          selectTab(tabs[(currentIndex + direction + tabs.length) % tabs.length], true);
+        } else if (event.key === "Home" || event.key === "End") {
+          event.preventDefault();
+          selectTab(event.key === "Home" ? tabs[0] : tabs.at(-1)!, true);
         }
       });
     }
+  }
+
+  const actionMenuRoots = [
+    ...document.querySelectorAll<HTMLElement>("[data-action-menu]"),
+  ];
+
+  const closeActionMenu = (root: HTMLElement, restoreFocus = false) => {
+    const trigger = root.querySelector<HTMLButtonElement>(
+      "[data-action-menu-trigger]",
+    );
+    const menu = root.querySelector<HTMLElement>("[data-action-menu-popover]");
+    if (!trigger || !menu || menu.hidden) return;
+    menu.hidden = true;
+    trigger.setAttribute("aria-expanded", "false");
+    if (restoreFocus) trigger.focus();
+  };
+
+  for (const root of actionMenuRoots) {
+    const trigger = root.querySelector<HTMLButtonElement>(
+      "[data-action-menu-trigger]",
+    );
+    const menu = root.querySelector<HTMLElement>("[data-action-menu-popover]");
+    if (!trigger || !menu) continue;
+    const menuItems = [
+      ...menu.querySelectorAll<HTMLElement>(
+        '[role="menuitem"]:not([aria-disabled="true"])',
+      ),
+    ];
+    const openActionMenu = (focusIndex?: number) => {
+      menu.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
+      if (focusIndex !== undefined) menuItems.at(focusIndex)?.focus();
+    };
+
+    trigger.addEventListener("click", () => {
+      if (menu.hidden) openActionMenu();
+      else closeActionMenu(root);
+    });
+    trigger.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        openActionMenu(event.key === "ArrowDown" ? 0 : -1);
+      } else if (event.key === "Escape") {
+        closeActionMenu(root, true);
+      }
+    });
+    menu.addEventListener("keydown", (event) => {
+      const activeIndex = menuItems.indexOf(document.activeElement as HTMLElement);
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        const direction = event.key === "ArrowDown" ? 1 : -1;
+        menuItems[(activeIndex + direction + menuItems.length) % menuItems.length]?.focus();
+      } else if (event.key === "Home" || event.key === "End") {
+        event.preventDefault();
+        menuItems.at(event.key === "Home" ? 0 : -1)?.focus();
+      } else if (event.key === "Escape") {
+        event.preventDefault();
+        closeActionMenu(root, true);
+      } else if (event.key === "Tab") {
+        closeActionMenu(root);
+      }
+    });
+    for (const item of menuItems) {
+      item.addEventListener("click", () => closeActionMenu(root));
+    }
+  }
+
+  document.addEventListener("pointerdown", (event) => {
+    for (const root of actionMenuRoots) {
+      if (!root.contains(event.target as Node)) closeActionMenu(root);
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    for (const root of actionMenuRoots) closeActionMenu(root, true);
+  });
+
+  const overviewRoots = document.querySelectorAll<HTMLElement>(
+    "[data-overview-collapse]",
+  );
+  for (const root of overviewRoots) {
+    const content = root.querySelector<HTMLElement>("[data-overview-content]");
+    const toggle = root.querySelector<HTMLButtonElement>("[data-overview-toggle]");
+    const fade = root.querySelector<HTMLElement>(".overview-collapse__fade");
+    if (!content || !toggle || !fade) continue;
+
+    const refreshCollapse = () => {
+      if (root.dataset.expanded === "true") return;
+      const isOverflowing = content.scrollHeight > content.clientHeight + 1;
+      toggle.hidden = !isOverflowing;
+      fade.hidden = !isOverflowing;
+    };
+    toggle.addEventListener("click", () => {
+      const expanded = root.dataset.expanded !== "true";
+      root.dataset.expanded = expanded ? "true" : "false";
+      toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      toggle.textContent = expanded ? "Show less" : "Show more";
+      if (!expanded) refreshCollapse();
+    });
+    requestAnimationFrame(refreshCollapse);
+    window.addEventListener("load", refreshCollapse, { once: true });
   }
 </script>

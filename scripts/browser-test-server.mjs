@@ -37,7 +37,26 @@ await Promise.all([
   writeJson(path.join(packageRoot, "registry.json"), registrySource()),
   writeFile(
     path.join(packageRoot, "registry-content", "overview.md"),
-    "# AI\n\nWork with agents inside the Lapis workspace.\n",
+    `# AI
+
+Work with agents inside the Lapis workspace while keeping the application-owned transcript close to the notes and files that informed it.
+
+## Review every step
+
+Follow tool activity, reasoning summaries, approval requests, and final results in one place. Switch between compatible providers without moving conversation ownership away from Lapis.
+
+## Built for real vaults
+
+Use realistic note context, inspect completed work, and stop active requests without losing the durable conversation history attached to the workspace.
+
+## Portable conversations
+
+Keep authored messages, tool evidence, and results together so switching agents does not discard the work that already happened. Capabilities remain explicit and host-owned.
+
+## Clear approvals
+
+Review requests before a tool changes application state, then follow the resulting activity in the same transcript. The registry description focuses on the experience rather than package-manager installation steps.
+`,
   ),
   writeFile(path.join(packageRoot, "CHANGELOG.md"), "# Changelog\n"),
   ...galleryCards().flatMap((card, index) => [

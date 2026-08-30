@@ -1,17 +1,19 @@
 ---
-import { ChevronsUpDown, SlidersHorizontal, X } from "@lucide/astro";
+import {
+  ChevronsUpDown,
+  LayoutGrid,
+  List,
+  SlidersHorizontal,
+  X,
+} from "@lucide/astro";
 import CategoryIcon from "../../components/CategoryIcon.astro";
 import PluginIdentity from "../../components/PluginIdentity.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import {
-  formatBytes,
-  getRegistrySiteData,
-  statusLabel,
-  titleCase,
-} from "../../lib/registry-data";
+import { getRegistrySiteData, statusLabel, titleCase } from "../../lib/registry-data";
 
 const { plugins, categories } = await getRegistrySiteData();
 const statusOptions = ["active", "pending", "revoked"] as const;
+const visibleCategoryCount = 9;
 const platformOptions = [...new Set(plugins.flatMap((plugin) => plugin.platforms))].sort();
 const statusCounts = new Map<string, number>();
 const platformCounts = new Map<string, number>();
@@ -49,7 +51,11 @@ for (const plugin of plugins) {
           </div>
           <section class="sidebar-panel">
             <h2>Type</h2>
-            <button type="button" class="filter-option filter-option--static">
+            <button
+              type="button"
+              class="filter-option filter-option--static"
+              aria-pressed="true"
+            >
               <span class="filter-option__main">
                 <span class="filter-option__icon">
                   <CategoryIcon id="package" />
@@ -89,13 +95,15 @@ for (const plugin of plugins) {
           <section class="sidebar-panel">
             <h2>Categories</h2>
             {
-              categories.map((category) => (
+              categories.map((category, index) => (
                 <button
                   type="button"
                   class="filter-option"
                   data-filter-category={category.id}
                   data-filter-label={category.label}
+                  data-category-extra={index >= visibleCategoryCount ? "true" : undefined}
                   aria-pressed="false"
+                  hidden={index >= visibleCategoryCount}
                 >
                   <span class="filter-option__main">
                     <span class="filter-option__icon filter-option__icon-default">
@@ -109,6 +117,18 @@ for (const plugin of plugins) {
                   <span class="filter-count">{category.count}</span>
                 </button>
               ))
+            }
+            {
+              categories.length > visibleCategoryCount && (
+                <button
+                  type="button"
+                  class="filter-show-more"
+                  aria-expanded="false"
+                  data-category-toggle
+                >
+                  <span data-category-toggle-label>Show more</span>
+                </button>
+              )
             }
           </section>
 
@@ -171,10 +191,12 @@ for (const plugin of plugins) {
           <div class="result-tools" aria-label="Result controls">
             <div class="result-view-tools">
               <div class="view-toggle" aria-label="View mode">
-                <button type="button" data-view="list" aria-pressed="true">
+                <button type="button" data-view="list" aria-pressed="false">
+                  <List size={16} stroke-width="1.75" aria-hidden="true" />
                   List
                 </button>
-                <button type="button" data-view="grid" aria-pressed="false">
+                <button type="button" data-view="grid" aria-pressed="true">
+                  <LayoutGrid size={16} stroke-width="1.75" aria-hidden="true" />
                   Cards
                 </button>
               </div>
@@ -220,7 +242,7 @@ for (const plugin of plugins) {
           </div>
         </section>
         <div class="active-filters" data-active-filters aria-live="polite"></div>
-        <div class="result-list" data-result-list data-view="list">
+        <div class="result-list" data-result-list data-view="grid">
           {
             plugins.map((plugin) => (
               <a
@@ -243,7 +265,7 @@ for (const plugin of plugins) {
                 <span class="dense-plugin-row__body">
                   <span class="dense-plugin-row__title">{plugin.name}</span>
                   <span class="dense-plugin-row__description">
-                    {plugin.description} · {formatBytes(plugin.latestRelease.bundle.size)}
+                    {plugin.description}
                     <span data-download-count data-plugin-id={plugin.id} hidden></span>
                   </span>
                 </span>
@@ -267,6 +289,15 @@ for (const plugin of plugins) {
   const emptyState = document.querySelector<HTMLElement>("[data-empty-state]");
   const activeFilters = document.querySelector<HTMLElement>("[data-active-filters]");
   const resultCount = document.querySelector<HTMLElement>("[data-result-count]");
+  const categoryToggle = document.querySelector<HTMLButtonElement>(
+    "[data-category-toggle]",
+  );
+  const categoryToggleLabel = document.querySelector<HTMLElement>(
+    "[data-category-toggle-label]",
+  );
+  const categoryExtraOptions = [
+    ...document.querySelectorAll<HTMLButtonElement>("[data-category-extra]"),
+  ];
   const filterShell = document.querySelector<HTMLElement>("[data-filter-shell]");
   const filterPanel = document.querySelector<HTMLElement>("[data-filter-panel]");
   const filterTrigger = document.querySelector<HTMLButtonElement>("[data-filter-trigger]");
@@ -290,6 +321,16 @@ for (const plugin of plugins) {
     official: false,
   };
 
+  function setCategoryListExpanded(expanded: boolean) {
+    categoryToggle?.setAttribute("aria-expanded", expanded ? "true" : "false");
+    if (categoryToggleLabel) {
+      categoryToggleLabel.textContent = expanded ? "Show less" : "Show more";
+    }
+    for (const option of categoryExtraOptions) {
+      option.toggleAttribute("hidden", !expanded);
+    }
+  }
+
   const params = new URLSearchParams(window.location.search);
   const initialQuery = params.get("q");
   const categoryParam = params.get("categories") || params.get("category");
@@ -311,6 +352,11 @@ for (const plugin of plugins) {
   if (params.get("official") === "true") {
     state.official = true;
   }
+  setCategoryListExpanded(
+    categoryExtraOptions.some((option) =>
+      state.categories.has(option.dataset.filterCategory || ""),
+    ),
+  );
 
   function setPressed() {
     for (const button of document.querySelectorAll<HTMLButtonElement>(
@@ -490,6 +536,16 @@ for (const plugin of plugins) {
   root?.addEventListener("click", (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) {
+      return;
+    }
+
+    const categoryDisclosure = target.closest<HTMLButtonElement>(
+      "[data-category-toggle]",
+    );
+    if (categoryDisclosure) {
+      setCategoryListExpanded(
+        categoryDisclosure.getAttribute("aria-expanded") !== "true",
+      );
       return;
     }
 
