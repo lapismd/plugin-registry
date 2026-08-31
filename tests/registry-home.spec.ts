@@ -13,6 +13,11 @@ test("homepage matches the reference discovery layout and Lapis Notes wordmark",
     "color",
     "rgb(167, 139, 250)",
   );
+  await brand.hover();
+  await expect(brand.locator(".site-brand__accent")).toHaveCSS(
+    "color",
+    "rgb(255, 255, 255)",
+  );
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Make Lapis Notes yours.",

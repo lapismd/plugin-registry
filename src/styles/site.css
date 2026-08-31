@@ -152,6 +152,12 @@ html.has-gallery-dialog {
 
 .site-brand__accent {
   color: var(--lapis-primary);
+  transition: color 150ms ease;
+}
+
+.site-brand:hover .site-brand__accent,
+.site-brand:focus-visible .site-brand__accent {
+  color: #fff;
 }
 
 .command-search {
