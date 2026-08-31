@@ -1,4 +1,8 @@
+import { createHash } from "node:crypto";
+import { readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { expect, test, type Locator } from "@playwright/test";
+import sharp from "sharp";
 
 const pluginPath = "/plugins/ai/";
 
@@ -639,6 +643,72 @@ test("fullscreen viewer opens at the selected image and restores focus", async (
   await expect(selectedCard).toBeFocused();
 });
 
+test("local source media refreshes without restarting the dev server", async ({
+  page,
+}) => {
+  test.skip(
+    Boolean(process.env.LAPIS_REGISTRY_TEST_BASE_URL),
+    "Live source mutation requires the repository-owned browser fixture.",
+  );
+
+  const previewPath = path.join(
+    process.cwd(),
+    "tmp",
+    "browser-source",
+    "packages",
+    "ai",
+    "registry-assets",
+    "gallery",
+    "conversation.preview.webp",
+  );
+  const originalBytes = await readFile(previewPath);
+  const originalDigest = digest(originalBytes);
+  const updatedBytes = await sharp({
+    create: {
+      width: 1200,
+      height: 800,
+      channels: 4,
+      background: "#0891B2",
+    },
+  })
+    .webp({ lossless: true })
+    .toBuffer();
+  const updatedDigest = digest(updatedBytes);
+
+  await page.goto(pluginPath);
+  const preview = page.locator("[data-gallery-card] img").first();
+  await expect(preview).toHaveAttribute("srcset", new RegExp(originalDigest));
+
+  try {
+    await writeFile(previewPath, updatedBytes);
+    await expect
+      .poll(
+        async () => {
+          await page.reload();
+          return preview.getAttribute("srcset");
+        },
+        { timeout: 15_000 },
+      )
+      .toContain(updatedDigest);
+
+    const previewUrl = previewVariantUrl(await preview.getAttribute("srcset"));
+    const response = await page.request.get(previewUrl);
+    expect(response.ok()).toBe(true);
+    expect(await response.body()).toEqual(updatedBytes);
+  } finally {
+    await writeFile(previewPath, originalBytes);
+    await expect
+      .poll(
+        async () => {
+          await page.reload();
+          return preview.getAttribute("srcset");
+        },
+        { timeout: 15_000 },
+      )
+      .toContain(originalDigest);
+  }
+});
+
 test.describe("mobile touch layout", () => {
   test.use({
     viewport: { width: 390, height: 844 },
@@ -790,4 +860,13 @@ async function snappedIndex(viewport: Locator) {
     }
     return closest;
   });
+}
+
+function digest(bytes: Buffer) {
+  return createHash("sha256").update(bytes).digest("hex");
+}
+
+function previewVariantUrl(srcset: string | null) {
+  if (!srcset) throw new Error("Expected gallery image srcset.");
+  return srcset.split(",", 1)[0].trim().split(/\s+/, 1)[0];
 }

@@ -4,7 +4,10 @@ import { cp, mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { buildLocalSourcePreview } from "./lib/local-source-preview.mjs";
+import {
+  refreshLocalSourcePreview,
+  watchLocalSourcePreview,
+} from "./lib/local-source-preview-dev.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const options = parseArgs(process.argv.slice(2));
@@ -12,19 +15,38 @@ const sourceDir = path.resolve(root, options.sourceDir);
 const previewRoot = path.join(root, "tmp", `source-preview-${options.port}`);
 const publicDir = path.join(previewRoot, "public");
 const registryDir = path.join(publicDir, "v1");
+const stagingDir = path.join(previewRoot, "staging");
 
 await rm(previewRoot, { recursive: true, force: true });
 await mkdir(publicDir, { recursive: true });
 await cp(path.join(root, "public"), publicDir, { recursive: true });
-const preview = await buildLocalSourcePreview({
-  sourceDir,
-  outputDir: registryDir,
-  registryBaseUrl: `http://${options.previewHost}:${options.port}/v1/`,
-});
+const refreshPreview = () =>
+  refreshLocalSourcePreview({
+    sourceDir,
+    outputDir: registryDir,
+    stagingDir,
+    registryBaseUrl: `http://${options.previewHost}:${options.port}/v1/`,
+  });
+const preview = await refreshPreview();
 
 console.log(
   `Prepared unsigned local source preview for ${preview.updatedPluginIds.length} plugin(s) from ${sourceDir}.`,
 );
+
+const previewWatcher = watchLocalSourcePreview({
+  sourceDir,
+  refresh: refreshPreview,
+  onSuccess: (result, changedPaths) => {
+    console.log(
+      `Refreshed unsigned local source preview for ${result.updatedPluginIds.length} plugin(s) after ${changedPaths.length} source change(s).`,
+    );
+  },
+  onError: (error) => {
+    console.error(
+      `Local source preview refresh failed: ${error instanceof Error ? error.message : String(error)}. Keeping the last valid preview.`,
+    );
+  },
+});
 
 const child = spawn("pnpm", ["exec", "astro", "dev", ...options.astroArgs], {
   cwd: root,
@@ -39,16 +61,27 @@ const child = spawn("pnpm", ["exec", "astro", "dev", ...options.astroArgs], {
   shell: process.platform === "win32",
 });
 
+let stopping = false;
+let watcherClose = null;
 for (const signal of ["SIGINT", "SIGTERM"]) {
-  process.once(signal, () => child.kill(signal));
+  process.once(signal, () => {
+    if (stopping) return;
+    stopping = true;
+    watcherClose = previewWatcher.close();
+    child.kill(signal);
+  });
 }
 
-const exitCode = await new Promise((resolve, reject) => {
-  child.once("error", reject);
-  child.once("exit", (code) => resolve(code ?? 1));
-});
-await rm(previewRoot, { recursive: true, force: true });
-process.exitCode = exitCode;
+try {
+  const exitCode = await new Promise((resolve, reject) => {
+    child.once("error", reject);
+    child.once("exit", (code) => resolve(code ?? (stopping ? 0 : 1)));
+  });
+  process.exitCode = exitCode;
+} finally {
+  await (watcherClose ?? previewWatcher.close());
+  await rm(previewRoot, { recursive: true, force: true });
+}
 
 function parseArgs(args) {
   const options = {
