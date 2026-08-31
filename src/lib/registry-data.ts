@@ -108,6 +108,7 @@ export interface PluginAppearance {
     | "list-checks"
     | "network"
     | "package"
+    | "presentation"
     | "search"
     | "sparkles"
     | "spell-check-2"

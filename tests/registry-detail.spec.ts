@@ -7,6 +7,10 @@ test("desktop carousel, health segments, and install geometry match the registry
 }) => {
   await page.goto(pluginPath);
 
+  await expect(
+    page.locator(".plugin-identity--hero svg.lucide-presentation"),
+  ).toHaveCount(1);
+
   const gallery = page.locator("[data-plugin-gallery]");
   const track = page.locator("[data-gallery-track]");
   const cards = page.locator("[data-gallery-card]");

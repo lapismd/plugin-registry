@@ -109,7 +109,7 @@ function registrySource() {
     schemaVersion: 1,
     categories: ["ai", "productivity"],
     highlights: ["Keep agent work in the active workspace."],
-    appearance: { icon: "sparkles", accent: "#A855F7" },
+    appearance: { icon: "presentation", accent: "#42AFFA" },
     gallery: galleryCards().map((card, index) => ({
       id: card.id,
       alt: card.alt,

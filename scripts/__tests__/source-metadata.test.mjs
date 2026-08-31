@@ -11,6 +11,7 @@ import {
   fetchPluginSourceMetadata,
   maxPluginGalleryBytes,
   maxPluginMarkdownBytes,
+  validatePluginSource,
 } from "../lib/source-metadata.mjs";
 import { sha256 } from "../lib/registry.mjs";
 
@@ -22,6 +23,19 @@ const payload = {
   version: "0.1.0",
   sourceCommit,
 };
+
+test("source schema accepts the presentation identity icon", async () => {
+  await assert.doesNotReject(
+    validatePluginSource({
+      schemaVersion: 1,
+      categories: ["presentation", "markdown"],
+      highlights: ["Turn Markdown into presentations."],
+      appearance: { icon: "presentation", accent: "#42AFFA" },
+      gallery: registryGallery(),
+      content: { overview: "README.md", changelog: "CHANGELOG.md" },
+    }),
+  );
+});
 
 test("source metadata is validated, derived, hashed, and mirrored deterministically", async () => {
   const fixture = await fixtureDir();

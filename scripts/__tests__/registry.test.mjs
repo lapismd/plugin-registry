@@ -95,6 +95,19 @@ test("valid Graph entry passes schema and custom validation", async () => {
   assert.deepEqual(validateEntryRules([entry]), []);
 });
 
+test("catalog media schema accepts the presentation identity icon", async () => {
+  const ajv = await createAjv();
+  const validate = ajv.getSchema(
+    "https://registry.lapis.md/schemas/catalog-entry.schema.json",
+  );
+  const entry = validEntry({
+    appearance: { icon: "presentation", accent: "#42AFFA" },
+  });
+  delete entry.__sourcePath;
+
+  assert.equal(validate(entry), true, formatAjvErrors(validate));
+});
+
 test("rejects Electron as a registry compatibility platform", async () => {
   const ajv = await createAjv();
   const validate = ajv.getSchema(
