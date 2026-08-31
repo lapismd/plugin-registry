@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   formatApproximateCount,
   hydrateDownloadStats,
+  hydratePopularPlugins,
   isUsableDownloadSummary,
   loadDownloadStats,
   normalizedBrowserOs,
@@ -73,6 +74,72 @@ test("hydrates list and detail surfaces without changing ordering", () => {
   );
   assert.equal(values.hidden, false);
   assert.equal(unavailable.hidden, true);
+});
+
+test("popular plugin hydration keeps its fallback and ranks usable statistics", () => {
+  const candidates = ["alpha", "beta", "gamma"].map((pluginId) => ({
+    dataset: { pluginId, pluginName: pluginId },
+    hidden: false,
+  }));
+  const list = {
+    children: [...candidates],
+    querySelectorAll() {
+      return [...this.children];
+    },
+    append(element) {
+      this.children = this.children.filter(
+        (candidate) => candidate !== element,
+      );
+      this.children.push(element);
+    },
+  };
+  const lane = {
+    attributes: {},
+    querySelector() {
+      return list;
+    },
+    setAttribute(name, value) {
+      this.attributes[name] = value;
+    },
+  };
+  const root = {
+    querySelectorAll(selector) {
+      return selector === "[data-popular-lane]" ? [lane] : [];
+    },
+  };
+
+  hydratePopularPlugins(root, validSummary());
+  assert.deepEqual(
+    list.children.map((candidate) => candidate.dataset.pluginId),
+    ["alpha", "beta", "gamma"],
+  );
+  assert.deepEqual(
+    candidates.map((candidate) => candidate.hidden),
+    [false, false, false],
+  );
+
+  const summary = validSummary();
+  summary.periods.lifetime.plugins = {
+    alpha: { total: 2, versions: {} },
+    beta: { total: 8, versions: {} },
+    gamma: { total: 5, versions: {} },
+  };
+  summary.periods["30d"].plugins = {
+    alpha: { total: 2, versions: {} },
+    beta: { total: 3, versions: {} },
+    gamma: { total: 4, versions: {} },
+  };
+
+  hydratePopularPlugins(root, summary);
+  assert.deepEqual(
+    list.children.map((candidate) => candidate.dataset.pluginId),
+    ["gamma", "beta", "alpha"],
+  );
+  assert.deepEqual(
+    candidates.map((candidate) => candidate.hidden),
+    [false, false, false],
+  );
+  assert.equal(lane.attributes["aria-busy"], "false");
 });
 
 test("unavailable and malformed summaries leave the page unchanged", async () => {

@@ -148,10 +148,13 @@ test("site build emits pages and registry metadata", async () => {
   assert.match(listing, /data-category-extra="true"/);
 
   const landing = await readFile(new URL("index.html", dist), "utf8");
-  assert.match(landing, />New<\/h2>/);
-  assert.match(landing, />Updated<\/h2>/);
-  assert.match(landing, /data-popular-lane hidden aria-busy="true"/);
-  assert.match(landing, />Popular<\/h2>/);
+  assert.match(landing, /Make Lapis Notes yours\./);
+  assert.match(landing, /class="site-brand__accent">Notes<\/span>/);
+  assert.match(landing, /data-popular-lane aria-busy="false"/);
+  assert.match(landing, />Popular<\/span>/);
+  assert.match(landing, />New<\/span>/);
+  assert.match(landing, />Updated<\/span>/);
+  assert.match(landing, /class="home-category-grid"/);
   assert.match(landing, />Developers<\/h2>/);
   assert.match(landing, />Registry schemas<\/a>/);
   assert.match(landing, />LapisMD on GitHub<\/a>/);

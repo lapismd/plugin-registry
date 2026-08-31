@@ -1,14 +1,16 @@
 ---
-import { formatBytes, type SitePlugin } from "../lib/registry-data";
+import type { SitePlugin } from "../lib/registry-data";
 import PluginIdentity from "./PluginIdentity.astro";
 
 interface Props {
   plugin: SitePlugin;
   as?: "a" | "article";
   popularCandidate?: boolean;
+  home?: boolean;
 }
 
-const { plugin, as = "a", popularCandidate = false } = Astro.props as Props;
+const { plugin, as = "a", popularCandidate = false, home = false } =
+  Astro.props as Props;
 const primaryCategory = plugin.categories[0] ?? "package";
 const href = `/plugins/${plugin.id}/`;
 ---
@@ -21,14 +23,18 @@ const href = `/plugins/${plugin.id}/`;
       data-plugin-id={popularCandidate ? plugin.id : undefined}
       data-plugin-name={popularCandidate ? plugin.name : undefined}
     >
-      <PluginIdentity appearance={plugin.appearance} fallbackIcon={primaryCategory} size="compact" />
-        <span class="dense-plugin-row__body">
-          <span class="dense-plugin-row__title">{plugin.name}</span>
-          <span class="dense-plugin-row__description">
-            {plugin.description} · {formatBytes(plugin.latestRelease.bundle.size)}
-            <span data-download-count data-plugin-id={plugin.id} hidden></span>
-          </span>
+      <PluginIdentity
+        appearance={plugin.appearance}
+        fallbackIcon={primaryCategory}
+        size={home ? "home" : "compact"}
+      />
+      <span class="dense-plugin-row__body">
+        <span class="dense-plugin-row__title">{plugin.name}</span>
+        <span class="dense-plugin-row__description">
+          {plugin.description}
+          <span data-download-count data-plugin-id={plugin.id} hidden></span>
         </span>
+      </span>
     </article>
   ) : (
     <a
@@ -38,14 +44,18 @@ const href = `/plugins/${plugin.id}/`;
       data-plugin-id={popularCandidate ? plugin.id : undefined}
       data-plugin-name={popularCandidate ? plugin.name : undefined}
     >
-      <PluginIdentity appearance={plugin.appearance} fallbackIcon={primaryCategory} size="compact" />
-        <span class="dense-plugin-row__body">
-          <span class="dense-plugin-row__title">{plugin.name}</span>
-          <span class="dense-plugin-row__description">
-            {plugin.description} · {formatBytes(plugin.latestRelease.bundle.size)}
-            <span data-download-count data-plugin-id={plugin.id} hidden></span>
-          </span>
+      <PluginIdentity
+        appearance={plugin.appearance}
+        fallbackIcon={primaryCategory}
+        size={home ? "home" : "compact"}
+      />
+      <span class="dense-plugin-row__body">
+        <span class="dense-plugin-row__title">{plugin.name}</span>
+        <span class="dense-plugin-row__description">
+          {plugin.description}
+          <span data-download-count data-plugin-id={plugin.id} hidden></span>
         </span>
+      </span>
     </a>
   )
 }

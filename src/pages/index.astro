@@ -1,115 +1,110 @@
 ---
+import { ChevronRight } from "@lucide/astro";
 import CategoryIcon from "../components/CategoryIcon.astro";
 import DensePluginRow from "../components/DensePluginRow.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import { getRegistrySiteData } from "../lib/registry-data";
 
-const { plugins, categories, generatedAt } = await getRegistrySiteData();
-const pendingPlugins = plugins.filter((plugin) => plugin.status === "pending");
+const { plugins, categories } = await getRegistrySiteData();
+const activePlugins = plugins.filter((plugin) => plugin.status === "active");
 const recentlyUpdated = [...plugins].sort((a, b) =>
   b.latestRelease.releasedAt.localeCompare(a.latestRelease.releasedAt),
 );
 const newlyReleased = [...plugins].sort((a, b) =>
   b.firstReleasedAt.localeCompare(a.firstReleasedAt),
 );
-const generatedDate = new Date(generatedAt).toLocaleDateString("en-GB");
 ---
 
 <SiteLayout
   title="Lapis Plugin Registry"
   description="Browse signed official plugins for Lapis Notes."
 >
-  <main class="page-main">
+  <main class="page-main page-main--home">
     <section class="home-hero">
-      <h1>Lapis Plugin Registry</h1>
-      <p>Browse {plugins.length} official plugins built for Lapis Notes.</p>
+      <h1>Make Lapis Notes yours.</h1>
+      <p>Browse {plugins.length} plugins built for Lapis Notes by the community.</p>
     </section>
 
-    <section class="home-directory-grid home-discovery-grid" aria-label="Discover plugins">
-      <div class="directory-column">
-        <div class="section-heading">
-          <h2>New</h2>
-          <a href="/plugins/">View all</a>
-        </div>
-        <div class="dense-list">
-          {newlyReleased.slice(0, 5).map((plugin) => <DensePluginRow plugin={plugin} />)}
-        </div>
-      </div>
+    <section class="home-section" aria-labelledby="home-plugins-heading">
+      <h2 class="home-section-title" id="home-plugins-heading">
+        <a href="/plugins/">
+          <span>Plugins</span>
+          <ChevronRight size={24} stroke-width="2" aria-hidden="true" />
+        </a>
+      </h2>
 
-      <div class="directory-column">
-        <div class="section-heading">
-          <h2>Updated</h2>
-          <a href="/plugins/">View all</a>
+      <div class="home-directory-grid home-discovery-grid">
+        <div class="directory-column" data-popular-lane aria-busy="false">
+          <h3 class="home-lane-heading">
+            <a href="/plugins/">
+              <span>Popular</span>
+              <ChevronRight size={16} stroke-width="2" aria-hidden="true" />
+            </a>
+          </h3>
+          <div class="dense-list home-plugin-list home-popular-list" data-popular-list>
+            {
+              activePlugins.map((plugin) => (
+                <DensePluginRow plugin={plugin} popularCandidate home />
+              ))
+            }
+          </div>
         </div>
-        <div class="dense-list">
-          {recentlyUpdated.slice(0, 5).map((plugin) => <DensePluginRow plugin={plugin} />)}
-        </div>
-      </div>
 
-      <div class="directory-column" data-popular-lane hidden aria-busy="true">
-        <div class="section-heading">
-          <h2>Popular</h2>
-          <span class="text-link">Last 30 days</span>
-        </div>
-        <div class="dense-list" data-popular-list>
-          {plugins.filter((plugin) => plugin.status === "active").map((plugin) => (
-            <DensePluginRow plugin={plugin} popularCandidate />
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section
-      class={`home-directory-grid home-directory-grid--secondary ${pendingPlugins.length === 0 ? "home-directory-grid--two" : ""}`}
-      aria-label="Registry directory"
-    >
-      <div class="directory-column">
-        <div class="section-heading">
-          <h2>Plugins</h2>
-          <a href="/plugins/">Browse registry</a>
-        </div>
-        <div class="dense-list">
-          {plugins.slice(0, 5).map((plugin) => <DensePluginRow plugin={plugin} />)}
-        </div>
-      </div>
-
-      {pendingPlugins.length > 0 && (
         <div class="directory-column">
-          <div class="section-heading">
-            <h2>Coming soon</h2>
-            <a href="/plugins/?status=pending">View all</a>
-          </div>
-          <div class="dense-list">
-            {pendingPlugins.slice(0, 5).map((plugin) => <DensePluginRow plugin={plugin} />)}
+          <h3 class="home-lane-heading">
+            <a href="/plugins/">
+              <span>New</span>
+              <ChevronRight size={16} stroke-width="2" aria-hidden="true" />
+            </a>
+          </h3>
+          <div class="dense-list home-plugin-list">
+            {
+              newlyReleased
+                .slice(0, 5)
+                .map((plugin) => <DensePluginRow plugin={plugin} home />)
+            }
           </div>
         </div>
-      )}
 
-      <div class="directory-column">
-        <div class="section-heading">
-          <h2>Categories</h2>
-          <span class="text-link">Generated {generatedDate}</span>
+        <div class="directory-column">
+          <h3 class="home-lane-heading">
+            <a href="/plugins/">
+              <span>Updated</span>
+              <ChevronRight size={16} stroke-width="2" aria-hidden="true" />
+            </a>
+          </h3>
+          <div class="dense-list home-plugin-list">
+            {
+              recentlyUpdated
+                .slice(0, 5)
+                .map((plugin) => <DensePluginRow plugin={plugin} home />)
+            }
+          </div>
         </div>
-        <div class="dense-list">
-          {
-            categories.slice(0, 5).map((category) => (
-              <a
-                class="dense-plugin-row"
-                href={`/plugins/?categories=${category.id}`}
-              >
-                <span class="plugin-icon plugin-icon--compact">
-                  <CategoryIcon id={category.id} size={18} />
-                </span>
-                <span class="dense-plugin-row__body">
-                  <span class="dense-plugin-row__title">{category.label}</span>
-                  <span class="dense-plugin-row__description">
-                    {category.count} official plugin{category.count === 1 ? "" : "s"}
-                  </span>
-                </span>
-              </a>
-            ))
-          }
-        </div>
+      </div>
+    </section>
+
+    <section class="home-section home-categories" aria-labelledby="home-categories-heading">
+      <h2 class="home-section-title" id="home-categories-heading">
+        <a href="/plugins/">
+          <span>Categories</span>
+          <ChevronRight size={24} stroke-width="2" aria-hidden="true" />
+        </a>
+      </h2>
+      <div class="home-category-grid">
+        {
+          categories.slice(0, 8).map((category) => (
+            <a
+              class="home-category-card"
+              href={`/plugins/?categories=${category.id}`}
+              aria-label={`${category.label}, ${category.count} plugin${category.count === 1 ? "" : "s"}`}
+            >
+              <CategoryIcon id={category.id} size={24} />
+              <span class="home-category-card__label">{category.label}</span>
+              <span class="home-category-card__count">{category.count}</span>
+            </a>
+          ))
+        }
       </div>
     </section>
   </main>

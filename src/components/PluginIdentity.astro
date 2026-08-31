@@ -18,7 +18,7 @@ import type { PluginAppearance } from "../lib/registry-data";
 interface Props {
   appearance?: PluginAppearance;
   fallbackIcon?: string;
-  size?: "compact" | "card" | "hero";
+  size?: "compact" | "card" | "home" | "hero";
 }
 
 const {
@@ -56,7 +56,8 @@ const iconName =
   appearance?.icon ?? fallbackIcons[fallbackIcon] ?? "package";
 const Icon = icons[iconName];
 const accent = appearance?.accent ?? "#8A5CF5";
-const iconSize = size === "hero" ? 36 : size === "compact" ? 17 : 20;
+const iconSize =
+  size === "hero" ? 36 : size === "home" ? 24 : size === "compact" ? 17 : 20;
 ---
 
 <span

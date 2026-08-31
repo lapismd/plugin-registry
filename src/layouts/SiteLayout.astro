@@ -40,9 +40,12 @@ const sourcePreview = process.env.LAPIS_REGISTRY_SOURCE_PREVIEW;
         ) : null
       }
       <header class:list={["site-header", isLandingPage && "site-header--landing"]}>
-        <a class="site-brand" href="/" aria-label="Lapis Plugin Registry">
+        <a class="site-brand" href="/" aria-label="Lapis Notes Plugin Registry">
           <img src="/lapis-logo.svg" alt="" aria-hidden="true" />
-          <span>Lapis</span>
+          <span class="site-brand__wordmark" aria-hidden="true">
+            <span class="site-brand__product">Lapis</span>
+            <span class="site-brand__accent">Notes</span>
+          </span>
         </a>
         <SearchPalette plugins={plugins} />
         <nav class="site-actions" aria-label="Primary">
@@ -54,10 +57,13 @@ const sourcePreview = process.env.LAPIS_REGISTRY_SOURCE_PREVIEW;
       <footer class="site-footer">
         <div class="site-footer__inner">
           <div class="site-footer__brand-column">
-            <a class="site-footer__brand" href="/" aria-label="Lapis Plugin Registry home">
+            <a class="site-footer__brand" href="/" aria-label="Lapis Notes Plugin Registry home">
               <img src="/lapis-logo.svg" alt="" aria-hidden="true" />
               <span>
-                <strong>Lapis</strong>
+                <strong>
+                  <span>Lapis</span>
+                  <span class="site-brand__accent">Notes</span>
+                </strong>
                 <small>Plugin Registry</small>
               </span>
             </a>

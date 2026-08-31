@@ -97,7 +97,6 @@ export function hydratePopularPlugins(root, summary) {
     const candidates = [
       ...list.querySelectorAll("[data-popular-item][data-plugin-id]"),
     ];
-    for (const element of candidates) element.hidden = true;
     const ranked = candidates
       .map((element) => ({
         element,
@@ -111,12 +110,19 @@ export function hydratePopularPlugins(root, summary) {
           b.stats.lifetime - a.stats.lifetime ||
           a.name.localeCompare(b.name),
       );
-    if (ranked.length === 0) continue;
+    if (ranked.length === 0) {
+      lane.setAttribute("aria-busy", "false");
+      continue;
+    }
+    for (const element of candidates) element.hidden = true;
     for (const [index, entry] of ranked.entries()) {
       entry.element.hidden = index >= 5;
       list.append(entry.element);
     }
-    lane.hidden = false;
+    const rankedElements = new Set(ranked.map((entry) => entry.element));
+    for (const element of candidates) {
+      if (!rankedElements.has(element)) list.append(element);
+    }
     lane.setAttribute("aria-busy", "false");
   }
 }
