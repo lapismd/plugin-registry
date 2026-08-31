@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   formatApproximateCount,
+  hydrateDirectoryPopularity,
   hydrateDownloadStats,
   hydratePopularPlugins,
   isUsableDownloadSummary,
@@ -140,6 +141,44 @@ test("popular plugin hydration keeps its fallback and ranks usable statistics", 
     [false, false, false],
   );
   assert.equal(lane.attributes["aria-busy"], "false");
+});
+
+test("directory popularity hydration supplies sort data and signals a resort", () => {
+  const rows = ["alpha", "beta"].map((pluginId) => ({
+    dataset: { pluginId },
+  }));
+  const events = [];
+  const root = {
+    querySelectorAll(selector) {
+      return selector === "[data-search-item][data-plugin-id]" ? rows : [];
+    },
+    dispatchEvent(event) {
+      events.push(event.type);
+    },
+  };
+  const summary = validSummary();
+  summary.periods.lifetime.plugins = {
+    alpha: { total: 20, versions: {} },
+    beta: { total: 40, versions: {} },
+  };
+  summary.periods["30d"].plugins = {
+    alpha: { total: 10, versions: {} },
+    beta: { total: 5, versions: {} },
+  };
+
+  hydrateDirectoryPopularity(root, summary);
+
+  assert.deepEqual(rows[0].dataset, {
+    pluginId: "alpha",
+    popularityRecent: "10",
+    popularityLifetime: "20",
+  });
+  assert.deepEqual(rows[1].dataset, {
+    pluginId: "beta",
+    popularityRecent: "5",
+    popularityLifetime: "40",
+  });
+  assert.deepEqual(events, ["lapis-plugin-popularity"]);
 });
 
 test("unavailable and malformed summaries leave the page unchanged", async () => {

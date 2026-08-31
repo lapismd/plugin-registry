@@ -41,6 +41,16 @@ test("homepage matches the reference discovery layout and Lapis Notes wordmark",
   await expect(laneHeadings.nth(0)).toContainText("Popular");
   await expect(laneHeadings.nth(1)).toContainText("New");
   await expect(laneHeadings.nth(2)).toContainText("Updated");
+  const laneLinks = discovery.locator(".home-lane-heading a");
+  await expect(laneLinks.nth(0)).toHaveAttribute(
+    "href",
+    "/plugins/?sort=popular",
+  );
+  await expect(laneLinks.nth(1)).toHaveAttribute("href", "/plugins/?sort=new");
+  await expect(laneLinks.nth(2)).toHaveAttribute(
+    "href",
+    "/plugins/?sort=updated",
+  );
 
   const firstPlugin = discovery.locator(".dense-plugin-row").first();
   expect(

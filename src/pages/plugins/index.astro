@@ -231,6 +231,12 @@ for (const plugin of plugins) {
                 <button type="button" role="option" data-sort-value="name" aria-selected="true">
                   Name
                 </button>
+                <button type="button" role="option" data-sort-value="popular">
+                  Popular
+                </button>
+                <button type="button" role="option" data-sort-value="new">
+                  New
+                </button>
                 <button type="button" role="option" data-sort-value="updated">
                   Recently updated
                 </button>
@@ -254,7 +260,9 @@ for (const plugin of plugins) {
                 data-categories={plugin.categories.join(" ")}
                 data-platforms={plugin.platforms.join(" ")}
                 data-channel={plugin.channel}
+                data-plugin-id={plugin.id}
                 data-name={plugin.name}
+                data-released={plugin.firstReleasedAt}
                 data-updated={plugin.latestRelease.releasedAt}
               >
                 <PluginIdentity
@@ -336,6 +344,11 @@ for (const plugin of plugins) {
   const categoryParam = params.get("categories") || params.get("category");
   const platformParam = params.get("platforms") || params.get("platform");
   const statusParam = params.get("status");
+  const sortParam = params.get("sort");
+
+  if (["name", "popular", "new", "updated", "status"].includes(sortParam || "")) {
+    sortValue = sortParam || "name";
+  }
 
   if (headerQueryInput && initialQuery) {
     headerQueryInput.value = initialQuery;
@@ -352,6 +365,15 @@ for (const plugin of plugins) {
   if (params.get("official") === "true") {
     state.official = true;
   }
+  const initialSortOption = sortOptions?.querySelector<HTMLButtonElement>(
+    `[data-sort-value="${sortValue}"]`,
+  );
+  if (sortLabel && initialSortOption) {
+    sortLabel.textContent = initialSortOption.textContent?.trim() || "Name";
+  }
+  sortOptions?.querySelectorAll<HTMLButtonElement>("[data-sort-value]").forEach((item) => {
+    item.setAttribute("aria-selected", item === initialSortOption ? "true" : "false");
+  });
   setCategoryListExpanded(
     categoryExtraOptions.some((option) =>
       state.categories.has(option.dataset.filterCategory || ""),
@@ -444,6 +466,9 @@ for (const plugin of plugins) {
     if (state.official) {
       next.set("official", "true");
     }
+    if (sortValue !== "name") {
+      next.set("sort", sortValue);
+    }
     const suffix = next.toString() ? `?${next.toString()}` : "";
     history.replaceState(null, "", `${window.location.pathname}${suffix}`);
   }
@@ -453,13 +478,27 @@ for (const plugin of plugins) {
       return;
     }
     const sorted = [...items].sort((a, b) => {
+      const byName = () =>
+        (a.dataset.name || "").localeCompare(b.dataset.name || "");
+      if (sortValue === "popular") {
+        const recentDifference =
+          Number(b.dataset.popularityRecent || 0) -
+          Number(a.dataset.popularityRecent || 0);
+        const lifetimeDifference =
+          Number(b.dataset.popularityLifetime || 0) -
+          Number(a.dataset.popularityLifetime || 0);
+        return recentDifference || lifetimeDifference || byName();
+      }
+      if (sortValue === "new") {
+        return (b.dataset.released || "").localeCompare(a.dataset.released || "") || byName();
+      }
       if (sortValue === "updated") {
-        return (b.dataset.updated || "").localeCompare(a.dataset.updated || "");
+        return (b.dataset.updated || "").localeCompare(a.dataset.updated || "") || byName();
       }
       if (sortValue === "status") {
-        return (a.dataset.status || "").localeCompare(b.dataset.status || "");
+        return (a.dataset.status || "").localeCompare(b.dataset.status || "") || byName();
       }
-      return (a.dataset.name || "").localeCompare(b.dataset.name || "");
+      return byName();
     });
     for (const item of sorted) {
       list.append(item);
@@ -626,6 +665,11 @@ for (const plugin of plugins) {
 
   headerQueryInput?.addEventListener("input", applyFilters);
   window.addEventListener("lapis-plugin-search", applyFilters);
+  document.addEventListener("lapis-plugin-popularity", () => {
+    if (sortValue === "popular") {
+      sortItems();
+    }
+  });
   mobileFiltersBreakpoint.addEventListener("change", (event) => {
     if (!event.matches) {
       setMobileFiltersOpen(false, { moveFocus: false, returnFocus: false });

@@ -36,7 +36,7 @@ const newlyReleased = [...plugins].sort((a, b) =>
       <div class="home-directory-grid home-discovery-grid">
         <div class="directory-column" data-popular-lane aria-busy="false">
           <h3 class="home-lane-heading">
-            <a href="/plugins/">
+            <a href="/plugins/?sort=popular">
               <span>Popular</span>
               <ChevronRight size={16} stroke-width="2" aria-hidden="true" />
             </a>
@@ -52,7 +52,7 @@ const newlyReleased = [...plugins].sort((a, b) =>
 
         <div class="directory-column">
           <h3 class="home-lane-heading">
-            <a href="/plugins/">
+            <a href="/plugins/?sort=new">
               <span>New</span>
               <ChevronRight size={16} stroke-width="2" aria-hidden="true" />
             </a>
@@ -68,7 +68,7 @@ const newlyReleased = [...plugins].sort((a, b) =>
 
         <div class="directory-column">
           <h3 class="home-lane-heading">
-            <a href="/plugins/">
+            <a href="/plugins/?sort=updated">
               <span>Updated</span>
               <ChevronRight size={16} stroke-width="2" aria-hidden="true" />
             </a>

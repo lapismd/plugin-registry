@@ -87,7 +87,20 @@ export function hydrateDownloadStats(root, summary) {
     unavailable.hidden = true;
   }
 
+  hydrateDirectoryPopularity(root, summary);
   hydratePopularPlugins(root, summary);
+}
+
+export function hydrateDirectoryPopularity(root, summary) {
+  for (const element of root.querySelectorAll(
+    "[data-search-item][data-plugin-id]",
+  )) {
+    const stats = statsForPlugin(summary, element.dataset.pluginId);
+    if (!stats) continue;
+    element.dataset.popularityRecent = String(stats.recent);
+    element.dataset.popularityLifetime = String(stats.lifetime);
+  }
+  root.dispatchEvent?.(new Event("lapis-plugin-popularity"));
 }
 
 export function hydratePopularPlugins(root, summary) {

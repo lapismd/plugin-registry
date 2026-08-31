@@ -136,7 +136,10 @@ test("site build emits pages and registry metadata", async () => {
     names,
     [...names].sort((a, b) => a.localeCompare(b)),
   );
-  assert.doesNotMatch(listing, /data-sort-value="(?:downloads|popularity)"/);
+  assert.match(listing, /data-sort-value="popular"/);
+  assert.match(listing, /data-sort-value="new"/);
+  assert.match(listing, /data-sort-value="updated"/);
+  assert.doesNotMatch(listing, /data-sort-value="downloads"/);
   assert.match(listing, /data-filter-category="ai" data-filter-label="AI"/);
   assert.doesNotMatch(listing, /data-filter-label="Ai"/);
   assert.match(listing, /class="lucide lucide-chevrons-up-down sort-chevrons"/);
@@ -151,6 +154,9 @@ test("site build emits pages and registry metadata", async () => {
   assert.match(landing, /Make Lapis Notes yours\./);
   assert.match(landing, /class="site-brand__accent">Notes<\/span>/);
   assert.match(landing, /data-popular-lane aria-busy="false"/);
+  assert.match(landing, /href="\/plugins\/\?sort=popular"/);
+  assert.match(landing, /href="\/plugins\/\?sort=new"/);
+  assert.match(landing, /href="\/plugins\/\?sort=updated"/);
   assert.match(landing, />Popular<\/span>/);
   assert.match(landing, />New<\/span>/);
   assert.match(landing, />Updated<\/span>/);

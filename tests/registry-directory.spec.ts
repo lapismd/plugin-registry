@@ -185,6 +185,58 @@ test("plugin directory uses the reference card layout and filter treatment", asy
   ).toBe(0);
 });
 
+test("homepage sort queries initialize and persist the directory sort", async ({
+  page,
+}) => {
+  await page.route("**/stats/summary.json", async (route) => {
+    await route.fulfill({ json: downloadSummary() });
+  });
+
+  const cases = [
+    { value: "popular", label: "Popular" },
+    { value: "new", label: "New" },
+    { value: "updated", label: "Recently updated" },
+  ];
+  for (const { value, label } of cases) {
+    await page.goto(`/plugins/?sort=${value}`);
+    await expect(page.locator("[data-sort-label]")).toHaveText(label);
+    await expect(page.locator(`[data-sort-value="${value}"]`)).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(new URL(page.url()).searchParams.get("sort")).toBe(value);
+    if (value === "new" || value === "updated") {
+      const attribute = value === "new" ? "released" : "updated";
+      const dates = await page
+        .locator("[data-search-item]")
+        .evaluateAll(
+          (items, datasetKey) =>
+            items.map(
+              (item) =>
+                (item as HTMLElement).dataset[
+                  datasetKey as "released" | "updated"
+                ] || "",
+            ),
+          attribute,
+        );
+      expect(dates).toEqual([...dates].sort((a, b) => b.localeCompare(a)));
+    }
+  }
+
+  await page.goto("/plugins/?sort=popular");
+  await expect(page.locator("[data-search-item]").first()).toHaveAttribute(
+    "data-plugin-id",
+    "bases",
+  );
+
+  await page.goto("/plugins/?categories=ai");
+  await page.locator("[data-sort-trigger]").click();
+  await page.locator('[data-sort-value="new"]').click();
+  const updatedUrl = new URL(page.url());
+  expect(updatedUrl.searchParams.get("categories")).toBe("ai");
+  expect(updatedUrl.searchParams.get("sort")).toBe("new");
+});
+
 test.describe("mobile plugin directory", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
@@ -218,3 +270,42 @@ test.describe("mobile plugin directory", () => {
     await expect(openFilters).toBeFocused();
   });
 });
+
+function downloadSummary() {
+  const through = new Date();
+  through.setUTCDate(through.getUTCDate() - 2);
+  const trackedSince = new Date(through);
+  trackedSince.setUTCDate(trackedSince.getUTCDate() - 30);
+  const throughDate = through.toISOString().slice(0, 10);
+  const trackedSinceDate = trackedSince.toISOString().slice(0, 10);
+  const counts = { ai: 2, bases: 10, history: 5 };
+  const plugins = Object.fromEntries(
+    Object.entries(counts).map(([pluginId, total]) => [
+      pluginId,
+      { total, versions: {} },
+    ]),
+  );
+  const period = {
+    from: trackedSinceDate,
+    through: throughDate,
+    total: 17,
+    plugins,
+    versions: {},
+    actions: {},
+    platforms: {},
+    os: {},
+  };
+  return {
+    schemaVersion: 1,
+    generatedAt: new Date().toISOString(),
+    dataset: "lapis_plugin_downloads_v1",
+    metric: "approximate_redirect_requests",
+    trackedSince: trackedSinceDate,
+    through: throughDate,
+    periods: {
+      lifetime: period,
+      "7d": period,
+      "30d": period,
+    },
+  };
+}
