@@ -7,12 +7,23 @@ test("plugin directory uses the reference card layout and filter treatment", asy
 }) => {
   await page.goto(directoryPath);
 
+  const primaryNavigation = page.getByRole("navigation", { name: "Primary" });
+  const pluginsNavigationLink = primaryNavigation.getByRole("link", {
+    name: "Plugins",
+  });
   const layout = page.locator("[data-plugin-search-root]");
   const heading = page.locator(".results-heading h1");
   const cards = page.locator("[data-search-item]");
   const resultList = page.locator("[data-result-list]");
   const listButton = page.locator('button[data-view="list"]');
   const cardsButton = page.locator('button[data-view="grid"]');
+
+  await expect(pluginsNavigationLink).toHaveAttribute("aria-current", "page");
+  await expect(pluginsNavigationLink).toHaveCSS(
+    "background-color",
+    "rgb(38, 38, 38)",
+  );
+  await expect(pluginsNavigationLink).toHaveCSS("color", "rgb(255, 255, 255)");
 
   expect(
     await layout.evaluate((node) => {

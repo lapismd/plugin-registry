@@ -319,6 +319,11 @@ html.has-gallery-dialog {
   color: #fff;
 }
 
+.site-actions a[aria-current="page"] {
+  background: var(--lapis-surface-2);
+  color: #fff;
+}
+
 .site-footer {
   margin-top: auto;
   padding: 96px 0 128px;

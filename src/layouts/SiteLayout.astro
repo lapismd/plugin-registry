@@ -14,6 +14,8 @@ const {
 } = Astro.props;
 const { plugins } = await getRegistrySiteData();
 const isLandingPage = Astro.url.pathname === "/";
+const isPluginDirectory =
+  Astro.url.pathname === "/plugins" || Astro.url.pathname === "/plugins/";
 const currentYear = new Date().getUTCFullYear();
 const sourcePreview = process.env.LAPIS_REGISTRY_SOURCE_PREVIEW;
 ---
@@ -49,7 +51,10 @@ const sourcePreview = process.env.LAPIS_REGISTRY_SOURCE_PREVIEW;
         </a>
         <SearchPalette plugins={plugins} />
         <nav class="site-actions" aria-label="Primary">
-          <a href="/plugins/">Plugins</a>
+          <a
+            href="/plugins/"
+            aria-current={isPluginDirectory ? "page" : undefined}>Plugins</a
+          >
           <a href="/v1/index.json">Manifest</a>
         </nav>
       </header>
