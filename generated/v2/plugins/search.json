@@ -34,7 +34,10 @@
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/search%400.1.2/search-0.1.2.lapis-plugin"
       },
       "minAppVersion": "0.1.0",
-      "platforms": ["web", "desktop"],
+      "platforms": [
+        "web",
+        "desktop"
+      ],
       "releasedAt": "2026-08-29T09:36:53.000Z",
       "version": "0.1.2"
     }

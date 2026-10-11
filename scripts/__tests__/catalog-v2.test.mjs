@@ -36,6 +36,7 @@ test("V2 derives listing compatibility from the immutable latest release and dro
   assert.equal(built.index.schemaVersion, 2);
   assert.equal(built.index.plugins[0].minAppVersion, "0.1.0");
   assert.deepEqual(built.index.plugins[0].platforms, ["web", "desktop"]);
+  assert.equal(built.index.plugins[0].links.documentation, entry.readmeUrl);
   assert.equal(built.details[entry.id].links.documentation, entry.readmeUrl);
   assert.equal(
     built.details[entry.id].versions["1.0.0"].bundle.sha256,

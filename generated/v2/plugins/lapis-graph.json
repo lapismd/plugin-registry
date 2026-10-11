@@ -34,7 +34,10 @@
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.2/lapis-graph-0.1.2.lapis-plugin"
       },
       "minAppVersion": "0.1.0",
-      "platforms": ["web", "desktop"],
+      "platforms": [
+        "web",
+        "desktop"
+      ],
       "releasedAt": "2026-08-29T09:36:18.000Z",
       "version": "0.1.2"
     },
@@ -46,7 +49,10 @@
         "url": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin"
       },
       "minAppVersion": "1.7.7",
-      "platforms": ["web", "desktop"],
+      "platforms": [
+        "web",
+        "desktop"
+      ],
       "releasedAt": "2026-06-06T22:47:39Z",
       "version": "2026.6.6"
     }

@@ -34,7 +34,10 @@
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/source-editor%400.1.1/lapis-source-editor-0.1.1.lapis-plugin"
       },
       "minAppVersion": "0.1.0",
-      "platforms": ["web", "desktop"],
+      "platforms": [
+        "web",
+        "desktop"
+      ],
       "releasedAt": "2026-08-29T09:37:01.000Z",
       "version": "0.1.1"
     }
