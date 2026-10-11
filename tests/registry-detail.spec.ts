@@ -10,6 +10,41 @@ import {
 
 const pluginPath = "/plugins/ai/";
 
+test("filter chips use Lucide X icons and support keyboard and icon removal", async ({
+  page,
+}) => {
+  await page.goto(
+    "/plugins/?categories=ai&platforms=desktop&status=active&official=true",
+  );
+  const chips = page.locator(".active-filter");
+  await expect(chips).toHaveCount(4);
+  for (const chip of await chips.all()) {
+    await expect(chip.locator("svg.lucide-x")).toHaveCount(1);
+    await expect(chip.locator("svg")).toHaveAttribute("aria-hidden", "true");
+    await expect(chip).toHaveAccessibleName(/Remove .+ filter/);
+  }
+  await page
+    .getByRole("button", { name: "Remove AI filter", exact: true })
+    .press("Enter");
+  await expect(chips).toHaveCount(3);
+  await expect(page).not.toHaveURL(/categories=/);
+  await expect(page.getByRole("button", { name: /^AI \d/ })).toHaveAttribute(
+    "aria-pressed",
+    "false",
+  );
+  for (const group of ["platforms", "status", "official"]) {
+    await page
+      .locator(`[data-remove-filter="${group}"] svg path`)
+      .first()
+      .click();
+    await expect(page.locator(`[data-remove-filter="${group}"]`)).toHaveCount(
+      0,
+    );
+  }
+  await expect(chips).toHaveCount(0);
+  await expect(page).toHaveURL(/\/plugins\/$/);
+});
+
 test("author name links to the profile beside its avatar", async ({ page }) => {
   for (const width of [1280, 390]) {
     await page.setViewportSize({ width, height: 800 });

@@ -1325,8 +1325,10 @@ html.has-gallery-dialog {
   color: var(--lapis-ink);
 }
 
-.active-filter span {
-  color: var(--lapis-ink-muted);
+.active-filter svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
 }
 
 .result-list {

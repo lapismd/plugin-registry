@@ -248,6 +248,12 @@ for (const plugin of plugins) {
           </div>
         </section>
         <div class="active-filters" data-active-filters aria-live="polite"></div>
+        <template data-filter-chip>
+          <button class="active-filter" type="button">
+            <span data-filter-label></span>
+            <X size={12} aria-hidden="true" />
+          </button>
+        </template>
         <div class="result-list" data-result-list data-view="grid">
           {
             plugins.map((plugin) => (
@@ -296,6 +302,7 @@ for (const plugin of plugins) {
   const list = document.querySelector<HTMLElement>("[data-result-list]");
   const emptyState = document.querySelector<HTMLElement>("[data-empty-state]");
   const activeFilters = document.querySelector<HTMLElement>("[data-active-filters]");
+  const filterChipTemplate = document.querySelector<HTMLTemplateElement>("[data-filter-chip]");
   const resultCount = document.querySelector<HTMLElement>("[data-result-count]");
   const categoryToggle = document.querySelector<HTMLButtonElement>(
     "[data-category-toggle]",
@@ -437,15 +444,21 @@ for (const plugin of plugins) {
   }
 
   function renderActiveFilters() {
-    if (!activeFilters) {
+    if (!activeFilters || !filterChipTemplate) {
       return;
     }
-    activeFilters.innerHTML = selectedFilters()
-      .map(
-        (filter) =>
-          `<button class="active-filter" type="button" data-remove-filter="${filter.group}" data-remove-value="${filter.value}">${filter.label}<span aria-hidden="true">x</span></button>`,
-      )
-      .join("");
+    activeFilters.replaceChildren();
+    for (const filter of selectedFilters()) {
+      const chip = filterChipTemplate.content.firstElementChild!.cloneNode(
+        true,
+      ) as HTMLButtonElement;
+      chip.dataset.removeFilter = filter.group;
+      chip.dataset.removeValue = filter.value;
+      chip.setAttribute("aria-label", `Remove ${filter.label} filter`);
+      chip.querySelector<HTMLElement>("[data-filter-label]")!.textContent =
+        filter.label;
+      activeFilters.append(chip);
+    }
   }
 
   function updateUrl() {
@@ -574,7 +587,7 @@ for (const plugin of plugins) {
 
   root?.addEventListener("click", (event) => {
     const target = event.target;
-    if (!(target instanceof HTMLElement)) {
+    if (!(target instanceof Element)) {
       return;
     }
 
