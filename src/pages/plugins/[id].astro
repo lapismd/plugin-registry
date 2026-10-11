@@ -12,16 +12,18 @@ import {
   House,
   Lightbulb,
 } from "@lucide/astro";
+import AuthorAvatar from "../../components/AuthorAvatar.astro";
+import { renderMarkdownToSafeHtml } from "../../../scripts/lib/readmes.mjs";
 import CategoryIcon from "../../components/CategoryIcon.astro";
 import PluginGallery from "../../components/PluginGallery.astro";
 import PluginIdentity from "../../components/PluginIdentity.astro";
+import PluginMediaViewer from "../../components/PluginMediaViewer.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import {
   formatBytes,
   getRegistrySiteData,
+  officialAuthorAvatarUrl,
   pluginDownloadHref,
-  readGeneratedReadmeHtml,
-  readStructuredMarkdownHtml,
   relatedPlugins,
   statusLabel,
   titleCase,
@@ -51,29 +53,22 @@ const breadcrumbCategory =
     (category) => titleCase(category).toLocaleLowerCase() !== plugin.name.toLocaleLowerCase(),
   ) ?? primaryCategory;
 const bundleHealthSteps = release.bundle.pending ? 1 : 4;
-const readmeUrl = plugin.detailData.readmeUrl;
-const overviewReference = plugin.detailData.content?.overview;
-const changelogReference = plugin.detailData.content?.changelog;
-const overviewContent = await readStructuredMarkdownHtml(
-  plugin.id,
-  "overview",
-  overviewReference,
-);
-const changelogContent = await readStructuredMarkdownHtml(
-  plugin.id,
-  "changelog",
-  changelogReference,
-);
-const legacyReadmeHtml =
-  !overviewReference && readmeUrl
-    ? await readGeneratedReadmeHtml(plugin.id)
-    : null;
-const readmeHtml = overviewContent.html ?? legacyReadmeHtml;
-const overviewSourceUrl = overviewReference?.sourceUrl ?? readmeUrl;
-const overviewSourceLabel = overviewReference
-  ? "View source overview"
-  : "View source README";
-const downloadHref = pluginDownloadHref(release);
+const sourcePreview = Boolean(process.env.LAPIS_REGISTRY_SOURCE_PREVIEW);
+const metadataHealthSteps = sourcePreview ? 0 : 4;
+const authorName = plugin.detailData.author ?? plugin.author;
+const authorUrl = plugin.detailData.authorUrl ?? plugin.authorUrl;
+const authorAvatarUrl =
+  plugin.detailData.authorAvatarUrl ??
+  plugin.authorAvatarUrl ??
+  (plugin.channel === "official" ? officialAuthorAvatarUrl : undefined);
+const bannerMedia = plugin.detailData.media?.banner;
+const overviewMedia = plugin.detailData.media?.overview;
+const bannerViewerId = `banner-${plugin.id}`;
+const overviewViewerId = `overview-${plugin.id}`;
+const overviewSourceUrl = plugin.detailData.links?.documentation;
+const overviewSourceLabel = "Documentation";
+const overviewContent = { error: null };
+const downloadHref = sourcePreview ? release.bundle.url : pluginDownloadHref(release);
 const actionMenuId = `plugin-${plugin.id}-actions`;
 const overviewContentId = `plugin-${plugin.id}-overview-content`;
 const actionIconByKey = {
@@ -97,7 +92,7 @@ const configuredActionLinks = Object.entries(plugin.detailData.links ?? {})
   }));
 const issueUrl = plugin.detailData.links?.issues;
 const reportPluginUrl = new URL(
-  "https://github.com/lapismd/plugin-registry/issues/new",
+  "https://github.com/lapismd/nostr-plugin-registry/issues/new",
 );
 reportPluginUrl.searchParams.set("title", `Report plugin: ${plugin.name}`);
 const supportActionLinks = [
@@ -110,10 +105,10 @@ const sourceActionLinks = [
   ...(overviewSourceUrl
     ? [{ href: overviewSourceUrl, icon: FileText, label: overviewSourceLabel }]
     : []),
-  ...(changelogReference?.sourceUrl
+  ...(false
     ? [
         {
-          href: changelogReference.sourceUrl,
+          href: "",
           icon: History,
           label: "View source changelog",
         },
@@ -130,8 +125,14 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
 <SiteLayout title={`${plugin.name} - Lapis Plugin Registry`} description={plugin.description}>
   <main class="plugin-detail-page">
     <div class="plugin-detail-container">
-      <section class="plugin-detail-hero">
-        <div class="plugin-hero-heading">
+      <section
+        class:list={[
+          "plugin-detail-hero",
+          bannerMedia && "plugin-detail-hero--with-banner",
+        ]}
+      >
+        <div class="plugin-detail-hero__copy">
+          <div class="plugin-hero-heading">
           <PluginIdentity
             appearance={plugin.appearance}
             fallbackIcon={primaryCategory}
@@ -140,18 +141,28 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
           <div class="plugin-title">
             <h1>{plugin.name}</h1>
             <div class="hero-meta">
-              <span>By {plugin.owner.name}</span>
-              <span class="detail-chip detail-chip--verified">
-                <CategoryIcon id={plugin.owner.verified ? "verified" : "official"} size={13} />
-                {plugin.owner.verified ? "Verified" : plugin.channel === "official" ? "Official" : "Community"}
+              <span class="hero-author">
+                <AuthorAvatar author={authorName} url={authorAvatarUrl} size={24} />
+                <span>By</span>
+                {
+                  authorUrl ? (
+                    <a href={authorUrl} target="_blank" rel="noopener noreferrer">
+                      {authorName}
+                    </a>
+                  ) : (
+                    <span>{authorName}</span>
+                  )
+                }
               </span>
-              <span>{plugin.latestVersion}</span>
               {
                 plugin.platforms.map((platform) => (
-                  <span class="detail-chip detail-chip--platform">
+                  <a
+                    class="detail-chip detail-chip--platform"
+                    href={`/plugins/?platforms=${encodeURIComponent(platform)}`}
+                  >
                     <CategoryIcon id={platform} size={13} />
                     {titleCase(platform)}
-                  </span>
+                  </a>
                 ))
               }
             </div>
@@ -203,7 +214,7 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
                     Bundle pending
                   </span>
                 ) : (
-                  <a href={downloadHref} role="menuitem" data-download-link>
+                  <a href={downloadHref} role="menuitem" data-download-link data-plugin-id={plugin.id} data-plugin-version={release.version}>
                     <Download size={16} stroke-width="2" aria-hidden="true" />
                     Download .lapis-plugin
                   </a>
@@ -234,12 +245,58 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
             </div>
           </div>
         </div>
+        </div>
+        {
+          bannerMedia ? (
+            <button
+              type="button"
+              class="plugin-hero-banner"
+              aria-label={`Open ${plugin.name} banner: ${bannerMedia.alt}`}
+              data-media-inline-theme="dark"
+              data-media-viewer-open={bannerViewerId}
+              data-media-index="0"
+            >
+              <img
+                src={bannerMedia.images.dark.url}
+                srcset={`${bannerMedia.images.dark.url} ${bannerMedia.images.dark.width}w`}
+                sizes="(max-width: 840px) calc(100vw - 40px), 520px"
+                width={bannerMedia.images.dark.width}
+                height={bannerMedia.images.dark.height}
+                alt=""
+                decoding="async"
+              />
+            </button>
+          ) : null
+        }
       </section>
     </div>
 
     {
       plugin.detailData.gallery?.length ? (
-        <PluginGallery items={plugin.detailData.gallery} pluginName={plugin.name} />
+        <PluginGallery
+          items={plugin.detailData.gallery}
+          pluginName={plugin.name}
+          pluginId={plugin.id}
+        />
+      ) : null
+    }
+
+    {
+      bannerMedia ? (
+        <PluginMediaViewer
+          items={[bannerMedia]}
+          pluginName={`${plugin.name} banner`}
+          viewerId={bannerViewerId}
+        />
+      ) : null
+    }
+    {
+      overviewMedia ? (
+        <PluginMediaViewer
+          items={[overviewMedia]}
+          pluginName={`${plugin.name} overview`}
+          viewerId={overviewViewerId}
+        />
       ) : null
     }
 
@@ -289,6 +346,29 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
               aria-labelledby="plugin-overview-tab"
               data-panel="overview"
             >
+              {
+                overviewMedia ? (
+                  <button
+                    type="button"
+                    class="plugin-overview-media"
+                    aria-label={`Open ${plugin.name} overview image: ${overviewMedia.alt}`}
+                    data-media-inline-theme="split"
+                    data-media-viewer-open={overviewViewerId}
+                    data-media-index="0"
+                  >
+                    <img
+                      src={overviewMedia.images.preview.url}
+                      srcset={`${overviewMedia.images.preview.url} ${overviewMedia.images.preview.width}w, ${overviewMedia.images.full.url} ${overviewMedia.images.full.width}w`}
+                      sizes="(max-width: 720px) calc(100vw - 72px), 700px"
+                      width={overviewMedia.images.preview.width}
+                      height={overviewMedia.images.preview.height}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </button>
+                ) : null
+              }
               <div class="overview-collapse" data-overview-collapse data-expanded="false">
                 <div
                   class="overview-collapse__content"
@@ -311,11 +391,11 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
                     ) : null
                   }
                   {
-                    readmeHtml ? (
+                    plugin.description ? (
                       <section
                         class="readme-panel"
-                        data-plugin-readme
-                        set:html={readmeHtml}
+                        data-plugin-overview
+                        set:html={renderMarkdownToSafeHtml(plugin.description)}
                       />
                     ) : overviewSourceUrl ? (
                       <section class="readme-panel" data-plugin-readme-error>
@@ -368,25 +448,13 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
               hidden
             >
               {
-                changelogContent.html ? (
-                  <section
-                    class="readme-panel"
-                    data-plugin-changelog
-                    set:html={changelogContent.html}
-                  />
-                ) : changelogReference ? (
-                  <section class="readme-panel" data-plugin-changelog-error>
-                    <div class="readme-panel__status">
-                      Changelog details are unavailable. Use the actions menu for the source changelog.
-                      <details>
-                        <summary>Diagnostic</summary>
-                        <code>{changelogContent.error}</code>
-                      </details>
-                    </div>
-                  </section>
-                ) : (
-                  <p>No structured changelog is available for this plugin yet.</p>
-                )
+                releases.length ? releases.map((item) => (
+                  <article class="readme-panel" data-plugin-changelog aria-label={`${item.version} changelog`}>
+                    <header><h2>{item.changelog?.title ?? `${plugin.name} ${item.version}`}</h2><p>{item.version} · {new Date(item.releasedAt).toLocaleDateString("en-GB")}</p></header>
+                    {item.changelog?.tags?.length && <p>{item.changelog.tags.join(" · ")}</p>}
+                    {item.changelog?.description || item.releasePost ? <div set:html={renderMarkdownToSafeHtml(item.changelog?.description ?? item.releasePost ?? "")} /> : <p>This release does not include verified changelog notes.</p>}
+                  </article>
+                )) : <p>No structured changelog is available yet.</p>
               }
             </div>
 
@@ -427,19 +495,19 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
 
         <aside class="detail-sidebar">
           <div class="health-list" aria-label="Plugin health">
-            <div class="health-row" data-complete="true">
-              <span><b>Metadata</b><b class="health-row__value">Signed</b></span>
+            <div class="health-row" data-complete={sourcePreview ? "false" : "true"}>
+              <span><b>Metadata</b><b class="health-row__value">{sourcePreview ? "Unsigned preview" : "Signed"}</b></span>
               <div
                 class="health-bar"
                 role="progressbar"
                 aria-label="Metadata health"
                 aria-valuemin="0"
                 aria-valuemax="4"
-                aria-valuenow="4"
-                aria-valuetext="Signed, 4 of 4 checks ready"
-                data-complete="true"
+                aria-valuenow={metadataHealthSteps}
+                aria-valuetext={sourcePreview ? "Unsigned local preview" : "Signed, 4 of 4 checks ready"}
+                data-complete={sourcePreview ? "false" : "true"}
               >
-                {Array.from({ length: 4 }, () => <i data-active="true"></i>)}
+                {Array.from({ length: 4 }, (_, index) => <i data-active={index < metadataHealthSteps ? "true" : "false"}></i>)}
               </div>
             </div>
             <div
@@ -469,6 +537,11 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
             </div>
           </div>
 
+          <section class="detail-sidebar-section" data-download-detail data-plugin-id={plugin.id} aria-label="Download statistics">
+            <h2 class="detail-section-heading">Downloads</h2>
+            <div data-download-stats-values hidden><p><span data-download-30d></span> downloads (30 days)</p><p><span data-download-lifetime></span> tracked downloads</p><p data-download-tracked-since></p></div>
+            <p data-download-stats-unavailable>Statistics unavailable</p>
+          </section>
           <section class="detail-sidebar-section" aria-labelledby="plugin-about-heading">
             <h2 class="detail-section-heading" id="plugin-about-heading">About</h2>
             <p class="detail-about">{plugin.description}</p>
@@ -530,24 +603,14 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
                 )
               }
               <div>
-                <dt>Owner</dt>
-                <dd>{plugin.owner.name}</dd>
+                <dt>Trust</dt>
+                <dd>
+                  {sourcePreview ? "Local preview" : plugin.owner.verified ? "Verified" : plugin.channel === "official" ? "Official" : "Community"}
+                </dd>
               </div>
               <div>
                 <dt>Bundle size</dt>
                 <dd>{formatBytes(release.bundle.size)}</dd>
-              </div>
-              <div data-download-detail data-plugin-id={plugin.id}>
-                <dt>Tracked downloads</dt>
-                <dd aria-live="polite">
-                  <span data-download-stats-values hidden>
-                    <span data-download-lifetime></span> lifetime · <span
-                      data-download-30d
-                    ></span> in 30 days
-                  </span>
-                  <span data-download-stats-unavailable>Statistics unavailable</span>
-                  <small class="download-stats-note" data-download-tracked-since></small>
-                </dd>
               </div>
               <div>
                 <dt>Plugin bundle</dt>
@@ -555,8 +618,34 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
               </div>
             </dl>
           </section>
+
+          <section
+            class="detail-sidebar-section"
+            aria-labelledby="plugin-author-heading"
+            data-author-section
+          >
+            <h2 class="detail-section-heading" id="plugin-author-heading">Author</h2>
+            <div class="plugin-author-card">
+              <AuthorAvatar author={authorName} url={authorAvatarUrl} size={48} />
+                {
+                  authorUrl ? (
+                    <a
+                      class="plugin-author-card__name"
+                      href={authorUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {authorName}
+                    </a>
+                  ) : (
+                    <span class="plugin-author-card__name">{authorName}</span>
+                  )
+                }
+            </div>
+          </section>
         </aside>
       </section>
+
 
     {
       related.length > 0 && (

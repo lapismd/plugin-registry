@@ -51,11 +51,12 @@ to the npm package name and source commit.
    missing or extra signed files, unsafe paths, coordinate mismatches, invalid
    signatures, checksums, sizes, or runtime descriptors.
 5. It updates the source entry without removing prior versions, regenerates and
-   signs V1 metadata, runs remote validation and the Astro site tests, then opens
+   signs V2 metadata, runs remote validation and the Astro site tests, then opens
    or updates `automation/plugin-<plugin-id>-<version>`.
 6. A maintainer reviews and merges the registry pull request. Checks validate
-   every referenced remote bundle; visual tests are not required and do not
-   block merging or deployment.
+   every referenced remote bundle. The approved V2 cutover enables deployment
+   after validated merges; human visual review remains separate from functional
+   and accessibility checks.
 
 The workflow uses a narrowly scoped GitHub App installed only on the plugin and
 registry repositories. It needs repository contents read/write for the release
@@ -63,14 +64,18 @@ and automation branch, pull-request write access in the registry, and access to
 send/receive repository dispatch events. Store its client ID and private key as
 `LAPIS_REGISTRY_APP_CLIENT_ID` and `LAPIS_REGISTRY_APP_PRIVATE_KEY` secrets.
 
-## README Mirroring and CORS
+## Presentation Metadata and CORS
 
-The sync records the package-local README at the verified source commit. The
-site build mirrors that content under `v1/readmes/<plugin-id>/`, allowing clients
-to render registry-hosted Markdown without depending on source-host CORS.
-Documentation updates require a new registry/site change but no plugin binary
-republishing. Static Cloudflare Pages headers serve registry metadata and
-README artifacts with permissive CORS headers.
+The source owns a V2 `registry.json` with categories, highlights, documentation
+links, optional logo/banner/overview/gallery variants, and optional structured
+release-note overrides. The registry reads these files and Changesets notes at
+the verified source commit and mirrors hashed images under `v2/assets/`.
+Clients consume inline structured metadata and per-version changelogs. The V1
+archive retains historical Markdown references for older clients.
+
+A `plugin_metadata` dispatch updates presentation fields while preserving every
+release version and artifact. It requires no binary publication. Static Pages
+CORS headers cover both registry versions and their assets.
 
 The default `registry:validate` command checks schemas and local rules. Pull
 requests and the manual production workflow run `registry:validate:remote`,

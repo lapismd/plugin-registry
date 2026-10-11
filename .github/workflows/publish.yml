@@ -1,6 +1,8 @@
 name: Publish registry
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       approval:
@@ -13,8 +15,8 @@ permissions:
 jobs:
   publish:
     if: >-
-      vars.FIRST_REGISTRY_RELEASE_APPROVED == 'true' &&
-      inputs.approval == 'REGISTRY_DEPLOY_APPROVED'
+      vars.STATIC_REGISTRY_V2_DEPLOY_APPROVED == 'true' &&
+      (github.event_name == 'push' || inputs.approval == 'REGISTRY_DEPLOY_APPROVED')
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: registry-production

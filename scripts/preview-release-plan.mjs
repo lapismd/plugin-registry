@@ -43,19 +43,17 @@ export async function previewReleasePlan(options) {
       asset_name: candidate.assetName,
       source_commit: candidate.sourceCommit,
     });
-    const archivePath = path.resolve(releaseRoot, candidate.archive.path);
-    const checksumPath = path.resolve(
-      releaseRoot,
-      candidate.archive.checksumPath,
-    );
+    const archive = candidate.bundle ?? candidate.archive;
+    const archivePath = path.resolve(releaseRoot, archive.path);
+    const checksumPath = path.resolve(releaseRoot, archive.checksumPath);
     const [bundleBytes, checksumBytes] = await Promise.all([
       readFile(archivePath),
       readFile(checksumPath),
     ]);
     const archiveSha256 = sha256(bundleBytes);
     if (
-      archiveSha256 !== candidate.archive.sha256 ||
-      bundleBytes.byteLength !== candidate.archive.size
+      archiveSha256 !== archive.sha256 ||
+      bundleBytes.byteLength !== archive.size
     ) {
       throw new Error(
         `${candidate.pluginId}: release plan archive metadata differs.`,

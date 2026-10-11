@@ -1,0 +1,40 @@
+---
+import { UserRound } from "@lucide/astro";
+
+interface Props {
+  author: string;
+  url?: string;
+  size?: number;
+}
+
+const { author, url, size = 24 } = Astro.props as Props;
+---
+
+<span
+  class="author-avatar"
+  style={`--author-avatar-size: ${size}px`}
+  data-author-avatar
+>
+  {
+    url ? (
+      <img
+        src={url}
+        width={size}
+        height={size}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        referrerpolicy="no-referrer"
+        onerror="this.setAttribute('hidden','');this.nextElementSibling?.removeAttribute('hidden')"
+      />
+    ) : null
+  }
+  <span
+    class="author-avatar__fallback"
+    aria-label={`${author} avatar unavailable`}
+    hidden={Boolean(url)}
+    data-author-avatar-fallback
+  >
+    <UserRound size={Math.max(14, Math.round(size * 0.52))} stroke-width="1.8" aria-hidden="true" />
+  </span>
+</span>

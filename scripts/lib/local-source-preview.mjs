@@ -2,12 +2,13 @@ import { access, cp, mkdir, readFile, rm } from "node:fs/promises";
 import path from "node:path";
 
 import {
-  buildRegistry,
   generatedDir,
   listFiles,
   loadEntries,
   writeJson,
 } from "./registry.mjs";
+import { buildRegistryV2 } from "./catalog-v2.mjs";
+import { pendingLocalSourceEntries } from "./preview-source-entries.mjs";
 import {
   applyPluginSourceMetadata,
   fetchPluginSourceMetadata,
@@ -28,7 +29,11 @@ export async function buildLocalSourcePreview({
   await mkdir(outputRoot, { recursive: true });
   await cp(directoryUrl(baseRegistryDir), outputRoot, { recursive: true });
 
-  const registryEntries = entries ?? (await loadEntries());
+  const curated = entries ?? (await loadEntries());
+  const registryEntries = [
+    ...curated,
+    ...(await pendingLocalSourceEntries(sourceRoot, curated)),
+  ];
   const updatedPluginIds = [];
   const previewEntries = [];
 
@@ -70,7 +75,7 @@ export async function buildLocalSourcePreview({
     );
   }
 
-  const registry = buildRegistry(previewEntries);
+  const registry = buildRegistryV2(previewEntries);
   await writeJson(new URL("index.json", outputRoot), registry.index);
   await mkdir(new URL("plugins/", outputRoot), { recursive: true });
   for (const [pluginId, detail] of Object.entries(registry.details)) {
@@ -110,6 +115,7 @@ function applyLocalSourceManifest(entry, metadata) {
       ...entry.versions,
       [version]: {
         ...baseRelease,
+        changelog: metadata.changelog,
         version,
         status: "pending",
         minAppVersion,

@@ -19,47 +19,92 @@
     "versions"
   ],
   "properties": {
-    "$schema": { "type": "string" },
-    "schemaVersion": { "const": 1 },
-    "id": { "$ref": "#/$defs/pluginId" },
-    "name": { "type": "string", "minLength": 1 },
-    "description": { "type": "string", "minLength": 1 },
-    "readmeUrl": { "$ref": "#/$defs/httpsUrl" },
-    "author": { "type": "string", "minLength": 1 },
-    "authorUrl": { "type": "string", "format": "uri" },
-    "appearance": {
-      "$ref": "plugin-media.schema.json#/$defs/appearance"
+    "$schema": {
+      "type": "string"
     },
-    "gallery": { "$ref": "plugin-media.schema.json#/$defs/gallery" },
-    "channel": { "enum": ["official", "community"] },
-    "status": { "enum": ["active", "pending", "revoked"] },
-    "latestVersion": { "$ref": "#/$defs/semver" },
-    "minAppVersion": { "$ref": "#/$defs/semver" },
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "$ref": "#/$defs/pluginId"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "readmeUrl": {
+      "$ref": "#/$defs/httpsUrl"
+    },
+    "author": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "appearance": {
+      "type": "object"
+    },
+    "gallery": {
+      "$ref": "plugin-media.schema.json#/$defs/gallery"
+    },
+    "channel": {
+      "enum": ["official", "community"]
+    },
+    "status": {
+      "enum": ["active", "pending", "deprecated", "disabled", "revoked"]
+    },
+    "latestVersion": {
+      "$ref": "#/$defs/semver"
+    },
+    "minAppVersion": {
+      "$ref": "#/$defs/semver"
+    },
     "platforms": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": { "enum": ["web", "desktop"] }
+      "items": {
+        "enum": ["web", "desktop"]
+      }
     },
     "categories": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      }
     },
     "badges": {
       "type": "array",
       "uniqueItems": true,
-      "items": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      }
     },
     "owner": {
       "type": "object",
       "additionalProperties": false,
       "required": ["name", "verified"],
       "properties": {
-        "name": { "type": "string", "minLength": 1 },
-        "verified": { "type": "boolean" },
-        "url": { "$ref": "#/$defs/httpsUrl" }
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "url": {
+          "$ref": "#/$defs/httpsUrl"
+        }
       }
     },
     "source": {
@@ -75,26 +120,59 @@
           "type": "string",
           "pattern": "^@[a-z0-9][a-z0-9-]*/[a-z0-9][a-z0-9-]*$"
         },
-        "releaseTag": { "type": "string", "minLength": 1 },
-        "sourceCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
-        "metadataPath": { "$ref": "#/$defs/relativePath" }
+        "releaseTag": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceCommit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "metadataPath": {
+          "$ref": "#/$defs/relativePath"
+        }
       }
     },
-    "readme": { "$ref": "#/$defs/hashedRemoteFile" },
-    "license": { "type": "string", "minLength": 1, "maxLength": 128 },
-    "links": { "$ref": "#/$defs/links" },
+    "readme": {
+      "$ref": "#/$defs/hashedRemoteFile"
+    },
+    "license": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "links": {
+      "$ref": "#/$defs/links"
+    },
     "highlights": {
       "type": "array",
       "maxItems": 8,
       "uniqueItems": true,
-      "items": { "type": "string", "minLength": 1, "maxLength": 160 }
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
     },
-    "content": { "$ref": "#/$defs/content" },
-    "contributes": { "$ref": "#/$defs/contributes" },
+    "content": {
+      "$ref": "#/$defs/content"
+    },
+    "contributes": {
+      "$ref": "#/$defs/contributes"
+    },
     "versions": {
       "type": "object",
       "minProperties": 1,
-      "additionalProperties": { "$ref": "#/$defs/pluginVersion" }
+      "additionalProperties": {
+        "$ref": "#/$defs/pluginVersion"
+      }
+    },
+    "media": {
+      "type": "object"
+    },
+    "authorAvatarUrl": {
+      "type": "string",
+      "format": "uri"
     }
   },
   "$defs": {
@@ -123,10 +201,19 @@
       "additionalProperties": false,
       "required": ["url", "sha256", "size"],
       "properties": {
-        "url": { "$ref": "#/$defs/httpsUrl" },
-        "sha256": { "$ref": "#/$defs/sha256" },
-        "size": { "type": "integer", "minimum": 0 },
-        "pending": { "type": "boolean" }
+        "url": {
+          "$ref": "#/$defs/httpsUrl"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pending": {
+          "type": "boolean"
+        }
       }
     },
     "markdownReference": {
@@ -134,29 +221,52 @@
       "additionalProperties": false,
       "required": ["url", "sourceUrl", "sha256", "size", "mediaType"],
       "properties": {
-        "url": { "$ref": "#/$defs/httpsUrl" },
-        "sourceUrl": { "$ref": "#/$defs/httpsUrl" },
-        "sha256": { "$ref": "#/$defs/sha256" },
-        "size": { "type": "integer", "minimum": 0 },
-        "mediaType": { "const": "text/markdown" }
+        "url": {
+          "$ref": "#/$defs/httpsUrl"
+        },
+        "sourceUrl": {
+          "$ref": "#/$defs/httpsUrl"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "mediaType": {
+          "const": "text/markdown"
+        }
       }
     },
     "content": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "overview": { "$ref": "#/$defs/markdownReference" },
-        "changelog": { "$ref": "#/$defs/markdownReference" }
+        "overview": {
+          "$ref": "#/$defs/markdownReference"
+        },
+        "changelog": {
+          "$ref": "#/$defs/markdownReference"
+        }
       }
     },
     "links": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "homepage": { "$ref": "#/$defs/httpsUrl" },
-        "repository": { "$ref": "#/$defs/httpsUrl" },
-        "documentation": { "$ref": "#/$defs/httpsUrl" },
-        "issues": { "$ref": "#/$defs/httpsUrl" }
+        "homepage": {
+          "$ref": "#/$defs/httpsUrl"
+        },
+        "repository": {
+          "$ref": "#/$defs/httpsUrl"
+        },
+        "documentation": {
+          "$ref": "#/$defs/httpsUrl"
+        },
+        "issues": {
+          "$ref": "#/$defs/httpsUrl"
+        }
       }
     },
     "contributes": {
@@ -170,12 +280,20 @@
             "additionalProperties": false,
             "required": ["id", "filenamePatterns"],
             "properties": {
-              "id": { "type": "string", "minLength": 1 },
-              "label": { "type": "string" },
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string"
+              },
               "filenamePatterns": {
                 "type": "array",
                 "minItems": 1,
-                "items": { "type": "string", "minLength": 1 }
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
               }
             }
           }
@@ -193,17 +311,30 @@
         "bundle"
       ],
       "properties": {
-        "version": { "$ref": "#/$defs/semver" },
-        "status": { "enum": ["active", "pending", "revoked"] },
-        "minAppVersion": { "$ref": "#/$defs/semver" },
-        "releasedAt": { "type": "string", "format": "date-time" },
+        "version": {
+          "$ref": "#/$defs/semver"
+        },
+        "status": {
+          "enum": ["active", "pending", "revoked"]
+        },
+        "minAppVersion": {
+          "$ref": "#/$defs/semver"
+        },
+        "releasedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
         "platforms": {
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": { "enum": ["web", "desktop"] }
+          "items": {
+            "enum": ["web", "desktop"]
+          }
         },
-        "bundle": { "$ref": "#/$defs/hashedRemoteFile" }
+        "bundle": {
+          "$ref": "#/$defs/hashedRemoteFile"
+        }
       }
     }
   }

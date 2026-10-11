@@ -4,134 +4,95 @@ import path from "node:path";
 // The site and registry automation intentionally share one safe Markdown renderer.
 import { renderMarkdownToSafeHtml } from "../../scripts/lib/readmes.mjs";
 
-export interface RegistryIndex {
-  schemaVersion: 1;
+import {
+  normalizeRegistryCatalogIndex,
+  normalizeRegistryCatalogDetail,
+  resolveRegistryMedia,
+  type RegistryCatalogV2Entry,
+  type RegistryCatalogV2Detail,
+  type RegistryReleaseV2,
+  type RegistryMediaV2,
+} from "@lapismd/lapis-community/registry/schema";
+export const officialAuthorAvatarUrl =
+  "https://www.gravatar.com/avatar/1df68d9ff087b0dd72fd8626056fca7f?s=128&d=404";
+export type PluginImageReference = ReturnType<typeof resolveRegistryMedia>;
+export type PluginMediaItem = {
+  alt: string;
+  images: Record<"preview" | "full" | "light" | "dark", PluginImageReference>;
+};
+export type PluginGalleryItem = PluginMediaItem & { id: string };
+export type PluginAppearance = {
+  icon: string;
+  accent: string;
+  logo?: PluginImageReference & { alt: string };
+};
+export type RegistryPluginSummary = Omit<
+  RegistryCatalogV2Entry,
+  "appearance"
+> & { appearance?: PluginAppearance };
+export type RegistryIndex = {
+  schemaVersion: 2;
   generatedAt: string;
   plugins: RegistryPluginSummary[];
-}
-
-export interface RegistryPluginSummary {
-  schemaVersion: 1;
-  id: string;
-  name: string;
-  description: string;
-  readmeUrl?: string;
-  author: string;
-  authorUrl?: string;
+};
+export type PluginContributions = RegistryCatalogV2Entry["contributes"];
+export type PluginVersion = RegistryReleaseV2;
+export type PluginLinks = RegistryCatalogV2Detail["links"];
+export type PluginDetail = Omit<
+  RegistryCatalogV2Detail,
+  "appearance" | "media" | "gallery"
+> & {
   appearance?: PluginAppearance;
-  channel: "official" | "community";
-  status: "active" | "pending" | "revoked";
-  latestVersion: string;
-  minAppVersion: string;
-  platforms: string[];
-  categories: string[];
-  badges: string[];
-  owner: {
-    name: string;
-    verified: boolean;
-    url?: string;
-  };
-  latestRelease?: {
-    releasedAt: string;
-    bundleSize: number;
-  };
-  detail: string;
-  contributes?: PluginContributions;
-}
-
-export interface PluginContributions {
-  editorViews?: Array<{
-    id: string;
-    label?: string;
-    filenamePatterns: string[];
-  }>;
-}
-
-export interface PluginVersion {
-  version: string;
-  minAppVersion: string;
-  releasedAt: string;
-  platforms: string[];
-  bundle: {
-    url: string;
-    downloadUrl?: string;
-    sha256: string;
-    size: number;
-    pending?: boolean;
-  };
-}
-
-export interface PluginDetail {
-  schemaVersion: 1;
-  id: string;
-  name: string;
-  description: string;
-  readmeUrl?: string;
-  appearance?: PluginAppearance;
+  media?: { banner?: PluginMediaItem; overview?: PluginMediaItem };
   gallery?: PluginGalleryItem[];
-  channel: "official" | "community";
-  status: "active" | "pending" | "revoked";
-  owner: {
-    name: string;
-    verified: boolean;
-    url?: string;
-  };
-  latestVersion: string;
-  license?: string;
-  links?: PluginLinks;
-  highlights?: string[];
-  content?: PluginCatalogContent;
-  contributes?: PluginContributions;
-  versions: Record<string, PluginVersion>;
-}
-
-export interface PluginImageReference {
-  url: string;
-  sourceUrl: string;
-  sha256: string;
-  size: number;
-  mediaType: "image/png" | "image/webp" | "image/svg+xml";
-  width: number;
-  height: number;
-}
-
-export interface PluginLogoReference extends PluginImageReference {
-  alt: string;
-}
-
-export interface PluginAppearance {
-  icon:
-    | "bookmark"
-    | "file-code-2"
-    | "file-text"
-    | "history"
-    | "list-checks"
-    | "network"
-    | "package"
-    | "presentation"
-    | "search"
-    | "sparkles"
-    | "spell-check-2"
-    | "table-2"
-    | "whole-word";
-  accent: string;
-  logo?: PluginLogoReference;
-}
-
-export interface PluginGalleryItem {
-  id: string;
-  alt: string;
-  images: {
-    preview: PluginImageReference;
-    full: PluginImageReference;
+};
+function displayMedia(item: RegistryMediaV2): PluginMediaItem {
+  return {
+    alt: item.alt,
+    images: {
+      preview: resolveRegistryMedia(item, "preview"),
+      full: resolveRegistryMedia(item, "full"),
+      light: resolveRegistryMedia(item, "light"),
+      dark: resolveRegistryMedia(item, "dark"),
+    },
   };
 }
-
-export interface PluginLinks {
-  homepage?: string;
-  repository?: string;
-  documentation?: string;
-  issues?: string;
+function displayAppearance(
+  appearance: RegistryCatalogV2Detail["appearance"],
+): PluginAppearance | undefined {
+  return appearance
+    ? {
+        icon: appearance.icon,
+        accent: appearance.accent,
+        ...(appearance.logo
+          ? {
+              logo: {
+                ...resolveRegistryMedia(appearance.logo),
+                alt: appearance.logo.alt,
+              },
+            }
+          : {}),
+      }
+    : undefined;
+}
+function displayDetail(value: unknown): PluginDetail {
+  const detail = normalizeRegistryCatalogDetail(value);
+  return {
+    ...detail,
+    appearance: displayAppearance(detail.appearance),
+    media: {
+      ...(detail.media?.banner
+        ? { banner: displayMedia(detail.media.banner) }
+        : {}),
+      ...(detail.media?.overview
+        ? { overview: displayMedia(detail.media.overview) }
+        : {}),
+    },
+    gallery: detail.gallery?.map((item) => ({
+      id: item.id,
+      ...displayMedia(item),
+    })),
+  };
 }
 
 export interface PluginMarkdownReference {
@@ -157,17 +118,28 @@ export interface SitePlugin
 }
 
 const registryRoot =
+  process.env.LAPIS_REGISTRY_DATA_DIR ??
   process.env.LAPIS_REGISTRY_DATA_V1_DIR ??
-  path.join(process.cwd(), "generated", "v1");
+  path.join(process.cwd(), "generated", "v2");
 const siteRegistryRoot =
+  process.env.LAPIS_REGISTRY_SITE_DIR ??
   process.env.LAPIS_REGISTRY_SITE_V1_DIR ??
-  path.join(process.cwd(), "dist", "v1");
+  path.join(process.cwd(), "dist", "v2");
 
 export async function getRegistrySiteData() {
-  const index = await readJson<RegistryIndex>("index.json");
+  const canonicalIndex = normalizeRegistryCatalogIndex(
+    await readJson<unknown>("index.json"),
+  );
+  const index: RegistryIndex = {
+    ...canonicalIndex,
+    plugins: canonicalIndex.plugins.map((entry) => ({
+      ...entry,
+      appearance: displayAppearance(entry.appearance),
+    })),
+  };
   const plugins = await Promise.all(
     index.plugins.map(async (plugin) => {
-      const detail = await readJson<PluginDetail>(plugin.detail);
+      const detail = displayDetail(await readJson<unknown>(plugin.detail));
       const latestRelease = detail.versions[detail.latestVersion];
       if (!latestRelease) {
         throw new Error(
@@ -335,7 +307,7 @@ export function pluginDownloadHref(release: PluginVersion) {
   try {
     const endpoint = new URL(
       release.bundle.downloadUrl,
-      "https://registry.lapis.md/v1/plugins/plugin.json",
+      "https://registry.lapis.md/v2/plugins/plugin.json",
     );
     if (!endpoint.pathname.startsWith("/download/")) return release.bundle.url;
     endpoint.searchParams.set("action", "download");
@@ -347,9 +319,10 @@ export function pluginDownloadHref(release: PluginVersion) {
   }
 }
 
-function collectFilePatterns(contributes?: PluginContributions) {
+function collectFilePatterns(contributes: PluginContributions) {
   return (
-    contributes?.editorViews?.flatMap((view) => view.filenamePatterns) ?? []
+    contributes?.editorViews?.flatMap((view) => view.filenamePatterns ?? []) ??
+    []
   ).sort();
 }
 

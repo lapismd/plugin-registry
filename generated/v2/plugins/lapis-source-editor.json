@@ -1,0 +1,42 @@
+{
+  "author": "Lapis Notes",
+  "authorUrl": "https://github.com/lapismd",
+  "channel": "official",
+  "description": "Source editing for text, JSON, and YAML files",
+  "highlights": [
+    "Edit text, JSON, and YAML files with syntax-aware source views.",
+    "Open supported files through normal workspace routing.",
+    "Keep edits synchronized through the Lapis vault lifecycle."
+  ],
+  "id": "lapis-source-editor",
+  "latestVersion": "0.1.1",
+  "license": "AGPL-3.0-or-later",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/source-editor#readme",
+    "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/source-editor#readme",
+    "issues": "https://github.com/lapismd/lapis-plugins/issues",
+    "repository": "https://github.com/lapismd/lapis-plugins"
+  },
+  "name": "Source Editor",
+  "owner": {
+    "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugins",
+    "verified": true
+  },
+  "schemaVersion": 2,
+  "status": "active",
+  "versions": {
+    "0.1.1": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-source-editor/0.1.1",
+        "sha256": "700188eec99b754a5df6e96c57b0ca243319e3fabe45cb0062ab92278148955e",
+        "size": 152766,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/source-editor%400.1.1/lapis-source-editor-0.1.1.lapis-plugin"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": ["web", "desktop"],
+      "releasedAt": "2026-08-29T09:37:01.000Z",
+      "version": "0.1.1"
+    }
+  }
+}

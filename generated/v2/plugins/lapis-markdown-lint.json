@@ -1,0 +1,54 @@
+{
+  "author": "Lapis Notes",
+  "authorUrl": "https://github.com/lapismd",
+  "channel": "official",
+  "description": "Markdown diagnostics provider",
+  "highlights": [
+    "Show Markdown diagnostics for open documents.",
+    "Apply supported code actions from editor and Problems surfaces.",
+    "Configure rule exclusions and path filters per vault."
+  ],
+  "id": "lapis-markdown-lint",
+  "latestVersion": "0.1.1",
+  "license": "AGPL-3.0-or-later",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/markdown-lint#readme",
+    "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/markdown-lint#readme",
+    "issues": "https://github.com/lapismd/lapis-plugins/issues",
+    "repository": "https://github.com/lapismd/lapis-plugins"
+  },
+  "name": "Markdown Lint",
+  "owner": {
+    "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugins",
+    "verified": true
+  },
+  "schemaVersion": 2,
+  "status": "active",
+  "versions": {
+    "0.1.1": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-markdown-lint/0.1.1",
+        "sha256": "be30dd401baca721890a2df723f336f055eb0c30d473dd0ed4f0bbf70a255432",
+        "size": 149673,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/markdown-lint%400.1.1/lapis-markdown-lint-0.1.1.lapis-plugin"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": ["web", "desktop"],
+      "releasedAt": "2026-08-29T09:36:46.000Z",
+      "version": "0.1.1"
+    },
+    "2026.6.6": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-markdown-lint/2026.6.6",
+        "sha256": "2791b1e8ae25352c587090d7853d29d6802b8b725c1d7793ea8b5d960ec6b1bc",
+        "size": 51432,
+        "url": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-markdown-lint-2026.6.6/lapis-markdown-lint-2026.6.6.lapis-plugin"
+      },
+      "minAppVersion": "1.7.7",
+      "platforms": ["web", "desktop"],
+      "releasedAt": "2026-06-06T22:48:26Z",
+      "version": "2026.6.6"
+    }
+  }
+}

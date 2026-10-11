@@ -37,6 +37,59 @@ test("source schema accepts the presentation identity icon", async () => {
   );
 });
 
+test("V2 preserves themed logos, manifest author URL and exact structured notes", async (t) => {
+  const fixture = await fixtureDir();
+  t.after(() => rm(fixture.root, { recursive: true, force: true }));
+  const requests = [];
+  const metadata = await fetchPluginSourceMetadata({
+    payload,
+    outputDir: fixture.contentDir,
+    assetOutputDir: fixture.assetDir,
+    fetchImpl: await sourceFetch({
+      source: {
+        schemaVersion: 2,
+        content: undefined,
+        appearance: {
+          icon: "search",
+          accent: "#F59E0B",
+          logo: {
+            alt: "Search logo",
+            images: {
+              light: { path: "registry-assets/logo-light.png" },
+              dark: { path: "registry-assets/logo-dark.png" },
+            },
+          },
+        },
+      },
+      manifest: { authorUrl: "https://author.example/profile" },
+      changelog: "## 0.1.0\n\n- Faster search.\n\n## 0.0.9\nOld notes.\n",
+      onFetch: (url) => requests.push(url),
+    }),
+  });
+  assert.deepEqual(Object.keys(metadata.appearance.logo.images).sort(), [
+    "dark",
+    "light",
+  ]);
+  assert.equal(metadata.appearance.logo.images.full, undefined);
+  assert.equal(metadata.authorUrl, "https://author.example/profile");
+  assert.equal(metadata.changelog.title, "Search 0.1.0");
+  assert.equal(metadata.changelog.description, "- Faster search.");
+  assert.deepEqual(metadata.content, {});
+  assert.equal(
+    requests.some((url) => url.endsWith("README.md")),
+    false,
+  );
+  for (const image of Object.values(metadata.appearance.logo.images))
+    assert.equal(
+      sha256(
+        await readFile(
+          new URL(`lapis-search/${image.sha256}.png`, fixture.assetDir),
+        ),
+      ),
+      image.sha256,
+    );
+});
+
 test("source metadata is validated, derived, hashed, and mirrored deterministically", async () => {
   const fixture = await fixtureDir();
   const fetchImpl = await sourceFetch();
@@ -334,7 +387,7 @@ async function sourceFetch(options = {}) {
     [`${base}package.json`, jsonBytes(packageJson)],
     [`${base}manifest.json`, jsonBytes(manifest)],
     [`${base}README.md`, options.readme ?? Buffer.from("# Search\n")],
-    [`${base}CHANGELOG.md`, Buffer.from("# Changelog\n")],
+    [`${base}CHANGELOG.md`, Buffer.from(options.changelog ?? "# Changelog\n")],
     [
       `${base}registry-assets/gallery/overview.preview.webp`,
       options.preview ?? (await webp(1200, 800)),
@@ -345,10 +398,11 @@ async function sourceFetch(options = {}) {
     ],
   ]);
   if (source.appearance?.logo) {
-    files.set(
-      `${base}${source.appearance.logo.path}`,
-      options.logo ?? (await png(128, 128)),
-    );
+    const assets = source.appearance.logo.images
+      ? Object.values(source.appearance.logo.images)
+      : [source.appearance.logo];
+    for (const asset of assets)
+      files.set(`${base}${asset.path}`, options.logo ?? (await png(128, 128)));
   }
   return async (url) => {
     options.onFetch?.(String(url));

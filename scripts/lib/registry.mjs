@@ -17,7 +17,11 @@ import {
 } from "./plugin-bundle.mjs";
 
 export const repoRoot = new URL("../../", import.meta.url);
-export const generatedDir = new URL("../../generated/v1/", import.meta.url);
+export const generatedDir = new URL(
+  process.env.LAPIS_REGISTRY_GENERATED_DIR ?? "../../generated/v2/",
+  import.meta.url,
+);
+export const archiveDir = new URL("../../generated/v1/", import.meta.url);
 export const downloadTargetsFile = new URL(
   "../../generated/download-targets.mjs",
   import.meta.url,

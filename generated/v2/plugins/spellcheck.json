@@ -1,0 +1,42 @@
+{
+  "author": "Lapis Notes",
+  "authorUrl": "https://github.com/lapismd",
+  "channel": "official",
+  "description": "Harper grammar and spelling diagnostics for open notes",
+  "highlights": [
+    "Check spelling and grammar in open notes with Harper.",
+    "Review diagnostics and suggestions in editor and Problems surfaces.",
+    "Configure dialect, dictionaries, rules, and file scopes per vault."
+  ],
+  "id": "spellcheck",
+  "latestVersion": "0.1.1",
+  "license": "AGPL-3.0-or-later",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/spellcheck#readme",
+    "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/spellcheck#readme",
+    "issues": "https://github.com/lapismd/lapis-plugins/issues",
+    "repository": "https://github.com/lapismd/lapis-plugins"
+  },
+  "name": "Spell Check",
+  "owner": {
+    "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugins",
+    "verified": true
+  },
+  "schemaVersion": 2,
+  "status": "active",
+  "versions": {
+    "0.1.1": {
+      "bundle": {
+        "downloadUrl": "../../download/spellcheck/0.1.1",
+        "sha256": "79a34cbdc73a5ffb12a33dfb8783e3c1d4b2a6bcd9a6b4c97cd6ba28a46da33d",
+        "size": 9999885,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/spellcheck%400.1.1/spellcheck-0.1.1.lapis-plugin"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": ["web", "desktop"],
+      "releasedAt": "2026-08-29T09:37:08.000Z",
+      "version": "0.1.1"
+    }
+  }
+}

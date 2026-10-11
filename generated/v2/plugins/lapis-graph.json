@@ -1,0 +1,54 @@
+{
+  "author": "Lapis Notes",
+  "authorUrl": "https://github.com/lapismd",
+  "channel": "official",
+  "description": "Global and local graph views powered by indexed metadata",
+  "highlights": [
+    "Explore global and local relationships across notes, tags, and attachments.",
+    "Open connected notes directly from an interactive canvas.",
+    "Tune grouping, forces, and time-lapse views for large vaults."
+  ],
+  "id": "lapis-graph",
+  "latestVersion": "0.1.2",
+  "license": "AGPL-3.0-or-later",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/graph#readme",
+    "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/graph#readme",
+    "issues": "https://github.com/lapismd/lapis-plugins/issues",
+    "repository": "https://github.com/lapismd/lapis-plugins"
+  },
+  "name": "Graph",
+  "owner": {
+    "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugins",
+    "verified": true
+  },
+  "schemaVersion": 2,
+  "status": "active",
+  "versions": {
+    "0.1.2": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-graph/0.1.2",
+        "sha256": "67ea1bcb090e9e82f329ef6f78b2ce0ab1eb728399b9ad9a9912ef576e869ba3",
+        "size": 476698,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.2/lapis-graph-0.1.2.lapis-plugin"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": ["web", "desktop"],
+      "releasedAt": "2026-08-29T09:36:18.000Z",
+      "version": "0.1.2"
+    },
+    "2026.6.6": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-graph/2026.6.6",
+        "sha256": "5bc56ce3ebcf76d17888d793e031a5dd6e7d519ffbce221b339fa6df3967b66f",
+        "size": 116157,
+        "url": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-graph-2026.6.6/lapis-graph-2026.6.6.lapis-plugin"
+      },
+      "minAppVersion": "1.7.7",
+      "platforms": ["web", "desktop"],
+      "releasedAt": "2026-06-06T22:47:39Z",
+      "version": "2026.6.6"
+    }
+  }
+}
