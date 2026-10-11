@@ -146,7 +146,7 @@ test("V2 local preview preserves banner media and leaves the production catalog 
   await rm(root, { recursive: true, force: true });
 });
 
-test("local-only discovery includes Community and Slides as pending without changing source files", async () => {
+test("local-only discovery excludes parked Community and keeps Slides pending without changing source files", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "lapis-registry-discovery-"));
   for (const [slug, id] of [
     ["community", "community"],
@@ -166,6 +166,7 @@ test("local-only discovery includes Community and Slides as pending without chan
     });
     await writeJson(path.join(packageRoot, "package.json"), {
       name: `@lapis-notes/${slug}`,
+      private: slug == "community",
       repository: "https://github.com/lapismd/lapis-plugins.git",
     });
   }
@@ -179,7 +180,7 @@ test("local-only discovery includes Community and Slides as pending without chan
   const entries = await pendingLocalSourceEntries(root, []);
   assert.deepEqual(
     entries.map((entry) => entry.id),
-    ["community", "lapis-slides"],
+    ["lapis-slides"],
   );
   for (const entry of entries) {
     assert.equal(entry.status, "pending");

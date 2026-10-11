@@ -47,6 +47,11 @@ export async function buildLocalSourcePreview({
       continue;
     }
 
+    const packageJson = JSON.parse(
+      await readFile(path.join(packageRoot, "package.json"), "utf8"),
+    );
+    if (packageJson.private === true) continue;
+
     const payload = {
       repository: entry.source.repository,
       packageName: entry.source.packageName,

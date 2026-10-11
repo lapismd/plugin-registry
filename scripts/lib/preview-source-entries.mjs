@@ -32,7 +32,7 @@ export async function pendingLocalSourceEntries(sourceRoot, entries) {
       if (error.code === "ENOENT") continue;
       throw error;
     }
-    if (knownIds.has(manifest.id)) continue;
+    if (packageJson.private === true || knownIds.has(manifest.id)) continue;
     const repository =
       typeof packageJson.repository === "string"
         ? packageJson.repository

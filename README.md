@@ -134,3 +134,7 @@ The production workflow requires the protected `registry-production`
 environment and the V2 cutover variable. It verifies committed signatures and
 production assets before deployment. Visual baseline updates remain separately
 approved.
+
+Source packages marked `private: true` are parked and excluded from the local
+registry, including curated entries. Community is parked in the first-party
+source repository for this release; Slides remains available for preview.
