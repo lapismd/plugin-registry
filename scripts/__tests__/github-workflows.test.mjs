@@ -92,6 +92,8 @@ test("registry metadata signing is reviewable and separate from deployment", asy
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /inputs\.approval == 'REGISTRY_SIGN_APPROVED'/);
   assert.match(workflow, /environment: registry-production/);
+  assert.match(workflow, /ref: \$\{\{ inputs\.source_ref \}\}/);
+  assert.match(workflow, /base: \$\{\{ inputs\.source_ref \}\}/);
   assert.match(
     workflow,
     /client-id: \$\{\{ secrets\.LAPIS_REGISTRY_APP_CLIENT_ID \}\}/,
