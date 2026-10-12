@@ -12,7 +12,7 @@ import {
   type RegistryCatalogV2Detail,
   type RegistryReleaseV2,
   type RegistryMediaV2,
-} from "@lapismd/lapis-community/registry/schema";
+} from "@lapis-notes/api/registry/schema";
 export const officialAuthorAvatarUrl =
   "https://www.gravatar.com/avatar/1df68d9ff087b0dd72fd8626056fca7f?s=128&d=404";
 export type PluginImageReference = ReturnType<typeof resolveRegistryMedia>;

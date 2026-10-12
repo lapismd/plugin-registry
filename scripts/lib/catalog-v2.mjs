@@ -1,7 +1,7 @@
 import {
   normalizeRegistryCatalogDetail,
   normalizeRegistryCatalogEntry,
-} from "@lapismd/lapis-community/registry/schema";
+} from "@lapis-notes/api/registry/schema";
 import { buildRegistry } from "./registry.mjs";
 
 export function buildRegistryV2(entries) {

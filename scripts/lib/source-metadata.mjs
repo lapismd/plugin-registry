@@ -1,4 +1,4 @@
-import { registryChangelogFromMarkdown } from "@lapismd/lapis-community/registry/schema";
+import { registryChangelogFromMarkdown } from "@lapis-notes/api/registry/schema";
 import { TextDecoder } from "node:util";
 import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import sharp from "sharp";

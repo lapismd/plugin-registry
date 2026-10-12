@@ -2,7 +2,7 @@
 
 Static plugin registry metadata for Lapis Notes.
 
-The V2 registry publishes inline-signed JSON metadata using Community's shared
+The V2 registry publishes inline-signed JSON metadata using the API's shared
 presentation schema. `generated/v2/` is the current catalog;
 `generated/v1/` remains a signed archive. Official plugins publish deterministic,
 per-package-version GitHub archives and npm packages for static composition.
@@ -27,12 +27,12 @@ using the existing registry and release trust roots.
 
 ## Commands
 
-The initial rollout requires a Community release that exports
-`@lapismd/lapis-community/registry/schema`. Before that publication, local
-acceptance uses a built Community tarball installed temporarily in the isolated
-registry workspace. Keep the tracked dependency on its npm semver range;
-refresh the registry lockfile from npm once that release is available. A
-temporary tarball install does not qualify the production frozen-install gate.
+The V2 contract is owned by `@lapis-notes/api/registry/schema` and requires
+API 0.1.1 or newer. Community publication is not a prerequisite. Before that
+API release is published, local acceptance uses an ignored checksum-pinned API
+tarball hook. Keep the tracked dependency on its npm semver range; refresh the
+registry lockfile from npm once that release is available. A temporary tarball
+install does not qualify the production frozen-install gate.
 
 ```sh
 pnpm install
@@ -64,8 +64,8 @@ helper binds to `127.0.0.1` by default so its generated media URLs and review
 address use the same reachable host.
 
 Source packages absent from the curated catalog appear as pending entries only
-in this local overlay. Their bundles cannot be installed. This includes
-Community and Slides until their first approved releases are indexed.
+in this local overlay. Their bundles cannot be installed. Slides appears until its first approved release is indexed. Private/parked
+Community source is excluded from the overlay.
 
 Gallery cards use an atomic responsive-image contract. Source metadata declares
 one to five cards with optional 1200×800 preview and 2400×1600 full/light/dark lossless-WebP paths,
