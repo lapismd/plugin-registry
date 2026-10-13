@@ -1,8 +1,57 @@
 {
+  "appearance": {
+    "accent": "#06B6D4",
+    "icon": "whole-word"
+  },
   "author": "Lapis Notes",
+  "authorAvatarUrl": "https://www.gravatar.com/avatar/1df68d9ff087b0dd72fd8626056fca7f?s=128&d=404",
   "authorUrl": "https://github.com/lapismd",
   "channel": "official",
   "description": "Status bar word and character count",
+  "gallery": [
+    {
+      "alt": "Focused Markdown editor with live word and character totals highlighted in the bottom status bar.",
+      "id": "focused-status-bar",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "f33c0cd6c8e64c368fb17b56308fdd63df19ea787069d771c55ec5344ab4a7ad",
+          "size": 91236,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/wordcount/registry-assets/gallery/focused-status-bar.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/wordcount/f33c0cd6c8e64c368fb17b56308fdd63df19ea787069d771c55ec5344ab4a7ad.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "cd08a4bffe9270e04ab971255d79439930df0ebad28cc78d63210332d21c94fe",
+          "size": 94606,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/wordcount/registry-assets/gallery/focused-status-bar.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/wordcount/cd08a4bffe9270e04ab971255d79439930df0ebad28cc78d63210332d21c94fe.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "4bedf2c59253dccbbfc3056adcb34a1e9496eaa3f8a84bc0167e8ee3101f4aaa",
+          "size": 84034,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/wordcount/registry-assets/gallery/focused-status-bar.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/wordcount/4bedf2c59253dccbbfc3056adcb34a1e9496eaa3f8a84bc0167e8ee3101f4aaa.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "2b18c7066bc4d2a4df35d6f1263c5d82a68830c64be6c84858f48c0781404869",
+          "size": 45094,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/wordcount/registry-assets/gallery/focused-status-bar.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/wordcount/2b18c7066bc4d2a4df35d6f1263c5d82a68830c64be6c84858f48c0781404869.webp",
+          "width": 1200
+        }
+      }
+    }
+  ],
   "highlights": [
     "Show live word and character counts in the status bar.",
     "Estimate reading time for the active document.",
@@ -17,6 +66,49 @@
     "issues": "https://github.com/lapismd/lapis-plugins/issues",
     "repository": "https://github.com/lapismd/lapis-plugins"
   },
+  "media": {
+    "banner": {
+      "alt": "Lapis Word Count showing a simple Markdown document and populated status bar in the complete shell with both sidebars closed.",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "24c6b88860df0eabe7002acfceeb29d789ba738c3abf806ea0f4304b62eb0def",
+          "size": 28008,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/wordcount/registry-assets/banner.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/wordcount/24c6b88860df0eabe7002acfceeb29d789ba738c3abf806ea0f4304b62eb0def.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "e37d8fbc6c65044119c362425de760b8a4cdf6ccc8c07d8b0ab92335fbfe6d1f",
+          "size": 33554,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/wordcount/registry-assets/banner.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/wordcount/e37d8fbc6c65044119c362425de760b8a4cdf6ccc8c07d8b0ab92335fbfe6d1f.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "25df00d22b68185f9ffed6c321a6abf85b9f7c07a652c93ab8ad57e031494be0",
+          "size": 27844,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/wordcount/registry-assets/banner.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/wordcount/25df00d22b68185f9ffed6c321a6abf85b9f7c07a652c93ab8ad57e031494be0.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "11c0c3466376f47ec2b98ee43843999cc326ad33531661a2a771ce35015f6e64",
+          "size": 17516,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/wordcount/registry-assets/banner.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/wordcount/11c0c3466376f47ec2b98ee43843999cc326ad33531661a2a771ce35015f6e64.webp",
+          "width": 1200
+        }
+      }
+    }
+  },
   "name": "Word Count",
   "owner": {
     "name": "Lapis Notes",
@@ -28,7 +120,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "X5H/BAFa1yUgyBLcwQy6+QtNZAlFCSzfNhNvJHn5k3EGTbDr4mcU3MSHaApqo7vOKuAGqGcxuMW1caMfZr1aBA=="
+      "sig": "VVpZEmfq1qMiDyUsQFG0Uh3YuDPrBYojld/0+e/TJ4oKXZj4xw+igX6iraxxsH2o+v9WiqTNbhDv5tVUJFRaAQ=="
     }
   ],
   "status": "active",
