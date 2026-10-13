@@ -17,6 +17,7 @@ import { setTimeout as delay } from "node:timers/promises";
 import sharp from "sharp";
 
 import { buildLocalSourcePreview } from "../lib/local-source-preview.mjs";
+import { pendingLocalSourceEntries } from "../lib/preview-source-entries.mjs";
 import {
   isLocalSourcePreviewInput,
   refreshLocalSourcePreview,
@@ -44,6 +45,7 @@ test("local source preview overlays unsigned manifest and registry-only content"
   assert.deepEqual(result.updatedPluginIds, ["example-plugin"]);
   assert.equal(result.unsigned, true);
   const index = await readJson(path.join(outputDir, "index.json"));
+  assert.equal(index.schemaVersion, 2);
   assert.equal(index.plugins[0].latestVersion, "1.1.0");
   assert.deepEqual(index.plugins[0].platforms, ["web", "desktop"]);
   assert.equal(
@@ -66,8 +68,8 @@ test("local source preview overlays unsigned manifest and registry-only content"
   assert.equal(detail.gallery[0].images.preview.height, 800);
   assert.equal(detail.gallery[0].images.full.width, 2400);
   assert.equal(detail.gallery[0].images.full.height, 1600);
-  assert.equal(detail.appearance.logo.width, 128);
-  assert.equal(detail.appearance.logo.height, 128);
+  assert.equal(detail.appearance.logo.images.full.width, 128);
+  assert.equal(detail.appearance.logo.images.full.height, 128);
   for (const [variant, sourceBytes] of [
     ["preview", previewImage],
     ["full", fullImage],
@@ -83,10 +85,8 @@ test("local source preview overlays unsigned manifest and registry-only content"
       sourceBytes,
     );
   }
-  assert.match(
-    detail.content.overview.sourceUrl,
-    /registry-content\/overview\.md$/,
-  );
+  assert.match(detail.links.documentation, /registry-content\/overview\.md$/);
+  assert.equal(detail.content, undefined);
   assert.equal(
     await readFile(
       path.join(outputDir, "content", "example-plugin", "overview.md"),
@@ -96,6 +96,104 @@ test("local source preview overlays unsigned manifest and registry-only content"
   );
   await assert.rejects(access(path.join(outputDir, "index.sig")));
 
+  await rm(root, { recursive: true, force: true });
+});
+
+test("V2 local preview preserves banner media and leaves the production catalog intact", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "lapis-registry-v2-preview-"));
+  const sourceDir = path.join(root, "source");
+  const baseRegistryDir = path.join(root, "base");
+  const outputDir = path.join(root, "preview");
+  await writeSourceFixture({ sourceDir, baseRegistryDir });
+  const source = registrySource();
+  source.schemaVersion = 2;
+  delete source.content;
+  source.media = {
+    banner: { alt: "Example banner", images: source.gallery[0].images },
+  };
+  await writeJson(path.join(sourceDir, "registry.json"), source);
+  await writeFile(
+    path.join(sourceDir, "CHANGELOG.md"),
+    "# Changelog\n\n## 1.1.0\n\nNew banner media.\n",
+  );
+  const productionBytes = Buffer.from('{"schemaVersion":1,"plugins":[]}\n');
+  await writeFile(path.join(baseRegistryDir, "index.json"), productionBytes);
+  await buildLocalSourcePreview({
+    sourceDir,
+    outputDir,
+    baseRegistryDir,
+    entries: [catalogEntry()],
+  });
+  const detail = await readJson(
+    path.join(outputDir, "plugins", "example-plugin.json"),
+  );
+  assert.equal(detail.media.banner.alt, "Example banner");
+  assert.equal(detail.media.banner.images.full.width, 2400);
+  assert.equal(detail.media.banner.images.full.height, 1600);
+  assert.equal(detail.content, undefined);
+  assert.equal(
+    detail.versions["1.1.0"].changelog.title,
+    "Example Plugin 1.1.0",
+  );
+  assert.deepEqual(
+    await readFile(path.join(baseRegistryDir, "index.json")),
+    productionBytes,
+  );
+  assert.equal(
+    await readFile(path.join(baseRegistryDir, "index.sig"), "utf8"),
+    "stale signature\n",
+  );
+  await rm(root, { recursive: true, force: true });
+});
+
+test("local-only discovery excludes parked Community and keeps Slides pending without changing source files", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "lapis-registry-discovery-"));
+  for (const [slug, id] of [
+    ["community", "community"],
+    ["slides", "lapis-slides"],
+  ]) {
+    const packageRoot = path.join(root, "packages", slug);
+    await mkdir(packageRoot, { recursive: true });
+    await writeJson(path.join(packageRoot, "registry.json"), {
+      schemaVersion: 2,
+    });
+    await writeJson(path.join(packageRoot, "manifest.json"), {
+      id,
+      name: slug,
+      version: "0.1.0",
+      description: `${slug} plugin`,
+      author: "Lapis Notes",
+    });
+    await writeJson(path.join(packageRoot, "package.json"), {
+      name: `@lapis-notes/${slug}`,
+      private: slug == "community",
+      repository: "https://github.com/lapismd/lapis-plugins.git",
+    });
+  }
+  const manifestPath = path.join(
+    root,
+    "packages",
+    "community",
+    "manifest.json",
+  );
+  const before = await readFile(manifestPath);
+  const entries = await pendingLocalSourceEntries(root, []);
+  assert.deepEqual(
+    entries.map((entry) => entry.id),
+    ["lapis-slides"],
+  );
+  for (const entry of entries) {
+    assert.equal(entry.status, "pending");
+    assert.equal(entry.versions["0.1.0"].bundle.pending, true);
+    assert.equal(entry.versions["0.1.0"].bundle.size, 0);
+  }
+  assert.deepEqual(
+    (await pendingLocalSourceEntries(root, [{ id: "community" }])).map(
+      (entry) => entry.id,
+    ),
+    ["lapis-slides"],
+  );
+  assert.deepEqual(await readFile(manifestPath), before);
   await rm(root, { recursive: true, force: true });
 });
 
@@ -192,7 +290,10 @@ test("local source refresh publishes complete snapshots and retains the last val
     updatedIndex.plugins[0].description,
     "Live manifest description from source.",
   );
-  assert.equal(updatedDetail.appearance.logo.sha256, sha256(updatedLogo));
+  assert.equal(
+    updatedDetail.appearance.logo.images.full.sha256,
+    sha256(updatedLogo),
+  );
   assert.equal(updatedReference.sha256, sha256(updatedPreviewImage));
   assert.equal(
     await readFile(
@@ -207,7 +308,9 @@ test("local source refresh publishes complete snapshots and retains the last val
         outputDir,
         "assets",
         "example-plugin",
-        new URL(updatedDetail.appearance.logo.url).pathname.split("/").at(-1),
+        new URL(updatedDetail.appearance.logo.images.full.url).pathname
+          .split("/")
+          .at(-1),
       ),
     ),
     updatedLogo,

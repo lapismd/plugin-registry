@@ -18,27 +18,51 @@
         "height"
       ],
       "properties": {
-        "url": { "type": "string", "pattern": "^https://.+" },
-        "sourceUrl": { "type": "string", "pattern": "^https://.+" },
-        "sha256": { "$ref": "#/$defs/sha256" },
-        "size": { "type": "integer", "minimum": 1, "maximum": 5242880 },
+        "url": {
+          "type": "string",
+          "pattern": "^https://.+"
+        },
+        "sourceUrl": {
+          "type": "string",
+          "pattern": "^https://.+"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5242880
+        },
         "mediaType": {
           "enum": ["image/png", "image/webp", "image/svg+xml"]
         },
-        "width": { "type": "integer", "minimum": 1 },
-        "height": { "type": "integer", "minimum": 1 }
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
       }
     },
     "logoReference": {
       "type": "object",
       "unevaluatedProperties": false,
       "allOf": [
-        { "$ref": "#/$defs/imageReference" },
+        {
+          "$ref": "#/$defs/imageReference"
+        },
         {
           "type": "object",
           "required": ["alt"],
           "properties": {
-            "alt": { "type": "string", "minLength": 1, "maxLength": 120 }
+            "alt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
           }
         }
       ]
@@ -65,8 +89,20 @@
             "whole-word"
           ]
         },
-        "accent": { "type": "string", "pattern": "^#[A-Fa-f0-9]{6}$" },
-        "logo": { "$ref": "#/$defs/logoReference" }
+        "accent": {
+          "type": "string",
+          "pattern": "^#[A-Fa-f0-9]{6}$"
+        },
+        "logo": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/logoReference"
+            },
+            {
+              "$ref": "#/$defs/logoMedia"
+            }
+          ]
+        }
       }
     },
     "galleryItem": {
@@ -78,15 +114,30 @@
           "type": "string",
           "pattern": "^[a-z0-9][a-z0-9-]{0,31}$"
         },
-        "alt": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "alt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
         "images": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["preview", "full"],
+          "required": [],
           "properties": {
-            "preview": { "$ref": "#/$defs/previewImageReference" },
-            "full": { "$ref": "#/$defs/fullImageReference" }
-          }
+            "preview": {
+              "$ref": "#/$defs/previewImageReference"
+            },
+            "full": {
+              "$ref": "#/$defs/fullImageReference"
+            },
+            "light": {
+              "$ref": "#/$defs/fullImageReference"
+            },
+            "dark": {
+              "$ref": "#/$defs/fullImageReference"
+            }
+          },
+          "minProperties": 1
         }
       }
     },
@@ -94,13 +145,21 @@
       "type": "object",
       "unevaluatedProperties": false,
       "allOf": [
-        { "$ref": "#/$defs/imageReference" },
+        {
+          "$ref": "#/$defs/imageReference"
+        },
         {
           "type": "object",
           "properties": {
-            "mediaType": { "const": "image/webp" },
-            "width": { "const": 1200 },
-            "height": { "const": 800 }
+            "mediaType": {
+              "const": "image/webp"
+            },
+            "width": {
+              "const": 1200
+            },
+            "height": {
+              "const": 800
+            }
           }
         }
       ]
@@ -109,13 +168,21 @@
       "type": "object",
       "unevaluatedProperties": false,
       "allOf": [
-        { "$ref": "#/$defs/imageReference" },
+        {
+          "$ref": "#/$defs/imageReference"
+        },
         {
           "type": "object",
           "properties": {
-            "mediaType": { "const": "image/webp" },
-            "width": { "const": 2400 },
-            "height": { "const": 1600 }
+            "mediaType": {
+              "const": "image/webp"
+            },
+            "width": {
+              "const": 2400
+            },
+            "height": {
+              "const": 1600
+            }
           }
         }
       ]
@@ -124,7 +191,40 @@
       "type": "array",
       "minItems": 1,
       "maxItems": 5,
-      "items": { "$ref": "#/$defs/galleryItem" }
+      "items": {
+        "$ref": "#/$defs/galleryItem"
+      }
+    },
+    "logoMedia": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alt", "images"],
+      "properties": {
+        "alt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "images": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "preview": {
+              "$ref": "#/$defs/imageReference"
+            },
+            "full": {
+              "$ref": "#/$defs/imageReference"
+            },
+            "light": {
+              "$ref": "#/$defs/imageReference"
+            },
+            "dark": {
+              "$ref": "#/$defs/imageReference"
+            }
+          }
+        }
+      }
     }
   }
 }

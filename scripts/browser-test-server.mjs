@@ -32,6 +32,7 @@ await Promise.all([
     minAppVersion: "0.1.0",
     description: "Provider-neutral agent chat inside the Lapis workspace.",
     author: "Lapis Notes",
+    authorUrl: "https://lapis.md/",
     isDesktopOnly: false,
   }),
   writeJson(path.join(packageRoot, "registry.json"), registrySource()),
@@ -58,7 +59,10 @@ Keep authored messages, tool evidence, and results together so switching agents 
 Review requests before a tool changes application state, then follow the resulting activity in the same transcript. The registry description focuses on the experience rather than package-manager installation steps.
 `,
   ),
-  writeFile(path.join(packageRoot, "CHANGELOG.md"), "# Changelog\n"),
+  writeFile(
+    path.join(packageRoot, "CHANGELOG.md"),
+    "## 0.1.3\n\n- Faster agent navigation.\n",
+  ),
   ...galleryCards().flatMap((card, index) => [
     writeFixtureImage(
       path.join(galleryRoot, `${card.id}.preview.webp`),
@@ -68,6 +72,18 @@ Review requests before a tool changes application state, then follow the resulti
     ),
     writeFixtureImage(
       path.join(galleryRoot, `${card.id}.full.webp`),
+      2400,
+      1600,
+      index,
+    ),
+    writeFixtureImage(
+      path.join(galleryRoot, `${card.id}.light.webp`),
+      2400,
+      1600,
+      (index + 1) % 3,
+    ),
+    writeFixtureImage(
+      path.join(galleryRoot, `${card.id}.dark.webp`),
       2400,
       1600,
       index,
@@ -106,9 +122,13 @@ process.exitCode = exitCode;
 
 function registrySource() {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     categories: ["ai", "productivity"],
-    highlights: ["Keep agent work in the active workspace."],
+    highlights: Array.from(
+      { length: 8 },
+      (_, index) =>
+        `Feature ${index + 1}: Keep agent work in the active workspace with durable conversations, clear approvals, and portable provider context.`,
+    ),
     appearance: { icon: "presentation", accent: "#42AFFA" },
     gallery: galleryCards().map((card, index) => ({
       id: card.id,
@@ -118,6 +138,8 @@ function registrySource() {
           path: `registry-assets/gallery/${card.id}.preview.webp`,
         },
         full: { path: `registry-assets/gallery/${card.id}.full.webp` },
+        light: { path: `registry-assets/gallery/${card.id}.light.webp` },
+        dark: { path: `registry-assets/gallery/${card.id}.dark.webp` },
       },
       capture: {
         storyId: `plugins-ai-registry-screenshots--fixture-${index + 1}`,
@@ -131,9 +153,20 @@ function registrySource() {
         ],
       },
     })),
-    content: {
-      overview: "registry-content/overview.md",
-      changelog: "CHANGELOG.md",
+    documentationUrl: "https://lapis.md/plugins/ai",
+    media: {
+      overview: {
+        alt: "AI workspace overview",
+        images: {
+          full: { path: "registry-assets/gallery/history.full.webp" },
+        },
+      },
+      banner: {
+        alt: "AI workspace banner",
+        images: {
+          full: { path: "registry-assets/gallery/conversation.full.webp" },
+        },
+      },
     },
   };
 }

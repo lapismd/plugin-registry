@@ -2,14 +2,37 @@
 
 Static plugin registry metadata for Lapis Notes.
 
-The V1 registry publishes inline-signed JSON metadata for official installable
-plugins.
-Generated files under `generated/v1/` are intended to be deployed as static
-assets. Official plugins publish deterministic, per-package-version GitHub
-release downloads from their owning repositories and npm packages for static
-application composition.
+The V2 registry publishes inline-signed JSON metadata using the API's shared
+presentation schema. `generated/v2/` is the current catalog;
+`generated/v1/` remains a signed archive. Official plugins publish deterministic,
+per-package-version GitHub archives and npm packages for static composition.
+
+The Astro site renders descriptions, highlights, documentation links, themed
+logos/banner/overview/gallery images and structured per-version changelogs.
+V2 omits README and Markdown-reference fields. Immutable artifact hashes and
+compatibility data remain attached to each version; listing compatibility
+comes from the latest release. Nostr deployment remains deferred.
+
+`plugin_release` dispatches verify signatures, artifact hashes and pinned source
+metadata before opening idempotent registry PRs. Metadata-only dispatches retain
+release artifacts and version history. Source schema V1 remains readable for
+older independent plugins; publication normalizes to V2. Structured notes use
+the exact Changesets section or a validated
+`registry.json.releases[version].changelog` override.
+
+The first signed V2 cutover requires approval. After
+`STATIC_REGISTRY_V2_DEPLOY_APPROVED` is enabled, validated merges to `main` deploy
+the Astro site and signed catalog. Signing remains a protected, reviewable step
+using the existing registry and release trust roots.
 
 ## Commands
+
+The V2 contract is owned by `@lapis-notes/api/registry/schema` and requires
+API 0.1.1 or newer. Community publication is not a prerequisite. Before that
+API release is published, local acceptance uses an ignored checksum-pinned API
+tarball hook. Keep the tracked dependency on its npm semver range; refresh the
+registry lockfile from npm once that release is available. A temporary tarball
+install does not qualify the production frozen-install gate.
 
 ```sh
 pnpm install
@@ -26,8 +49,8 @@ pnpm test:browser
 
 `site:dev:source` starts the catalog with an unsigned overlay from the sibling
 `../lapis-plugins` checkout. It reads current package manifests,
-`registry.json`, registry-only Markdown, logos, and gallery assets without
-changing `generated/v1` or its signatures. A banner keeps the local preview
+`registry.json`, presentation fields, release notes, logos, and gallery assets without
+changing the signed generated catalog or its signatures. A banner keeps the local preview
 distinct from signed production metadata. Point it at another checkout or port
 when needed:
 
@@ -40,12 +63,16 @@ second working-source preview cannot remove another preview's assets. The
 helper binds to `127.0.0.1` by default so its generated media URLs and review
 address use the same reachable host.
 
+Source packages absent from the curated catalog appear as pending entries only
+in this local overlay. Their bundles cannot be installed. Slides appears until its first approved release is indexed. Private/parked
+Community source is excluded from the overlay.
+
 Gallery cards use an atomic responsive-image contract. Source metadata declares
-one to five cards with 1200×800 preview and 2400×1600 full lossless-WebP paths,
+one to five cards with optional 1200×800 preview and 2400×1600 full/light/dark lossless-WebP paths,
 plus source-only Storybook capture and colour-segmented headline and description
 composition instructions. Published
-detail metadata retains only each card's ID, alternative text, and complete
-hashed `images.preview` and `images.full` references.
+detail metadata retains only each card's ID, alternative text, and authored
+hashed image variants. Display fallbacks preserve missing authored variants.
 
 Registry signing uses protected CI secrets or a local key generated under
 `~/.lapis/`:
@@ -58,15 +85,17 @@ LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64="$(base64 -i ~/.lapis/lapis-registry-private.
 pnpm registry:sign
 ```
 
-Private keys must never be committed. The committed bootstrap metadata is signed
-so verification can run in CI before production keys are installed.
+Private keys must never be committed. V2 metadata must be signed with the existing registry key before cutover.
+Tests generate isolated ephemeral keys and output directories, separate from
+production build output.
 
 ## Layout
 
 - `entries/**`: human-maintained JSONC source entries.
 - `schemas/**`: strict JSON schemas for source and generated metadata.
-- `generated/v1/**`: deterministic generated registry files with inline
+- `generated/v2/**`: deterministic current registry files with inline
   signatures plus matching signature sidecars.
+- `generated/v1/**`: retained archive for older clients.
 - `stats/daily/**`: immutable UTC download aggregates once production tracking
   is enabled; `stats/summary.json` is rebuilt only from these files.
 - `scripts/**`: validation, generation, signing, and verification tooling.
@@ -84,34 +113,28 @@ Existing catalog versions use immutable assets from the public
 published from `lapismd/lapis-plugins` and indexed through the verified GitHub
 dispatch workflow.
 
-New plugin sources own a validated `registry.json` beside their package
-manifest. It supplies curated categories and short highlights plus safe relative
-Overview and Changelog Markdown paths. The registry fetches those files from the
-exact source commit, validates package/repository ownership, and mirrors them
-under `v1/content/<plugin-id>/`. Signed detail metadata records each mirror and
-source URL with its SHA-256, byte size, and `text/markdown` media type. The
-public site and Lapis clients consume the same references. Legacy `readmeUrl`
-and `readme` fields remain supported while older catalog entries migrate.
+New plugin sources own a validated V2 `registry.json` beside their package
+manifest. It supplies categories, plain-text highlights, documentation links,
+source-owned image paths and optional structured-note overrides. The registry
+fetches metadata, `CHANGELOG.md` and assets at the exact source commit, verifies
+ownership, and mirrors hashed image variants under `v2/assets/<plugin-id>/`.
+Historical V1 Markdown references remain in the archive.
 
-First-party packages keep end-user catalog copy in
-`registry-content/overview.md`; package-manager installation and static
-composition guidance remains in the package README. Registry compatibility
-uses `web` and `desktop` as its only platform identifiers.
+Links use HTTPS and asset paths stay within the package. Media has bounded byte
+sizes and validated dimensions; gallery paths retain strict Storybook capture
+contracts. Badges and verified-owner claims stay curator-owned. Platform labels
+are preserved in metadata; runtime compatibility still checks supported hosts.
 
-Source metadata is intentionally bounded: links must use HTTPS, Markdown paths
-must remain inside the package, highlights are plain text, and content is valid
-UTF-8 no larger than 256 KiB per file. Registry badges and verified-owner claims
-remain curated in this repository rather than being accepted from plugin source.
-Static Cloudflare Pages `_headers` rules add `Access-Control-Allow-Origin: *` to
-published registry files, README artifacts, and optional statistics. Only the
-anonymous `/download/*` redirect is handled by a Pages Function; ordinary
-registry pages and assets remain static. See
-[Anonymous plugin download analytics](docs/download-analytics.md) for metric,
-privacy, mirroring, recovery, and rollout details.
+Cloudflare Pages CORS headers cover both registry versions and statistics.
+Only anonymous `/download/*` redirects use a Pages Function; catalog pages and
+assets stay static. See [download analytics](docs/download-analytics.md) for
+metric, privacy, mirroring and recovery details.
 
-Production deployment is manual-only during the first-publication gate. The
-`Publish registry` workflow requires the protected `registry-production`
-environment, the `FIRST_REGISTRY_RELEASE_APPROVED` repository variable, and the
-exact `REGISTRY_DEPLOY_APPROVED` input. Deploy-on-merge may be enabled only after
-the first cutover is explicitly accepted. Visual tests are intentionally not a
-registry deployment gate.
+The production workflow requires the protected `registry-production`
+environment and the V2 cutover variable. It verifies committed signatures and
+production assets before deployment. Visual baseline updates remain separately
+approved.
+
+Source packages marked `private: true` are parked and excluded from the local
+registry, including curated entries. Community is parked in the first-party
+source repository for this release; Slides remains available for preview.

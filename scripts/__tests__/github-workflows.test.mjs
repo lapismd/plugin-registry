@@ -4,14 +4,14 @@ import test from "node:test";
 
 const repoRoot = new URL("../../", import.meta.url);
 
-test("production deployment stays manual and explicitly approved", async () => {
+test("production deployment follows validated main merges after the V2 cutover approval", async () => {
   const workflow = await readFile(
     new URL(".github/workflows/publish.yml", repoRoot),
     "utf8",
   );
   assert.match(workflow, /workflow_dispatch:/);
-  assert.doesNotMatch(workflow, /\n\s+push:/);
-  assert.match(workflow, /FIRST_REGISTRY_RELEASE_APPROVED == 'true'/);
+  assert.match(workflow, /\n\s+push:/);
+  assert.match(workflow, /STATIC_REGISTRY_V2_DEPLOY_APPROVED == 'true'/);
   assert.match(workflow, /inputs\.approval == 'REGISTRY_DEPLOY_APPROVED'/);
   assert.match(workflow, /environment: registry-production/);
   assert.match(workflow, /pnpm exec wrangler pages deploy dist/);
@@ -92,6 +92,8 @@ test("registry metadata signing is reviewable and separate from deployment", asy
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /inputs\.approval == 'REGISTRY_SIGN_APPROVED'/);
   assert.match(workflow, /environment: registry-production/);
+  assert.match(workflow, /ref: \$\{\{ inputs\.source_ref \}\}/);
+  assert.match(workflow, /base: \$\{\{ inputs\.source_ref \}\}/);
   assert.match(
     workflow,
     /client-id: \$\{\{ secrets\.LAPIS_REGISTRY_APP_CLIENT_ID \}\}/,

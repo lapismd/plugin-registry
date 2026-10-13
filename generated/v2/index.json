@@ -1,0 +1,432 @@
+{
+  "generatedAt": "2026-05-31T00:00:00.000Z",
+  "plugins": [
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "ai",
+        "productivity"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Provider-agnostic agent chat with ACP and optional native runtimes.",
+      "detail": "plugins/ai.json",
+      "id": "ai",
+      "latestRelease": {
+        "bundleSize": 668241,
+        "releasedAt": "2026-08-29T09:35:55.000Z"
+      },
+      "latestVersion": "0.1.2",
+      "links": {
+        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/ai/README.md"
+      },
+      "minAppVersion": "0.1.0",
+      "name": "AI",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "author": "Lapis Notes Bases",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "data",
+        "database",
+        "editor"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Bases",
+      "detail": "plugins/bases.json",
+      "id": "bases",
+      "latestRelease": {
+        "bundleSize": 645112,
+        "releasedAt": "2026-08-29T09:36:02.000Z"
+      },
+      "latestVersion": "0.1.2",
+      "links": {
+        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/bases/README.md"
+      },
+      "minAppVersion": "0.1.0",
+      "name": "Bases",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "navigation",
+        "productivity"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Bookmark files, folders, searches, and groups",
+      "detail": "plugins/bookmarks.json",
+      "id": "bookmarks",
+      "latestRelease": {
+        "bundleSize": 457091,
+        "releasedAt": "2026-08-29T09:36:10.000Z"
+      },
+      "latestVersion": "0.1.2",
+      "links": {
+        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/bookmarks/README.md"
+      },
+      "minAppVersion": "0.1.0",
+      "name": "Bookmarks",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "history",
+        "versioning"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "File history",
+      "detail": "plugins/history.json",
+      "id": "history",
+      "latestRelease": {
+        "bundleSize": 148095,
+        "releasedAt": "2026-08-29T09:36:30.000Z"
+      },
+      "latestVersion": "0.1.2",
+      "links": {
+        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/history/README.md"
+      },
+      "minAppVersion": "0.1.0",
+      "name": "History",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "graph",
+        "visualization"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Global and local graph views powered by indexed metadata",
+      "detail": "plugins/lapis-graph.json",
+      "id": "lapis-graph",
+      "latestRelease": {
+        "bundleSize": 476698,
+        "releasedAt": "2026-08-29T09:36:18.000Z"
+      },
+      "latestVersion": "0.1.2",
+      "links": {
+        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/graph/README.md"
+      },
+      "minAppVersion": "0.1.0",
+      "name": "Graph",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "diagnostics",
+        "linting"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Markdown diagnostics provider",
+      "detail": "plugins/lapis-markdown-lint.json",
+      "id": "lapis-markdown-lint",
+      "latestRelease": {
+        "bundleSize": 149673,
+        "releasedAt": "2026-08-29T09:36:46.000Z"
+      },
+      "latestVersion": "0.1.1",
+      "links": {
+        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/markdown-lint/README.md"
+      },
+      "minAppVersion": "0.1.0",
+      "name": "Markdown Lint",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "editor",
+        "source"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Source editing for text, JSON, and YAML files",
+      "detail": "plugins/lapis-source-editor.json",
+      "id": "lapis-source-editor",
+      "latestRelease": {
+        "bundleSize": 152766,
+        "releasedAt": "2026-08-29T09:37:01.000Z"
+      },
+      "latestVersion": "0.1.1",
+      "links": {
+        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/source-editor/README.md"
+      },
+      "minAppVersion": "0.1.0",
+      "name": "Source Editor",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "editor",
+        "markdown"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Mira-powered Markdown editing with source, live preview, and reading modes.",
+      "detail": "plugins/markdown.json",
+      "id": "markdown",
+      "latestRelease": {
+        "bundleSize": 6265198,
+        "releasedAt": "2026-08-29T09:36:38.000Z"
+      },
+      "latestVersion": "0.1.3",
+      "links": {
+        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/markdown/README.md"
+      },
+      "minAppVersion": "0.1.0",
+      "name": "Markdown",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "navigation",
+        "search"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Search files, metadata, tags, and note content.",
+      "detail": "plugins/search.json",
+      "id": "search",
+      "latestRelease": {
+        "bundleSize": 366330,
+        "releasedAt": "2026-08-29T09:36:53.000Z"
+      },
+      "latestVersion": "0.1.2",
+      "links": {
+        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/search/README.md"
+      },
+      "minAppVersion": "0.1.0",
+      "name": "Search",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "diagnostics",
+        "writing"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Harper grammar and spelling diagnostics for open notes",
+      "detail": "plugins/spellcheck.json",
+      "id": "spellcheck",
+      "latestRelease": {
+        "bundleSize": 9999885,
+        "releasedAt": "2026-08-29T09:37:08.000Z"
+      },
+      "latestVersion": "0.1.1",
+      "links": {
+        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/spellcheck/README.md"
+      },
+      "minAppVersion": "0.1.0",
+      "name": "Spell Check",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "statistics",
+        "writing"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Status bar word and character count",
+      "detail": "plugins/wordcount.json",
+      "id": "wordcount",
+      "latestRelease": {
+        "bundleSize": 50493,
+        "releasedAt": "2026-08-29T09:37:16.000Z"
+      },
+      "latestVersion": "0.1.1",
+      "links": {
+        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/wordcount/README.md"
+      },
+      "minAppVersion": "0.1.0",
+      "name": "Word Count",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    }
+  ],
+  "schemaVersion": 2,
+  "signatures": [
+    {
+      "alg": "ed25519",
+      "keyId": "lapis-registry-2026-06",
+      "sig": "Ok00Fn6o24rfaBj3lLRAjvQ1xiObJlD/KFnIT1dK6SmQBVc4DWPjl/eGvE2FbbvV1DJ1COwLtS85t+biKa2nBA=="
+    }
+  ]
+}

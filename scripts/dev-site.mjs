@@ -48,18 +48,26 @@ const previewWatcher = watchLocalSourcePreview({
   },
 });
 
-const child = spawn("pnpm", ["exec", "astro", "dev", ...options.astroArgs], {
-  cwd: root,
-  env: {
-    ...process.env,
-    LAPIS_REGISTRY_DATA_V1_DIR: registryDir,
-    LAPIS_REGISTRY_SITE_V1_DIR: registryDir,
-    LAPIS_REGISTRY_PUBLIC_DIR: publicDir,
-    LAPIS_REGISTRY_SOURCE_PREVIEW: sourceDir,
+const child = spawn(
+  process.execPath,
+  [
+    path.join(root, "node_modules/astro/bin/astro.mjs"),
+    "dev",
+    ...options.astroArgs,
+  ],
+  {
+    cwd: root,
+    env: {
+      ...process.env,
+      LAPIS_REGISTRY_DATA_V1_DIR: registryDir,
+      LAPIS_REGISTRY_SITE_V1_DIR: registryDir,
+      LAPIS_REGISTRY_PUBLIC_DIR: publicDir,
+      LAPIS_REGISTRY_SOURCE_PREVIEW: sourceDir,
+    },
+    stdio: "inherit",
+    shell: process.platform === "win32",
   },
-  stdio: "inherit",
-  shell: process.platform === "win32",
-});
+);
 
 let stopping = false;
 let watcherClose = null;

@@ -1,3 +1,4 @@
+import { registryChangelogFromMarkdown } from "@lapis-notes/api/registry/schema";
 import { TextDecoder } from "node:util";
 import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import sharp from "sharp";
@@ -17,7 +18,7 @@ export async function fetchPluginSourceMetadata({
   fetchImpl = fetch,
   outputDir,
   assetOutputDir = outputDir ? new URL("../assets/", outputDir) : undefined,
-  registryBaseUrl = "https://registry.lapis.md/v1/",
+  registryBaseUrl = "https://registry.lapis.md/v2/",
 }) {
   const packageRoot = sourcePackageRoot(payload);
   const sourceBaseUrl = `https://raw.githubusercontent.com/${payload.repository}/${payload.sourceCommit}/${packageRoot ? `${packageRoot}/` : ""}`;
@@ -44,7 +45,9 @@ export async function fetchPluginSourceMetadata({
   validateFirstPartyMediaSource(payload, source);
 
   const contentEntries = await Promise.all(
-    Object.entries(source.content).map(async ([kind, relativePath]) => {
+    Object.entries(
+      source.schemaVersion === 2 ? {} : (source.content ?? {}),
+    ).map(async ([kind, relativePath]) => {
       assertSafeMarkdownPath(relativePath);
       const sourceUrl = new URL(relativePath, sourceBaseUrl).href;
       const bytes = await fetchBytes(
@@ -96,13 +99,62 @@ export async function fetchPluginSourceMetadata({
         pluginId: payload.pluginId,
       })
     : undefined;
+  const media = source.media
+    ? Object.fromEntries(
+        await Promise.all(
+          Object.entries(source.media).map(async ([role, item]) => [
+            role,
+            {
+              alt: item.alt,
+              images: Object.fromEntries(
+                await Promise.all(
+                  Object.entries(item.images).map(async ([variant, asset]) => [
+                    variant,
+                    await resolveSourceImage({
+                      appearance: source.appearance,
+                      fetchImpl,
+                      sourceBaseUrl,
+                      assetOutputDir,
+                      registryBaseUrl,
+                      pluginId: payload.pluginId,
+                      sourceAsset: asset,
+                      maxBytes: maxPluginGalleryBytes,
+                      role: `${role} ${variant}`,
+                      allowSvg: false,
+                    }),
+                  ]),
+                ),
+              ),
+            },
+          ]),
+        ),
+      )
+    : undefined;
+  let changelog;
+  if (source.schemaVersion === 2) {
+    const bytes = await fetchBytes(
+      fetchImpl,
+      new URL("CHANGELOG.md", sourceBaseUrl).href,
+      maxPluginMarkdownBytes,
+    );
+    changelog = registryChangelogFromMarkdown(
+      manifest.name,
+      manifest.version,
+      decodeUtf8(bytes, "changelog"),
+      source.releases?.[manifest.version]?.changelog,
+    );
+  }
   await pruneMirroredAssets(
     assetOutputDir,
     payload.pluginId,
     [
-      appearance?.logo,
-      ...(gallery?.flatMap((item) => [item.images.preview, item.images.full]) ??
-        []),
+      ...(appearance?.logo?.images
+        ? Object.values(appearance.logo.images)
+        : [appearance?.logo]),
+      ...(gallery?.flatMap((item) => Object.values(item.images)) ?? []),
+      ...Object.values(media ?? {}).flatMap((item) =>
+        Object.values(item.images),
+      ),
     ].filter(Boolean),
   );
   const links = compactObject({
@@ -126,6 +178,7 @@ export async function fetchPluginSourceMetadata({
     description: manifest.description,
     author: normalizeAuthorName(manifest.author ?? packageJson.author),
     authorUrl:
+      normalizeHttpsUrl(manifest.authorUrl, "manifest author URL") ??
       normalizeAuthorUrl(manifest.author ?? packageJson.author) ??
       repositoryUrl.split("/").slice(0, 4).join("/"),
     minAppVersion:
@@ -135,6 +188,9 @@ export async function fetchPluginSourceMetadata({
     highlights: source.highlights,
     ...(appearance ? { appearance } : {}),
     ...(gallery ? { gallery } : {}),
+    ...(media ? { media } : {}),
+    ...(changelog ? { changelog } : {}),
+    authorAvatarUrl: manifest.authorAvatarUrl,
     license: packageJson.license,
     links,
     content: Object.fromEntries(contentEntries),
@@ -151,10 +207,25 @@ export async function fetchPluginSourceMetadata({
 }
 
 export function applyPluginSourceMetadata(entry, metadata) {
-  const { appearance: _appearance, gallery: _gallery, ...baseEntry } = entry;
+  const {
+    appearance: _appearance,
+    gallery: _gallery,
+    media: _media,
+    ...baseEntry
+  } = entry;
   return {
     ...baseEntry,
     name: metadata.name,
+    authorAvatarUrl: metadata.authorAvatarUrl,
+    ...(metadata.media ? { media: metadata.media } : {}),
+    versions: Object.fromEntries(
+      Object.entries(entry.versions).map(([version, release]) => [
+        version,
+        version === metadata.version && metadata.changelog
+          ? { ...release, changelog: metadata.changelog }
+          : release,
+      ]),
+    ),
     description: metadata.description,
     readmeUrl: metadata.readmeUrl,
     author: metadata.author,
@@ -267,6 +338,29 @@ function validateFirstPartyMediaSource(payload, source) {
 
 async function resolveSourceAppearance(options) {
   const { appearance } = options;
+  if (appearance.logo?.images) {
+    const images = Object.fromEntries(
+      await Promise.all(
+        Object.entries(appearance.logo.images).map(
+          async ([variant, sourceAsset]) => [
+            variant,
+            await resolveSourceImage({
+              ...options,
+              sourceAsset,
+              maxBytes: maxPluginLogoBytes,
+              role: "logo",
+              allowSvg: true,
+            }),
+          ],
+        ),
+      ),
+    );
+    return {
+      icon: appearance.icon,
+      accent: appearance.accent.toUpperCase(),
+      logo: { alt: appearance.logo.alt, images },
+    };
+  }
   const logo = appearance.logo
     ? await resolveSourceImage({
         ...options,
@@ -291,7 +385,7 @@ async function resolveSourceGallery(options) {
       throw new Error(`${options.pluginId}: duplicate gallery id ${item.id}.`);
     }
     ids.add(item.id);
-    for (const variant of ["preview", "full"]) {
+    for (const variant of Object.keys(item.images)) {
       const imagePath = item.images[variant].path;
       const expectedPath = `registry-assets/gallery/${item.id}.${variant}.webp`;
       if (imagePath !== expectedPath) {
@@ -326,31 +420,28 @@ async function resolveSourceGallery(options) {
     }
   }
   return Promise.all(
-    options.gallery.map(async (item) => {
-      const [preview, full] = await Promise.all([
-        resolveSourceImage({
-          ...options,
-          sourceAsset: item.images.preview,
-          maxBytes: maxPluginGalleryBytes,
-          role: "preview gallery image",
-          allowSvg: false,
-          expectedDimensions: { width: 1200, height: 800 },
-        }),
-        resolveSourceImage({
-          ...options,
-          sourceAsset: item.images.full,
-          maxBytes: maxPluginGalleryBytes,
-          role: "full gallery image",
-          allowSvg: false,
-          expectedDimensions: { width: 2400, height: 1600 },
-        }),
-      ]);
-      return {
-        id: item.id,
-        alt: item.alt,
-        images: { preview, full },
-      };
-    }),
+    options.gallery.map(async (item) => ({
+      id: item.id,
+      alt: item.alt,
+      images: Object.fromEntries(
+        await Promise.all(
+          Object.entries(item.images).map(async ([variant, sourceAsset]) => [
+            variant,
+            await resolveSourceImage({
+              ...options,
+              sourceAsset,
+              maxBytes: maxPluginGalleryBytes,
+              role: `${variant} gallery image`,
+              allowSvg: false,
+              expectedDimensions:
+                variant === "preview"
+                  ? { width: 1200, height: 800 }
+                  : { width: 2400, height: 1600 },
+            }),
+          ]),
+        ),
+      ),
+    })),
   );
 }
 

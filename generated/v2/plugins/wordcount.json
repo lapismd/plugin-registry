@@ -1,0 +1,52 @@
+{
+  "author": "Lapis Notes",
+  "authorUrl": "https://github.com/lapismd",
+  "channel": "official",
+  "description": "Status bar word and character count",
+  "highlights": [
+    "Show live word and character counts in the status bar.",
+    "Estimate reading time for the active document.",
+    "Update counts as editors and active files change."
+  ],
+  "id": "wordcount",
+  "latestVersion": "0.1.1",
+  "license": "AGPL-3.0-or-later",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/wordcount#readme",
+    "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/wordcount#readme",
+    "issues": "https://github.com/lapismd/lapis-plugins/issues",
+    "repository": "https://github.com/lapismd/lapis-plugins"
+  },
+  "name": "Word Count",
+  "owner": {
+    "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugins",
+    "verified": true
+  },
+  "schemaVersion": 2,
+  "signatures": [
+    {
+      "alg": "ed25519",
+      "keyId": "lapis-registry-2026-06",
+      "sig": "X5H/BAFa1yUgyBLcwQy6+QtNZAlFCSzfNhNvJHn5k3EGTbDr4mcU3MSHaApqo7vOKuAGqGcxuMW1caMfZr1aBA=="
+    }
+  ],
+  "status": "active",
+  "versions": {
+    "0.1.1": {
+      "bundle": {
+        "downloadUrl": "../../download/wordcount/0.1.1",
+        "sha256": "3364e3f1c760fd06ee24e614b774b276dcbd6a15147b39c0d1b5e778beeb6cf2",
+        "size": 50493,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/wordcount%400.1.1/wordcount-0.1.1.lapis-plugin"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-08-29T09:37:16.000Z",
+      "version": "0.1.1"
+    }
+  }
+}

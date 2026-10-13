@@ -3,6 +3,11 @@ name: Sign registry metadata
 on:
   workflow_dispatch:
     inputs:
+      source_ref:
+        description: Existing source branch to sign and open the generated-only PR against
+        required: true
+        default: main
+        type: string
       approval:
         description: Enter REGISTRY_SIGN_APPROVED to generate signed metadata
         required: true
@@ -29,7 +34,7 @@ jobs:
 
       - uses: actions/checkout@v7
         with:
-          ref: main
+          ref: ${{ inputs.source_ref }}
           token: ${{ steps.registry-app.outputs.token }}
           persist-credentials: false
 
@@ -78,13 +83,13 @@ jobs:
         with:
           token: ${{ steps.registry-app.outputs.token }}
           branch-token: ${{ steps.registry-app.outputs.token }}
-          base: main
-          branch: automation/sign-registry-download-urls
+          base: ${{ inputs.source_ref }}
+          branch: automation/sign-registry-v2
           delete-branch: true
           add-paths: generated/**
           commit-message: "chore(registry): sign download metadata"
           title: Sign plugin download metadata
           body: |
-            Protected signing refresh for generated V1 registry metadata.
+            Protected signing refresh for the selected source branch's V2 registry metadata.
 
             The pull request preserves each signed artifact origin and adds the registry-owned download redirect reference.

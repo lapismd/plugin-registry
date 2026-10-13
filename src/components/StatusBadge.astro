@@ -2,7 +2,7 @@
 import { statusLabel } from "../lib/registry-data";
 
 interface Props {
-  status: "active" | "pending" | "revoked";
+  status: "active" | "pending" | "revoked" | "deprecated" | "disabled";
 }
 
 const { status } = Astro.props;

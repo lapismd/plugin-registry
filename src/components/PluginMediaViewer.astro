@@ -1,0 +1,291 @@
+---
+import { ChevronLeft, ChevronRight, X } from "@lucide/astro";
+import type {
+  PluginGalleryItem,
+  PluginMediaItem,
+} from "../lib/registry-data";
+
+interface Props {
+  items: Array<PluginGalleryItem | PluginMediaItem>;
+  pluginName: string;
+  viewerId: string;
+}
+
+const { items, pluginName, viewerId } = Astro.props as Props;
+const multiple = items.length > 1;
+---
+
+<dialog
+  class="plugin-lightbox"
+  aria-label={`${pluginName} media viewer`}
+  data-media-viewer={viewerId}
+>
+  <div class="plugin-lightbox__topbar">
+    <div
+      class="plugin-lightbox__modes"
+      role="group"
+      aria-label="Screenshot theme"
+      data-media-modes
+    >
+      <button type="button" aria-pressed="true" data-media-mode="full">
+        Split
+      </button>
+      <button type="button" aria-pressed="false" data-media-mode="light">
+        Light
+      </button>
+      <button type="button" aria-pressed="false" data-media-mode="dark">
+        Dark
+      </button>
+    </div>
+    <button
+      type="button"
+      class="plugin-lightbox__close"
+      aria-label="Close media viewer"
+      data-media-close
+    >
+      <X size={20} stroke-width="2" aria-hidden="true" />
+    </button>
+  </div>
+
+  <div
+    class="plugin-lightbox__viewport"
+    aria-label={`${pluginName} fullscreen media`}
+    data-media-track
+  >
+    {
+      items.map((item, index) => (
+        <figure
+          class="plugin-lightbox__slide"
+          role="group"
+          aria-label={multiple ? `${index + 1} of ${items.length}` : item.alt}
+          data-media-slide
+        >
+          <img
+            src={item.images.full.url}
+            width={item.images.full.width}
+            height={item.images.full.height}
+            alt={item.alt}
+            loading="lazy"
+            decoding="async"
+            data-media-image
+            data-media-source-full={item.images.full.url}
+            data-media-source-light={item.images.light.url}
+            data-media-source-dark={item.images.dark.url}
+          />
+        </figure>
+      ))
+    }
+  </div>
+
+  {
+    multiple ? (
+      <>
+        <button
+          type="button"
+          class="plugin-lightbox__control plugin-lightbox__control--previous"
+          aria-label="Show previous screenshot"
+          data-media-previous
+          disabled
+        >
+          <ChevronLeft size={20} stroke-width="2" aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          class="plugin-lightbox__control plugin-lightbox__control--next"
+          aria-label="Show next screenshot"
+          data-media-next
+          disabled={items.length === 1}
+        >
+          <ChevronRight size={20} stroke-width="2" aria-hidden="true" />
+        </button>
+      </>
+    ) : null
+  }
+</dialog>
+
+<script>
+  function closestMediaIndex(
+    viewport: HTMLElement,
+    slides: HTMLElement[],
+  ): number {
+    const viewportBox = viewport.getBoundingClientRect();
+    let closest = 0;
+    let distance = Number.POSITIVE_INFINITY;
+    for (const [index, slide] of slides.entries()) {
+      const candidate = Math.abs(
+        slide.getBoundingClientRect().left - viewportBox.left,
+      );
+      if (candidate < distance) {
+        distance = candidate;
+        closest = index;
+      }
+    }
+    return closest;
+  }
+
+  for (const dialog of document.querySelectorAll<HTMLDialogElement>(
+    "[data-media-viewer]",
+  )) {
+    if (dialog.dataset.mediaViewerReady === "true") continue;
+    dialog.dataset.mediaViewerReady = "true";
+    const viewerId = dialog.dataset.mediaViewer;
+    if (!viewerId) continue;
+    const track = dialog.querySelector<HTMLElement>("[data-media-track]");
+    const slides = [
+      ...dialog.querySelectorAll<HTMLElement>("[data-media-slide]"),
+    ];
+    const images = [
+      ...dialog.querySelectorAll<HTMLImageElement>("[data-media-image]"),
+    ];
+    const previous = dialog.querySelector<HTMLButtonElement>(
+      "[data-media-previous]",
+    );
+    const next = dialog.querySelector<HTMLButtonElement>("[data-media-next]");
+    const close = dialog.querySelector<HTMLButtonElement>("[data-media-close]");
+    const modeButtons = [
+      ...dialog.querySelectorAll<HTMLButtonElement>("[data-media-mode]"),
+    ];
+    const triggers = [
+      ...document.querySelectorAll<HTMLButtonElement>(
+        `[data-media-viewer-open="${CSS.escape(viewerId)}"]`,
+      ),
+    ];
+    let index = 0;
+    let opener: HTMLButtonElement | null = null;
+    let frame = 0;
+    let settleTimer = 0;
+    let programmaticIndex: number | null = null;
+
+    if (!track || slides.length === 0) continue;
+
+    const renderIndex = (nextIndex: number) => {
+      index = nextIndex;
+      if (previous) previous.disabled = index === 0;
+      if (next) next.disabled = index === slides.length - 1;
+    };
+
+    const updateIndex = () => renderIndex(closestMediaIndex(track, slides));
+
+    const scrollTo = (
+      nextIndex: number,
+      behavior: ScrollBehavior = "smooth",
+    ) => {
+      const bounded = Math.max(0, Math.min(nextIndex, slides.length - 1));
+      programmaticIndex = bounded;
+      renderIndex(bounded);
+      track.scrollTo({ left: slides[bounded]?.offsetLeft ?? 0, behavior });
+      if (behavior === "auto") {
+        requestAnimationFrame(() => {
+          programmaticIndex = null;
+          updateIndex();
+        });
+      }
+    };
+
+    const setMode = (mode: "full" | "light" | "dark") => {
+      for (const button of modeButtons) {
+        button.setAttribute(
+          "aria-pressed",
+          button.dataset.mediaMode === mode ? "true" : "false",
+        );
+      }
+      for (const image of images) {
+        const source = image.dataset[
+          mode === "full"
+            ? "mediaSourceFull"
+            : mode === "light"
+              ? "mediaSourceLight"
+              : "mediaSourceDark"
+        ];
+        if (source) image.src = source;
+      }
+      dialog.dataset.mediaTheme = mode;
+    };
+
+    const openViewer = (nextIndex: number, source: HTMLButtonElement) => {
+      opener = source;
+      setMode("full");
+      dialog.showModal();
+      document.documentElement.classList.add("has-gallery-dialog");
+      requestAnimationFrame(() => {
+        scrollTo(nextIndex, "auto");
+        close?.focus({ preventScroll: true });
+      });
+    };
+
+    for (const trigger of triggers) {
+      trigger.addEventListener("click", () => {
+        openViewer(Number(trigger.dataset.mediaIndex ?? 0), trigger);
+      });
+    }
+    for (const button of modeButtons) {
+      button.addEventListener("click", () => {
+        const mode = button.dataset.mediaMode;
+        if (mode === "full" || mode === "light" || mode === "dark") {
+          setMode(mode);
+        }
+      });
+    }
+    previous?.addEventListener("click", () => scrollTo(index - 1));
+    next?.addEventListener("click", () => scrollTo(index + 1));
+    close?.addEventListener("click", () => dialog.close());
+
+    track.addEventListener(
+      "scroll",
+      () => {
+        cancelAnimationFrame(frame);
+        clearTimeout(settleTimer);
+        settleTimer = window.setTimeout(() => {
+          programmaticIndex = null;
+          updateIndex();
+        }, 120);
+        if (programmaticIndex === null) {
+          frame = requestAnimationFrame(updateIndex);
+        }
+      },
+      { passive: true },
+    );
+
+    dialog.addEventListener("keydown", (event) => {
+      const target = event.target as HTMLElement;
+      const modeIndex = modeButtons.indexOf(target as HTMLButtonElement);
+      if (
+        modeIndex >= 0 &&
+        (event.key === "ArrowLeft" || event.key === "ArrowRight")
+      ) {
+        event.preventDefault();
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const selected =
+          modeButtons[
+            (modeIndex + direction + modeButtons.length) % modeButtons.length
+          ];
+        selected.click();
+        selected.focus();
+        return;
+      }
+      if (event.key === "ArrowLeft") scrollTo(index - 1);
+      else if (event.key === "ArrowRight") scrollTo(index + 1);
+      else if (event.key === "Home") scrollTo(0);
+      else if (event.key === "End") scrollTo(slides.length - 1);
+      else if (event.key === "Escape") dialog.close();
+      else return;
+      event.preventDefault();
+    });
+    dialog.addEventListener("click", (event) => {
+      const target = event.target;
+      if (
+        target === dialog ||
+        target === track ||
+        (target instanceof HTMLElement && target.hasAttribute("data-media-slide"))
+      ) {
+        dialog.close();
+      }
+    });
+    dialog.addEventListener("close", () => {
+      document.documentElement.classList.remove("has-gallery-dialog");
+      opener?.focus({ preventScroll: true });
+      opener = null;
+    });
+    renderIndex(0);
+  }
+</script>

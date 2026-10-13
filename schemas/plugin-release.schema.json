@@ -14,19 +14,35 @@
     "files"
   ],
   "properties": {
-    "schemaVersion": { "const": 1 },
-    "type": { "const": "lapis.plugin.release" },
-    "pluginId": { "type": "string" },
-    "version": { "type": "string" },
-    "channel": { "enum": ["official", "community"] },
+    "schemaVersion": {
+      "const": 1
+    },
+    "type": {
+      "const": "lapis.plugin.release"
+    },
+    "pluginId": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "channel": {
+      "enum": ["official", "community"]
+    },
     "source": {
       "type": "object",
       "additionalProperties": false,
       "required": ["repo", "commit", "package"],
       "properties": {
-        "repo": { "type": "string" },
-        "commit": { "type": "string" },
-        "package": { "type": "string" }
+        "repo": {
+          "type": "string"
+        },
+        "commit": {
+          "type": "string"
+        },
+        "package": {
+          "type": "string"
+        }
       }
     },
     "compatibility": {
@@ -34,10 +50,14 @@
       "additionalProperties": false,
       "required": ["minAppVersion", "platforms"],
       "properties": {
-        "minAppVersion": { "type": "string" },
+        "minAppVersion": {
+          "type": "string"
+        },
         "platforms": {
           "type": "array",
-          "items": { "enum": ["web", "desktop"] }
+          "items": {
+            "enum": ["web", "desktop"]
+          }
         }
       }
     },
@@ -48,11 +68,20 @@
         "additionalProperties": false,
         "required": ["path", "sha256", "size"],
         "properties": {
-          "path": { "type": "string" },
-          "sha256": { "type": "string" },
-          "size": { "type": "integer" }
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          }
         }
       }
+    },
+    "changelog": {
+      "type": "object"
     }
   }
 }

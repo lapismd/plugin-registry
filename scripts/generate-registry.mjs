@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 import { promises as fs } from "node:fs";
+import { buildRegistryV2 } from "./lib/catalog-v2.mjs";
 import {
-  buildRegistry,
   downloadTargetsFile,
+  archiveDir,
   generatedDir,
   loadEntries,
   readJsonIfExists,
@@ -11,7 +12,7 @@ import {
 } from "./lib/registry.mjs";
 
 const entries = await loadEntries();
-const registry = buildRegistry(entries);
+const registry = buildRegistryV2(entries);
 
 await fs.mkdir(generatedDir, { recursive: true });
 const generatedPluginsDir = new URL("plugins/", generatedDir);
@@ -33,15 +34,10 @@ await fs.writeFile(
 try {
   await fs.access(new URL("trust/root.json", generatedDir));
 } catch {
-  await writeJson(new URL("trust/root.json", generatedDir), {
-    schemaVersion: 1,
-    generatedAt: registry.index.generatedAt,
-    keys: [],
-    roles: {
-      registry: [],
-      release: [],
-    },
-  });
+  await fs.copyFile(
+    new URL("trust/root.json", archiveDir),
+    new URL("trust/root.json", generatedDir),
+  );
 }
 
 console.log(

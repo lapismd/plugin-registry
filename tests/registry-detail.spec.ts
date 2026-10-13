@@ -3,8 +3,248 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { expect, test, type Locator } from "@playwright/test";
 import sharp from "sharp";
+import {
+  buildDailySnapshot,
+  buildDownloadSummary,
+} from "../scripts/lib/download-stats.mjs";
 
 const pluginPath = "/plugins/ai/";
+
+test("filter chips use Lucide X icons and support keyboard and icon removal", async ({
+  page,
+}) => {
+  await page.goto(
+    "/plugins/?categories=ai&platforms=desktop&status=active&official=true",
+  );
+  const chips = page.locator(".active-filter");
+  await expect(chips).toHaveCount(4);
+  for (const chip of await chips.all()) {
+    await expect(chip.locator("svg.lucide-x")).toHaveCount(1);
+    await expect(chip.locator("svg")).toHaveAttribute("aria-hidden", "true");
+    await expect(chip).toHaveAccessibleName(/Remove .+ filter/);
+  }
+  await page
+    .getByRole("button", { name: "Remove AI filter", exact: true })
+    .press("Enter");
+  await expect(chips).toHaveCount(3);
+  await expect(page).not.toHaveURL(/categories=/);
+  await expect(page.getByRole("button", { name: /^AI \d/ })).toHaveAttribute(
+    "aria-pressed",
+    "false",
+  );
+  for (const group of ["platforms", "status", "official"]) {
+    await page
+      .locator(`[data-remove-filter="${group}"] svg path`)
+      .first()
+      .click();
+    await expect(page.locator(`[data-remove-filter="${group}"]`)).toHaveCount(
+      0,
+    );
+  }
+  await expect(chips).toHaveCount(0);
+  await expect(page).toHaveURL(/\/plugins\/$/);
+});
+
+test("author name links to the profile beside its avatar", async ({ page }) => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto(pluginPath);
+    const author = page.locator("[data-author-section]");
+    const name = author.getByRole("link", { name: "Lapis Notes", exact: true });
+    await expect(name).toHaveAttribute("href", "https://lapis.md/");
+    await expect(author.getByRole("link")).toHaveCount(1);
+    await expect(
+      author.getByText("Author profile", { exact: true }),
+    ).toHaveCount(0);
+    const avatarBox = await author
+      .locator("[data-author-avatar]")
+      .boundingBox();
+    const nameBox = await name.boundingBox();
+    expect(avatarBox).not.toBeNull();
+    expect(nameBox).not.toBeNull();
+    expect(
+      Math.abs(
+        nameBox!.y +
+          nameBox!.height / 2 -
+          (avatarBox!.y + avatarBox!.height / 2),
+      ),
+    ).toBeLessThan(2);
+    expect(nameBox!.x).toBeGreaterThanOrEqual(avatarBox!.x + avatarBox!.width);
+  }
+});
+
+test("download counts render from a current static summary across details and lists", async ({
+  page,
+}) => {
+  const through = new Date();
+  through.setUTCDate(through.getUTCDate() - 2);
+  const date = through.toISOString().slice(0, 10);
+  const summary = buildDownloadSummary({
+    trackedSince: date,
+    generatedAt: new Date().toISOString(),
+    snapshots: [
+      buildDailySnapshot({
+        date,
+        generatedAt: new Date().toISOString(),
+        rows: [
+          {
+            pluginId: "ai",
+            version: "0.1.2",
+            action: "install",
+            platform: "desktop",
+            os: "macos",
+            count: 1250,
+          },
+        ],
+      }),
+    ],
+  });
+  await page.route("**/stats/summary.json", (route) =>
+    route.fulfill({ json: summary }),
+  );
+  await page.goto(pluginPath);
+  const detail = page.getByRole("region", { name: "Download statistics" });
+  await expect(detail.locator("[data-download-30d]")).toHaveText("~1.3K");
+  await expect(detail.locator("[data-download-lifetime]")).toHaveText("~1.3K");
+  await expect(detail.locator("[data-download-tracked-since]")).toHaveText(
+    `Tracked downloads since ${date}. Approximate redirect requests.`,
+  );
+  await expect(
+    detail.locator("[data-download-stats-unavailable]"),
+  ).not.toBeVisible();
+  await page.goto("/plugins/");
+  const count = page.locator("[data-download-count][data-plugin-id=ai]");
+  await expect(count).toBeVisible();
+  await expect(count).toContainText("~1.3K downloads (30d)");
+});
+
+test("missing and stale statistics stay unavailable without showing a fabricated zero", async ({
+  page,
+}) => {
+  for (const json of [
+    null,
+    {
+      ...buildDownloadSummary({
+        trackedSince: "2026-01-01",
+        generatedAt: "2026-01-03T04:17:00.000Z",
+        snapshots: [
+          buildDailySnapshot({
+            date: "2026-01-01",
+            generatedAt: "2026-01-03T04:17:00.000Z",
+            rows: [],
+          }),
+        ],
+      }),
+    },
+  ]) {
+    await page.route("**/stats/summary.json", (route) =>
+      json ? route.fulfill({ json }) : route.fulfill({ status: 404 }),
+    );
+    await page.goto(pluginPath);
+    const detail = page.getByRole("region", { name: "Download statistics" });
+    await expect(
+      detail.locator("[data-download-stats-unavailable]"),
+    ).toBeVisible();
+    await expect(
+      detail.locator("[data-download-stats-values]"),
+    ).not.toBeVisible();
+    await page.goto("/plugins/");
+    await expect(
+      page.locator("[data-download-count][data-plugin-id=ai]"),
+    ).not.toBeVisible();
+    await page.unroute("**/stats/summary.json");
+  }
+});
+
+test("overview collapse measures text independently of its image", async ({
+  page,
+}) => {
+  await page.goto(pluginPath);
+  const image = page.getByRole("button", {
+    name: "Open AI overview image: AI workspace overview",
+  });
+  const content = page.locator("[data-overview-content]");
+  await expect(image).toBeVisible();
+  expect(
+    await image.evaluate((node) =>
+      Boolean(node.closest("[data-overview-collapse]")),
+    ),
+  ).toBe(false);
+  await expect(
+    content.getByRole("heading", { name: "Highlights" }),
+  ).toBeVisible();
+  await expect(content).toHaveCSS("max-height", "360px");
+  const toggle = page.getByRole("button", { name: "Show more", exact: true });
+  await expect(toggle).toBeVisible();
+  await toggle.click();
+  await expect(content).toHaveCSS("max-height", "none");
+});
+
+test("lightbox theme controls use the Community selected, muted, and focus styles", async ({
+  page,
+}) => {
+  await page.goto(pluginPath);
+  await page.locator("[data-gallery-card]").first().click();
+  const viewer = page.getByRole("dialog", { name: "AI media viewer" });
+  const modes = viewer.getByRole("group", { name: "Screenshot theme" });
+  const light = modes.getByRole("button", { name: "Light", exact: true });
+  const dark = modes.getByRole("button", { name: "Dark", exact: true });
+  await expect(modes).toHaveCSS("background-color", "rgba(24, 24, 27, 0.88)");
+  await expect(modes).toHaveCSS("backdrop-filter", "blur(12px)");
+  await expect(light).toHaveCSS("color", "rgba(255, 255, 255, 0.68)");
+  await expect(light).toHaveCSS("min-height", "32px");
+  await light.click();
+  await expect(light).toHaveAttribute("aria-pressed", "true");
+  await expect(light).toHaveCSS(
+    "background-color",
+    "rgba(255, 255, 255, 0.14)",
+  );
+  await expect(light).toHaveCSS("color", "rgb(255, 255, 255)");
+  await light.press("Tab");
+  await expect(dark).toBeFocused();
+  await expect(dark).toHaveCSS("outline-style", "solid");
+  await expect(dark).toHaveCSS("outline-width", "2px");
+  await dark.press("Escape");
+  await expect(viewer).not.toBeVisible();
+});
+
+test("V2 banner fits the responsive hero and opens its media viewer", async ({
+  page,
+}) => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto(pluginPath);
+    const banner = page.getByRole("button", {
+      name: "Open AI banner: AI workspace banner",
+    });
+    await expect(banner).toBeVisible();
+    await expect(
+      page.getByRole("progressbar", { name: "Metadata health" }),
+    ).toHaveAttribute("aria-valuetext", "Unsigned local preview");
+    const geometry = await banner.evaluate((node) => {
+      const box = node.getBoundingClientRect();
+      const image = node.querySelector("img")!.getBoundingClientRect();
+      const hero = node.closest(".plugin-detail-hero")!.getBoundingClientRect();
+      return {
+        width: box.width,
+        height: box.height,
+        imageWidth: image.width,
+        heroWidth: hero.width,
+      };
+    });
+    expect(geometry.width).toBeLessThanOrEqual(geometry.heroWidth);
+    expect(geometry.imageWidth).toBeCloseTo(geometry.width, 0);
+    expect(geometry.width / geometry.height).toBeCloseTo(1.5, 2);
+    await banner.click();
+    const viewer = page.getByRole("dialog", { name: "AI banner media viewer" });
+    await expect(viewer).toBeVisible();
+    await page
+      .getByRole("button", { name: "Close media viewer" })
+      .press("Escape");
+    await expect(viewer).not.toBeVisible();
+    await expect(banner).toBeFocused();
+  }
+});
 
 test("desktop carousel, health segments, and install geometry match the registry contract", async ({
   page,
@@ -167,21 +407,21 @@ test("desktop carousel, health segments, and install geometry match the registry
 
   const healthBars = page.getByRole("progressbar");
   await expect(healthBars).toHaveCount(2);
-  await expect(healthBars.nth(0)).toHaveAttribute("aria-valuenow", "4");
+  await expect(healthBars.nth(0)).toHaveAttribute("aria-valuenow", "0");
   await expect(healthBars.nth(1)).toHaveAttribute("aria-valuenow", "1");
   expect(await segmentState(healthBars.nth(0))).toEqual({
     count: 4,
-    active: 4,
+    active: 0,
   });
   expect(await segmentState(healthBars.nth(1))).toEqual({
     count: 4,
     active: 1,
   });
   expect(await segmentColors(healthBars.nth(0))).toEqual([
-    "rgb(52, 211, 153)",
-    "rgb(52, 211, 153)",
-    "rgb(52, 211, 153)",
-    "rgb(52, 211, 153)",
+    "rgb(54, 54, 54)",
+    "rgb(54, 54, 54)",
+    "rgb(54, 54, 54)",
+    "rgb(54, 54, 54)",
   ]);
   expect(await segmentColors(healthBars.nth(1))).toEqual([
     "rgb(138, 92, 245)",
@@ -589,14 +829,14 @@ test("fullscreen viewer opens at the selected image and restores focus", async (
   await selectedCard.click();
 
   const dialog = page.getByRole("dialog", {
-    name: "AI screenshot viewer",
+    name: "AI media viewer",
   });
-  const dialogTrack = page.locator("[data-dialog-track]");
+  const dialogTrack = dialog.locator("[data-media-track]");
   const close = page.getByRole("button", {
-    name: "Close screenshot viewer",
+    name: "Close media viewer",
   });
   await expect(dialog).toBeVisible();
-  await expect(page.locator("[data-dialog-counter]")).toHaveCount(0);
+  await expect(page.locator("[data-media-counter]")).toHaveCount(0);
   await expect.poll(() => snappedIndex(dialogTrack)).toBe(1);
   await expect(close).toBeFocused();
   expect(
@@ -604,7 +844,7 @@ test("fullscreen viewer opens at the selected image and restores focus", async (
       surface: getComputedStyle(node).backgroundColor,
       mask: getComputedStyle(node, "::backdrop").backgroundColor,
       imageRadius: getComputedStyle(
-        node.querySelector<HTMLImageElement>("[data-dialog-slide] img")!,
+        node.querySelector<HTMLImageElement>("[data-media-slide] img")!,
       ).borderRadius,
     })),
   ).toEqual({
@@ -614,7 +854,7 @@ test("fullscreen viewer opens at the selected image and restores focus", async (
   });
 
   const fullDensity = await imageDensity(
-    page.locator("[data-dialog-slide] img").nth(1),
+    dialog.locator("[data-media-slide] img").nth(1),
   );
   expect(fullDensity.physicalWidth).toBeGreaterThanOrEqual(
     fullDensity.renderedWidth * fullDensity.devicePixelRatio,
@@ -623,12 +863,12 @@ test("fullscreen viewer opens at the selected image and restores focus", async (
   await close.press("ArrowRight");
   await expect.poll(() => snappedIndex(dialogTrack)).toBe(2);
   await expect(
-    page.getByRole("button", { name: "Show next screenshot" }).last(),
+    dialog.getByRole("button", { name: "Show next screenshot" }),
   ).toBeDisabled();
   await close.press("Home");
   await expect.poll(() => snappedIndex(dialogTrack)).toBe(0);
   await expect(
-    page.getByRole("button", { name: "Show previous screenshot" }).last(),
+    dialog.getByRole("button", { name: "Show previous screenshot" }),
   ).toBeDisabled();
   await close.press("End");
   await expect.poll(() => snappedIndex(dialogTrack)).toBe(2);
@@ -659,14 +899,14 @@ test("local source media refreshes without restarting the dev server", async ({
     "ai",
     "registry-assets",
     "gallery",
-    "conversation.preview.webp",
+    "conversation.dark.webp",
   );
   const originalBytes = await readFile(previewPath);
   const originalDigest = digest(originalBytes);
   const updatedBytes = await sharp({
     create: {
-      width: 1200,
-      height: 800,
+      width: 2400,
+      height: 1600,
       channels: 4,
       background: "#0891B2",
     },
@@ -784,12 +1024,12 @@ test.describe("mobile touch layout", () => {
 
     await cards.nth(1).click();
     const dialog = page.getByRole("dialog", {
-      name: "AI screenshot viewer",
+      name: "AI media viewer",
     });
-    const dialogTrack = page.locator("[data-dialog-track]");
+    const dialogTrack = dialog.locator("[data-media-track]");
     await expect(dialog).toBeVisible();
     await expect(
-      page.getByRole("button", { name: "Show next screenshot" }).last(),
+      dialog.getByRole("button", { name: "Show next screenshot" }),
     ).not.toBeVisible();
     await expect(dialogTrack).toHaveCSS("scroll-snap-type", /mandatory/);
     await expect(dialogTrack).toHaveCSS("touch-action", /pan-x/);
@@ -797,11 +1037,11 @@ test.describe("mobile touch layout", () => {
     await dialogTrack.evaluate((node) =>
       node.scrollTo({ left: node.clientWidth * 2, behavior: "auto" }),
     );
-    await expect(page.locator("[data-dialog-counter]")).toHaveCount(0);
+    await expect(page.locator("[data-media-counter]")).toHaveCount(0);
     await expect.poll(() => snappedIndex(dialogTrack)).toBe(2);
 
     const fullDensity = await imageDensity(
-      page.locator("[data-dialog-slide] img").nth(2),
+      dialog.locator("[data-media-slide] img").nth(2),
     );
     expect(fullDensity.physicalWidth).toBeGreaterThanOrEqual(
       fullDensity.renderedWidth * fullDensity.devicePixelRatio,
@@ -847,7 +1087,7 @@ async function snappedIndex(viewport: Locator) {
   return viewport.evaluate((node) => {
     const track = node as HTMLElement;
     const slides = [
-      ...track.querySelectorAll<HTMLElement>("[data-dialog-slide]"),
+      ...track.querySelectorAll<HTMLElement>("[data-media-slide]"),
     ];
     let closest = 0;
     let distance = Number.POSITIVE_INFINITY;

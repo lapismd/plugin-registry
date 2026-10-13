@@ -18,6 +18,7 @@ const isPluginDirectory =
   Astro.url.pathname === "/plugins" || Astro.url.pathname === "/plugins/";
 const currentYear = new Date().getUTCFullYear();
 const sourcePreview = process.env.LAPIS_REGISTRY_SOURCE_PREVIEW;
+const registryPath = sourcePreview ? "/v1" : "/v2";
 ---
 
 <!doctype html>
@@ -55,7 +56,7 @@ const sourcePreview = process.env.LAPIS_REGISTRY_SOURCE_PREVIEW;
             href="/plugins/"
             aria-current={isPluginDirectory ? "page" : undefined}>Plugins</a
           >
-          <a href="/v1/index.json">Manifest</a>
+          <a href={`${registryPath}/index.json`}>Manifest</a>
         </nav>
       </header>
       <slot />
@@ -79,13 +80,13 @@ const sourcePreview = process.env.LAPIS_REGISTRY_SOURCE_PREVIEW;
             <section>
               <h2>Registry</h2>
               <a href="/plugins/">Browse plugins</a>
-              <a href="/v1/index.json">Registry manifest</a>
-              <a href="/v1/trust/root.json">Trust root</a>
+              <a href={`${registryPath}/index.json`}>Registry manifest</a>
+              <a href={`${registryPath}/trust/root.json`}>Trust root</a>
               <a href="/stats/summary.json">Download statistics</a>
             </section>
             <section>
               <h2>Developers</h2>
-              <a href="https://github.com/lapismd/plugin-registry/blob/main/docs/publishing.md">Publishing guide</a>
+              <a href="https://github.com/lapismd/plugin-registry/blob/main/docs/publishing-official-plugins.md">Publishing guide</a>
               <a href="https://github.com/lapismd/plugin-registry/tree/main/schemas">Registry schemas</a>
               <a href="https://github.com/lapismd/lapis-plugins">First-party plugins</a>
               <a href="https://github.com/lapismd/plugin-registry">Registry source</a>

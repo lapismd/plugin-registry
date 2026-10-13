@@ -4,6 +4,9 @@ export default defineConfig({
   site: "https://registry.lapis.md",
   trailingSlash: "always",
   output: "static",
+  ...(process.env.LAPIS_REGISTRY_DIST_DIR
+    ? { outDir: process.env.LAPIS_REGISTRY_DIST_DIR }
+    : {}),
   ...(process.env.LAPIS_REGISTRY_PUBLIC_DIR
     ? { publicDir: process.env.LAPIS_REGISTRY_PUBLIC_DIR }
     : {}),

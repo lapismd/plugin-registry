@@ -3,33 +3,194 @@
   "$id": "https://registry.lapis.md/schemas/plugin-source.schema.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "categories", "highlights", "content"],
+  "required": ["schemaVersion", "categories", "highlights"],
   "properties": {
-    "$schema": { "type": "string" },
-    "schemaVersion": { "const": 1 },
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "enum": [1, 2]
+    },
     "categories": {
       "type": "array",
       "minItems": 1,
       "maxItems": 8,
       "uniqueItems": true,
-      "items": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      }
     },
     "highlights": {
       "type": "array",
       "maxItems": 8,
       "uniqueItems": true,
-      "items": { "type": "string", "minLength": 1, "maxLength": 160 }
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
     },
-    "documentationUrl": { "$ref": "#/$defs/httpsUrl" },
-    "appearance": { "$ref": "#/$defs/sourceAppearance" },
-    "gallery": { "$ref": "#/$defs/sourceGallery" },
+    "documentationUrl": {
+      "$ref": "#/$defs/httpsUrl"
+    },
+    "appearance": {
+      "$ref": "#/$defs/sourceAppearance"
+    },
+    "gallery": {
+      "$ref": "#/$defs/sourceGallery"
+    },
     "content": {
       "type": "object",
       "additionalProperties": false,
       "required": ["overview", "changelog"],
       "properties": {
-        "overview": { "$ref": "#/$defs/safeRelativePath" },
-        "changelog": { "$ref": "#/$defs/safeRelativePath" }
+        "overview": {
+          "$ref": "#/$defs/safeRelativePath"
+        },
+        "changelog": {
+          "$ref": "#/$defs/safeRelativePath"
+        }
+      }
+    },
+    "releases": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "changelog": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "media": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "banner": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["alt", "images"],
+          "properties": {
+            "alt": {
+              "type": "string",
+              "minLength": 1
+            },
+            "images": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "preview": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path"],
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/safeAssetPath"
+                    }
+                  }
+                },
+                "full": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path"],
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/safeAssetPath"
+                    }
+                  }
+                },
+                "light": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path"],
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/safeAssetPath"
+                    }
+                  }
+                },
+                "dark": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path"],
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/safeAssetPath"
+                    }
+                  }
+                }
+              }
+            },
+            "capture": {
+              "type": "object"
+            }
+          }
+        },
+        "overview": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["alt", "images"],
+          "properties": {
+            "alt": {
+              "type": "string",
+              "minLength": 1
+            },
+            "images": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "preview": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path"],
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/safeAssetPath"
+                    }
+                  }
+                },
+                "full": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path"],
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/safeAssetPath"
+                    }
+                  }
+                },
+                "light": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path"],
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/safeAssetPath"
+                    }
+                  }
+                },
+                "dark": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path"],
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/safeAssetPath"
+                    }
+                  }
+                }
+              }
+            },
+            "capture": {
+              "type": "object"
+            }
+          }
+        }
       }
     }
   },
@@ -48,7 +209,7 @@
     },
     "safeGalleryAssetPath": {
       "type": "string",
-      "pattern": "^registry-assets/gallery/[a-z0-9][a-z0-9-]*\\.(?:preview|full)\\.webp$"
+      "pattern": "^registry-assets/gallery/[a-z0-9][a-z0-9-]*\\.(?:preview|full|light|dark)\\.webp$"
     },
     "iconName": {
       "enum": [
@@ -72,16 +233,88 @@
       "additionalProperties": false,
       "required": ["icon", "accent"],
       "properties": {
-        "icon": { "$ref": "#/$defs/iconName" },
-        "accent": { "type": "string", "pattern": "^#[A-Fa-f0-9]{6}$" },
+        "icon": {
+          "$ref": "#/$defs/iconName"
+        },
+        "accent": {
+          "type": "string",
+          "pattern": "^#[A-Fa-f0-9]{6}$"
+        },
         "logo": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["path", "alt"],
+          "required": ["alt"],
           "properties": {
-            "path": { "$ref": "#/$defs/safeAssetPath" },
-            "alt": { "type": "string", "minLength": 1, "maxLength": 120 }
-          }
+            "path": {
+              "$ref": "#/$defs/safeAssetPath"
+            },
+            "alt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "images": {
+              "type": "object",
+              "additionalProperties": false,
+              "minProperties": 1,
+              "properties": {
+                "preview": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path"],
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/safeAssetPath"
+                    }
+                  }
+                },
+                "full": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path"],
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/safeAssetPath"
+                    }
+                  }
+                },
+                "light": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path"],
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/safeAssetPath"
+                    }
+                  }
+                },
+                "dark": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path"],
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/safeAssetPath"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "anyOf": [
+            {
+              "required": ["path"],
+              "properties": {
+                "path": {}
+              }
+            },
+            {
+              "required": ["images"],
+              "properties": {
+                "images": {}
+              }
+            }
+          ]
         }
       }
     },
@@ -98,19 +331,30 @@
             "type": "string",
             "pattern": "^[a-z0-9][a-z0-9-]{0,31}$"
           },
-          "alt": { "type": "string", "minLength": 1, "maxLength": 240 },
+          "alt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
           "images": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["preview", "full"],
+            "required": [],
             "properties": {
               "preview": {
                 "$ref": "#/$defs/sourceGalleryImage"
               },
               "full": {
                 "$ref": "#/$defs/sourceGalleryImage"
+              },
+              "light": {
+                "$ref": "#/$defs/sourceGalleryImage"
+              },
+              "dark": {
+                "$ref": "#/$defs/sourceGalleryImage"
               }
-            }
+            },
+            "minProperties": 1
           },
           "capture": {
             "type": "object",
@@ -131,7 +375,9 @@
                       "bottom-status"
                     ]
                   },
-                  { "$ref": "#/$defs/normalizedCrop" }
+                  {
+                    "$ref": "#/$defs/normalizedCrop"
+                  }
                 ]
               }
             }
@@ -145,13 +391,17 @@
                 "type": "array",
                 "minItems": 1,
                 "maxItems": 4,
-                "items": { "$ref": "#/$defs/headlineSegment" }
+                "items": {
+                  "$ref": "#/$defs/headlineSegment"
+                }
               },
               "description": {
                 "type": "array",
                 "minItems": 1,
                 "maxItems": 6,
-                "items": { "$ref": "#/$defs/descriptionSegment" }
+                "items": {
+                  "$ref": "#/$defs/descriptionSegment"
+                }
               }
             }
           }
@@ -163,7 +413,9 @@
       "additionalProperties": false,
       "required": ["path"],
       "properties": {
-        "path": { "$ref": "#/$defs/safeGalleryAssetPath" }
+        "path": {
+          "$ref": "#/$defs/safeGalleryAssetPath"
+        }
       }
     },
     "normalizedCrop": {
@@ -171,10 +423,26 @@
       "additionalProperties": false,
       "required": ["x", "y", "width", "height"],
       "properties": {
-        "x": { "type": "number", "minimum": 0, "maximum": 1 },
-        "y": { "type": "number", "minimum": 0, "maximum": 1 },
-        "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
-        "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+        "x": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        }
       }
     },
     "headlineSegment": {
@@ -208,6 +476,26 @@
           "enum": ["neutral", "violet", "cyan", "green", "amber", "rose"]
         }
       }
+    }
+  },
+  "if": {
+    "properties": {
+      "schemaVersion": {
+        "const": 1
+      }
+    }
+  },
+  "then": {
+    "properties": {
+      "content": {
+        "$ref": "#/properties/content"
+      }
+    },
+    "required": ["content"]
+  },
+  "else": {
+    "properties": {
+      "content": false
     }
   }
 }

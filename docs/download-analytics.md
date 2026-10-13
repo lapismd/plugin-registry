@@ -3,12 +3,17 @@
 The registry counts requests that pass through its optional download redirect.
 Plugin bundles remain immutable assets owned by their release repository. The
 signed `bundle.url` is the verified artifact origin and direct fallback;
-`bundle.downloadUrl` is an additive V1 reference to the registry redirect.
+`bundle.downloadUrl` is an optional signed reference to the registry redirect,
+preserved by both V1 and V2 catalogs. Production detail-page downloads use this
+reference with `action=download` and `platform=web`; the browser adds a normalized
+OS value. Local Astro source previews use the artifact origin because they do
+not run the Cloudflare Pages Function.
 
-This design leaves the registry portable. A mirror can publish all signed V1
+This design leaves the registry portable. A mirror can publish all signed
 metadata, pages, documentation, and `stats/` as ordinary static files. It can
-omit the redirect Function entirely, in which case clients continue to use the
-signed origin URL.
+omit the redirect Function entirely. App clients retain the signed origin URL
+as their direct fallback; a mirror serving website downloads must either provide
+the redirect Function or render links to the artifact origin.
 
 ## Metric and privacy
 
@@ -34,6 +39,11 @@ write events.
 The website wording is deliberately explicit: `Tracked downloads since
 <cutover date>. Approximate redirect requests.` The count is hidden when the
 summary is missing, malformed, more than five UTC days behind, or unavailable.
+
+Plugin cards and directory rows show the trailing 30-day count. Plugin detail
+pages show both trailing 30-day and lifetime totals, with the tracking start date
+and metric description. Missing data displays `Statistics unavailable` on the
+detail page and hides card counts. The site never substitutes invented totals.
 
 ## Static records
 
@@ -65,7 +75,7 @@ days later, allowing late Analytics Engine points to settle.
 
 The committed Pages configuration binds `PLUGIN_DOWNLOADS` to
 `lapis_plugin_downloads_v1`. `_routes.json` sends only `/download/*` through the
-Function. `_headers` supplies static CORS for `/v1/*` and `/stats/*`; all other
+Function. `_headers` supplies static CORS for `/v1/*`, `/v2/*`, and `/stats/*`; all other
 registry traffic remains ordinary Pages static traffic.
 
 The scheduled workflow requires:
