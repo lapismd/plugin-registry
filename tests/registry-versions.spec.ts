@@ -16,9 +16,11 @@ test("version selector opens a shareable older release with its own archive and 
   );
   await page.reload();
   await expect(versions).toHaveValue("/plugins/lapis-graph/versions/2026.6.6/");
-  await page
-    .getByRole("button", { name: "Install in Lapis", exact: true })
-    .click();
+  await expect(
+    page.getByRole("link", { name: "Install in Lapis", exact: true }),
+  ).toHaveAttribute("href", "lapis://plugins?id=lapis-graph&version=2026.6.6");
+  await page.getByRole("button", { name: "More actions" }).click();
+  await page.getByRole("menuitem", { name: "Installation help" }).click();
   const dialog = page.getByRole("dialog", { name: "Install Graph 2026.6.6" });
   await expect(dialog).toBeVisible();
   const download = dialog.getByRole("link", {
@@ -32,7 +34,7 @@ test("version selector opens a shareable older release with its own archive and 
     .press("Escape");
   await expect(dialog).not.toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Install in Lapis", exact: true }),
+    page.getByRole("button", { name: "More actions" }),
   ).toBeFocused();
   await page.getByRole("tab", { name: "Changelog", exact: true }).click();
   await expect(page.locator("[data-plugin-changelog]")).toHaveCount(1);
@@ -64,6 +66,6 @@ test("a pending source version cannot install while its retained published versi
       .locator("option:checked"),
   ).toHaveText("0.1.2");
   await expect(
-    page.getByRole("button", { name: "Install in Lapis", exact: true }),
+    page.getByRole("link", { name: "Install in Lapis", exact: true }),
   ).toBeEnabled();
 });

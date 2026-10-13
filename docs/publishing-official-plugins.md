@@ -85,8 +85,13 @@ never assigned to older releases.
 
 The site retains every indexed version at `/plugins/<id>/versions/<version>/`.
 The version selector and Releases links select its compatibility, date, notes,
-bundle size and immutable archive. Install in Lapis opens instructions for the
-existing verified `.lapis-plugin` file installer. Pending bundles and inactive
+bundle size and immutable archive. Install in Lapis opens
+`lapis://plugins?id=<id>&version=<version>` in the registered app, selecting its
+verified plugin page without automatic installation or a caller-provided archive
+or trust root. The receiving app requires the disposable `plugins` action and
+version navigation. More actions also offers the registered `web+lapis` handler
+for an installed Web app when the release supports Web. Installation help and archive downloads remain under More
+actions for the existing verified file installer. Pending bundles and inactive
 plugins remain non-installable. Presentation fields are shared catalog metadata,
 not a historical snapshot of each release's screenshots or description.
 
