@@ -1,8 +1,57 @@
 {
+  "appearance": {
+    "accent": "#F97316",
+    "icon": "list-checks"
+  },
   "author": "Lapis Notes",
-  "authorUrl": "https://github.com/lapismd",
+  "authorAvatarUrl": "https://www.gravatar.com/avatar/1df68d9ff087b0dd72fd8626056fca7f?s=128&d=404",
+  "authorUrl": "https://app.lapis.md/",
   "channel": "official",
   "description": "Markdown diagnostics provider",
+  "gallery": [
+    {
+      "alt": "Focused Markdown editor with inline lint markers and a populated Problems panel listing heading issues.",
+      "id": "editor-diagnostics",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "0ac3ec21df2ccf326760ccbe9bd13cfc67da2fd4f4c21875277f14f78691ee24",
+          "size": 140304,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/markdown-lint/registry-assets/gallery/editor-diagnostics.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/0ac3ec21df2ccf326760ccbe9bd13cfc67da2fd4f4c21875277f14f78691ee24.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "5980ab8c62ba19c415014404862f8569f103627195169e22830709f6e99dcdbc",
+          "size": 139182,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/markdown-lint/registry-assets/gallery/editor-diagnostics.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/5980ab8c62ba19c415014404862f8569f103627195169e22830709f6e99dcdbc.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "31abae03fb2f2def1bd1ca3ffd34b7fe7e5f48963e9bbd632c6db9679cdaf1e7",
+          "size": 126700,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/markdown-lint/registry-assets/gallery/editor-diagnostics.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/31abae03fb2f2def1bd1ca3ffd34b7fe7e5f48963e9bbd632c6db9679cdaf1e7.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "c4cbe164c11e0a98598ef5d3f3ea424a3e8cbd2e876a12625ca83988801e89dc",
+          "size": 63868,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/markdown-lint/registry-assets/gallery/editor-diagnostics.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/c4cbe164c11e0a98598ef5d3f3ea424a3e8cbd2e876a12625ca83988801e89dc.webp",
+          "width": 1200
+        }
+      }
+    }
+  ],
   "highlights": [
     "Show Markdown diagnostics for open documents.",
     "Apply supported code actions from editor and Problems surfaces.",
@@ -17,6 +66,49 @@
     "issues": "https://github.com/lapismd/lapis-plugins/issues",
     "repository": "https://github.com/lapismd/lapis-plugins"
   },
+  "media": {
+    "banner": {
+      "alt": "Lapis Markdown Lint showing real editor diagnostics and a populated Problems panel with both sidebars closed.",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "13eacb5f61f4559f7803f859bad6937940241a568b145fef742fa27e74ad50c9",
+          "size": 51600,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/markdown-lint/registry-assets/banner.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/13eacb5f61f4559f7803f859bad6937940241a568b145fef742fa27e74ad50c9.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "9069b3350de47b67a32708937ba57c24a6e7387692334d297465c2b1748affe1",
+          "size": 58312,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/markdown-lint/registry-assets/banner.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/9069b3350de47b67a32708937ba57c24a6e7387692334d297465c2b1748affe1.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "fd1c46d04793e9ab254c54d76b700e71a3bcc6a1b48c0ee5e3c1b1689c4e5164",
+          "size": 51824,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/markdown-lint/registry-assets/banner.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/fd1c46d04793e9ab254c54d76b700e71a3bcc6a1b48c0ee5e3c1b1689c4e5164.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "0b856137a2b72b15d46ec9c6e680c28ba23198fd2afc28a2d4bf9cb9e277acf5",
+          "size": 31858,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/markdown-lint/registry-assets/banner.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/0b856137a2b72b15d46ec9c6e680c28ba23198fd2afc28a2d4bf9cb9e277acf5.webp",
+          "width": 1200
+        }
+      }
+    }
+  },
   "name": "Markdown Lint",
   "owner": {
     "name": "Lapis Notes",
@@ -28,7 +120,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "ZbXbXciHQcaEDZkwvkWJf4+ZmqEINJJNrZhpVMVf7OEKeb2pdnpxQzCmlS5K7cR9xsxiNULD7IOijYz15q35Bg=="
+      "sig": "h9mHsoThM/kze/uYWmV4I8w4g86S019aaaFTw2aPGpwufgLdqjml+UAcJq5u410G6PfRPf6PNUfaFHbKarTqDA=="
     }
   ],
   "status": "active",

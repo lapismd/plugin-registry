@@ -2,6 +2,10 @@
   "generatedAt": "2026-05-31T00:00:00.000Z",
   "plugins": [
     {
+      "appearance": {
+        "accent": "#A855F7",
+        "icon": "sparkles"
+      },
       "author": "Lapis Notes",
       "authorUrl": "https://github.com/lapismd",
       "badges": [
@@ -22,9 +26,7 @@
         "releasedAt": "2026-08-29T09:35:55.000Z"
       },
       "latestVersion": "0.1.2",
-      "links": {
-        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/ai/README.md"
-      },
+      "links": {},
       "minAppVersion": "0.1.0",
       "name": "AI",
       "owner": {
@@ -40,8 +42,12 @@
       "status": "active"
     },
     {
+      "appearance": {
+        "accent": "#14B8A6",
+        "icon": "table-2"
+      },
       "author": "Lapis Notes Bases",
-      "authorUrl": "https://github.com/lapismd",
+      "authorUrl": "https://app.lapis.md/",
       "badges": [
         "official",
         "verified"
@@ -53,7 +59,7 @@
       ],
       "channel": "official",
       "contributes": {},
-      "description": "Bases",
+      "description": "Build table, card, and grouped views from Markdown properties",
       "detail": "plugins/bases.json",
       "id": "bases",
       "latestRelease": {
@@ -61,9 +67,7 @@
         "releasedAt": "2026-08-29T09:36:02.000Z"
       },
       "latestVersion": "0.1.2",
-      "links": {
-        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/bases/README.md"
-      },
+      "links": {},
       "minAppVersion": "0.1.0",
       "name": "Bases",
       "owner": {
@@ -79,6 +83,10 @@
       "status": "active"
     },
     {
+      "appearance": {
+        "accent": "#E11D48",
+        "icon": "bookmark"
+      },
       "author": "Lapis Notes",
       "authorUrl": "https://github.com/lapismd",
       "badges": [
@@ -99,9 +107,7 @@
         "releasedAt": "2026-08-29T09:36:10.000Z"
       },
       "latestVersion": "0.1.2",
-      "links": {
-        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/bookmarks/README.md"
-      },
+      "links": {},
       "minAppVersion": "0.1.0",
       "name": "Bookmarks",
       "owner": {
@@ -117,6 +123,10 @@
       "status": "active"
     },
     {
+      "appearance": {
+        "accent": "#6366F1",
+        "icon": "history"
+      },
       "author": "Lapis Notes",
       "authorUrl": "https://github.com/lapismd",
       "badges": [
@@ -129,7 +139,7 @@
       ],
       "channel": "official",
       "contributes": {},
-      "description": "File history",
+      "description": "Browse, compare, and restore saved file revisions",
       "detail": "plugins/history.json",
       "id": "history",
       "latestRelease": {
@@ -137,9 +147,7 @@
         "releasedAt": "2026-08-29T09:36:30.000Z"
       },
       "latestVersion": "0.1.2",
-      "links": {
-        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/history/README.md"
-      },
+      "links": {},
       "minAppVersion": "0.1.0",
       "name": "History",
       "owner": {
@@ -155,8 +163,12 @@
       "status": "active"
     },
     {
+      "appearance": {
+        "accent": "#8B5CF6",
+        "icon": "network"
+      },
       "author": "Lapis Notes",
-      "authorUrl": "https://github.com/lapismd",
+      "authorUrl": "https://app.lapis.md/",
       "badges": [
         "official",
         "verified"
@@ -175,9 +187,7 @@
         "releasedAt": "2026-08-29T09:36:18.000Z"
       },
       "latestVersion": "0.1.2",
-      "links": {
-        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/graph/README.md"
-      },
+      "links": {},
       "minAppVersion": "0.1.0",
       "name": "Graph",
       "owner": {
@@ -193,8 +203,12 @@
       "status": "active"
     },
     {
+      "appearance": {
+        "accent": "#F97316",
+        "icon": "list-checks"
+      },
       "author": "Lapis Notes",
-      "authorUrl": "https://github.com/lapismd",
+      "authorUrl": "https://app.lapis.md/",
       "badges": [
         "official",
         "verified"
@@ -213,9 +227,7 @@
         "releasedAt": "2026-08-29T09:36:46.000Z"
       },
       "latestVersion": "0.1.1",
-      "links": {
-        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/markdown-lint/README.md"
-      },
+      "links": {},
       "minAppVersion": "0.1.0",
       "name": "Markdown Lint",
       "owner": {
@@ -231,8 +243,12 @@
       "status": "active"
     },
     {
+      "appearance": {
+        "accent": "#0EA5E9",
+        "icon": "file-code-2"
+      },
       "author": "Lapis Notes",
-      "authorUrl": "https://github.com/lapismd",
+      "authorUrl": "https://app.lapis.md/",
       "badges": [
         "official",
         "verified"
@@ -251,9 +267,7 @@
         "releasedAt": "2026-08-29T09:37:01.000Z"
       },
       "latestVersion": "0.1.1",
-      "links": {
-        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/source-editor/README.md"
-      },
+      "links": {},
       "minAppVersion": "0.1.0",
       "name": "Source Editor",
       "owner": {
@@ -269,6 +283,10 @@
       "status": "active"
     },
     {
+      "appearance": {
+        "accent": "#2563EB",
+        "icon": "file-text"
+      },
       "author": "Lapis Notes",
       "authorUrl": "https://github.com/lapismd",
       "badges": [
@@ -289,9 +307,7 @@
         "releasedAt": "2026-08-29T09:36:38.000Z"
       },
       "latestVersion": "0.1.3",
-      "links": {
-        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/markdown/README.md"
-      },
+      "links": {},
       "minAppVersion": "0.1.0",
       "name": "Markdown",
       "owner": {
@@ -307,6 +323,10 @@
       "status": "active"
     },
     {
+      "appearance": {
+        "accent": "#F59E0B",
+        "icon": "search"
+      },
       "author": "Lapis Notes",
       "authorUrl": "https://github.com/lapismd",
       "badges": [
@@ -327,9 +347,7 @@
         "releasedAt": "2026-08-29T09:36:53.000Z"
       },
       "latestVersion": "0.1.2",
-      "links": {
-        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/search/README.md"
-      },
+      "links": {},
       "minAppVersion": "0.1.0",
       "name": "Search",
       "owner": {
@@ -345,8 +363,12 @@
       "status": "active"
     },
     {
+      "appearance": {
+        "accent": "#22C55E",
+        "icon": "spell-check-2"
+      },
       "author": "Lapis Notes",
-      "authorUrl": "https://github.com/lapismd",
+      "authorUrl": "https://app.lapis.md/",
       "badges": [
         "official",
         "verified"
@@ -365,9 +387,7 @@
         "releasedAt": "2026-08-29T09:37:08.000Z"
       },
       "latestVersion": "0.1.1",
-      "links": {
-        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/spellcheck/README.md"
-      },
+      "links": {},
       "minAppVersion": "0.1.0",
       "name": "Spell Check",
       "owner": {
@@ -383,6 +403,10 @@
       "status": "active"
     },
     {
+      "appearance": {
+        "accent": "#06B6D4",
+        "icon": "whole-word"
+      },
       "author": "Lapis Notes",
       "authorUrl": "https://github.com/lapismd",
       "badges": [
@@ -403,9 +427,7 @@
         "releasedAt": "2026-08-29T09:37:16.000Z"
       },
       "latestVersion": "0.1.1",
-      "links": {
-        "documentation": "https://raw.githubusercontent.com/lapismd/lapis-plugins/8a0b4648ca934a64480c01c9116609e5e28afa73/packages/wordcount/README.md"
-      },
+      "links": {},
       "minAppVersion": "0.1.0",
       "name": "Word Count",
       "owner": {
@@ -426,7 +448,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "Ok00Fn6o24rfaBj3lLRAjvQ1xiObJlD/KFnIT1dK6SmQBVc4DWPjl/eGvE2FbbvV1DJ1COwLtS85t+biKa2nBA=="
+      "sig": "motsnw4kF1gj1IoLXLFJI8/ZJCgXOU75S1hF/v2AZ7F4kO/h5KNF8W/pGa3wtv3XkQXq6+5DHd/gGaD1mkUiCg=="
     }
   ]
 }
