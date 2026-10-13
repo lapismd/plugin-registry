@@ -203,7 +203,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "SlrbR+nwqYnbQFlTiXs5Z8A0Hm65j4ruUy24b7WgdYYY/knXD51sWabsxKkA0+EBbK9ardUb+LXq3x1uz0rLDQ=="
+      "sig": "diBOcs7HFhvVuq+lIVja4ct4jN2vm+xRdh6SrjF+rMdFJfzsiYPZG8NPG00NCgqkzTa293EZ7mKdW5L6UraFAw=="
     }
   ],
   "status": "active",
@@ -214,6 +214,10 @@
         "sha256": "67ea1bcb090e9e82f329ef6f78b2ce0ab1eb728399b9ad9a9912ef576e869ba3",
         "size": 476698,
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.2/lapis-graph-0.1.2.lapis-plugin"
+      },
+      "changelog": {
+        "description": "- Initial independent public package extracted from Lapis Notes without changing\n  the runtime plugin ID.",
+        "title": "Graph 0.1.2"
       },
       "minAppVersion": "0.1.0",
       "platforms": [

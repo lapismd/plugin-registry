@@ -245,7 +245,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "JG5ykrksw/GwD8Jiocr3X4/AaxjhnWpUgxeypmqNcEaTWv/9kUlWEnQJ8liN/VWUEjmsPV+nOnwLpYnirbZBCA=="
+      "sig": "ZInNd6Oh7Lvyxq8C0BVNMM83RAqneWcneyV+XbNqRF31534AM1mV0WQ01p0mzTcD7sl7SpCvCCMp7ozkuRd5DA=="
     }
   ],
   "status": "active",
@@ -256,6 +256,10 @@
         "sha256": "3efd17a0cfeac2f35d37aea06c0492becf67e4aa79f95c960914df2f0976e77c",
         "size": 668241,
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.2/ai-0.1.2.lapis-plugin"
+      },
+      "changelog": {
+        "description": "- Initial independent public package extracted from Lapis Notes without changing\n  the runtime plugin ID.",
+        "title": "AI 0.1.2"
       },
       "minAppVersion": "0.1.0",
       "platforms": [

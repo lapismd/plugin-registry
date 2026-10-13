@@ -120,7 +120,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "h9mHsoThM/kze/uYWmV4I8w4g86S019aaaFTw2aPGpwufgLdqjml+UAcJq5u410G6PfRPf6PNUfaFHbKarTqDA=="
+      "sig": "2ZQDU/uXkBcczSh7HqA5Desjzvio8ATTa3h/sKCo9Wdmyt/QPeM2LshH3fdoMAFdbLfrk/XhQfgA9+WH7qBkBg=="
     }
   ],
   "status": "active",
@@ -131,6 +131,10 @@
         "sha256": "be30dd401baca721890a2df723f336f055eb0c30d473dd0ed4f0bbf70a255432",
         "size": 149673,
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/markdown-lint%400.1.1/lapis-markdown-lint-0.1.1.lapis-plugin"
+      },
+      "changelog": {
+        "description": "- Initial independent public package extracted from Lapis Notes without changing\n  the runtime plugin ID.",
+        "title": "Markdown Lint 0.1.1"
       },
       "minAppVersion": "0.1.0",
       "platforms": [

@@ -120,7 +120,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "EiNqlNV+jnEuTLozgqwcqNfZL3QyO742b9N4O3vsAcUeW29Yjvy/NoVTeasVK8GT3VmSu02/97Nuu5ONcqgQBQ=="
+      "sig": "8aNh9ze9jnfb06tfxAiosl8C+35Dp5KkEpCqjiG13uwb/t/NaLpAJ//KhHpz+rCBRDjXiSj9oA+OLsizhaYDBg=="
     }
   ],
   "status": "active",
@@ -131,6 +131,10 @@
         "sha256": "700188eec99b754a5df6e96c57b0ca243319e3fabe45cb0062ab92278148955e",
         "size": 152766,
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/source-editor%400.1.1/lapis-source-editor-0.1.1.lapis-plugin"
+      },
+      "changelog": {
+        "description": "- Initial independent public package extracted from Lapis Notes without changing\n  the runtime plugin ID.",
+        "title": "Source Editor 0.1.1"
       },
       "minAppVersion": "0.1.0",
       "platforms": [
