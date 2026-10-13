@@ -114,7 +114,7 @@ test("V2 local preview preserves banner media and leaves the production catalog 
   await writeJson(path.join(sourceDir, "registry.json"), source);
   await writeFile(
     path.join(sourceDir, "CHANGELOG.md"),
-    "# Changelog\n\n## 1.1.0\n\nNew banner media.\n",
+    "# Changelog\n\n## 1.1.0\n\nNew banner media.\n\n## 1.0.0\n\nOriginal release.\n",
   );
   const productionBytes = Buffer.from('{"schemaVersion":1,"plugins":[]}\n');
   await writeFile(path.join(baseRegistryDir, "index.json"), productionBytes);
@@ -134,6 +134,10 @@ test("V2 local preview preserves banner media and leaves the production catalog 
   assert.equal(
     detail.versions["1.1.0"].changelog.title,
     "Example Plugin 1.1.0",
+  );
+  assert.equal(
+    detail.versions["1.0.0"].changelog.description,
+    "Original release.",
   );
   assert.deepEqual(
     await readFile(path.join(baseRegistryDir, "index.json")),

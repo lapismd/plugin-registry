@@ -203,7 +203,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "osel+I2ONGckQTqyS1l1gmwRvRqWqq7FIivhP2XUCnh0UFMFTKaPlWQVnOpgokoRJfz+Ys5KuOTgF2z9hM2ECQ=="
+      "sig": "Pq6TdX3mvITmZUh551bWBxlDS1Nj6oRwVrRssCYrgAqLvpXcSaxMY7hBLuVZvi70Aa3i2zv9alpL7vSaqh0FDQ=="
     }
   ],
   "status": "active",
@@ -214,6 +214,10 @@
         "sha256": "79a34cbdc73a5ffb12a33dfb8783e3c1d4b2a6bcd9a6b4c97cd6ba28a46da33d",
         "size": 9999885,
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/spellcheck%400.1.1/spellcheck-0.1.1.lapis-plugin"
+      },
+      "changelog": {
+        "description": "- Initial independent public package extracted from Lapis Notes without changing\n  the runtime plugin ID.",
+        "title": "Spell Check 0.1.1"
       },
       "minAppVersion": "0.1.0",
       "platforms": [

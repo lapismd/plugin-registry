@@ -203,7 +203,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "DObSUWNAGN/9wf/GZw1AXdnnSeTNW6vWOH2oW4ZZVW8NAEfNPUq3mfNDuwEzkOfgN2EJQytUYQJTJ0s6qo4rCQ=="
+      "sig": "+WdbFKb7hOB0TH0XkZjoClqLniiX/qkV3mGuSemRfa5qrAcbB51LQnAdNiGpPYKyJlma8XO61CD/GWh5gKwNAg=="
     }
   ],
   "status": "active",
@@ -214,6 +214,10 @@
         "sha256": "709b7744c069826853b8852b98b28c6dab33f27110dc30b83102f6afda209096",
         "size": 366330,
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/search%400.1.2/search-0.1.2.lapis-plugin"
+      },
+      "changelog": {
+        "description": "- Initial independent public package extracted from Lapis Notes without changing\n  the runtime plugin ID.",
+        "title": "Search 0.1.2"
       },
       "minAppVersion": "0.1.0",
       "platforms": [

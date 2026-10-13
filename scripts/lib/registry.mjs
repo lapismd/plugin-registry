@@ -420,6 +420,15 @@ export function downloadUrlFor(pluginId, version) {
   return `../../download/${encodeURIComponent(pluginId)}/${encodeURIComponent(version)}`;
 }
 
+export function releaseDownloadAvailable(pluginStatus, release, target) {
+  return (
+    pluginStatus === "active" &&
+    release.bundle.pending !== true &&
+    target?.status === "active" &&
+    target.originUrl === release.bundle.url
+  );
+}
+
 export function stripInternal(value) {
   if (Array.isArray(value)) {
     return value.map(stripInternal);

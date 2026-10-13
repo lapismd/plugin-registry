@@ -1508,6 +1508,56 @@ html.has-gallery-dialog {
   margin-top: 30px;
 }
 
+.plugin-version-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.plugin-version-control select {
+  max-width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--lapis-hairline);
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: var(--lapis-surface-1);
+  color: var(--lapis-ink);
+  font: inherit;
+}
+
+.plugin-version-control select:focus-visible {
+  outline: 2px solid var(--lapis-primary);
+  outline-offset: 2px;
+}
+
+.plugin-install-dialog {
+  width: min(560px, calc(100% - 32px));
+  max-height: calc(100% - 32px);
+  overflow: auto;
+  margin: auto;
+  border: 1px solid var(--lapis-hairline);
+  border-radius: 16px;
+  padding: 24px;
+  background: var(--lapis-surface-1);
+  color: var(--lapis-ink);
+}
+
+.plugin-install-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.plugin-install-dialog p {
+  margin-top: 16px;
+}
+
+.plugin-install-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
 .button-primary,
 .button-secondary,
 .button-icon {

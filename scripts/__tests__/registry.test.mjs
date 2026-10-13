@@ -7,6 +7,7 @@ import {
   createAjv,
   formatAjvErrors,
   readJsonc,
+  releaseDownloadAvailable,
   sha256,
   signJson,
   validateEntryRules,
@@ -106,6 +107,61 @@ test("catalog media schema accepts the presentation identity icon", async () => 
   delete entry.__sourcePath;
 
   assert.equal(validate(entry), true, formatAjvErrors(validate));
+});
+
+test("catalog release notes accept the strict structured changelog contract", async () => {
+  const ajv = await createAjv();
+  const validate = ajv.getSchema(
+    "https://registry.lapis.md/schemas/catalog-entry.schema.json",
+  );
+  const entry = validEntry();
+  delete entry.__sourcePath;
+  const release = entry.versions[entry.latestVersion];
+  release.changelog = {
+    title: "Graph release",
+    description: "- Fixed navigation.",
+    tags: ["fix"],
+  };
+  assert.equal(validate(entry), true, formatAjvErrors(validate));
+  for (const invalid of [
+    { title: "Graph", description: "x".repeat(4001) },
+    { title: "Graph", tags: ["unknown"] },
+    { title: "Graph", tags: ["fix", "fix"] },
+    { title: "Graph", unexpected: "value" },
+  ]) {
+    release.changelog = invalid;
+    assert.equal(validate(entry), false);
+  }
+});
+
+test("release selection permits only the active pinned artifact and blocks revoked or pending downloads", () => {
+  const release = validEntry().versions["2026.6.6"];
+  const target = { status: "active", originUrl: release.bundle.url };
+  assert.equal(releaseDownloadAvailable("active", release, target), true);
+  assert.equal(releaseDownloadAvailable("revoked", release, target), false);
+  assert.equal(
+    releaseDownloadAvailable("active", release, {
+      ...target,
+      status: "revoked",
+    }),
+    false,
+  );
+  assert.equal(releaseDownloadAvailable("active", release, undefined), false);
+  assert.equal(
+    releaseDownloadAvailable(
+      "active",
+      { ...release, bundle: { ...release.bundle, pending: true } },
+      target,
+    ),
+    false,
+  );
+  assert.equal(
+    releaseDownloadAvailable("active", release, {
+      ...target,
+      originUrl: "https://example.com/different-version.lapis-plugin",
+    }),
+    false,
+  );
 });
 
 test("rejects Electron as a registry compatibility platform", async () => {

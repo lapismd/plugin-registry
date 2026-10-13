@@ -1,6 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
+import { downloadTargets } from "../../generated/download-targets.mjs";
+import { releaseDownloadAvailable } from "../../scripts/lib/registry.mjs";
 // The site and registry automation intentionally share one safe Markdown renderer.
 import { renderMarkdownToSafeHtml } from "../../scripts/lib/readmes.mjs";
 
@@ -317,6 +319,18 @@ export function pluginDownloadHref(release: PluginVersion) {
   } catch {
     return release.bundle.url;
   }
+}
+
+export function pluginReleaseAvailable(
+  plugin: SitePlugin,
+  release: PluginVersion,
+) {
+  const targets = downloadTargets.targets as Record<
+    string,
+    { status: string; originUrl: string }
+  >;
+  const target = targets[`${plugin.id}@${release.version}`];
+  return releaseDownloadAvailable(plugin.status, release, target);
 }
 
 function collectFilePatterns(contributes: PluginContributions) {

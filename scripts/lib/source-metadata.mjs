@@ -15,6 +15,7 @@ const sourceSchemaId =
 
 export async function fetchPluginSourceMetadata({
   payload,
+  releaseVersions = [],
   fetchImpl = fetch,
   outputDir,
   assetOutputDir = outputDir ? new URL("../assets/", outputDir) : undefined,
@@ -130,20 +131,25 @@ export async function fetchPluginSourceMetadata({
         ),
       )
     : undefined;
-  let changelog;
+  const changelogs = {};
   if (source.schemaVersion === 2) {
     const bytes = await fetchBytes(
       fetchImpl,
       new URL("CHANGELOG.md", sourceBaseUrl).href,
       maxPluginMarkdownBytes,
     );
-    changelog = registryChangelogFromMarkdown(
-      manifest.name,
-      manifest.version,
-      decodeUtf8(bytes, "changelog"),
-      source.releases?.[manifest.version]?.changelog,
-    );
+    const markdown = decodeUtf8(bytes, "changelog");
+    for (const version of new Set([manifest.version, ...releaseVersions])) {
+      const notes = registryChangelogFromMarkdown(
+        manifest.name,
+        version,
+        markdown,
+        source.releases?.[version]?.changelog,
+      );
+      if (notes) changelogs[version] = notes;
+    }
   }
+  const changelog = changelogs[manifest.version];
   await pruneMirroredAssets(
     assetOutputDir,
     payload.pluginId,
@@ -190,6 +196,7 @@ export async function fetchPluginSourceMetadata({
     ...(gallery ? { gallery } : {}),
     ...(media ? { media } : {}),
     ...(changelog ? { changelog } : {}),
+    changelogs,
     authorAvatarUrl: manifest.authorAvatarUrl,
     license: packageJson.license,
     links,
@@ -219,12 +226,12 @@ export function applyPluginSourceMetadata(entry, metadata) {
     authorAvatarUrl: metadata.authorAvatarUrl,
     ...(metadata.media ? { media: metadata.media } : {}),
     versions: Object.fromEntries(
-      Object.entries(entry.versions).map(([version, release]) => [
-        version,
-        version === metadata.version && metadata.changelog
-          ? { ...release, changelog: metadata.changelog }
-          : release,
-      ]),
+      Object.entries(entry.versions).map(([version, release]) => {
+        const changelog =
+          metadata.changelogs?.[version] ??
+          (version === metadata.version ? metadata.changelog : undefined);
+        return [version, changelog ? { ...release, changelog } : release];
+      }),
     ),
     description: metadata.description,
     readmeUrl: metadata.readmeUrl,

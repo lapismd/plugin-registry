@@ -6,6 +6,7 @@ import test from "node:test";
 import sharp from "sharp";
 
 import {
+  applyPluginSourceMetadata,
   assertSafeAssetPath,
   assertSafeMarkdownPath,
   fetchPluginSourceMetadata,
@@ -88,6 +89,67 @@ test("V2 preserves themed logos, manifest author URL and exact structured notes"
       ),
       image.sha256,
     );
+});
+
+test("V2 backfills exact published changelogs when source is a newer unreleased version", async () => {
+  const { version: _releaseVersion, ...metadataPayload } = payload;
+  const metadata = await fetchPluginSourceMetadata({
+    payload: metadataPayload,
+    releaseVersions: ["0.0.9", "0.0.8", "0.0.7"],
+    fetchImpl: await sourceFetch({
+      source: {
+        schemaVersion: 2,
+        content: undefined,
+        releases: {
+          "0.0.8": {
+            changelog: { title: "Authored historical title", tags: ["fix"] },
+          },
+        },
+      },
+      changelog:
+        "## 0.1.0\n\n- Unreleased feature.\n\n## 0.0.9\n\n- Published search fix.\n",
+    }),
+  });
+  const versions = {
+    "0.0.9": { version: "0.0.9", bundle: { sha256: "a".repeat(64) } },
+    "0.0.8": { version: "0.0.8", bundle: { sha256: "b".repeat(64) } },
+    "0.0.7": {
+      version: "0.0.7",
+      bundle: { sha256: "c".repeat(64) },
+      changelog: {
+        title: "Retained verified notes",
+        description: "Previously published.",
+      },
+    },
+  };
+  const updated = applyPluginSourceMetadata(
+    {
+      id: metadataPayload.pluginId,
+      latestVersion: "0.0.9",
+      owner: { name: "Lapis", verified: true },
+      source: { repository: metadataPayload.repository },
+      versions,
+    },
+    metadata,
+  );
+  assert.deepEqual(updated.versions["0.0.9"].changelog, {
+    title: "Search 0.0.9",
+    description: "- Published search fix.",
+  });
+  assert.deepEqual(updated.versions["0.0.8"].changelog, {
+    title: "Authored historical title",
+    tags: ["fix"],
+  });
+  assert.deepEqual(updated.versions["0.0.7"], versions["0.0.7"]);
+  assert.equal(updated.latestVersion, "0.0.9");
+  assert.deepEqual(Object.keys(updated.versions), Object.keys(versions));
+  for (const version of Object.keys(versions)) {
+    assert.deepEqual(
+      updated.versions[version].bundle,
+      versions[version].bundle,
+    );
+  }
+  assert.doesNotMatch(JSON.stringify(updated.versions), /Unreleased feature/);
 });
 
 test("source metadata is validated, derived, hashed, and mirrored deterministically", async () => {

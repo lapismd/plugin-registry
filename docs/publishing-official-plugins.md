@@ -77,6 +77,19 @@ A `plugin_metadata` dispatch updates presentation fields while preserving every
 release version and artifact. It requires no binary publication. Static Pages
 CORS headers cover both registry versions and their assets.
 
+Both release and metadata syncs extract the exact `CHANGELOG.md` section for
+each retained release version, even when the source manifest has advanced to
+an unpublished version. Per-version structured overrides apply only to that
+version. Missing sections preserve existing verified notes; newer notes are
+never assigned to older releases.
+
+The site retains every indexed version at `/plugins/<id>/versions/<version>/`.
+The version selector and Releases links select its compatibility, date, notes,
+bundle size and immutable archive. Install in Lapis opens instructions for the
+existing verified `.lapis-plugin` file installer. Pending bundles and inactive
+plugins remain non-installable. Presentation fields are shared catalog metadata,
+not a historical snapshot of each release's screenshots or description.
+
 The default `registry:validate` command checks schemas and local rules. Pull
 requests and the manual production workflow run `registry:validate:remote`,
 which downloads every active archive and verifies its embedded official release

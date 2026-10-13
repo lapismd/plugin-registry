@@ -225,6 +225,10 @@
         "size": 9999885,
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/spellcheck%400.1.1/spellcheck-0.1.1.lapis-plugin",
       },
+      "changelog": {
+        "description": "- Initial independent public package extracted from Lapis Notes without changing\n  the runtime plugin ID.",
+        "title": "Spell Check 0.1.1",
+      },
       "minAppVersion": "0.1.0",
       "platforms": ["web", "desktop"],
       "releasedAt": "2026-08-29T09:37:08.000Z",

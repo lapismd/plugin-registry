@@ -107,6 +107,7 @@ export async function syncGitHubRelease(options = {}) {
   });
   const sourceMetadata = await fetchPluginSourceMetadata({
     payload,
+    releaseVersions: Object.keys(releaseEntry.versions),
     fetchImpl,
     outputDir: contentDir,
     assetOutputDir: assetDir,
@@ -169,6 +170,7 @@ export async function syncGitHubMetadata(options = {}) {
   }
   const sourceMetadata = await fetchPluginSourceMetadata({
     payload,
+    releaseVersions: Object.keys(existingEntry.versions),
     fetchImpl,
     outputDir: contentDir,
     assetOutputDir: assetDir,

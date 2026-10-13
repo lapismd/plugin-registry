@@ -1,0 +1,13 @@
+---
+import PluginDetailPage from "../../../../components/PluginDetailPage.astro";
+import { getRegistrySiteData } from "../../../../lib/registry-data";
+
+export async function getStaticPaths() {
+  const { plugins } = await getRegistrySiteData();
+  return plugins.flatMap((plugin) => Object.keys(plugin.detailData.versions).map((version) => ({
+    params: { id: plugin.id, version },
+    props: { pluginId: plugin.id, releaseVersion: version },
+  })));
+}
+---
+<PluginDetailPage pluginId={Astro.props.pluginId} releaseVersion={Astro.props.releaseVersion} />

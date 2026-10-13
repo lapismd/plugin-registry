@@ -60,6 +60,7 @@ export async function buildLocalSourcePreview({
     };
     const sourceMetadata = await fetchPluginSourceMetadata({
       payload,
+      releaseVersions: Object.keys(entry.versions),
       fetchImpl: localSourceFetch(payload, packageRoot),
       outputDir: new URL("content/", outputRoot),
       assetOutputDir: new URL("assets/", outputRoot),
