@@ -120,7 +120,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "WyCie4r1kQdgrebizJyXALTu38iSITVBiuiRKmAAsxxheu8HB/JAsQTx52EiPuo7l3RqFbpWYySPjNAVR1f0Bg=="
+      "sig": "wnSEh1a2WLCq210XuIieP7TqsoJp5+PqcHM28a7asg6FG7qOkHy6RYObQEgmoMSP3xOoOsKH1h1eVm4TrycDAQ=="
     }
   ],
   "status": "active",
@@ -131,6 +131,10 @@
         "sha256": "2fb723286717273df303a26242c1040adb81e66c9d0e77e40668fa44266d4ec5",
         "size": 457091,
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/bookmarks%400.1.2/bookmarks-0.1.2.lapis-plugin"
+      },
+      "changelog": {
+        "description": "- Initial independent public package extracted from Lapis Notes without changing\n  the runtime plugin ID.",
+        "title": "Bookmarks 0.1.2"
       },
       "minAppVersion": "0.1.0",
       "platforms": [

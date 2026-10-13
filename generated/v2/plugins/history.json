@@ -203,7 +203,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "mTtRVXUptagVdLG/38d/70Q/3UBGbgjqj+bRZrbNfeXk4tPni1yKUn5801OPmYmKEkKpHNzKcyT5BDz5hsLbCg=="
+      "sig": "2Net095QfgbajXC2ZEuFVkFsrWRzjLspMsyD7nrsUM/0jyPDiHAQOWNboCU7GLVax3Ugqc9u9t28kfcBVmIoCA=="
     }
   ],
   "status": "active",
@@ -214,6 +214,10 @@
         "sha256": "d07dc0b6fc4afa87f8d2fdbcac86f15f5bf6efdd946d60c04bccd2bda12b9060",
         "size": 148095,
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/history%400.1.2/history-0.1.2.lapis-plugin"
+      },
+      "changelog": {
+        "description": "- Initial independent public package extracted from Lapis Notes without changing\n  the runtime plugin ID.",
+        "title": "History 0.1.2"
       },
       "minAppVersion": "0.1.0",
       "platforms": [
