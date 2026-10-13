@@ -15,8 +15,12 @@
     }
   ],
   "roles": {
-    "registry": ["lapis-registry-2026-06"],
-    "release": ["lapis-plugin-release-2026-06"]
+    "registry": [
+      "lapis-registry-2026-06"
+    ],
+    "release": [
+      "lapis-plugin-release-2026-06"
+    ]
   },
   "schemaVersion": 1
 }
