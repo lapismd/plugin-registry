@@ -142,6 +142,10 @@
         "size": 149673,
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/markdown-lint%400.1.1/lapis-markdown-lint-0.1.1.lapis-plugin",
       },
+      "changelog": {
+        "description": "- Initial independent public package extracted from Lapis Notes without changing\n  the runtime plugin ID.",
+        "title": "Markdown Lint 0.1.1",
+      },
       "minAppVersion": "0.1.0",
       "platforms": ["web", "desktop"],
       "releasedAt": "2026-08-29T09:36:46.000Z",

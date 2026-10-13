@@ -334,6 +334,34 @@
         },
         "bundle": {
           "$ref": "#/$defs/hashedRemoteFile"
+        },
+        "changelog": {
+          "$ref": "#/$defs/releaseChangelog"
+        }
+      }
+    },
+    "releaseChangelog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "tags": {
+          "type": "array",
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "feature",
+              "improvement",
+              "fix",
+              "security",
+              "breaking",
+              "deprecation",
+              "removal"
+            ]
+          }
         }
       }
     }

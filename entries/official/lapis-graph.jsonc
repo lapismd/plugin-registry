@@ -225,6 +225,10 @@
         "size": 476698,
         "url": "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.2/lapis-graph-0.1.2.lapis-plugin",
       },
+      "changelog": {
+        "description": "- Initial independent public package extracted from Lapis Notes without changing\n  the runtime plugin ID.",
+        "title": "Graph 0.1.2",
+      },
       "minAppVersion": "0.1.0",
       "platforms": ["web", "desktop"],
       "releasedAt": "2026-08-29T09:36:18.000Z",

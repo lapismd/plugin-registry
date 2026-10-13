@@ -278,6 +278,62 @@ test("metadata-only sync updates content without changing release versions", asy
   await rm(fixture.root, { recursive: true, force: true });
 });
 
+test("V2 metadata and release syncs backfill retained exact-version notes", async (t) => {
+  const fixture = await fixtureDir();
+  t.after(() => rm(fixture.root, { recursive: true, force: true }));
+  const release = await signedReleaseFixture({
+    sourceSchemaVersion: 2,
+    changelog:
+      "## 0.1.2\n\n- Current release.\n\n## 2026.6.6\n\n- Original graph release.\n",
+  });
+  await writeTrustRoot(fixture.trustRootPath, release.publicKeyPem);
+  const existing = existingGraphEntry();
+  await writeFile(
+    new URL("lapis-graph.jsonc", fixture.entriesDir),
+    JSON.stringify(existing),
+  );
+  const metadata = await syncGitHubMetadata({
+    payload: validateMetadataDispatchPayload({
+      repository: payload.repository,
+      package_name: payload.package_name,
+      plugin_id: payload.plugin_id,
+      source_commit: sourceCommit,
+    }),
+    entriesDir: fixture.entriesDir,
+    contentDir: fixture.contentDir,
+    fetchImpl: release.fetchImpl,
+  });
+  assert.equal(
+    metadata.entry.versions["2026.6.6"].changelog.description,
+    "- Original graph release.",
+  );
+  assert.deepEqual(
+    metadata.entry.versions["2026.6.6"].bundle,
+    existing.versions["2026.6.6"].bundle,
+  );
+  assert.equal(metadata.entry.versions["0.1.2"], undefined);
+  // Reset to prove the release ingestion caller also supplies historical versions.
+  await writeFile(
+    new URL("lapis-graph.jsonc", fixture.entriesDir),
+    JSON.stringify(existing),
+  );
+  const updated = await syncGitHubRelease({
+    payload: validateDispatchPayload(payload),
+    entriesDir: fixture.entriesDir,
+    trustRootPath: fixture.trustRootPath,
+    contentDir: fixture.contentDir,
+    fetchImpl: release.fetchImpl,
+  });
+  assert.equal(
+    updated.entry.versions["2026.6.6"].changelog.description,
+    "- Original graph release.",
+  );
+  assert.equal(
+    updated.entry.versions["0.1.2"].changelog.description,
+    "- Current release.",
+  );
+});
+
 async function signedReleaseFixture(options = {}) {
   const { privateKey, publicKey } = generateKeyPairSync("ed25519");
   const privateKeyPem = privateKey.export({ type: "pkcs8", format: "pem" });
@@ -381,7 +437,7 @@ async function signedReleaseFixture(options = {}) {
   );
   const sourceBytes = Buffer.from(
     `${JSON.stringify({
-      schemaVersion: 1,
+      schemaVersion: options.sourceSchemaVersion ?? 1,
       categories: ["graph", "visualization"],
       highlights: [
         "Explore note and tag relationships.",
@@ -413,7 +469,11 @@ async function signedReleaseFixture(options = {}) {
           },
         },
       ],
-      content: { overview: "README.md", changelog: "CHANGELOG.md" },
+      ...(options.sourceSchemaVersion === 2
+        ? {}
+        : {
+            content: { overview: "README.md", changelog: "CHANGELOG.md" },
+          }),
     })}\n`,
   );
   const previewBytes = await sharp({
@@ -438,7 +498,7 @@ async function signedReleaseFixture(options = {}) {
     .toBuffer();
   const readmeBytes = Buffer.from("# Graph\n\nExplore connected notes.\n");
   const changelogBytes = Buffer.from(
-    "# Changelog\n\n## 0.1.0\n\nInitial release.\n",
+    options.changelog ?? "# Changelog\n\n## 0.1.0\n\nInitial release.\n",
   );
   const fetchImpl = async (url) => {
     if (String(url).startsWith("https://api.github.com/")) {
