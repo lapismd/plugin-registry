@@ -16,7 +16,14 @@ export async function onRequest(context) {
   return handleDownloadRequest(context);
 }
 
-export function handleDownloadRequest(context, targets = downloadTargets) {
+/**
+ * @param {{ targets: Record<string, { pluginId: string, version: string, originUrl: string, status: string }> }} targets
+ */
+export async function handleDownloadRequest(
+  context,
+  targets = downloadTargets,
+  fetchImpl = fetch,
+) {
   const method = context.request.method.toUpperCase();
   if (method === "OPTIONS") {
     return new Response(null, { status: 204, headers: responseHeaders() });
@@ -43,10 +50,30 @@ export function handleDownloadRequest(context, targets = downloadTargets) {
   if (method === "GET") {
     recordDownload(context, target);
   }
-  return new Response(null, {
-    status: 302,
-    headers: responseHeaders({ Location: target.originUrl }),
-  });
+  try {
+    // Fetch only the generated release target. Browser headers, cookies and
+    // caller-supplied URLs never enter the upstream request.
+    const upstream = await fetchImpl(target.originUrl, {
+      method,
+      redirect: "follow",
+      signal: context.request.signal,
+    });
+    if (upstream.status !== 200) {
+      await upstream.body?.cancel();
+      return textResponse(context.request, "Plugin archive unavailable", 502);
+    }
+    return new Response(method === "HEAD" ? null : upstream.body, {
+      status: 200,
+      headers: responseHeaders({
+        "Content-Type": "application/octet-stream",
+        "Content-Disposition": `attachment; filename="${target.pluginId}-${target.version}.lapis-plugin"`,
+        "X-Content-Type-Options": "nosniff",
+        "Cross-Origin-Resource-Policy": "cross-origin",
+      }),
+    });
+  } catch {
+    return textResponse(context.request, "Plugin archive unavailable", 502);
+  }
 }
 
 function recordDownload(context, target) {
@@ -66,7 +93,7 @@ function recordDownload(context, target) {
       blobs: [target.pluginId, target.version, action, platform, os],
     });
   } catch {
-    // Analytics is best-effort. A valid artifact redirect must always win.
+    // Analytics is best-effort. It cannot prevent archive delivery.
   }
 }
 
