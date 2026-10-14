@@ -74,6 +74,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.1"
     },
+    "spellcheck@0.1.3": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/spellcheck%400.1.3/spellcheck-0.1.3.lapis-plugin",
+      "pluginId": "spellcheck",
+      "status": "active",
+      "version": "0.1.3"
+    },
     "wordcount@0.1.1": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/wordcount%400.1.1/wordcount-0.1.1.lapis-plugin",
       "pluginId": "wordcount",
