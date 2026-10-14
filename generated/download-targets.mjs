@@ -68,6 +68,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.2"
     },
+    "search@0.1.3": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/search%400.1.3/search-0.1.3.lapis-plugin",
+      "pluginId": "search",
+      "status": "active",
+      "version": "0.1.3"
+    },
     "spellcheck@0.1.1": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/spellcheck%400.1.1/spellcheck-0.1.1.lapis-plugin",
       "pluginId": "spellcheck",
