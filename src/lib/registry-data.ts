@@ -128,6 +128,10 @@ const siteRegistryRoot =
   process.env.LAPIS_REGISTRY_SITE_V1_DIR ??
   path.join(process.cwd(), "dist", "v2");
 
+export async function getRegistryManifestSource() {
+  return readFile(path.join(registryRoot, "index.json"), "utf8");
+}
+
 export async function getRegistrySiteData() {
   const canonicalIndex = normalizeRegistryCatalogIndex(
     await readJson<unknown>("index.json"),

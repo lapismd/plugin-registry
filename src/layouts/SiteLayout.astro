@@ -2,6 +2,7 @@
 import SearchPalette from "../components/SearchPalette.astro";
 import { getRegistrySiteData } from "../lib/registry-data";
 import "../styles/site.css";
+import { registryUpdatedAt } from "../lib/site-metadata.mjs";
 
 interface Props {
   title?: string;
@@ -16,6 +17,8 @@ const { plugins } = await getRegistrySiteData();
 const isLandingPage = Astro.url.pathname === "/";
 const isPluginDirectory =
   Astro.url.pathname === "/plugins" || Astro.url.pathname === "/plugins/";
+const registryUpdated = registryUpdatedAt();
+const isManifestPage = Astro.url.pathname.replace(/\/$/, "") === "/manifest";
 const currentYear = new Date().getUTCFullYear();
 const sourcePreview = process.env.LAPIS_REGISTRY_SOURCE_PREVIEW;
 const registryPath = sourcePreview ? "/v1" : "/v2";
@@ -56,7 +59,7 @@ const registryPath = sourcePreview ? "/v1" : "/v2";
             href="/plugins/"
             aria-current={isPluginDirectory ? "page" : undefined}>Plugins</a
           >
-          <a href={`${registryPath}/index.json`}>Manifest</a>
+          <a href="/manifest/" aria-current={isManifestPage ? "page" : undefined}>Manifest</a>
         </nav>
       </header>
       <slot />
@@ -75,6 +78,7 @@ const registryPath = sourcePreview ? "/v1" : "/v2";
             </a>
             <p>Signed community software for Lapis Notes.</p>
             <p class="site-footer__copyright">© {currentYear} LapisMD</p>
+            {registryUpdated && <p class="site-footer__updated">Registry updated<br /><time data-registry-updated datetime={registryUpdated.datetime}>{registryUpdated.label}</time></p>}
           </div>
           <nav class="site-footer__directory" aria-label="Footer">
             <section>

@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { loadEntries } from "../scripts/lib/registry.mjs";
 
 test("version selector opens a shareable older release with its own archive and compatibility", async ({
   page,
@@ -43,7 +44,12 @@ test("version selector opens a shareable older release with its own archive and 
     "2026.6.6 changelog",
   );
   await versions.selectOption("/plugins/lapis-graph/");
-  await expect(versions.locator("option:checked")).toHaveText("0.1.2 (Latest)");
+  const graph = (await loadEntries()).find(
+    (entry) => entry.id === "lapis-graph",
+  );
+  await expect(versions.locator("option:checked")).toHaveText(
+    `${graph.latestVersion} (Latest)`,
+  );
 });
 
 test("a pending source version cannot install while its retained published version can", async ({

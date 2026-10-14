@@ -42,8 +42,8 @@ test("hydrates list and detail surfaces without changing ordering", () => {
   const recent = {};
   const note = {};
   const values = { hidden: true };
-  const unavailable = { hidden: false };
   const detail = {
+    hidden: true,
     dataset: { pluginId: "lapis-docs" },
     querySelector(selector) {
       return {
@@ -51,7 +51,6 @@ test("hydrates list and detail surfaces without changing ordering", () => {
         "[data-download-30d]": recent,
         "[data-download-tracked-since]": note,
         "[data-download-stats-values]": values,
-        "[data-download-stats-unavailable]": unavailable,
       }[selector];
     },
   };
@@ -74,7 +73,7 @@ test("hydrates list and detail surfaces without changing ordering", () => {
     "Tracked downloads since 2026-01-01. Approximate redirect requests.",
   );
   assert.equal(values.hidden, false);
-  assert.equal(unavailable.hidden, true);
+  assert.equal(detail.hidden, false);
 });
 
 test("popular plugin hydration keeps its fallback and ranks usable statistics", () => {

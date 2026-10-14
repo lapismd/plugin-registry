@@ -76,15 +76,23 @@ export function hydrateDownloadStats(root, summary) {
     const recent = element.querySelector("[data-download-30d]");
     const note = element.querySelector("[data-download-tracked-since]");
     const values = element.querySelector("[data-download-stats-values]");
-    const unavailable = element.querySelector(
-      "[data-download-stats-unavailable]",
-    );
-    if (!lifetime || !recent || !note || !values || !unavailable) continue;
+    if (!lifetime || !recent || !note || !values) continue;
     lifetime.textContent = `~${stats.lifetimeLabel}`;
     recent.textContent = `~${stats.recentLabel}`;
     note.textContent = `Tracked downloads since ${summary.trackedSince}. Approximate redirect requests.`;
     values.hidden = false;
-    unavailable.hidden = true;
+    element.hidden = false;
+  }
+
+  for (const element of root.querySelectorAll(
+    "[data-download-summary][data-plugin-id]",
+  )) {
+    const stats = statsForPlugin(summary, element.dataset.pluginId);
+    const label = element.querySelector("[data-download-summary-label]");
+    if (!stats || !label) continue;
+    label.textContent = `~${stats.lifetimeLabel} ${stats.lifetime === 1 ? "download" : "downloads"}`;
+    element.title = `Approximate tracked downloads since ${summary.trackedSince}`;
+    element.hidden = false;
   }
 
   hydrateDirectoryPopularity(root, summary);

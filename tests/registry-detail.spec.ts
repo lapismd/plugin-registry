@@ -109,16 +109,22 @@ test("download counts render from a current static summary across details and li
   await expect(detail.locator("[data-download-tracked-since]")).toHaveText(
     `Tracked downloads since ${date}. Approximate redirect requests.`,
   );
-  await expect(
-    detail.locator("[data-download-stats-unavailable]"),
-  ).not.toBeVisible();
+  const summaryButton = page.locator("[data-download-summary]");
+  await expect(summaryButton).toBeVisible();
+  await expect(summaryButton).toHaveText("~1.3K downloads");
+  await expect(summaryButton).toHaveAttribute(
+    "href",
+    "#plugin-download-statistics",
+  );
+  await summaryButton.click();
+  await expect(page).toHaveURL(/#plugin-download-statistics$/);
   await page.goto("/plugins/");
   const count = page.locator("[data-download-count][data-plugin-id=ai]");
   await expect(count).toBeVisible();
   await expect(count).toContainText("~1.3K downloads (30d)");
 });
 
-test("missing and stale statistics stay unavailable without showing a fabricated zero", async ({
+test("missing and stale statistics hide their section and author count without fabricating a zero", async ({
   page,
 }) => {
   for (const json of [
@@ -141,10 +147,9 @@ test("missing and stale statistics stay unavailable without showing a fabricated
       json ? route.fulfill({ json }) : route.fulfill({ status: 404 }),
     );
     await page.goto(pluginPath);
-    const detail = page.getByRole("region", { name: "Download statistics" });
-    await expect(
-      detail.locator("[data-download-stats-unavailable]"),
-    ).toBeVisible();
+    const detail = page.locator("[data-download-detail]");
+    await expect(detail).not.toBeVisible();
+    await expect(page.locator("[data-download-summary]")).not.toBeVisible();
     await expect(
       detail.locator("[data-download-stats-values]"),
     ).not.toBeVisible();

@@ -1,0 +1,20 @@
+---
+import { Code } from "astro:components";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { getRegistryManifestSource } from "../lib/registry-data";
+
+const manifest = await getRegistryManifestSource();
+const registryPath = process.env.LAPIS_REGISTRY_SOURCE_PREVIEW ? "/v1" : "/v2";
+---
+
+<SiteLayout title="Registry manifest - Lapis Plugin Registry">
+  <main class="manifest-page">
+    <div class="manifest-page__heading">
+      <h1>Registry manifest</h1>
+      <a class="manifest-page__raw" href={`${registryPath}/index.json`}>Raw JSON</a>
+    </div>
+    <div class="manifest-page__source" aria-label="Syntax-highlighted registry manifest">
+      <Code code={manifest.trimEnd()} lang="json" theme="github-dark" />
+    </div>
+  </main>
+</SiteLayout>
