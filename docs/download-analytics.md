@@ -1,9 +1,9 @@
 # Anonymous plugin download analytics
 
-The registry counts requests that pass through its optional download redirect.
+The registry counts requests that pass through its optional archive delivery endpoint.
 Plugin bundles remain immutable assets owned by their release repository. The
 signed `bundle.url` is the verified artifact origin and direct fallback;
-`bundle.downloadUrl` is an optional signed reference to the registry redirect,
+`bundle.downloadUrl` is an optional signed reference to the registry delivery endpoint,
 preserved by both V1 and V2 catalogs. Production detail-page downloads use this
 reference with `action=download` and `platform=web`; the browser adds a normalized
 OS value. Local Astro source previews use the artifact origin because they do
@@ -11,18 +11,27 @@ not run the Cloudflare Pages Function.
 
 This design leaves the registry portable. A mirror can publish all signed
 metadata, pages, documentation, and `stats/` as ordinary static files. It can
-omit the redirect Function entirely. App clients retain the signed origin URL
+omit the delivery Function entirely. App clients retain the signed origin URL
 as their direct fallback; a mirror serving website downloads must either provide
-the redirect Function or render links to the artifact origin.
+the delivery Function or render links to the artifact origin.
+
+The Pages Function streams the generated release target with public CORS headers.
+It never forwards browser credentials or caller-supplied URLs upstream. Invalid,
+pending and revoked releases remain unavailable; upstream failure produces a
+CORS-readable gateway error. Clients verify the original signed archive digest,
+size and embedded signatures after delivery. Updated API clients prefer the
+signed endpoint and retry the same signed origin only for transport failure;
+cancellation, revocation and integrity failures never cause that retry.
 
 ## Metric and privacy
 
-`stats/` reports **approximate redirect requests**, not unique people, devices,
+`stats/` retains the legacy **approximate redirect requests** metric name for
+compatibility. It counts eligible archive requests, including streamed delivery, not unique people, devices,
 or confirmed installations. Counts can include retries, automation, and direct
 website downloads. Older clients and downloads made directly from the artifact
 origin are not counted.
 
-One Analytics Engine point is written before each eligible `GET` redirect. It
+One Analytics Engine point is written before each eligible `GET` archive request. It
 uses `pluginId@version` as the index and exactly five normalized blobs:
 
 1. Plugin ID
@@ -33,7 +42,7 @@ uses `pluginId@version` as the index and exactly five normalized blobs:
 
 The endpoint does not record an IP address, raw user agent, referrer, user ID,
 machine ID, installation ID, or vault ID. Analytics is best-effort: a missing
-binding or failed write cannot block the redirect. `HEAD` and `OPTIONS` do not
+binding or failed write cannot block archive delivery. `HEAD` and `OPTIONS` do not
 write events.
 
 The website wording is deliberately explicit: `Tracked downloads since
@@ -131,14 +140,14 @@ wrong, regenerate it from the daily files.
 
 ## Rollout gate
 
-Keep `DOWNLOAD_STATS_AUTOMATION_APPROVED` unset while deploying the redirect
+Keep `DOWNLOAD_STATS_AUTOMATION_APPROVED` unset while deploying the delivery
 endpoint for the first time. Run the protected `Sign registry metadata`
 workflow with `REGISTRY_SIGN_APPROVED`, review and merge its generated-only pull
 request, and confirm each release contains both the origin and tracking
 reference. The manual production workflow refuses uncommitted generated changes
 and deploys the reviewed signatures without handling the private signing key.
 After verifying
-exact redirects, web and desktop fallback, static routing, and an anonymous
+exact streamed bytes, browser CORS, web and desktop fallback, static routing, and an anonymous
 Analytics Engine point, record the UTC cutover date and enable the scheduled
 workflow. The first immutable daily file should appear only after the two-day
 delay.

@@ -126,9 +126,11 @@ contracts. Badges and verified-owner claims stay curator-owned. Platform labels
 are preserved in metadata; runtime compatibility still checks supported hosts.
 
 Cloudflare Pages CORS headers cover both registry versions and statistics.
-Only anonymous `/download/*` redirects use a Pages Function; catalog pages and
+Only anonymous `/download/*` archive delivery uses a Pages Function; catalog pages and
 assets stay static. See [download analytics](docs/download-analytics.md) for
-metric, privacy, mirroring and recovery details.
+metric, privacy, mirroring and recovery details. The Function streams only generated
+release targets with CORS; clients retain signed archive verification and
+transport-only fallback to the same artifact origin.
 
 The production workflow requires the protected `registry-production`
 environment and the V2 cutover variable. It verifies committed signatures and

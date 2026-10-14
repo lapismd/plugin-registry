@@ -30,10 +30,54 @@ const targets = {
     },
   },
 };
+const archiveFetch = async () => new Response(new Uint8Array([1, 2, 3]));
 
-test("GET records normalized dimensions and redirects to the known origin", async () => {
+test("GET streams the pinned archive with CORS instead of redirecting the browser", async () => {
+  let controller;
+  const stream = new ReadableStream({
+    start(value) {
+      controller = value;
+    },
+  });
+  const requests = [];
+  const response = await handleDownloadRequest(
+    context({
+      url: "https://registry.example.test/download/lapis-docs/0.1.0?url=https://evil.test/archive",
+    }),
+    targets,
+    async (url, init) => {
+      requests.push({ url, init });
+      return new Response(stream);
+    },
+  );
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("location"), null);
+  assert.equal(response.headers.get("access-control-allow-origin"), "*");
+  assert.equal(requests.length, 1);
+  assert.equal(requests[0].url, originUrl);
+  assert.equal(requests[0].init.method, "GET");
+  controller.enqueue(new Uint8Array([1, 2, 3]));
+  controller.close();
+  assert.deepEqual(
+    new Uint8Array(await response.arrayBuffer()),
+    new Uint8Array([1, 2, 3]),
+  );
+});
+
+test("upstream failures return a CORS-readable gateway error without a redirect", async () => {
+  const response = await handleDownloadRequest(
+    context(),
+    targets,
+    async () => new Response("unavailable", { status: 503 }),
+  );
+  assert.equal(response.status, 502);
+  assert.equal(response.headers.get("location"), null);
+  assert.equal(response.headers.get("access-control-allow-origin"), "*");
+});
+
+test("GET records normalized dimensions and delivers the known origin", async () => {
   const points = [];
-  const response = handleDownloadRequest(
+  const response = await handleDownloadRequest(
     context({
       url: "https://registry.example.test/download/lapis-docs/0.1.0?action=install&platform=desktop&os=macos&url=https://evil.test/payload",
       env: {
@@ -41,10 +85,11 @@ test("GET records normalized dimensions and redirects to the known origin", asyn
       },
     }),
     targets,
+    archiveFetch,
   );
 
-  assert.equal(response.status, 302);
-  assert.equal(response.headers.get("location"), originUrl);
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("location"), null);
   assert.equal(response.headers.get("cache-control"), "no-store");
   assert.equal(response.headers.get("access-control-allow-origin"), "*");
   assert.equal(response.headers.get("referrer-policy"), "no-referrer");
@@ -56,9 +101,9 @@ test("GET records normalized dimensions and redirects to the known origin", asyn
   ]);
 });
 
-test("unknown dimensions are normalized without retaining raw values", () => {
+test("unknown dimensions are normalized without retaining raw values", async () => {
   const points = [];
-  const response = handleDownloadRequest(
+  const response = await handleDownloadRequest(
     context({
       url: "https://registry.example.test/download/lapis-docs/0.1.0?action=side-load&platform=darwin&os=MacIntel",
       env: {
@@ -66,9 +111,10 @@ test("unknown dimensions are normalized without retaining raw values", () => {
       },
     }),
     targets,
+    archiveFetch,
   );
 
-  assert.equal(response.status, 302);
+  assert.equal(response.status, 200);
   assert.deepEqual(points[0].blobs, [
     "lapis-docs",
     "0.1.0",
@@ -78,18 +124,24 @@ test("unknown dimensions are normalized without retaining raw values", () => {
   ]);
 });
 
-test("HEAD redirects without recording and OPTIONS supplies CORS", () => {
+test("HEAD delivers headers without recording and OPTIONS supplies CORS", async () => {
   let writes = 0;
   const env = {
     PLUGIN_DOWNLOADS: { writeDataPoint: () => (writes += 1) },
   };
-  const head = handleDownloadRequest(context({ method: "HEAD", env }), targets);
-  const options = handleDownloadRequest(
+  const head = await handleDownloadRequest(
+    context({ method: "HEAD", env }),
+    targets,
+    archiveFetch,
+  );
+  const options = await handleDownloadRequest(
     context({ method: "OPTIONS", env }),
     targets,
+    archiveFetch,
   );
 
-  assert.equal(head.status, 302);
+  assert.equal(head.status, 200);
+  assert.equal(await head.text(), "");
   assert.equal(options.status, 204);
   assert.equal(
     options.headers.get("access-control-allow-methods"),
@@ -99,21 +151,25 @@ test("HEAD redirects without recording and OPTIONS supplies CORS", () => {
 });
 
 test("unsupported, unknown, pending, and revoked requests are rejected", async () => {
-  const unsupported = handleDownloadRequest(
+  const unsupported = await handleDownloadRequest(
     context({ method: "POST" }),
     targets,
+    archiveFetch,
   );
-  const unknown = handleDownloadRequest(
+  const unknown = await handleDownloadRequest(
     context({ pluginId: "not-listed" }),
     targets,
+    archiveFetch,
   );
-  const pending = handleDownloadRequest(
+  const pending = await handleDownloadRequest(
     context({ pluginId: "lapis-pending" }),
     targets,
+    archiveFetch,
   );
-  const revoked = handleDownloadRequest(
+  const revoked = await handleDownloadRequest(
     context({ pluginId: "lapis-revoked" }),
     targets,
+    archiveFetch,
   );
 
   assert.equal(unsupported.status, 405);
@@ -124,9 +180,9 @@ test("unsupported, unknown, pending, and revoked requests are rejected", async (
   assert.equal(await revoked.text(), "Plugin release revoked");
 });
 
-test("missing and failing Analytics Engine bindings fail open", () => {
-  const missing = handleDownloadRequest(context(), targets);
-  const failing = handleDownloadRequest(
+test("missing and failing Analytics Engine bindings fail open", async () => {
+  const missing = await handleDownloadRequest(context(), targets, archiveFetch);
+  const failing = await handleDownloadRequest(
     context({
       env: {
         PLUGIN_DOWNLOADS: {
@@ -137,12 +193,63 @@ test("missing and failing Analytics Engine bindings fail open", () => {
       },
     }),
     targets,
+    archiveFetch,
   );
 
-  assert.equal(missing.status, 302);
-  assert.equal(missing.headers.get("location"), originUrl);
-  assert.equal(failing.status, 302);
-  assert.equal(failing.headers.get("location"), originUrl);
+  assert.equal(missing.status, 200);
+  assert.equal(failing.status, 200);
+  assert.deepEqual(
+    new Uint8Array(await missing.arrayBuffer()),
+    new Uint8Array([1, 2, 3]),
+  );
+  assert.deepEqual(
+    new Uint8Array(await failing.arrayBuffer()),
+    new Uint8Array([1, 2, 3]),
+  );
+});
+
+test("upstream requests never forward browser credentials or query parameters", async () => {
+  const ctx = context({
+    url: "https://registry.example.test/download/lapis-docs/0.1.0?token=private&url=https://evil.test",
+  });
+  ctx.request = new Request(ctx.request, {
+    headers: { Authorization: "Bearer private", Cookie: "session=private" },
+  });
+  const response = await handleDownloadRequest(
+    ctx,
+    targets,
+    async (url, init) => {
+      assert.equal(url, originUrl);
+      assert.deepEqual(Object.keys(init).sort(), [
+        "method",
+        "redirect",
+        "signal",
+      ]);
+      assert.equal(init.signal, ctx.request.signal);
+      return archiveFetch();
+    },
+  );
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("set-cookie"), null);
+});
+
+test("network errors remain CORS-readable and unknown targets never fetch", async () => {
+  let requests = 0;
+  const fetchImpl = async () => {
+    requests += 1;
+    throw new TypeError("Fetch failed");
+  };
+  const missing = await handleDownloadRequest(
+    context({ pluginId: "not-listed" }),
+    targets,
+    fetchImpl,
+  );
+  assert.equal(missing.status, 404);
+  assert.equal(requests, 0);
+  const failed = await handleDownloadRequest(context(), targets, fetchImpl);
+  assert.equal(failed.status, 502);
+  assert.equal(failed.headers.get("access-control-allow-origin"), "*");
+  assert.equal(requests, 1);
 });
 
 test("Pages routes and bindings keep ordinary registry requests static", async () => {
