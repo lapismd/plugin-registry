@@ -62,6 +62,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.3"
     },
+    "markdown@0.1.6": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/markdown%400.1.6/markdown-0.1.6.lapis-plugin",
+      "pluginId": "markdown",
+      "status": "active",
+      "version": "0.1.6"
+    },
     "search@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/search%400.1.2/search-0.1.2.lapis-plugin",
       "pluginId": "search",
