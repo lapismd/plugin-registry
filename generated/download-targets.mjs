@@ -14,6 +14,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.2"
     },
+    "bases@0.1.3": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/bases%400.1.3/bases-0.1.3.lapis-plugin",
+      "pluginId": "bases",
+      "status": "active",
+      "version": "0.1.3"
+    },
     "bookmarks@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/bookmarks%400.1.2/bookmarks-0.1.2.lapis-plugin",
       "pluginId": "bookmarks",

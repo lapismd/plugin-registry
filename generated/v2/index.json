@@ -63,10 +63,10 @@
       "detail": "plugins/bases.json",
       "id": "bases",
       "latestRelease": {
-        "bundleSize": 645112,
-        "releasedAt": "2026-08-29T09:36:02.000Z"
+        "bundleSize": 467188,
+        "releasedAt": "2026-10-14T13:43:24.000Z"
       },
-      "latestVersion": "0.1.2",
+      "latestVersion": "0.1.3",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Bases",
@@ -448,7 +448,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "motsnw4kF1gj1IoLXLFJI8/ZJCgXOU75S1hF/v2AZ7F4kO/h5KNF8W/pGa3wtv3XkQXq6+5DHd/gGaD1mkUiCg=="
+      "sig": "gQhWvkbmQGNlGfYqTVOgf+h76taIQpRxRxY0PCvmd5J7mMztGt18sUoZwJBsbweH23kTwvSJU2/IztYjlbKkCw=="
     }
   ]
 }
