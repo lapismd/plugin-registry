@@ -3,6 +3,8 @@ import {
   BookOpen,
   Bug,
   ChevronRight,
+  ChevronDown,
+  CloudDownload,
   Download,
   Ellipsis,
   ExternalLink,
@@ -153,6 +155,10 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
                   )
                 }
               </span>
+              <a class="hero-download-summary" data-download-summary data-plugin-id={plugin.id} href="#plugin-download-statistics" hidden>
+                <CloudDownload size={18} aria-hidden="true" />
+                <span data-download-summary-label></span>
+              </a>
               {
                 release.platforms.map((platform) => (
                   <a
@@ -552,10 +558,9 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
             </div>
           </div>
 
-          <section class="detail-sidebar-section" data-download-detail data-plugin-id={plugin.id} aria-label="Download statistics">
+          <section class="detail-sidebar-section" id="plugin-download-statistics" data-download-detail data-plugin-id={plugin.id} aria-label="Download statistics" hidden>
             <h2 class="detail-section-heading">Downloads</h2>
             <div data-download-stats-values hidden><p><span data-download-30d></span> downloads (30 days)</p><p><span data-download-lifetime></span> tracked downloads</p><p data-download-tracked-since></p></div>
-            <p data-download-stats-unavailable>Statistics unavailable</p>
           </section>
           <section class="detail-sidebar-section" aria-labelledby="plugin-about-heading">
             <h2 class="detail-section-heading" id="plugin-about-heading">About</h2>
@@ -588,6 +593,7 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
                       </option>
                     ))}
                   </select>
+                  <ChevronDown size={16} aria-hidden="true" />
                 </dd>
               </div>
               <div>

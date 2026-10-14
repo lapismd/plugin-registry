@@ -99,3 +99,19 @@ The default `registry:validate` command checks schemas and local rules. Pull
 requests and the manual production workflow run `registry:validate:remote`,
 which downloads every active archive and verifies its embedded official release
 signature and signed files.
+
+## Registry presentation
+
+The header Manifest link opens a full-page syntax-highlighted view of the same
+registry JSON served by the raw endpoint. The footer shows the source snapshot's
+commit timestamp in UTC, independently of reproducible signed-metadata timestamps.
+Builds without Git metadata may supply `LAPIS_REGISTRY_UPDATED_AT` explicitly.
+
+Release selection retains the native keyboard-accessible dropdown and a shareable
+page for every curated version. Site acceptance follows curated latest versions
+while verifying older pages and their installation coordinates.
+
+Download statistics remain hidden until a current, validated summary is available.
+The author row then links its compact lifetime count to the statistics section;
+counts remain approximate tracked redirect requests. Missing, stale or malformed
+summaries never reveal either surface or invent a zero.

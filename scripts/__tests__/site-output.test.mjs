@@ -7,21 +7,9 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import test from "node:test";
+import { loadEntries } from "../lib/registry.mjs";
 
 const root = new URL("../../", import.meta.url);
-const expectedPluginIds = [
-  "ai",
-  "bases",
-  "bookmarks",
-  "history",
-  "lapis-graph",
-  "lapis-markdown-lint",
-  "lapis-source-editor",
-  "markdown",
-  "search",
-  "spellcheck",
-  "wordcount",
-];
 const removedPluginIds = [
   "lapis-canvas",
   "lapis-docs",
@@ -32,6 +20,9 @@ const removedPluginIds = [
 ];
 
 test("site build emits signed V2 pages and retains the V1 archive", async (t) => {
+  const entries = await loadEntries();
+  const expectedPluginIds = entries.map((entry) => entry.id).sort();
+  const aiVersion = entries.find((entry) => entry.id === "ai").latestVersion;
   const fixture = await mkdtemp(path.join(tmpdir(), "lapis-registry-v2-"));
   t.after(() => rm(fixture, { recursive: true, force: true }));
   const generated = path.join(fixture, "generated");
@@ -90,7 +81,9 @@ test("site build emits signed V2 pages and retains the V1 archive", async (t) =>
     assert.equal(existsSync(new URL(file, dist)), true, `${file} should exist`);
   }
 
-  for (const pluginId of removedPluginIds) {
+  for (const pluginId of removedPluginIds.filter(
+    (id) => !expectedPluginIds.includes(id),
+  )) {
     assert.equal(
       existsSync(new URL(`plugins/${pluginId}/index.html`, dist)),
       false,
@@ -121,17 +114,44 @@ test("site build emits signed V2 pages and retains the V1 archive", async (t) =>
     expectedPluginIds,
   );
 
+  for (const entry of entries) {
+    for (const release of Object.values(entry.versions)) {
+      const versionPage = `plugins/${entry.id}/versions/${release.version}/index.html`;
+      assert.equal(
+        existsSync(new URL(versionPage, dist)),
+        true,
+        `${versionPage} retains the release`,
+      );
+      if (
+        !release.bundle.pending &&
+        (release.status ?? entry.status) === "active"
+      ) {
+        const html = await readFile(new URL(versionPage, dist), "utf8");
+        assert.ok(
+          html.includes(
+            `lapis://plugins?id=${entry.id}&amp;version=${release.version}`,
+          ),
+          `${entry.id}@${release.version} retains its app install coordinates`,
+        );
+      }
+    }
+  }
+
   const detail = await readFile(new URL("plugins/ai/index.html", dist), "utf8");
   assert.match(detail, /Signed bundle/);
   assert.match(detail, /Download \.lapis-plugin/);
   assert.match(detail, /Bundle size/);
   assert.match(detail, /data-download-detail/);
   assert.match(detail, /data-download-stats-values hidden/);
-  assert.match(detail, /Statistics unavailable/);
+  assert.doesNotMatch(detail, /Statistics unavailable/);
+  assert.match(detail, /data-download-detail[^>]*hidden/);
+  assert.match(detail, /data-download-summary[^>]*hidden/);
   assert.match(detail, /data-download-link/);
   assert.match(
     detail,
-    /href="\/download\/ai\/0\.1\.2\?action=download(?:&amp;|&)platform=web(?:&amp;|&)os=unknown"[^>]*data-download-link/,
+    new RegExp(
+      `href="/download/ai/${aiVersion.replaceAll(".", "\\.")}\\?action=download(?:&amp;|&)platform=web(?:&amp;|&)os=unknown"[^>]*data-download-link`,
+    ),
   );
   assert.match(detail, /data-plugin-overview/);
   assert.match(detail, /data-plugin-changelog/);
