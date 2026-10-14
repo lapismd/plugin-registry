@@ -18,7 +18,7 @@
           "mediaType": "image/webp",
           "sha256": "3471316c48169ca9455819474a455fa876a84f6b8bd04b56b75f8c799034cdb8",
           "size": 103700,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/source-editor/registry-assets/gallery/json-editor.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/source-editor/registry-assets/gallery/json-editor.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-source-editor/3471316c48169ca9455819474a455fa876a84f6b8bd04b56b75f8c799034cdb8.webp",
           "width": 2400
         },
@@ -27,7 +27,7 @@
           "mediaType": "image/webp",
           "sha256": "45b1c89c7b5a8b1d2e921d5b3ef982ded9911a728f34e76cf58c0fa96dc2f5f7",
           "size": 106766,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/source-editor/registry-assets/gallery/json-editor.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/source-editor/registry-assets/gallery/json-editor.full.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-source-editor/45b1c89c7b5a8b1d2e921d5b3ef982ded9911a728f34e76cf58c0fa96dc2f5f7.webp",
           "width": 2400
         },
@@ -36,7 +36,7 @@
           "mediaType": "image/webp",
           "sha256": "8ae512f71e246a0241e8da7cee8834b225733bc523c2726f044dac11333f496f",
           "size": 95286,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/source-editor/registry-assets/gallery/json-editor.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/source-editor/registry-assets/gallery/json-editor.light.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-source-editor/8ae512f71e246a0241e8da7cee8834b225733bc523c2726f044dac11333f496f.webp",
           "width": 2400
         },
@@ -45,7 +45,7 @@
           "mediaType": "image/webp",
           "sha256": "f74bed71c82d6c9907277c8a3aef754207e5a6e279a78e3c6ee9217daffa4408",
           "size": 46352,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/source-editor/registry-assets/gallery/json-editor.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/source-editor/registry-assets/gallery/json-editor.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-source-editor/f74bed71c82d6c9907277c8a3aef754207e5a6e279a78e3c6ee9217daffa4408.webp",
           "width": 1200
         }
@@ -58,8 +58,8 @@
     "Keep edits synchronized through the Lapis vault lifecycle."
   ],
   "id": "lapis-source-editor",
-  "latestVersion": "0.1.1",
-  "license": "AGPL-3.0-or-later",
+  "latestVersion": "0.1.2",
+  "license": "Apache-2.0",
   "links": {
     "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/source-editor#readme",
     "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/source-editor#readme",
@@ -75,7 +75,7 @@
           "mediaType": "image/webp",
           "sha256": "2a8bb80e07bdbbe0f923c1507a38808502a6292d66c158d5ef7d60ba6bc5aa33",
           "size": 29206,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/source-editor/registry-assets/banner.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/source-editor/registry-assets/banner.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-source-editor/2a8bb80e07bdbbe0f923c1507a38808502a6292d66c158d5ef7d60ba6bc5aa33.webp",
           "width": 2400
         },
@@ -84,7 +84,7 @@
           "mediaType": "image/webp",
           "sha256": "51c46b01abc13dd746b77957ec6e1df1e9c88b658045702a88e198d854ca3a5f",
           "size": 33482,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/source-editor/registry-assets/banner.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/source-editor/registry-assets/banner.full.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-source-editor/51c46b01abc13dd746b77957ec6e1df1e9c88b658045702a88e198d854ca3a5f.webp",
           "width": 2400
         },
@@ -93,7 +93,7 @@
           "mediaType": "image/webp",
           "sha256": "52da8febab08273fb4ccd2f6a0f038bb6643b8f8730b373dba4597127f5eb3a3",
           "size": 29034,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/source-editor/registry-assets/banner.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/source-editor/registry-assets/banner.light.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-source-editor/52da8febab08273fb4ccd2f6a0f038bb6643b8f8730b373dba4597127f5eb3a3.webp",
           "width": 2400
         },
@@ -102,7 +102,7 @@
           "mediaType": "image/webp",
           "sha256": "28bff4cfc0dc06bf74f8530d7610f4c13a42d39c89dc5f919bb062152dec669b",
           "size": 18494,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/source-editor/registry-assets/banner.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/source-editor/registry-assets/banner.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-source-editor/28bff4cfc0dc06bf74f8530d7610f4c13a42d39c89dc5f919bb062152dec669b.webp",
           "width": 1200
         }
@@ -120,7 +120,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "8aNh9ze9jnfb06tfxAiosl8C+35Dp5KkEpCqjiG13uwb/t/NaLpAJ//KhHpz+rCBRDjXiSj9oA+OLsizhaYDBg=="
+      "sig": "utNRMgOPFA44dV/5xKKJaIhvuPRz1vp6Uxc8ll5Lo7Y51R1LLbr/0Z4jv2s+WhWIr7eXdhsUz6ep3zDFuOPFDg=="
     }
   ],
   "status": "active",
@@ -143,6 +143,25 @@
       ],
       "releasedAt": "2026-08-29T09:37:01.000Z",
       "version": "0.1.1"
+    },
+    "0.1.2": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-source-editor/0.1.2",
+        "sha256": "38478af279ab3e385640cd9f7466e50a6428e5c5896f693f0ebf7665acb0347d",
+        "size": 11341,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/source-editor%400.1.2/lapis-source-editor-0.1.2.lapis-plugin"
+      },
+      "changelog": {
+        "description": "### Patch Changes\n\n- Add official author avatars and deterministic split, light, and dark registry media for plugin banners, overviews, and galleries.",
+        "title": "Source Editor 0.1.2"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-10-14T13:44:23.000Z",
+      "version": "0.1.2"
     }
   }
 }
