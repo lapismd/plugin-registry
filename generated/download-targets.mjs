@@ -26,6 +26,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.2"
     },
+    "history@0.1.4": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/history%400.1.4/history-0.1.4.lapis-plugin",
+      "pluginId": "history",
+      "status": "active",
+      "version": "0.1.4"
+    },
     "lapis-graph@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.2/lapis-graph-0.1.2.lapis-plugin",
       "pluginId": "lapis-graph",
