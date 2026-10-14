@@ -223,10 +223,10 @@
       "detail": "plugins/lapis-markdown-lint.json",
       "id": "lapis-markdown-lint",
       "latestRelease": {
-        "bundleSize": 149673,
-        "releasedAt": "2026-08-29T09:36:46.000Z"
+        "bundleSize": 150015,
+        "releasedAt": "2026-10-14T13:44:05.000Z"
       },
-      "latestVersion": "0.1.1",
+      "latestVersion": "0.1.2",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Markdown Lint",
@@ -448,7 +448,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "motsnw4kF1gj1IoLXLFJI8/ZJCgXOU75S1hF/v2AZ7F4kO/h5KNF8W/pGa3wtv3XkQXq6+5DHd/gGaD1mkUiCg=="
+      "sig": "4cuh8lAPVm8C4Y7ni2SHTUlJMeH19QAMNd59WicTu55g3rO9JOMIxpDySosS3iik1On9EToJcGUhBjpIZSlsCA=="
     }
   ]
 }
