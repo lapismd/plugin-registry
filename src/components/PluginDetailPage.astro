@@ -14,6 +14,7 @@ import {
 } from "@lucide/astro";
 import AuthorAvatar from "./AuthorAvatar.astro";
 import { renderMarkdownToSafeHtml } from "../../scripts/lib/readmes.mjs";
+import { pluginAppHref } from "../../scripts/lib/app-links.mjs";
 import CategoryIcon from "./CategoryIcon.astro";
 import PluginGallery from "./PluginGallery.astro";
 import PluginIdentity from "./PluginIdentity.astro";
@@ -168,15 +169,20 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
         </div>
         <p class="plugin-description">{plugin.description}</p>
         <div class="detail-actions">
-          <button
+          {installDisabled ? <button
             type="button"
             class="button-primary"
             disabled={installDisabled}
             data-install-disabled={installDisabled ? "true" : "false"}
             data-install-button
           >
-            {installDisabled ? release.bundle.pending ? "Install pending" : "Install unavailable" : "Install in Lapis"}
-          </button>
+            {release.bundle.pending ? "Install pending" : "Install unavailable"}
+          </button> : <a
+            class="button-primary"
+            href={pluginAppHref(plugin.id, release.version)}
+            data-install-disabled="false"
+            data-install-button
+          >Install in Lapis</a>}
           <div class="action-menu" data-action-menu>
             <button
               class="button-icon"
@@ -218,6 +224,17 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
                   </a>
                 )
               }
+              {!installDisabled && <button type="button" role="menuitem" data-install-help>
+                <FileText size={16} stroke-width="2" aria-hidden="true" />
+                Installation help
+              </button>}
+              {!installDisabled && release.platforms.includes("web") && <a
+                href={pluginAppHref(plugin.id, release.version, "web+lapis")}
+                role="menuitem"
+              >
+                <ExternalLink size={16} stroke-width="2" aria-hidden="true" />
+                Open in installed web app
+              </a>}
               {
                 sourceActionLinks.length > 0 && (
                   <div class="action-menu__separator" role="separator"></div>
@@ -722,14 +739,14 @@ const formatReleaseDate = (value: string) => dateFormatter.format(new Date(value
   for (const selector of document.querySelectorAll<HTMLSelectElement>("[data-version-selector]")) {
     selector.addEventListener("change", () => window.location.assign(selector.value));
   }
-  const installButton = document.querySelector<HTMLButtonElement>("[data-install-button]");
+  const installButton = document.querySelector<HTMLButtonElement>("[data-install-help]");
   const installDialog = document.querySelector<HTMLDialogElement>("[data-install-dialog]");
   if (installButton && installDialog) {
     installButton.addEventListener("click", () => {
       if (!installButton.disabled) installDialog.showModal();
     });
     installDialog.querySelector("[data-install-close]")?.addEventListener("click", () => installDialog.close());
-    installDialog.addEventListener("close", () => installButton.focus());
+    installDialog.addEventListener("close", () => document.querySelector<HTMLButtonElement>("[data-action-menu-trigger]")?.focus());
   }
   const tabRoots = document.querySelectorAll<HTMLElement>("[data-tabs]");
   for (const root of tabRoots) {
