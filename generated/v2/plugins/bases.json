@@ -18,7 +18,7 @@
           "mediaType": "image/webp",
           "sha256": "374d69fdd90dcda312ebbe529d81046e932709f40a30e7183dad997bcc1fe6a5",
           "size": 104162,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/gallery/table.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/gallery/table.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/374d69fdd90dcda312ebbe529d81046e932709f40a30e7183dad997bcc1fe6a5.webp",
           "width": 2400
         },
@@ -27,7 +27,7 @@
           "mediaType": "image/webp",
           "sha256": "c7e9ea00c614ec7562dbd127827deee31a04b659648614240f32d58288489f58",
           "size": 107176,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/gallery/table.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/gallery/table.full.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/c7e9ea00c614ec7562dbd127827deee31a04b659648614240f32d58288489f58.webp",
           "width": 2400
         },
@@ -36,7 +36,7 @@
           "mediaType": "image/webp",
           "sha256": "b43627fc3f2b9d0f6068f983b4d2534fec615cd0e65002d94857ca00b9732ee3",
           "size": 96992,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/gallery/table.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/gallery/table.light.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/b43627fc3f2b9d0f6068f983b4d2534fec615cd0e65002d94857ca00b9732ee3.webp",
           "width": 2400
         },
@@ -45,7 +45,7 @@
           "mediaType": "image/webp",
           "sha256": "041a02afb40ebfdf2383e83ec1f35b91785c863bffda0c3aefd24a15d7911b75",
           "size": 46480,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/gallery/table.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/gallery/table.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/041a02afb40ebfdf2383e83ec1f35b91785c863bffda0c3aefd24a15d7911b75.webp",
           "width": 1200
         }
@@ -60,7 +60,7 @@
           "mediaType": "image/webp",
           "sha256": "b3273d230af830201f6ecd1b746da0386ad59276e4fedca698a01c674baa269e",
           "size": 169444,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/gallery/cards.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/gallery/cards.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/b3273d230af830201f6ecd1b746da0386ad59276e4fedca698a01c674baa269e.webp",
           "width": 2400
         },
@@ -69,7 +69,7 @@
           "mediaType": "image/webp",
           "sha256": "bba9e652480b53a262f399909ee7d9ee1a3331e85595fdd6a9d7a45e90632644",
           "size": 175166,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/gallery/cards.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/gallery/cards.full.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/bba9e652480b53a262f399909ee7d9ee1a3331e85595fdd6a9d7a45e90632644.webp",
           "width": 2400
         },
@@ -78,7 +78,7 @@
           "mediaType": "image/webp",
           "sha256": "a4c531bc49b6f31857bf7261597e1acb4f4651c69a3ce06caccfd18a4f5b35ac",
           "size": 166886,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/gallery/cards.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/gallery/cards.light.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/a4c531bc49b6f31857bf7261597e1acb4f4651c69a3ce06caccfd18a4f5b35ac.webp",
           "width": 2400
         },
@@ -87,7 +87,7 @@
           "mediaType": "image/webp",
           "sha256": "15400a333d851f82ee1e4bc27cc4a730d9a6072246aa9da84beea4cec2cb2a19",
           "size": 62550,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/gallery/cards.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/gallery/cards.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/15400a333d851f82ee1e4bc27cc4a730d9a6072246aa9da84beea4cec2cb2a19.webp",
           "width": 1200
         }
@@ -102,7 +102,7 @@
           "mediaType": "image/webp",
           "sha256": "e81cf5a91456ed4364924eb088a23edf2ccfcb0a88d4ec0efea0cc3203a16734",
           "size": 101552,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/gallery/grouped-list.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/gallery/grouped-list.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/e81cf5a91456ed4364924eb088a23edf2ccfcb0a88d4ec0efea0cc3203a16734.webp",
           "width": 2400
         },
@@ -111,7 +111,7 @@
           "mediaType": "image/webp",
           "sha256": "b86dfd51b89f7b2e32677945db06ed69927168acae22761844307950ce0eb74b",
           "size": 104922,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/gallery/grouped-list.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/gallery/grouped-list.full.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/b86dfd51b89f7b2e32677945db06ed69927168acae22761844307950ce0eb74b.webp",
           "width": 2400
         },
@@ -120,7 +120,7 @@
           "mediaType": "image/webp",
           "sha256": "25ae551ecbb5d73942277f017fa6f3c347b01c8aa3ec8189cbc474c49841b17f",
           "size": 93460,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/gallery/grouped-list.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/gallery/grouped-list.light.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/25ae551ecbb5d73942277f017fa6f3c347b01c8aa3ec8189cbc474c49841b17f.webp",
           "width": 2400
         },
@@ -129,7 +129,7 @@
           "mediaType": "image/webp",
           "sha256": "cdccc6cdf74801098384e4e3f5ab7bbf5a8fa9fa0ad1ae1d08ec2961f4b3bfc2",
           "size": 50962,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/gallery/grouped-list.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/gallery/grouped-list.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/cdccc6cdf74801098384e4e3f5ab7bbf5a8fa9fa0ad1ae1d08ec2961f4b3bfc2.webp",
           "width": 1200
         }
@@ -142,8 +142,8 @@
     "Keep editable views backed by ordinary Lapis content."
   ],
   "id": "bases",
-  "latestVersion": "0.1.2",
-  "license": "AGPL-3.0-or-later",
+  "latestVersion": "0.1.3",
+  "license": "Apache-2.0",
   "links": {
     "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/bases#readme",
     "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/bases#readme",
@@ -159,7 +159,7 @@
           "mediaType": "image/webp",
           "sha256": "2d0961115467c938b07249bdbbac7d7e4cf5aabc60dd716010b3207bd92401d1",
           "size": 153674,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/banner.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/banner.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/2d0961115467c938b07249bdbbac7d7e4cf5aabc60dd716010b3207bd92401d1.webp",
           "width": 2400
         },
@@ -168,7 +168,7 @@
           "mediaType": "image/webp",
           "sha256": "df586e611b0207d294cef08a67395f08c352f390f0c2f5dd46f04a6254f9c5bf",
           "size": 161992,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/banner.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/banner.full.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/df586e611b0207d294cef08a67395f08c352f390f0c2f5dd46f04a6254f9c5bf.webp",
           "width": 2400
         },
@@ -177,7 +177,7 @@
           "mediaType": "image/webp",
           "sha256": "27895c70d45dc316e355696346c1882e9f76a1344596a0bea1ada80faa4b5bf9",
           "size": 153556,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/banner.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/banner.light.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/27895c70d45dc316e355696346c1882e9f76a1344596a0bea1ada80faa4b5bf9.webp",
           "width": 2400
         },
@@ -186,7 +186,7 @@
           "mediaType": "image/webp",
           "sha256": "0c9b0fc9f262ced867383d45ca5dbbe493a6cd4de189695e9d60efb3d682b3f7",
           "size": 40136,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/banner.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/banner.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/0c9b0fc9f262ced867383d45ca5dbbe493a6cd4de189695e9d60efb3d682b3f7.webp",
           "width": 1200
         }
@@ -200,7 +200,7 @@
           "mediaType": "image/webp",
           "sha256": "f02d7d01a04ecc735ed7185879068e9a21482182c87bd87053f096d80eca9987",
           "size": 33500,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/overview.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/overview.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/f02d7d01a04ecc735ed7185879068e9a21482182c87bd87053f096d80eca9987.webp",
           "width": 2400
         },
@@ -209,7 +209,7 @@
           "mediaType": "image/webp",
           "sha256": "94d7a435edea0b473ec1fba459ef775de6ccaf769bd2f3e84de87d9050c740b2",
           "size": 39224,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/overview.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/overview.full.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/94d7a435edea0b473ec1fba459ef775de6ccaf769bd2f3e84de87d9050c740b2.webp",
           "width": 2400
         },
@@ -218,7 +218,7 @@
           "mediaType": "image/webp",
           "sha256": "9bf19ed525a396fd39e018b4195a4d81f13cea0ab3e1179040a12fd7dac91f17",
           "size": 32930,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/overview.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/overview.light.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/9bf19ed525a396fd39e018b4195a4d81f13cea0ab3e1179040a12fd7dac91f17.webp",
           "width": 2400
         },
@@ -227,7 +227,7 @@
           "mediaType": "image/webp",
           "sha256": "3315b146f979e106ddd1cf9c41a0afb1ea29af147b81b49e9bf27f003e3954c2",
           "size": 20134,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/61bf175f21d91f17e06a071bdaadbaf5d87645a1/packages/bases/registry-assets/overview.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/bases/registry-assets/overview.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/bases/3315b146f979e106ddd1cf9c41a0afb1ea29af147b81b49e9bf27f003e3954c2.webp",
           "width": 1200
         }
@@ -245,7 +245,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "35MwubJ31p0MVQLAtfc4NrviWeZO3Sli4+BFBwP5GshqL+B5Lu7XIx6eqa/CCldZ5ntjAhRJ2Z/vPgywfB+dBQ=="
+      "sig": "VGW5GCj2RGVTuSvflggtk8sp1o/NqJMubEl7xN1KrtF5g7D2q6XTdG5w43LBJWoPj6JMdzm1ow+y/VCJXHRSBw=="
     }
   ],
   "status": "active",
@@ -268,6 +268,25 @@
       ],
       "releasedAt": "2026-08-29T09:36:02.000Z",
       "version": "0.1.2"
+    },
+    "0.1.3": {
+      "bundle": {
+        "downloadUrl": "../../download/bases/0.1.3",
+        "sha256": "cc6da250daed27c899d3f54a18164acd33289e1141b3e3b5fe0860aa46ee31b9",
+        "size": 467188,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/bases%400.1.3/bases-0.1.3.lapis-plugin"
+      },
+      "changelog": {
+        "description": "### Patch Changes\n\n- Add official author avatars and deterministic split, light, and dark registry media for plugin banners, overviews, and galleries.",
+        "title": "Bases 0.1.3"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-10-14T13:43:24.000Z",
+      "version": "0.1.3"
     }
   }
 }
