@@ -258,8 +258,10 @@ export function renderMarkdownToSafeHtml(markdown) {
     if (/^\s*[-*+]\s+/.test(line)) {
       const items = [];
       while (index < lines.length && /^\s*[-*+]\s+/.test(lines[index])) {
-        items.push(lines[index].replace(/^\s*[-*+]\s+/, ""));
+        const item = [lines[index].replace(/^\s*[-*+]\s+/, "")];
         index += 1;
+        index = readListContinuation(lines, index, item);
+        items.push(item.join(" "));
       }
       blocks.push(
         `<ul>${items.map((item) => `<li>${renderInlineMarkdown(item)}</li>`).join("")}</ul>`,
@@ -269,8 +271,10 @@ export function renderMarkdownToSafeHtml(markdown) {
     if (/^\s*\d+\.\s+/.test(line)) {
       const items = [];
       while (index < lines.length && /^\s*\d+\.\s+/.test(lines[index])) {
-        items.push(lines[index].replace(/^\s*\d+\.\s+/, ""));
+        const item = [lines[index].replace(/^\s*\d+\.\s+/, "")];
         index += 1;
+        index = readListContinuation(lines, index, item);
+        items.push(item.join(" "));
       }
       blocks.push(
         `<ol>${items.map((item) => `<li>${renderInlineMarkdown(item)}</li>`).join("")}</ol>`,
@@ -362,6 +366,20 @@ function startsBlock(lines, index) {
     line.startsWith(">") ||
     isMarkdownTableStart(lines, index)
   );
+}
+
+function readListContinuation(lines, index, item) {
+  // Markdown soft line breaks, including lazy unindented continuations, stay
+  // in their list item. A blank line or a new block ends this item's text.
+  while (
+    index < lines.length &&
+    lines[index].trim() &&
+    !startsBlock(lines, index)
+  ) {
+    item.push(lines[index].trim());
+    index += 1;
+  }
+  return index;
 }
 
 function isMarkdownTableStart(lines, index) {

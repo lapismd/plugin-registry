@@ -156,6 +156,33 @@ test("markdown renderer escapes unsafe HTML", () => {
   assert.doesNotMatch(html, /<img src=x/);
 });
 
+test("markdown list items retain wrapped changelog text", () => {
+  assert.equal(
+    renderMarkdownToSafeHtml(
+      "- Initial independent public package extracted from Lapis Notes without changing\n  the runtime plugin ID.",
+    ),
+    "<ul><li>Initial independent public package extracted from Lapis Notes without changing the runtime plugin ID.</li></ul>",
+  );
+});
+
+test("unordered and ordered list continuations stop at the next item or block", () => {
+  for (const [marker, tag] of [
+    ["-", "ul"],
+    ["1.", "ol"],
+  ]) {
+    assert.equal(
+      renderMarkdownToSafeHtml(
+        `${marker} **First** line\n  indented continuation\nlazy continuation\n${marker} Second item\n  with \`code\`.\n\nSeparate paragraph.\n\n## Heading`,
+      ),
+      `<${tag}><li><strong>First</strong> line indented continuation lazy continuation</li><li>Second item with <code>code</code>.</li></${tag}>\n<p>Separate paragraph.</p>\n<h2>Heading</h2>`,
+    );
+    assert.equal(
+      renderMarkdownToSafeHtml(`${marker} Item\n## Heading\n\n> Quote`),
+      `<${tag}><li>Item</li></${tag}>\n<h2>Heading</h2>\n<blockquote><p>Quote</p></blockquote>`,
+    );
+  }
+});
+
 async function fixtureDir({
   readmeUrl = "https://example.test/README.md",
 } = {}) {
