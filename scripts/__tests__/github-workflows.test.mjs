@@ -21,27 +21,78 @@ test("production deployment follows validated main merges after the V2 cutover a
   assert.doesNotMatch(workflow, /visual|baseline/i);
 });
 
-test("release dispatch verifies assets before opening an idempotent PR", async () => {
+test("release dispatch delegates to the shared verified, leased publication pipeline", async () => {
   const workflow = await readFile(
     new URL(".github/workflows/sync-plugin-release.yml", repoRoot),
     "utf8",
   );
-  const syncIndex = workflow.indexOf("registry:sync:github");
-  const remoteValidationIndex = workflow.indexOf("registry:validate:remote");
-  const pullRequestIndex = workflow.indexOf("peter-evans/create-pull-request");
-  assert.ok(syncIndex >= 0);
-  assert.ok(remoteValidationIndex > syncIndex);
-  assert.ok(pullRequestIndex > remoteValidationIndex);
-  assert.match(workflow, /automation\/plugin-\$\{\{/);
-  assert.match(workflow, /actions\/create-github-app-token@v3/);
+  const worker = await readFile(
+    new URL(".github/workflows/materialize-registry-pr.yml", repoRoot),
+    "utf8",
+  );
+  const runner = await readFile(
+    new URL("scripts/lib/registry-runner.mjs", repoRoot),
+    "utf8",
+  );
   assert.match(
     workflow,
-    /client-id: \$\{\{ secrets\.LAPIS_REGISTRY_APP_CLIENT_ID \}\}/,
+    /uses: \.\/\.github\/workflows\/materialize-registry-pr\.yml/,
   );
-  assert.doesNotMatch(workflow, /app-id:|LAPIS_REGISTRY_APP_ID/);
   assert.match(workflow, /types: \[plugin_release, plugin_metadata\]/);
-  assert.match(workflow, /version \|\| 'metadata'/);
-  assert.doesNotMatch(workflow, /visual|baseline/i);
+  assert.match(worker, /ref: main/);
+  assert.match(worker, /fetch-depth: 0/);
+  assert.match(worker, /persist-credentials: false/);
+  assert.match(worker, /actions\/create-github-app-token@v3/);
+  assert.match(worker, /REGISTRY_TARGET: \$\{\{ inputs\.target \}\}/);
+  assert.match(worker, /node scripts\/update-registry-pr\.mjs/);
+  for (const command of [
+    "registry:validate",
+    "registry:generate",
+    "registry:sign",
+    "registry:verify-signatures",
+    "registry:validate:remote",
+    "stats:validate",
+    "site:check",
+    "site:build",
+    "test",
+    "check:format",
+  ])
+    assert.ok(runner.includes(`"${command}"`));
+  assert.ok(
+    runner.indexOf('"registry:generate"') < runner.indexOf('"registry:sign"'),
+  );
+  assert.ok(
+    runner.indexOf('"registry:validate:remote"') < runner.indexOf('"push"'),
+  );
+  assert.match(runner, /--force-with-lease=refs\/heads\//);
+  assert.match(runner, /snapshot\(\)/);
+  assert.doesNotMatch(worker, /visual|baseline/i);
+});
+
+test("refresh is manual and automatic with bounded independent workers and a read-only discovery job", async () => {
+  const workflow = await readFile(
+    new URL(".github/workflows/refresh-registry-prs.yml", repoRoot),
+    "utf8",
+  );
+  assert.match(workflow, /push:[\s\S]*branches: \[main\]/);
+  assert.match(workflow, /workflows: \[Sync plugin release\]/);
+  assert.match(workflow, /workflow_dispatch:/);
+  for (const input of ["pr_number", "dry_run", "recover_missing_releases"])
+    assert.ok(workflow.includes(`${input}:`));
+  assert.match(workflow, /max-parallel: 3/);
+  assert.match(
+    workflow,
+    /group: registry-pr-refresh-\$\{\{ github.event_name == 'workflow_dispatch' && github.run_id \|\| 'automatic' \}\}/,
+  );
+  assert.match(workflow, /fail-fast: false/);
+  assert.match(workflow, /permission-contents: read/);
+  assert.match(workflow, /permission-pull-requests: read/);
+  assert.match(workflow, /ref: main/);
+  assert.match(
+    workflow,
+    /uses: \.\/\.github\/workflows\/materialize-registry-pr\.yml/,
+  );
+  assert.doesNotMatch(workflow, /pull_request_target|wrangler pages deploy/);
 });
 
 test("pull requests run strict remote bundle validation", async () => {
@@ -111,7 +162,8 @@ test("every GitHub workflow uses Node 24 builds and Node 24 action runtimes", as
     "download-stats.yml",
     "publish.yml",
     "sign-registry-metadata.yml",
-    "sync-plugin-release.yml",
+    "materialize-registry-pr.yml",
+    "refresh-registry-prs.yml",
   ];
   for (const name of workflowNames) {
     const workflow = await readFile(

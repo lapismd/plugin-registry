@@ -20,10 +20,11 @@ test("Source Editor changelog keeps wrapped text inside its bullet", async ({
   }
 });
 
-test("the current Source Editor notes retain native Markdown bullets", async ({
+test("Source Editor 0.1.2 notes retain native Markdown bullets", async ({
   page,
 }) => {
-  await page.goto("/plugins/lapis-source-editor/");
+  // Keep the exact one-bullet regression fixture stable when latest advances.
+  await page.goto("/plugins/lapis-source-editor/versions/0.1.2/");
   await page.getByRole("tab", { name: "Changelog", exact: true }).click();
   const changelog = page.locator("[data-plugin-changelog]");
   await expect(changelog.locator("li")).toHaveCount(1);
