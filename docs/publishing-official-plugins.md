@@ -64,6 +64,45 @@ and automation branch, pull-request write access in the registry, and access to
 send/receive repository dispatch events. Store its client ID and private key as
 `LAPIS_REGISTRY_APP_CLIENT_ID` and `LAPIS_REGISTRY_APP_PRIVATE_KEY` secrets.
 
+## Refreshing and recovering registry PRs
+
+The **Refresh registry pull requests** workflow rebuilds open registry-bot PRs
+after changes to `main` and after the release-sync workflow completes. Each PR
+keeps its number and discussion. The worker replays its original verified request
+on current `main`, regenerates the catalog, signs it, and reruns validation.
+Shared generated files and signatures are regenerated together; conflict hunks
+are never combined by hand. Ordinary PR checks run again after the branch update.
+
+Run it manually from GitHub Actions on `main`, or use:
+
+```sh
+gh workflow run refresh-registry-prs.yml --ref main
+gh workflow run refresh-registry-prs.yml --ref main -f pr_number=40 -f dry_run=true
+gh workflow run refresh-registry-prs.yml --ref main -f recover_missing_releases=true
+```
+
+Leave `pr_number` blank to select all eligible bot PRs. `dry_run` verifies and
+reports candidates without changing GitHub branches or descriptions, and needs
+no registry private key. `recover_missing_releases` additionally discovers the
+newest stable published release of each active lapis-plugins package and creates
+missing registry PRs. It cannot be combined with `pr_number`. Recovery verifies
+the existing archive and checksum against the committed trust root and resolved
+release tag; it does not republish artifacts or activate private packages.
+
+Discovery paginates PRs and releases, reports blocked candidates, and runs at
+most three independent workers. Branch writes use a captured-head lease and
+retry moving references up to three times. Human commits, unexpected files, and
+competing changes to the same plugin's curated entry require manual
+reconciliation. Closed PRs are not reopened and already-indexed releases are
+reported without another submission. Review and merging remain maintainer-owned.
+
+Bot descriptions carry the replay request in a versioned hidden record. Legacy
+descriptions are recovered and checked against branch and source coordinates.
+Only the managed description block is replaced; maintainer notes are retained.
+The banner appears inline and the overview/gallery appear under **Plugin
+screenshots**. Preview images link to full-size images at immutable source-commit
+URLs, so they work before registry deployment and after branch deletion.
+
 ## Presentation Metadata and CORS
 
 The source owns a V2 `registry.json` with categories, highlights, documentation

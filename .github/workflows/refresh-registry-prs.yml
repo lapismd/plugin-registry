@@ -1,0 +1,91 @@
+name: Refresh registry pull requests
+
+on:
+  push:
+    branches: [main]
+  workflow_run:
+    workflows: [Sync plugin release]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to refresh; blank refreshes all eligible bot PRs
+        required: false
+        type: string
+      dry_run:
+        description: Verify and report without updating branches or descriptions
+        default: false
+        type: boolean
+      recover_missing_releases:
+        description: Also recover missing or stale published lapis-plugins releases
+        default: false
+        type: boolean
+
+permissions: {}
+
+# Only refresh sweeps coalesce. Every sweep discovers all currently open PRs.
+# Unique incoming dispatches retain their existing per-request concurrency.
+concurrency:
+  group: registry-pr-refresh
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      targets: ${{ steps.targets.outputs.targets }}
+      has_targets: ${{ steps.targets.outputs.has_targets }}
+      has_blocked: ${{ steps.targets.outputs.has_blocked }}
+    steps:
+      - name: Create registry GitHub App token
+        id: registry-app
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ secrets.LAPIS_REGISTRY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.LAPIS_REGISTRY_APP_PRIVATE_KEY }}
+          owner: lapismd
+          repositories: |
+            lapis-plugins
+            plugin-registry
+          permission-contents: read
+          permission-pull-requests: read
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          token: ${{ steps.registry-app.outputs.token }}
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.32.1
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Discover and audit registry candidates
+        id: targets
+        run: node scripts/prepare-registry-refresh.mjs
+        env:
+          GITHUB_TOKEN: ${{ steps.registry-app.outputs.token }}
+
+  refresh:
+    needs: discover
+    if: needs.discover.outputs.has_targets == 'true'
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        target: ${{ fromJSON(needs.discover.outputs.targets) }}
+    uses: ./.github/workflows/materialize-registry-pr.yml
+    with:
+      target: ${{ toJSON(matrix.target) }}
+      dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+    secrets: inherit
+
+  audit-result:
+    needs: discover
+    if: needs.discover.outputs.has_blocked == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Some candidates need manual reconciliation; see discovery summary.' >&2; exit 1

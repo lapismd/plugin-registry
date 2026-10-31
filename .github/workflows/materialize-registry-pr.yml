@@ -1,0 +1,55 @@
+name: Materialize registry pull request
+
+on:
+  workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
+      dry_run:
+        default: false
+        type: boolean
+
+permissions: {}
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Create registry GitHub App token
+        id: registry-app
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ secrets.LAPIS_REGISTRY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.LAPIS_REGISTRY_APP_PRIVATE_KEY }}
+          owner: lapismd
+          repositories: |
+            lapis-plugins
+            plugin-registry
+          permission-contents: write
+          permission-pull-requests: write
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ steps.registry-app.outputs.token }}
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.32.1
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Verify, regenerate, sign and update the registry PR
+        run: node scripts/update-registry-pr.mjs
+        env:
+          REGISTRY_TARGET: ${{ inputs.target }}
+          REGISTRY_DRY_RUN: ${{ inputs.dry_run }}
+          GITHUB_TOKEN: ${{ steps.registry-app.outputs.token }}
+          LAPIS_PLUGIN_RELEASE_KEY_ID: ${{ secrets.LAPIS_PLUGIN_RELEASE_KEY_ID }}
+          LAPIS_PLUGIN_RELEASE_PUBLIC_KEY_PEM: ${{ secrets.LAPIS_PLUGIN_RELEASE_PUBLIC_KEY_PEM }}
+          LAPIS_REGISTRY_KEY_ID: ${{ secrets.LAPIS_REGISTRY_KEY_ID }}
+          LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64: ${{ secrets.LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64 }}
