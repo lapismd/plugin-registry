@@ -36,12 +36,20 @@ Sources: [registry index](https://registry.lapis.md/v2/index.json),
 - The implemented discovery and worker verified all 16 recovery/refresh
   candidates in a read-only live dry run. The sender separately verified all
   17 current published plugin archives and resolved their original source tags.
-- `pnpm check` passed with 103 unit tests, 25 cold browser tests, Astro checks,
+- `pnpm check` passed with 104 unit tests, 25 cold browser tests, Astro checks,
   site build, registry signatures and formatting. `registry:validate:remote`
   separately passed for every currently indexed bundle. In the isolated JJ
   workspace, the browser run supplied the documented
   `LAPIS_REGISTRY_UPDATED_AT=2026-10-31T19:12:34Z` input because Git metadata is
   absent; the footer target first failed without it and passed with it.
+- A temporary catalog containing all 16 candidate updates (17 total plugins)
+  passed strict remote validation and the complete check lane with ephemeral
+  test signing keys. This exposed the latest-URL changelog fixture: Source
+  Editor 0.1.3 correctly has four bullets, while the existing regression expects
+  0.1.2's one bullet. The exact narrow browser target failed once, then passed
+  after pinning its URL to 0.1.2; every content, count and layout assertion is
+  retained. Pending version placeholders also have an explicit recovery
+  regression and are not treated as indexed installable archives.
 - Both installed and latest actionlint reject `client-id` using stale bundled
   action metadata. The live `actions/create-github-app-token@v3/action.yml`
   defines that input and deprecates `app-id`; existing successful sync runs use

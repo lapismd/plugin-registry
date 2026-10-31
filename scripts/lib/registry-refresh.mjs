@@ -3,6 +3,20 @@ import { stableStringify } from "./registry.mjs";
 
 export class LeaseConflict extends Error {}
 
+export function isIndexedRelease(entry, version) {
+  const release = entry?.versions?.[version],
+    bundle = release?.bundle;
+  return Boolean(
+    release?.status !== "pending" &&
+      bundle?.status !== "pending" &&
+      /^https:\/\//.test(bundle?.url ?? "") &&
+      /^[a-f0-9]{64}$/.test(bundle?.sha256 ?? "") &&
+      bundle.sha256 !== "0".repeat(64) &&
+      Number.isSafeInteger(bundle.size) &&
+      bundle.size > 0,
+  );
+}
+
 export function compareVersions(a, b) {
   const parse = (value) => {
     const match = value.match(
@@ -48,7 +62,7 @@ export async function refreshCandidate(target, adapter) {
       return { status: "superseded" };
     const p = target.request.client_payload;
     await adapter.verify(snapshot);
-    if (p.version && snapshot.entry?.versions?.[p.version])
+    if (p.version && isIndexedRelease(snapshot.entry, p.version))
       return { status: "indexed" };
     if (
       !p.version &&

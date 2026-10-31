@@ -14,7 +14,7 @@ import {
   registryRepository,
   registryBot,
 } from "./registry-request.mjs";
-import { compareVersions } from "./registry-refresh.mjs";
+import { compareVersions, isIndexedRelease } from "./registry-refresh.mjs";
 
 export async function discoverTargets(client, inputs, { trustRoot } = {}) {
   const main = await client.call(`/repos/${registryRepository}/commits/main`);
@@ -135,7 +135,7 @@ export async function discoverTargets(client, inputs, { trustRoot } = {}) {
           main.sha,
           { missing: true },
         );
-        if (entry?.versions?.[version]) {
+        if (isIndexedRelease(entry, version)) {
           report.push({ plugin: manifest.id, status: "indexed", version });
           continue;
         }

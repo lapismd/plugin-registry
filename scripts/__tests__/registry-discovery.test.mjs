@@ -153,7 +153,18 @@ test("indexed releases and malformed bot PRs are reported without duplicate reco
   const original = client.file;
   client.file = async (repo, ...args) =>
     repo.endsWith("plugin-registry")
-      ? { versions: { "0.2.0": {} }, latestVersion: "0.2.0" }
+      ? {
+          versions: {
+            "0.2.0": {
+              bundle: {
+                url: "https://github.com/archive",
+                sha256: "1".repeat(64),
+                size: 1,
+              },
+            },
+          },
+          latestVersion: "0.2.0",
+        }
       : original(repo, ...args);
   let result = await discoverTargets(
     client,
@@ -244,7 +255,15 @@ test("automatic sweeps skip current PRs while explicit manual selection still ve
       sourceCommit: sha,
       releaseTag: "history@0.2.0",
     },
-    versions: { "0.2.0": {} },
+    versions: {
+      "0.2.0": {
+        bundle: {
+          url: "https://github.com/archive",
+          sha256: "1".repeat(64),
+          size: 1,
+        },
+      },
+    },
   };
   const pr = {
     number: 40,

@@ -284,7 +284,17 @@ test("closed, indexed, conflicting and dry-run candidates cannot write branches"
   adapter.snapshot = async () => ({
     state: "open",
     request,
-    entry: { versions: { "0.2.0": {} } },
+    entry: {
+      versions: {
+        "0.2.0": {
+          bundle: {
+            url: "https://github.com/archive",
+            sha256: "1".repeat(64),
+            size: 1,
+          },
+        },
+      },
+    },
     baseEntry: null,
   });
   assert.equal((await refreshCandidate(target, adapter)).status, "indexed");
@@ -338,4 +348,32 @@ test("legacy metadata requests carry no release fields and human committers bloc
       ),
     /human/,
   );
+});
+
+test("a pending version is not mistaken for an indexed installable release", async () => {
+  const entry = {
+    latestVersion: "0.2.0",
+    versions: { "0.2.0": { bundle: { status: "pending" } } },
+  };
+  let published = 0;
+  const result = await refreshCandidate(
+    { request, prNumber: 40 },
+    {
+      snapshot: async () => ({
+        state: "open",
+        request,
+        mainSha: sha,
+        headSha: sha,
+        entry,
+        baseEntry: entry,
+      }),
+      verify: async () => {},
+      build: async () => ({}),
+      publish: async () => {
+        published++;
+      },
+    },
+  );
+  assert.equal(result.status, "updated");
+  assert.equal(published, 1);
 });
