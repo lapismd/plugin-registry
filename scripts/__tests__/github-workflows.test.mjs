@@ -80,6 +80,10 @@ test("refresh is manual and automatic with bounded independent workers and a rea
   for (const input of ["pr_number", "dry_run", "recover_missing_releases"])
     assert.ok(workflow.includes(`${input}:`));
   assert.match(workflow, /max-parallel: 3/);
+  assert.match(
+    workflow,
+    /group: registry-pr-refresh-\$\{\{ github.event_name == 'workflow_dispatch' && github.run_id \|\| 'automatic' \}\}/,
+  );
   assert.match(workflow, /fail-fast: false/);
   assert.match(workflow, /permission-contents: read/);
   assert.match(workflow, /permission-pull-requests: read/);

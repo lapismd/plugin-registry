@@ -23,10 +23,10 @@ on:
 
 permissions: {}
 
-# Only refresh sweeps coalesce. Every sweep discovers all currently open PRs.
+# Automatic sweeps coalesce; targeted/dry-run/recovery requests keep their intent.
 # Unique incoming dispatches retain their existing per-request concurrency.
 concurrency:
-  group: registry-pr-refresh
+  group: registry-pr-refresh-${{ github.event_name == 'workflow_dispatch' && github.run_id || 'automatic' }}
   cancel-in-progress: false
 
 jobs:

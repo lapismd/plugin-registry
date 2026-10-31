@@ -90,7 +90,9 @@ the existing archive and checksum against the committed trust root and resolved
 release tag; it does not republish artifacts or activate private packages.
 
 Discovery paginates PRs and releases, reports blocked candidates, and runs at
-most three independent workers. Branch writes use a captured-head lease and
+most three independent workers per sweep. Automatic sweeps coalesce; manual
+runs keep distinct identities so an automatic event cannot discard a targeted,
+dry-run or recovery request. Branch writes use a captured-head lease and
 retry moving references up to three times. Human commits, unexpected files, and
 competing changes to the same plugin's curated entry require manual
 reconciliation. Closed PRs are not reopened and already-indexed releases are
