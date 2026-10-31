@@ -324,6 +324,45 @@
     },
     {
       "appearance": {
+        "accent": "#8B5CF6",
+        "icon": "file-text"
+      },
+      "author": "Lapis Notes",
+      "authorUrl": "https://app.lapis.md/",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "writing"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Speaker-separated reading view for Markdown transcripts",
+      "detail": "plugins/lapis-transcripts.json",
+      "id": "lapis-transcripts",
+      "latestRelease": {
+        "bundleSize": 3030717,
+        "releasedAt": "2026-10-30T15:58:35.000Z"
+      },
+      "latestVersion": "0.2.0",
+      "links": {},
+      "minAppVersion": "0.1.0",
+      "name": "Transcripts",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "appearance": {
         "accent": "#2563EB",
         "icon": "file-text"
       },
@@ -488,7 +527,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "RFvoofsYVXCxPXR6+C0y3JNwjOsNOYoG2rtNre0C591uqRtzmM4im7TzmjsFgkZq0rpeSl1IaNQIIAFpA+xdDg=="
+      "sig": "1bhlnvq2ZFGtEgLNaYbcJuXLKxAJxSM1t29cQMGUs7o8Vuiw0Jb9VqOGgxqTLFppqnAvXhZwpvdwAywQeoEsAQ=="
     }
   ]
 }
