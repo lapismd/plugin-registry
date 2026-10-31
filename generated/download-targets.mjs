@@ -110,6 +110,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.2"
     },
+    "lapis-source-editor@0.1.3": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/source-editor%400.1.3/lapis-source-editor-0.1.3.lapis-plugin",
+      "pluginId": "lapis-source-editor",
+      "status": "active",
+      "version": "0.1.3"
+    },
     "lapis-transcripts@0.2.0": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/transcripts%400.2.0/lapis-transcripts-0.2.0.lapis-plugin",
       "pluginId": "lapis-transcripts",

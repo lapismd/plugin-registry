@@ -303,10 +303,10 @@
       "detail": "plugins/lapis-source-editor.json",
       "id": "lapis-source-editor",
       "latestRelease": {
-        "bundleSize": 11341,
-        "releasedAt": "2026-10-14T13:44:23.000Z"
+        "bundleSize": 11395,
+        "releasedAt": "2026-10-30T15:58:18.000Z"
       },
-      "latestVersion": "0.1.2",
+      "latestVersion": "0.1.3",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Source Editor",
@@ -527,7 +527,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "1bhlnvq2ZFGtEgLNaYbcJuXLKxAJxSM1t29cQMGUs7o8Vuiw0Jb9VqOGgxqTLFppqnAvXhZwpvdwAywQeoEsAQ=="
+      "sig": "0XzJKR4NqDoJnDF1V2WDTZYRgc0J9Ix6lmdjmNliBv+aB1f1wKr0cj69HbL4iQSDqqTk50yZua74gshwSR10CA=="
     }
   ]
 }
