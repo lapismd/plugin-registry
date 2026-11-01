@@ -65,3 +65,9 @@ jobs:
 
       - name: Check generated files are committed
         run: git diff --exit-code generated
+env:
+  LAPIS_CI_EVENT: ${{ github.event_name }}
+  LAPIS_CI_PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+  LAPIS_CI_PR_AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
+  LAPIS_CI_PR_HEAD: ${{ github.event.pull_request.head.ref }}
+  LAPIS_DEPENDENCY_BOT_LOGIN: ${{ vars.LAPIS_DEPENDENCY_BOT_LOGIN }}
