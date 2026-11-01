@@ -63,10 +63,10 @@
       "detail": "plugins/bases.json",
       "id": "bases",
       "latestRelease": {
-        "bundleSize": 468069,
-        "releasedAt": "2026-10-15T23:04:13.000Z"
+        "bundleSize": 470290,
+        "releasedAt": "2026-10-31T16:34:26.000Z"
       },
-      "latestVersion": "0.1.4",
+      "latestVersion": "0.2.0",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Bases",
@@ -103,10 +103,10 @@
       "detail": "plugins/bookmarks.json",
       "id": "bookmarks",
       "latestRelease": {
-        "bundleSize": 245378,
-        "releasedAt": "2026-10-14T13:43:32.000Z"
+        "bundleSize": 253975,
+        "releasedAt": "2026-10-30T14:57:21.000Z"
       },
-      "latestVersion": "0.1.3",
+      "latestVersion": "0.1.4",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Bookmarks",
@@ -143,13 +143,130 @@
       "detail": "plugins/history.json",
       "id": "history",
       "latestRelease": {
-        "bundleSize": 120671,
-        "releasedAt": "2026-10-14T13:43:48.000Z"
+        "bundleSize": 188034,
+        "releasedAt": "2026-10-31T16:34:33.000Z"
       },
-      "latestVersion": "0.1.4",
+      "latestVersion": "0.2.0",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "History",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "appearance": {
+        "accent": "#8B5CF6",
+        "icon": "network"
+      },
+      "author": "Lapis Notes",
+      "authorUrl": "https://app.lapis.md/",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "editing"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "JSON Canvas file view and note embed for Lapis applications",
+      "detail": "plugins/lapis-canvas.json",
+      "id": "lapis-canvas",
+      "latestRelease": {
+        "bundleSize": 2546718,
+        "releasedAt": "2026-10-30T14:57:24.000Z"
+      },
+      "latestVersion": "0.2.0",
+      "links": {},
+      "minAppVersion": "0.1.0",
+      "name": "Canvas",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "appearance": {
+        "accent": "#06B6D4",
+        "icon": "table-2"
+      },
+      "author": "Lapis Notes",
+      "authorUrl": "https://app.lapis.md/",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "editing"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "CSV and TSV table view and note embed for Lapis applications",
+      "detail": "plugins/lapis-csv.json",
+      "id": "lapis-csv",
+      "latestRelease": {
+        "bundleSize": 229638,
+        "releasedAt": "2026-10-30T14:58:19.000Z"
+      },
+      "latestVersion": "0.2.0",
+      "links": {},
+      "minAppVersion": "0.1.0",
+      "name": "CSV",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "appearance": {
+        "accent": "#8B5CF6",
+        "icon": "file-text"
+      },
+      "author": "Lapis Notes",
+      "authorUrl": "https://app.lapis.md/",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "reading"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Word document file view and note embed for Lapis applications",
+      "detail": "plugins/lapis-docx.json",
+      "id": "lapis-docx",
+      "latestRelease": {
+        "bundleSize": 16894463,
+        "releasedAt": "2026-10-30T14:58:16.000Z"
+      },
+      "latestVersion": "0.2.0",
+      "links": {},
+      "minAppVersion": "0.1.0",
+      "name": "DOCX",
       "owner": {
         "name": "Lapis Notes",
         "url": "https://github.com/lapismd/lapis-plugins",
@@ -183,10 +300,10 @@
       "detail": "plugins/lapis-graph.json",
       "id": "lapis-graph",
       "latestRelease": {
-        "bundleSize": 268533,
-        "releasedAt": "2026-10-14T13:43:39.000Z"
+        "bundleSize": 274564,
+        "releasedAt": "2026-10-30T14:57:36.000Z"
       },
-      "latestVersion": "0.1.3",
+      "latestVersion": "0.1.4",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Graph",
@@ -223,13 +340,52 @@
       "detail": "plugins/lapis-markdown-lint.json",
       "id": "lapis-markdown-lint",
       "latestRelease": {
-        "bundleSize": 150015,
-        "releasedAt": "2026-10-14T13:44:05.000Z"
+        "bundleSize": 153186,
+        "releasedAt": "2026-10-30T14:58:08.000Z"
       },
-      "latestVersion": "0.1.2",
+      "latestVersion": "0.1.3",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Markdown Lint",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "appearance": {
+        "accent": "#8B5CF6",
+        "icon": "file-text"
+      },
+      "author": "Lapis Notes",
+      "authorUrl": "https://app.lapis.md/",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "reading"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "PDF file view and note embed for Lapis applications",
+      "detail": "plugins/lapis-pdf.json",
+      "id": "lapis-pdf",
+      "latestRelease": {
+        "bundleSize": 6102802,
+        "releasedAt": "2026-10-30T14:58:11.000Z"
+      },
+      "latestVersion": "0.2.0",
+      "links": {},
+      "minAppVersion": "0.1.0",
+      "name": "PDF",
       "owner": {
         "name": "Lapis Notes",
         "url": "https://github.com/lapismd/lapis-plugins",
@@ -263,10 +419,10 @@
       "detail": "plugins/lapis-slides.json",
       "id": "lapis-slides",
       "latestRelease": {
-        "bundleSize": 411601,
-        "releasedAt": "2026-10-14T13:44:15.000Z"
+        "bundleSize": 411655,
+        "releasedAt": "2026-10-30T15:58:04.000Z"
       },
-      "latestVersion": "0.1.0",
+      "latestVersion": "0.1.1",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Slides",
@@ -382,10 +538,10 @@
       "detail": "plugins/markdown.json",
       "id": "markdown",
       "latestRelease": {
-        "bundleSize": 5981966,
-        "releasedAt": "2026-10-14T13:43:57.000Z"
+        "bundleSize": 6001101,
+        "releasedAt": "2026-11-01T03:25:04.000Z"
       },
-      "latestVersion": "0.1.6",
+      "latestVersion": "0.2.1",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Markdown",
@@ -422,10 +578,10 @@
       "detail": "plugins/search.json",
       "id": "search",
       "latestRelease": {
-        "bundleSize": 155509,
-        "releasedAt": "2026-10-14T13:44:12.000Z"
+        "bundleSize": 167346,
+        "releasedAt": "2026-10-30T14:58:31.000Z"
       },
-      "latestVersion": "0.1.3",
+      "latestVersion": "0.1.4",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Search",
@@ -462,10 +618,10 @@
       "detail": "plugins/spellcheck.json",
       "id": "spellcheck",
       "latestRelease": {
-        "bundleSize": 10000455,
-        "releasedAt": "2026-10-14T13:44:30.000Z"
+        "bundleSize": 10000519,
+        "releasedAt": "2026-10-30T15:58:31.000Z"
       },
-      "latestVersion": "0.1.3",
+      "latestVersion": "0.1.4",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Spell Check",
@@ -502,10 +658,10 @@
       "detail": "plugins/wordcount.json",
       "id": "wordcount",
       "latestRelease": {
-        "bundleSize": 6224,
-        "releasedAt": "2026-10-14T13:44:37.000Z"
+        "bundleSize": 6273,
+        "releasedAt": "2026-10-30T15:58:50.000Z"
       },
-      "latestVersion": "0.1.2",
+      "latestVersion": "0.1.3",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Word Count",
@@ -527,7 +683,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "0XzJKR4NqDoJnDF1V2WDTZYRgc0J9Ix6lmdjmNliBv+aB1f1wKr0cj69HbL4iQSDqqTk50yZua74gshwSR10CA=="
+      "sig": "JE1AzRgOTWQmceOeJ9KSDDe/lnoFW6MvHhBouftl24Nw7UvwS32e2IJdKt6k+ATd2JWK7h1egkS1MT7v4hPZDQ=="
     }
   ]
 }

@@ -1,0 +1,148 @@
+{
+  "appearance": {
+    "accent": "#8B5CF6",
+    "icon": "file-text"
+  },
+  "author": "Lapis Notes",
+  "authorAvatarUrl": "https://gravatar.com/avatar/f7226d5f9cf07af2a6a60d3ab11413abb9d2e2eb60f2d5cce17356845a166155?size=256&d=initials",
+  "authorUrl": "https://app.lapis.md/",
+  "channel": "official",
+  "description": "Word document file view and note embed for Lapis applications",
+  "gallery": [
+    {
+      "alt": "A note embedding the seeded Word document beneath a short introduction.",
+      "id": "embedded-note",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "dd09a2591c442f44a6f628fc47dc4d2b705c510726f369fff103d24326422b8b",
+          "size": 7096,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/docx/registry-assets/gallery/embedded-note.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-docx/dd09a2591c442f44a6f628fc47dc4d2b705c510726f369fff103d24326422b8b.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "332adee0684684ec64c1ea9e6a04e1efcc6e3302afa246c64d4de7f144d75c6a",
+          "size": 7204,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/docx/registry-assets/gallery/embedded-note.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-docx/332adee0684684ec64c1ea9e6a04e1efcc6e3302afa246c64d4de7f144d75c6a.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "8933492f62fdbd73a18314e310c70ce636961993d30e010ce4e134f2c4931937",
+          "size": 7094,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/docx/registry-assets/gallery/embedded-note.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-docx/8933492f62fdbd73a18314e310c70ce636961993d30e010ce4e134f2c4931937.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "32605fdf88aed0538db20a427b016bc3619685c0e6f8eb588a122dd62daeede0",
+          "size": 1946,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/docx/registry-assets/gallery/embedded-note.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-docx/32605fdf88aed0538db20a427b016bc3619685c0e6f8eb588a122dd62daeede0.webp",
+          "width": 1200
+        }
+      }
+    }
+  ],
+  "highlights": [
+    "Open a vault Word document in its own view.",
+    "Embed the same viewer in a note.",
+    "Keep the file owned by the vault."
+  ],
+  "id": "lapis-docx",
+  "latestVersion": "0.2.0",
+  "license": "Apache-2.0",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/docx#readme",
+    "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/docx#readme",
+    "issues": "https://github.com/lapismd/lapis-plugins/issues",
+    "repository": "https://github.com/lapismd/lapis-plugins"
+  },
+  "media": {
+    "banner": {
+      "alt": "Lapis DOCX showing a seeded Word document in the file view, with both sidebars available to the shell.",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "67bde3652b2818e7ae75d07057daf82b6981fad08ba116a1c1cfeee27a998145",
+          "size": 7210,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/docx/registry-assets/banner.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-docx/67bde3652b2818e7ae75d07057daf82b6981fad08ba116a1c1cfeee27a998145.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "268ef7522aa6a1f95c2f8e7e7bd7327bc980ef67d0e14eda8924a9cab8688878",
+          "size": 7202,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/docx/registry-assets/banner.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-docx/268ef7522aa6a1f95c2f8e7e7bd7327bc980ef67d0e14eda8924a9cab8688878.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "42db2643d534fed3fe9d40bc1adf38bb775f439f64e58209581c1dbd89720d10",
+          "size": 7094,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/docx/registry-assets/banner.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-docx/42db2643d534fed3fe9d40bc1adf38bb775f439f64e58209581c1dbd89720d10.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "2adab46d3621b7c2a130b9b96b7edfe8bf405f24558344d227db1e847b29abf6",
+          "size": 1944,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/docx/registry-assets/banner.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-docx/2adab46d3621b7c2a130b9b96b7edfe8bf405f24558344d227db1e847b29abf6.webp",
+          "width": 1200
+        }
+      }
+    }
+  },
+  "name": "DOCX",
+  "owner": {
+    "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugins",
+    "verified": true
+  },
+  "schemaVersion": 2,
+  "signatures": [
+    {
+      "alg": "ed25519",
+      "keyId": "lapis-registry-2026-06",
+      "sig": "5nZkStXV5D7sebPtAwLu5mpagf6IiF4FmZH2vfyowSBx1enxzt7wL0mM0Td5OpD6d15T8DiRChQSWHL/W/pICg=="
+    }
+  ],
+  "status": "active",
+  "versions": {
+    "0.2.0": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-docx/0.2.0",
+        "sha256": "a99ff8f65c751dfa3605aac451186fc6e77a9b6239aa14d26e526951c3981ec1",
+        "size": 16894463,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/docx%400.2.0/lapis-docx-0.2.0.lapis-plugin"
+      },
+      "changelog": {
+        "description": "### Minor Changes\n\n- [#28](https://github.com/lapismd/lapis-plugins/pull/28) [`adbd5cf`](https://github.com/lapismd/lapis-plugins/commit/adbd5cf5373fef5fd56347323c82598942bff97c) Thanks [@stevejuma](https://github.com/stevejuma)! - Open a vault Word document in a read-only file view and note embed.\n\n### Patch Changes\n\n- [#28](https://github.com/lapismd/lapis-plugins/pull/28) [`c9febb1`](https://github.com/lapismd/lapis-plugins/commit/c9febb1c8b431db30ecdcf7507cfff8f727bc4ed) Thanks [@stevejuma](https://github.com/stevejuma)! - Consume the published Notes next packages, Mira 0.1.2, and Design Core 0.7.0 through the existing semver floors. Markdown dependents accept ^0.2.0. History keeps its public repository entrypoints, and Bases keeps the file-icon contract on API 0.2.0.",
+        "title": "DOCX 0.2.0"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-10-30T14:58:16.000Z",
+      "version": "0.2.0"
+    }
+  }
+}
