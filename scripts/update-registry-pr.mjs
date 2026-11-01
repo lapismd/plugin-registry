@@ -15,6 +15,9 @@ const target = {
 const name = target.prNumber
   ? `PR #${target.prNumber}`
   : requestBranch(target.request);
+const summaryName = target.prNumber
+  ? `[${name}](https://github.com/lapismd/plugin-registry/pull/${target.prNumber})`
+  : name;
 try {
   const result = await refreshCandidate(
     target,
@@ -28,14 +31,14 @@ try {
   if (process.env.GITHUB_STEP_SUMMARY)
     await appendFile(
       process.env.GITHUB_STEP_SUMMARY,
-      `- ${name}: ${result.status}\n`,
+      `- ${summaryName}: ${result.status}\n`,
     );
 } catch (error) {
   console.error(`${name}: ${error.message}`);
   if (process.env.GITHUB_STEP_SUMMARY)
     await appendFile(
       process.env.GITHUB_STEP_SUMMARY,
-      `- ${name}: **blocked** — ${error.message.replace(/[\r\n]/g, " ")}\n`,
+      `- ${summaryName}: **blocked** — ${error.message.replace(/[\r\n]/g, " ")}\n`,
     );
   process.exitCode = 1;
 }

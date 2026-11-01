@@ -6,15 +6,16 @@ import { sha256 } from "./registry.mjs";
 import {
   assertBotPr,
   requestFromPr,
-  assertSource,
   assertChanges,
-  updateDescription,
   requestBranch,
   validateRequest,
   registryRepository,
   registryBot,
+  requestFile,
+  sameRequest,
 } from "./registry-request.mjs";
 import { compareVersions, isIndexedRelease } from "./registry-refresh.mjs";
+import { parseSubmission } from "./registry-submissions.mjs";
 
 export async function discoverTargets(client, inputs, { trustRoot } = {}) {
   const main = await client.call(`/repos/${registryRepository}/commits/main`);
@@ -41,10 +42,7 @@ export async function discoverTargets(client, inputs, { trustRoot } = {}) {
         !inputs.prNumber &&
         pr.body?.includes("<!-- lapis-registry-managed:start -->")
       ) {
-        const comparison = await client.call(
-          `/repos/${registryRepository}/compare/${main.sha}...${pr.head.sha}`,
-        );
-        if (comparison.merge_base_commit?.sha === main.sha) {
+        {
           const [commits, files] = await Promise.all([
             client.list(
               `/repos/${registryRepository}/pulls/${pr.number}/commits`,
@@ -62,13 +60,21 @@ export async function discoverTargets(client, inputs, { trustRoot } = {}) {
                 : [file.filename],
             ),
           );
-          const entry = await client.file(
+          const queued = await client.file(
             registryRepository,
-            `entries/official/${request.client_payload.plugin_id}.jsonc`,
+            requestFile(request),
             pr.head.sha,
+            { missing: true },
           );
-          assertSource(request, entry);
-          if (updateDescription(pr.body, request, entry) === pr.body) {
+          if (
+            queued &&
+            sameRequest(
+              parseSubmission(queued, requestFile(request)).request,
+              request,
+            ) &&
+            files.every((file) => file.filename === requestFile(request)) &&
+            pr.body.includes("Merging this one-file submission queues")
+          ) {
             report.push({ prNumber: pr.number, status: "current" });
             continue;
           }
@@ -169,6 +175,23 @@ export async function discoverTargets(client, inputs, { trustRoot } = {}) {
           },
           trustRoot,
         );
+        const queued = await client.file(
+          registryRepository,
+          requestFile(request),
+          main.sha,
+          { missing: true },
+        );
+        if (queued) {
+          if (
+            !sameRequest(
+              parseSubmission(queued, requestFile(request)).request,
+              request,
+            )
+          )
+            throw new Error("A competing release already owns the queue path.");
+          report.push({ plugin: manifest.id, version, status: "queued" });
+          continue;
+        }
         targets.push({ request, dryRun: inputs.dryRun });
         report.push({
           plugin: manifest.id,

@@ -34,6 +34,11 @@ jobs:
       - name: Validate source and published bundles
         run: pnpm registry:validate:remote
 
+      - name: Verify queued plugin submissions
+        run: pnpm registry:submissions:verify
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
       - name: Generate registry
         run: pnpm registry:generate
 

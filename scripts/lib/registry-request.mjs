@@ -30,6 +30,11 @@ export function requestBranch(request) {
   return `automation/plugin-${p.plugin_id}-${p.version ?? "metadata"}`;
 }
 
+export function requestFile(request) {
+  const p = validateRequest(request).client_payload;
+  return `submissions/${p.plugin_id}/${p.version ?? `metadata-${p.source_commit}`}.jsonc`;
+}
+
 export function requestFromPr(pr) {
   const body = pr.body ?? "";
   const records = [
@@ -106,6 +111,7 @@ export function assertChanges(request, commits, paths) {
     );
   const id = request.client_payload.plugin_id;
   const allowed = new Set([
+    requestFile(request),
     `entries/official/${id}.jsonc`,
     "generated/download-targets.mjs",
     "generated/v2/index.json",
@@ -210,6 +216,7 @@ export function renderDescription(request, entry) {
     request.action === "plugin_release"
       ? "The archive, checksum, embedded release signature, signed files, runtime descriptor, source metadata and source commit were verified."
       : "Source ownership and metadata were verified. Release versions and artifacts are unchanged.",
+    "Merging this one-file submission queues it for the next **Publish registry updates** PR. That PR combines approved submissions and generates the signed catalog; publication remains maintainer-controlled.",
     banner,
     gallery.length
       ? `<details>\n<summary>Plugin screenshots</summary>\n\n${gallery.join("\n\n")}\n\n</details>`

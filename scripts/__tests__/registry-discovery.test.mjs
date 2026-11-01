@@ -11,6 +11,7 @@ import { canonicalize, signJson } from "../lib/registry.mjs";
 import {
   validateRequest,
   renderDescription,
+  requestFile,
 } from "../lib/registry-request.mjs";
 
 const sha = "a".repeat(40);
@@ -189,6 +190,35 @@ test("indexed releases and malformed bot PRs are reported without duplicate reco
   assert.equal(result.report[0].status, "blocked");
 });
 
+test("a merged queued release is not recovered as another PR before publication", async () => {
+  const { client, release, trustRoot } = fixture();
+  const request = await requestFromPublishedRelease(
+    client,
+    {
+      repository: "lapismd/lapis-plugins",
+      packageName: "@lapis-notes/history",
+      pluginId: "history",
+      version: "0.2.0",
+      release,
+    },
+    trustRoot,
+  );
+  const read = client.file;
+  client.file = async (repo, file, ...args) =>
+    file === requestFile(request) ? request : read(repo, file, ...args);
+  const result = await discoverTargets(
+    client,
+    { recoverMissing: true },
+    { trustRoot },
+  );
+  assert.equal(result.targets.length, 0);
+  assert.ok(
+    result.report.some(
+      (item) => item.plugin === "history" && item.status === "queued",
+    ),
+  );
+});
+
 test("published recovery rejects a tag mismatch and an untrusted release key", async () => {
   const { client, release, trustRoot } = fixture();
   const coordinates = {
@@ -276,6 +306,7 @@ test("automatic sweeps skip current PRs while explicit manual selection still ve
     base: { ref: "main" },
     body: renderDescription(request, entry),
   };
+  let legacy = false;
   const client = {
     call: async (url) =>
       url.includes("/pulls/")
@@ -287,9 +318,16 @@ test("automatic sweeps skip current PRs while explicit manual selection still ve
       url.endsWith("/commits")
         ? [{ author: pr.user, committer: pr.user }]
         : url.endsWith("/files")
-          ? [{ filename: "generated/v2/index.sig" }]
+          ? [
+              {
+                filename: legacy
+                  ? "generated/v2/index.sig"
+                  : requestFile(request),
+              },
+            ]
           : [pr],
-    file: async () => entry,
+    file: async (_repo, file) =>
+      file.startsWith("submissions/") ? (legacy ? null : request) : entry,
   };
   const automatic = await discoverTargets(client, {});
   assert.equal(automatic.targets.length, 0);
@@ -297,4 +335,11 @@ test("automatic sweeps skip current PRs while explicit manual selection still ve
   const manual = await discoverTargets(client, { prNumber: 40, dryRun: true });
   assert.equal(manual.targets.length, 1);
   assert.equal(manual.targets[0].dryRun, true);
+  legacy = true;
+  const migration = await discoverTargets(client, {});
+  assert.equal(
+    migration.targets.length,
+    1,
+    "legacy generated PRs migrate even when based on current main",
+  );
 });
