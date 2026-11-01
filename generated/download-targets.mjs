@@ -14,6 +14,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.5"
     },
+    "ai@0.1.6": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.6/ai-0.1.6.lapis-plugin",
+      "pluginId": "ai",
+      "status": "active",
+      "version": "0.1.6"
+    },
     "bases@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/bases%400.1.2/bases-0.1.2.lapis-plugin",
       "pluginId": "bases",
@@ -139,6 +145,12 @@ export const downloadTargets = {
       "pluginId": "lapis-markdown-lint",
       "status": "active",
       "version": "2026.6.6"
+    },
+    "lapis-notebook@0.2.2": {
+      "originUrl": "https://github.com/lapismd/lapis-plugin-notebook/releases/download/v0.2.2/lapis-notebook-0.2.2.lapis-plugin",
+      "pluginId": "lapis-notebook",
+      "status": "active",
+      "version": "0.2.2"
     },
     "lapis-pdf@0.2.0": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/pdf%400.2.0/lapis-pdf-0.2.0.lapis-plugin",
