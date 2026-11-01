@@ -306,13 +306,14 @@ test("automatic sweeps skip current PRs while explicit manual selection still ve
     base: { ref: "main" },
     body: renderDescription(request, entry),
   };
-  let legacy = false;
+  let legacy = false,
+    behind = false;
   const client = {
     call: async (url) =>
       url.includes("/pulls/")
         ? pr
         : url.includes("/compare/")
-          ? { merge_base_commit: { sha } }
+          ? { merge_base_commit: { sha: behind ? "older-main" : sha } }
           : { sha },
     list: async (url) =>
       url.endsWith("/commits")
@@ -332,6 +333,14 @@ test("automatic sweeps skip current PRs while explicit manual selection still ve
   const automatic = await discoverTargets(client, {});
   assert.equal(automatic.targets.length, 0);
   assert.equal(automatic.report[0].status, "current");
+  behind = true;
+  const protectedBranchRefresh = await discoverTargets(client, {});
+  assert.equal(
+    protectedBranchRefresh.targets.length,
+    1,
+    "one-file PRs still advance when main changes under strict status checks",
+  );
+  behind = false;
   const manual = await discoverTargets(client, { prNumber: 40, dryRun: true });
   assert.equal(manual.targets.length, 1);
   assert.equal(manual.targets[0].dryRun, true);

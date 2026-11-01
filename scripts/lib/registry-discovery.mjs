@@ -43,6 +43,9 @@ export async function discoverTargets(client, inputs, { trustRoot } = {}) {
         pr.body?.includes("<!-- lapis-registry-managed:start -->")
       ) {
         {
+          const comparison = await client.call(
+            `/repos/${registryRepository}/compare/${main.sha}...${pr.head.sha}`,
+          );
           const [commits, files] = await Promise.all([
             client.list(
               `/repos/${registryRepository}/pulls/${pr.number}/commits`,
@@ -67,6 +70,7 @@ export async function discoverTargets(client, inputs, { trustRoot } = {}) {
             { missing: true },
           );
           if (
+            comparison.merge_base_commit?.sha === main.sha &&
             queued &&
             sameRequest(
               parseSubmission(queued, requestFile(request)).request,

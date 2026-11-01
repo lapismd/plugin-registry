@@ -117,3 +117,18 @@ the change, and the full `pnpm check` lane passed all 117 unit and 25 cold brows
 cases, signatures, type/build and formatting checks. The local macOS target also
 passed before the change because its system temporary directory shares the
 checkout filesystem; the hosted log supplies the failing environment evidence.
+
+## Protected-main branch freshness
+
+The live `main` protection requires the `checks` context with `strict: true` and
+enforces it for administrators. One-file submission diffs remain conflict-free
+after unrelated merges, but their branches must include current `main` before
+GitHub permits merging. Discovery therefore skips a bot PR only when its queue
+record, managed description and ancestry are all current. Stale one-file branches
+continue through verified replay and captured-head updates; generation and signing
+remain confined to the publication PR. No branch-protection settings changed.
+
+The exact automatic-discovery regression first failed once when a stale one-file
+branch was skipped, then passed after restoring the ancestry check. Full
+`pnpm check` passed 117 unit and 25 cold browser cases, signatures, types, build
+and formatting with the same documented timestamp input.

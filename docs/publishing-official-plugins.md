@@ -83,8 +83,10 @@ after changes to `main` and after the release-sync workflow completes. Each PR
 keeps its number and discussion. The worker replays its original verified request
 on current `main` and writes only its small queue record. Legacy PRs containing
 generated files are converted in place, preserving their numbers and discussions.
-Once a PR contains only its queue file it stays current across unrelated merges;
-catalog generation is owned by the shared publication PR. Ordinary PR checks
+The bot also advances one-file branches after `main` changes, keeping the
+repository's strict up-to-date status-check requirement satisfied. Different
+request files remain independent; catalog generation is owned by the shared
+publication PR. Ordinary PR checks
 verify the queued request and continue checking the committed signed catalog.
 
 Run it manually from GitHub Actions on `main`, or use:
