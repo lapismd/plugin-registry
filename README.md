@@ -14,14 +14,17 @@ compatibility data remain attached to each version; listing compatibility
 comes from the latest release. Nostr deployment remains deferred.
 
 `plugin_release` dispatches verify signatures, artifact hashes and pinned source
-metadata before opening idempotent registry PRs. Metadata-only dispatches retain
+metadata before opening idempotent one-file submission PRs. Merging a submission
+queues it; one **Publish registry updates** PR combines approved requests and
+updates the entries, mirrored images, generated catalog and signatures together.
+Metadata-only dispatches retain
 release artifacts and version history. Source schema V1 remains readable for
 older independent plugins; publication normalizes to V2. Structured notes use
 the exact Changesets section or a validated
 `registry.json.releases[version].changelog` override.
 
 The first signed V2 cutover requires approval. After
-`STATIC_REGISTRY_V2_DEPLOY_APPROVED` is enabled, validated merges to `main` deploy
+`STATIC_REGISTRY_V2_DEPLOY_APPROVED` is enabled, validated publication merges to `main` deploy
 the Astro site and signed catalog. Signing remains a protected, reviewable step
 using the existing registry and release trust roots.
 
@@ -38,6 +41,7 @@ install does not qualify the production frozen-install gate.
 pnpm install
 pnpm check
 pnpm registry:validate
+pnpm registry:submissions:verify
 pnpm registry:sync:github -- --event-path /path/to/repository-dispatch.json --dry-run
 pnpm registry:preview:release-plan -- --release-plan ../lapis-plugins/.release/release-plan.json --public-key ../lapis-plugins/.release/plugin-release-public.pem --output tmp/registry-preview.json
 pnpm registry:generate

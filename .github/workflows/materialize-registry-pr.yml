@@ -43,7 +43,7 @@ jobs:
           node-version: "24"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Verify, regenerate, sign and update the registry PR
+      - name: Verify and queue the one-file plugin submission
         run: node scripts/update-registry-pr.mjs
         env:
           REGISTRY_TARGET: ${{ inputs.target }}
@@ -51,5 +51,3 @@ jobs:
           GITHUB_TOKEN: ${{ steps.registry-app.outputs.token }}
           LAPIS_PLUGIN_RELEASE_KEY_ID: ${{ secrets.LAPIS_PLUGIN_RELEASE_KEY_ID }}
           LAPIS_PLUGIN_RELEASE_PUBLIC_KEY_PEM: ${{ secrets.LAPIS_PLUGIN_RELEASE_PUBLIC_KEY_PEM }}
-          LAPIS_REGISTRY_KEY_ID: ${{ secrets.LAPIS_REGISTRY_KEY_ID }}
-          LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64: ${{ secrets.LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64 }}

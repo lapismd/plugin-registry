@@ -62,6 +62,7 @@ export async function refreshCandidate(target, adapter) {
       return { status: "superseded" };
     const p = target.request.client_payload;
     await adapter.verify(snapshot);
+    if (snapshot.queued) return { status: "queued" };
     if (p.version && isIndexedRelease(snapshot.entry, p.version))
       return { status: "indexed" };
     if (

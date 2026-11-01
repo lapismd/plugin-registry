@@ -1,0 +1,58 @@
+name: Prepare registry publication
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Verify the merged queue without updating a branch or PR
+        default: false
+        type: boolean
+
+permissions: {}
+
+concurrency:
+  group: registry-publication-${{ github.event_name == 'workflow_dispatch' && github.run_id || 'automatic' }}
+  cancel-in-progress: false
+
+jobs:
+  publication:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Create registry GitHub App token
+        id: registry-app
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ secrets.LAPIS_REGISTRY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.LAPIS_REGISTRY_APP_PRIVATE_KEY }}
+          owner: lapismd
+          repositories: |
+            plugin-registry
+            lapis-plugins
+          permission-contents: write
+          permission-pull-requests: write
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ steps.registry-app.outputs.token }}
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.32.1
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Collect approved submissions and prepare the signed publication PR
+        run: node scripts/publish-registry-updates.mjs
+        env:
+          REGISTRY_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+          GITHUB_TOKEN: ${{ steps.registry-app.outputs.token }}
+          LAPIS_PLUGIN_RELEASE_KEY_ID: ${{ secrets.LAPIS_PLUGIN_RELEASE_KEY_ID }}
+          LAPIS_PLUGIN_RELEASE_PUBLIC_KEY_PEM: ${{ secrets.LAPIS_PLUGIN_RELEASE_PUBLIC_KEY_PEM }}
+          LAPIS_REGISTRY_KEY_ID: ${{ secrets.LAPIS_REGISTRY_KEY_ID }}
+          LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64: ${{ secrets.LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64 }}

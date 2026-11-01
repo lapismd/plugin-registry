@@ -4,6 +4,20 @@ import test from "node:test";
 
 const repoRoot = new URL("../../", import.meta.url);
 
+test("submission workers keep registry signing out of one-file plugin PRs", async () => {
+  const worker = await readFile(
+    new URL(".github/workflows/materialize-registry-pr.yml", repoRoot),
+    "utf8",
+  );
+  const runner = await readFile(
+    new URL("scripts/lib/registry-runner.mjs", repoRoot),
+    "utf8",
+  );
+  assert.doesNotMatch(worker, /LAPIS_REGISTRY_PRIVATE_KEY/);
+  assert.doesNotMatch(runner, /\"registry:sign\"/);
+  assert.match(runner, /writeSubmission/);
+});
+
 test("production deployment follows validated main merges after the V2 cutover approval", async () => {
   const workflow = await readFile(
     new URL(".github/workflows/publish.yml", repoRoot),
@@ -34,6 +48,10 @@ test("release dispatch delegates to the shared verified, leased publication pipe
     new URL("scripts/lib/registry-runner.mjs", repoRoot),
     "utf8",
   );
+  const publication = await readFile(
+    new URL("scripts/lib/registry-publication-runner.mjs", repoRoot),
+    "utf8",
+  );
   assert.match(
     workflow,
     /uses: \.\/\.github\/workflows\/materialize-registry-pr\.yml/,
@@ -57,9 +75,10 @@ test("release dispatch delegates to the shared verified, leased publication pipe
     "test",
     "check:format",
   ])
-    assert.ok(runner.includes(`"${command}"`));
+    assert.ok(publication.includes(`"${command}"`));
   assert.ok(
-    runner.indexOf('"registry:generate"') < runner.indexOf('"registry:sign"'),
+    publication.indexOf('"registry:generate"') <
+      publication.indexOf('"registry:sign"'),
   );
   assert.ok(
     runner.indexOf('"registry:validate:remote"') < runner.indexOf('"push"'),
@@ -102,6 +121,7 @@ test("pull requests run strict remote bundle validation", async () => {
   );
   assert.match(workflow, /pull_request:/);
   assert.match(workflow, /pnpm registry:validate:remote/);
+  assert.match(workflow, /pnpm registry:submissions:verify/);
   assert.doesNotMatch(workflow, /visual|baseline/i);
 });
 
@@ -164,6 +184,7 @@ test("every GitHub workflow uses Node 24 builds and Node 24 action runtimes", as
     "sign-registry-metadata.yml",
     "materialize-registry-pr.yml",
     "refresh-registry-prs.yml",
+    "publish-registry-updates.yml",
   ];
   for (const name of workflowNames) {
     const workflow = await readFile(
@@ -176,4 +197,28 @@ test("every GitHub workflow uses Node 24 builds and Node 24 action runtimes", as
     assert.match(workflow, /node-version:\s*["']?24/);
     assert.doesNotMatch(workflow, /@v4|node-version:\s*["']?(20|22)/);
   }
+});
+
+test("one publication workflow consumes approved submissions without deploying them directly", async () => {
+  const workflow = await readFile(
+    new URL(".github/workflows/publish-registry-updates.yml", repoRoot),
+    "utf8",
+  );
+  const deploy = await readFile(
+    new URL(".github/workflows/publish.yml", repoRoot),
+    "utf8",
+  );
+  assert.match(workflow, /push:[\s\S]*branches: \[main\]/);
+  assert.match(
+    workflow,
+    /group: registry-publication-\$\{\{ github.event_name == 'workflow_dispatch' && github.run_id \|\| 'automatic' \}\}/,
+  );
+  assert.match(workflow, /cancel-in-progress: false/);
+  assert.match(workflow, /ref: main/);
+  assert.match(workflow, /fetch-depth: 0/);
+  assert.match(workflow, /dry_run:/);
+  assert.match(workflow, /node scripts\/publish-registry-updates.mjs/);
+  assert.match(workflow, /LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64/);
+  assert.doesNotMatch(workflow, /wrangler|pull_request_target/);
+  assert.match(deploy, /paths-ignore: \[submissions\/\*\*\]/);
 });

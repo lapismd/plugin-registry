@@ -14,7 +14,9 @@ import {
   assertSource,
   sameRequest,
   updateDescription,
+  requestFile,
 } from "./registry-request.mjs";
+import { writeSubmission, parseSubmission } from "./registry-submissions.mjs";
 import { LeaseConflict } from "./registry-refresh.mjs";
 import {
   syncGitHubRelease,
@@ -29,6 +31,7 @@ export function createRegistryRunner(client, target, directory) {
     payload = request.client_payload,
     branch = requestBranch(request);
   const token = process.env.GITHUB_TOKEN;
+  let verifiedEntry;
   const authEnv = {
     ...process.env,
     GIT_CONFIG_COUNT: "1",
@@ -89,9 +92,9 @@ export function createRegistryRunner(client, target, directory) {
     let baseEntry = entry,
       originalRequest = request;
     if (headSha) {
-      if (active) {
-        assertBotPr(active);
-        originalRequest = requestFromPr(active);
+      if (pr) {
+        assertBotPr(pr);
+        originalRequest = requestFromPr(pr);
       }
       const comparison = await client.call(
         `/repos/${registryRepository}/compare/${mainSha}...${headSha}`,
@@ -120,7 +123,17 @@ export function createRegistryRunner(client, target, directory) {
             : [f.filename],
         ),
       );
-      assertSource(originalRequest, await file(headSha));
+      const queued = await client.file(
+        registryRepository,
+        requestFile(originalRequest),
+        headSha,
+        { missing: true },
+      );
+      if (queued) {
+        parseSubmission(queued, requestFile(originalRequest));
+        if (!sameRequest(queued, originalRequest))
+          throw new Error("PR submission coordinates do not match request.");
+      } else assertSource(originalRequest, await file(headSha));
       baseEntry = await file(comparison.merge_base_commit.sha);
       if (!target.prNumber && !sameRequest(request, originalRequest)) {
         if (
@@ -140,6 +153,20 @@ export function createRegistryRunner(client, target, directory) {
           );
       }
     }
+    const queued = await client.file(
+      registryRepository,
+      requestFile(request),
+      mainSha,
+      { missing: true },
+    );
+    if (
+      queued &&
+      !sameRequest(
+        parseSubmission(queued, requestFile(request)).request,
+        request,
+      )
+    )
+      throw new Error("A competing submission already owns this queue path.");
     return {
       state: "open",
       mainSha,
@@ -148,6 +175,7 @@ export function createRegistryRunner(client, target, directory) {
       baseEntry,
       request: originalRequest,
       pr: active,
+      queued: Boolean(queued),
     };
   }
 
@@ -169,7 +197,7 @@ export function createRegistryRunner(client, target, directory) {
       );
       const rootPath = path.join(temp, "root.json");
       await writeFile(rootPath, JSON.stringify(root));
-      await sync({
+      const verified = await sync({
         entriesDir: pathToFileURL(`${entries}/`),
         trustRootPath: pathToFileURL(rootPath),
         contentDir: pathToFileURL(`${temp}/content/`),
@@ -178,6 +206,7 @@ export function createRegistryRunner(client, target, directory) {
         token,
         dryRun: true,
       });
+      verifiedEntry = verified.entry;
     } finally {
       await rm(temp, { recursive: true, force: true });
     }
@@ -200,33 +229,43 @@ export function createRegistryRunner(client, target, directory) {
       cwd: directory,
       maxBuffer: 20 * 1024 * 1024,
     });
-    const result = await sync({ token });
+    const submissionPath = await writeSubmission(
+      request,
+      pathToFileURL(`${directory}/`),
+    );
+    await execute("pnpm", ["exec", "prettier", submissionPath, "--write"], {
+      cwd: directory,
+    });
     const commands = [
-      "fmt",
+      "registry:submissions:validate",
       "registry:validate",
-      "registry:generate",
-      "registry:sign",
       "registry:verify-signatures",
       "registry:validate:remote",
-      "stats:validate",
-      "site:check",
-      "site:build",
       "test",
       "check:format",
     ];
     for (const command of commands) {
       console.log(`Running pnpm ${command}`);
-      const output = await execute("pnpm", [command], {
-        cwd: directory,
-        maxBuffer: 30 * 1024 * 1024,
-      });
-      console.log(output.stdout);
+      try {
+        const output = await execute("pnpm", [command], {
+          cwd: directory,
+          maxBuffer: 30 * 1024 * 1024,
+        });
+        console.log(output.stdout);
+        if (output.stderr) console.error(output.stderr);
+      } catch (error) {
+        console.error(error.stdout ?? "");
+        console.error(error.stderr ?? "");
+        throw error;
+      }
     }
-    await git("add", "--", entryPath, "generated");
+    await git("add", "--", submissionPath);
     const paths = (await git("diff", "--cached", "--name-only"))
       .split("\n")
       .filter(Boolean);
     assertChanges(request, [], paths);
+    if (paths.some((file) => file !== submissionPath))
+      throw new Error("Submission PR must change exactly its queue file.");
     const tree = await git("write-tree");
     let unchanged = false;
     if (snapshot.headSha)
@@ -257,7 +296,7 @@ export function createRegistryRunner(client, target, directory) {
     }
     return {
       sha: unchanged ? snapshot.headSha : await git("rev-parse", "HEAD"),
-      entry: result.entry,
+      entry: verifiedEntry,
       unchanged,
     };
   }

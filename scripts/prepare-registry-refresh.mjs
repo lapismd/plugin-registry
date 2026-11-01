@@ -23,7 +23,7 @@ await appendFile(
 );
 await appendFile(
   process.env.GITHUB_STEP_SUMMARY,
-  `## Registry refresh discovery\n\n${result.targets.length} candidate(s).\n\n${result.report.map((r) => `- ${r.plugin ?? `PR #${r.prNumber}`}: ${r.status}${r.version ? ` ${r.version}` : ""}${r.reason ? ` — ${r.reason.replace(/[\r\n]/g, " ")}` : ""}`).join("\n")}\n`,
+  `## Registry refresh discovery\n\n${result.targets.length} candidate(s).\n\n${result.report.map((r) => `- ${r.plugin ?? `[PR #${r.prNumber}](https://github.com/lapismd/plugin-registry/pull/${r.prNumber})`}: ${r.status}${r.version ? ` ${r.version}` : ""}${r.reason ? ` — ${r.reason.replace(/[\r\n]/g, " ")}` : ""}`).join("\n")}\n`,
 );
 if (result.report.some((r) => r.status === "blocked")) {
   // Let independent matrix jobs proceed, but retain a failing audit check.

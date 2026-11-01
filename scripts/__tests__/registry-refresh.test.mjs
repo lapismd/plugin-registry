@@ -281,6 +281,9 @@ test("closed, indexed, conflicting and dry-run candidates cannot write branches"
     "verified",
   );
   assert.equal(verified, 1);
+  adapter.snapshot = async () => ({ state: "open", request, queued: true });
+  assert.equal((await refreshCandidate(target, adapter)).status, "queued");
+  assert.equal(verified, 2);
   adapter.snapshot = async () => ({
     state: "open",
     request,

@@ -8,6 +8,8 @@
     "node": ">=22"
   },
   "scripts": {
+    "registry:submissions:validate": "node scripts/validate-registry-submissions.mjs",
+    "registry:submissions:verify": "node scripts/validate-registry-submissions.mjs --verify",
     "registry:validate": "node scripts/validate-registry.mjs",
     "registry:validate:remote": "node scripts/validate-registry.mjs --strict-remote",
     "registry:sync:github": "node scripts/sync-github-release.mjs",
@@ -28,7 +30,7 @@
     "test:browser": "playwright test",
     "check:format": "prettier . --check --log-level warn",
     "fmt": "prettier . --write --log-level warn",
-    "check": "pnpm registry:validate && pnpm registry:generate && pnpm registry:verify-signatures && pnpm stats:validate && pnpm site:check && pnpm site:build && pnpm test && pnpm test:browser && pnpm check:format"
+    "check": "pnpm registry:submissions:validate && pnpm registry:validate && pnpm registry:generate && pnpm registry:verify-signatures && pnpm stats:validate && pnpm site:check && pnpm site:build && pnpm test && pnpm test:browser && pnpm check:format"
   },
   "dependencies": {
     "ajv": "^8.17.1",

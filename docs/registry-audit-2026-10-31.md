@@ -57,3 +57,45 @@ Sources: [registry index](https://registry.lapis.md/v2/index.json),
 - The optional dependency audit reports 79 existing advisories (10 low,
   31 moderate, 37 high, one critical). The manifest and lockfile remain identical
   to the baseline. Dependency remediation is separate from listing recovery.
+
+## Queued publication qualification: 2026-11-01
+
+The recovery run [41254526145](https://github.com/lapismd/plugin-registry/actions/runs/41254526145)
+created the ten missing submissions as PRs #42–#51. Source Editor #34 merged
+during qualification. Its main-branch change exercised automatic refresh: the
+rebuilt CSV candidate retained both CSV 0.2.0 and Source Editor 0.1.3.
+
+The revised flow keeps each submission to one small versioned request under
+`submissions/<plugin-id>/<version>.jsonc`. Merging submissions queues them. One
+reviewable publication PR replays the approved requests, updates the curated
+entries, mirrors media, regenerates and signs the catalog, and consumes the
+queue records. A queue-only merge does not deploy. Existing deployment approval
+and environment gates remain in place. Standalone requests use the same contract;
+the packaging and onboarding gaps above still apply.
+
+- The separation regression first failed once against the old signing worker,
+  then passed after signing moved to publication. All 35 focused cases passed.
+- All 15 remaining open requests passed the new read-only verifier using their
+  real published archives and original source coordinates. Replaying them through
+  the queue consumer produced 17 plugins, retained prior versions and consumed
+  every request. This local candidate used an ephemeral test signing key.
+- The combined candidate passed strict remote validation and `pnpm check`: 117
+  unit tests, 25 cold browser tests, types, build, signatures and formatting. The
+  isolated workspace supplied `LAPIS_REGISTRY_UPDATED_AT=2026-10-31T23:58:41Z`.
+  Temporary entries, mirrored assets, signatures and trust-root changes were
+  restored after qualification; no release assets or screenshots were authored.
+- Metadata tests cover older content, divergent history, source ownership and
+  a new dispatch after the preceding metadata PR merged. Publication tests cover
+  independent submissions, version ordering, immutable indexed artifacts,
+  dry runs, concurrent main/head updates, bot-owned orphan recovery, human edits,
+  closed PRs, unexpected files and preservation of maintainer notes.
+- One earlier Word Count refresh worker failed in `pnpm test` without retaining
+  the child output. Its exact current-main-plus-entry reproduction passed all
+  104 then-existing tests, and the unchanged targeted retry
+  [41255597354](https://github.com/lapismd/plugin-registry/actions/runs/41255597354)
+  passed. The original cause remains unconfirmed. Workers now retain failed
+  command stdout/stderr and refresh summaries link to the affected PR.
+- The dependency audit still reports the same 79 pre-existing advisories; no
+  dependency ranges, lockfiles or ignores changed. Actionlint reports only the
+  previously documented stale `create-github-app-token@v3` input metadata, with
+  no suppressions added.
