@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "lapis-notebook-0.2.2.lapis-plugin",
+    "package_name": "@lapis-notes/lapis-plugin-notebook",
+    "plugin_id": "lapis-notebook",
+    "release_tag": "v0.2.2",
+    "repository": "lapismd/lapis-plugin-notebook",
+    "source_commit": "3c533226082f2195bd2eac435728a5cb5932c83c",
+    "version": "0.2.2",
+  },
+}
