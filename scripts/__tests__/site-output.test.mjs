@@ -3,7 +3,6 @@ import { existsSync } from "node:fs";
 import { readFile, mkdtemp, rm, writeFile, mkdir } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { generateKeyPairSync } from "node:crypto";
-import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import test from "node:test";
@@ -23,7 +22,11 @@ test("site build emits signed V2 pages and retains the V1 archive", async (t) =>
   const entries = await loadEntries();
   const expectedPluginIds = entries.map((entry) => entry.id).sort();
   const aiVersion = entries.find((entry) => entry.id === "ai").latestVersion;
-  const fixture = await mkdtemp(path.join(tmpdir(), "lapis-registry-v2-"));
+  // Astro renames prerender assets from the checkout cache into the output.
+  // Keep both on the checkout filesystem; hosted runners may mount /tmp elsewhere.
+  const fixtureParent = new URL("../../tmp/", import.meta.url);
+  await mkdir(fixtureParent, { recursive: true });
+  const fixture = await mkdtemp(new URL("site-output-", fixtureParent));
   t.after(() => rm(fixture, { recursive: true, force: true }));
   const generated = path.join(fixture, "generated");
   const dist = pathToFileURL(`${fixture}/dist/`);
