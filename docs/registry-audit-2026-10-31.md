@@ -99,3 +99,21 @@ the packaging and onboarding gaps above still apply.
   dependency ranges, lockfiles or ignores changed. Actionlint reports only the
   previously documented stale `create-github-app-token@v3` input metadata, with
   no suppressions added.
+
+## Hosted build-fixture portability
+
+All 15 open plugin PRs converted to single request files. During their CI,
+[DOCX #46](https://github.com/lapismd/plugin-registry/actions/runs/41257682009/job/124704230407)
+passed archive and queue verification but failed one of 117 unit cases:
+`site build emits signed V2 pages and retains the V1 archive` in
+`scripts/__tests__/site-output.test.mjs`. Astro's asset rename from the checkout's
+`.astro/.prerender` cache into the system `/tmp` fixture failed with `EXDEV` on a
+runner where those paths use different filesystems.
+
+The fixture now uses the checkout's ignored `tmp/site-output-*` directory, keeping
+cache and output on one filesystem. Every existing assertion is retained. The
+exact target (`node --test scripts/__tests__/site-output.test.mjs`) passed after
+the change, and the full `pnpm check` lane passed all 117 unit and 25 cold browser
+cases, signatures, type/build and formatting checks. The local macOS target also
+passed before the change because its system temporary directory shares the
+checkout filesystem; the hosted log supplies the failing environment evidence.
