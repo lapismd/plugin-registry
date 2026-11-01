@@ -1,0 +1,228 @@
+{
+  "appearance": {
+    "accent": "#8B5CF6",
+    "icon": "list-checks"
+  },
+  "author": "Lapis Notes",
+  "authorUrl": "https://github.com/lapismd",
+  "channel": "official",
+  "description": "Vault-native Tasks planner, indexing, and queries.",
+  "gallery": [
+    {
+      "alt": "Tasks daily planner in the real Lapis workspace with Explorer, project lists, a calendar and populated task rows.",
+      "id": "planner",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "56677b3751a0fb79eb1b499b11e29f3ee16d33f732f65c3a845dc670a5c1d53d",
+          "size": 115786,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/gallery/planner.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/56677b3751a0fb79eb1b499b11e29f3ee16d33f732f65c3a845dc670a5c1d53d.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "fdd713e0fff030917089f380d3a68bed24d9e7f1addae89729ba0bcd3cb699c5",
+          "size": 120546,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/gallery/planner.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/fdd713e0fff030917089f380d3a68bed24d9e7f1addae89729ba0bcd3cb699c5.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "236f2cf72686a89e1b7d8933f3649926c16cd40a28bdb005777cc023075c8e2e",
+          "size": 116336,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/gallery/planner.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/236f2cf72686a89e1b7d8933f3649926c16cd40a28bdb005777cc023075c8e2e.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "aaa74914e139d0ca0645833d3b83d6898f66dd74a79e36a010a3e4b36eb0ea85",
+          "size": 48872,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/gallery/planner.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/aaa74914e139d0ca0645833d3b83d6898f66dd74a79e36a010a3e4b36eb0ea85.webp",
+          "width": 1200
+        }
+      }
+    },
+    {
+      "alt": "Task detail view in the Lapis workspace, showing scheduling metadata, a checklist and comments.",
+      "id": "details",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "12cfe1eeec5160d3848f94c4829c492a252a7e3c4b51362ad6f63c5a226abc4e",
+          "size": 99626,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/gallery/details.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/12cfe1eeec5160d3848f94c4829c492a252a7e3c4b51362ad6f63c5a226abc4e.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "8876361a3033049ae061003bac28362c32db6683fc260651c65e9e196712a57a",
+          "size": 107942,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/gallery/details.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/8876361a3033049ae061003bac28362c32db6683fc260651c65e9e196712a57a.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "b83b504c361cca382df486b69b18df9b4454ff7faac443e8695361e4080ab7cc",
+          "size": 94456,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/gallery/details.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/b83b504c361cca382df486b69b18df9b4454ff7faac443e8695361e4080ab7cc.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "908c2cd9b4f3350bd4b9602ec8f1601e62e0be06b1e56662d55eba3896389724",
+          "size": 44160,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/gallery/details.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/908c2cd9b4f3350bd4b9602ec8f1601e62e0be06b1e56662d55eba3896389724.webp",
+          "width": 1200
+        }
+      }
+    }
+  ],
+  "highlights": [
+    "Plan daily work and project lists from vault-native Markdown tasks.",
+    "Track recurrence, due dates, checklists and task metadata.",
+    "Query and index tasks across the vault."
+  ],
+  "id": "tasks",
+  "latestVersion": "0.1.2",
+  "license": "AGPL-3.0-or-later",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugin-tasks#readme",
+    "repository": "https://github.com/lapismd/lapis-plugin-tasks"
+  },
+  "media": {
+    "banner": {
+      "alt": "Tasks daily planner in the real Lapis workspace with Explorer, project lists, a calendar and populated task rows.",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "0e722c706cd92d9eeb67dcd717cca2d05d33715dbb86d961c7106d84c8ec6e1a",
+          "size": 48404,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/banner.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/0e722c706cd92d9eeb67dcd717cca2d05d33715dbb86d961c7106d84c8ec6e1a.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "e810903da0ee3a052fa4247d665297aa612a0f351a8c994554123cace8c78d7d",
+          "size": 58226,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/banner.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/e810903da0ee3a052fa4247d665297aa612a0f351a8c994554123cace8c78d7d.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "d3ec71d7ed9027a0aa04a04e44308e382a3b7d7e7d5c5d039d892c12c8300d3e",
+          "size": 49514,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/banner.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/d3ec71d7ed9027a0aa04a04e44308e382a3b7d7e7d5c5d039d892c12c8300d3e.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "10c947b8db2833679176821f8fde873638118b24c43f17195ce7689cfb8b7d49",
+          "size": 29356,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/banner.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/10c947b8db2833679176821f8fde873638118b24c43f17195ce7689cfb8b7d49.webp",
+          "width": 1200
+        }
+      }
+    },
+    "overview": {
+      "alt": "Task detail view in the Lapis workspace, showing scheduling metadata, a checklist and comments.",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "01d35fd5f7391ab0118ec07e982c5e7f923de63d9f7dfa8a4993cbe3463d4d67",
+          "size": 44548,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/overview.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/01d35fd5f7391ab0118ec07e982c5e7f923de63d9f7dfa8a4993cbe3463d4d67.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "afa1d2538406517dec178f2224a2c06eb0dd86ca2f5a8eb6b2a77574b0c317ed",
+          "size": 52150,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/overview.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/afa1d2538406517dec178f2224a2c06eb0dd86ca2f5a8eb6b2a77574b0c317ed.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "a4749a1b496742621cb23ca26ff89e147d2b7a87eec340455587e6eef9704f01",
+          "size": 46050,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/overview.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/a4749a1b496742621cb23ca26ff89e147d2b7a87eec340455587e6eef9704f01.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "0987675cde12486b8a679f9aa2065e5419f3dedc7561f3d49df560dab9667691",
+          "size": 25758,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a0cfe225d62e402dbf98e1b84ef3da66a233ca60/registry-assets/overview.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/tasks/0987675cde12486b8a679f9aa2065e5419f3dedc7561f3d49df560dab9667691.webp",
+          "width": 1200
+        }
+      }
+    }
+  },
+  "name": "Tasks",
+  "owner": {
+    "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugin-tasks",
+    "verified": true
+  },
+  "schemaVersion": 2,
+  "signatures": [
+    {
+      "alg": "ed25519",
+      "keyId": "lapis-registry-2026-06",
+      "sig": "EEHIftfPK3HnSCpINGaMM07VqSdK3uzUK3obJtkt98LXmJWB4WK9eauwZ/ImnsA+ILYqMC6ZqN6UPhDc2ibGAQ=="
+    }
+  ],
+  "status": "active",
+  "versions": {
+    "0.1.2": {
+      "bundle": {
+        "downloadUrl": "../../download/tasks/0.1.2",
+        "sha256": "78f2c49abcb8ef43c9b11762e621ef92fdf0a3fb077bf0c3e2a7a95330481ebc",
+        "size": 596146,
+        "url": "https://github.com/lapismd/lapis-plugin-tasks/releases/download/%40lapis-notes/lapis-plugin-tasks%400.1.2/tasks-0.1.2.lapis-plugin"
+      },
+      "changelog": {
+        "description": "### Patch Changes\n\n- b280b97: Admit Design Core 0.8/0.9 alongside 0.7.4 and qualify the public Tasks planner and shell against the refreshed host cohort.\n- 1190368: Add signed installable archives, automatic registry submissions, and light/dark plugin screenshots.",
+        "title": "Tasks 0.1.2"
+      },
+      "minAppVersion": "0.0.1",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-11-01T15:08:21.000Z",
+      "version": "0.1.2"
+    }
+  }
+}
