@@ -1,0 +1,357 @@
+{
+  "appearance": {
+    "accent": "#06B6D4",
+    "icon": "table-2"
+  },
+  "author": "Lapis Notes",
+  "authorAvatarUrl": "https://gravatar.com/avatar/f7226d5f9cf07af2a6a60d3ab11413abb9d2e2eb60f2d5cce17356845a166155?size=256&d=initials",
+  "authorUrl": "https://app.lapis.md/",
+  "channel": "official",
+  "description": "CSV and TSV table view and note embed for Lapis applications",
+  "gallery": [
+    {
+      "alt": "The staff-readings CSV open as coloured source, with each column in its own colour and both sidebars closed.",
+      "id": "source",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "4fb071869ac49574f8d4a86849f356c817d29f1955e19ba382b7e026790af1e5",
+          "size": 210252,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/source.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/4fb071869ac49574f8d4a86849f356c817d29f1955e19ba382b7e026790af1e5.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "8e344d430a4ac24fb782c134bab6d116490514aa7f5620be730e7805e5c3b3a9",
+          "size": 236062,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/source.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/8e344d430a4ac24fb782c134bab6d116490514aa7f5620be730e7805e5c3b3a9.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "ab86d3e4f46e2b1b62861b9109311b09a34d890c9be1071b744311df35b4a880",
+          "size": 182722,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/source.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/ab86d3e4f46e2b1b62861b9109311b09a34d890c9be1071b744311df35b4a880.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "d2f9b59bd8eb5385ab3df6bd673982d730a4dae638de8a920ecbfd975ac29f52",
+          "size": 85124,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/source.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/d2f9b59bd8eb5385ab3df6bd673982d730a4dae638de8a920ecbfd975ac29f52.webp",
+          "width": 1200
+        }
+      }
+    },
+    {
+      "alt": "A staff-readings note with both sidebars closed, embedding the same CSV table beneath a short introduction.",
+      "id": "embedded-note",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "a170d37c50fc27674b8ba4b8db7c7358e0d7732ff49681711e439b8cc35f91f9",
+          "size": 136356,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/embedded-note.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/a170d37c50fc27674b8ba4b8db7c7358e0d7732ff49681711e439b8cc35f91f9.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "e44149011651f5566d9a0181ec2e307dfd4c0f3aa234cfdd6be2d1f970c05249",
+          "size": 138100,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/embedded-note.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/e44149011651f5566d9a0181ec2e307dfd4c0f3aa234cfdd6be2d1f970c05249.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "747f2c068a6e1606774e7e8718e5575476739c88254fc0d97619f895f30d08c9",
+          "size": 115216,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/embedded-note.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/747f2c068a6e1606774e7e8718e5575476739c88254fc0d97619f895f30d08c9.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "db6855e37c984dff532a5e8f0fb9d8273d15708068491944ceab3931d193dcce",
+          "size": 54950,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/embedded-note.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/db6855e37c984dff532a5e8f0fb9d8273d15708068491944ceab3931d193dcce.webp",
+          "width": 1200
+        }
+      }
+    },
+    {
+      "alt": "Find open on the staff-readings table, showing the one quoted cell that contains culvert.",
+      "id": "find",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "d487a78be76ca73a18f00c69c2f71101076091f33fa35bdb62663141fba000ae",
+          "size": 78578,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/find.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/d487a78be76ca73a18f00c69c2f71101076091f33fa35bdb62663141fba000ae.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "fa8ba5dba75b2538d821662978196072f4793bdc8062649b43e587ddec29ea16",
+          "size": 84690,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/find.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/fa8ba5dba75b2538d821662978196072f4793bdc8062649b43e587ddec29ea16.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "1b0ac5d1ccaa402c284e1d3ac70ff84dbe3ecd5116be806f7df1375097abb444",
+          "size": 73578,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/find.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/1b0ac5d1ccaa402c284e1d3ac70ff84dbe3ecd5116be806f7df1375097abb444.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "70835b5047e5481385d4fc1bdce9ac960239b61a1446d645987f2843970c023a",
+          "size": 36922,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/find.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/70835b5047e5481385d4fc1bdce9ac960239b61a1446d645987f2843970c023a.webp",
+          "width": 1200
+        }
+      }
+    },
+    {
+      "alt": "The staff-readings CSV open as a canvas sheet, with column letters, a fixed header, and both sidebars closed.",
+      "id": "canvas",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "db775a3984f7195a5d5fa4684a8597190b917f72c38934ca7304282d3acb89ad",
+          "size": 102490,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/canvas.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/db775a3984f7195a5d5fa4684a8597190b917f72c38934ca7304282d3acb89ad.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "fb77c92ab83b92cddc43b8fa4b51f89aee2e1d5ef1e1fc8400d7bce2bd8d15c5",
+          "size": 102954,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/canvas.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/fb77c92ab83b92cddc43b8fa4b51f89aee2e1d5ef1e1fc8400d7bce2bd8d15c5.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "8b13d1ecbe0d77bd02fa22cd2f4c7389fe36b953271e010a4a9dedff75919a24",
+          "size": 100592,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/canvas.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/8b13d1ecbe0d77bd02fa22cd2f4c7389fe36b953271e010a4a9dedff75919a24.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "ac729aeca95f770245dc035e5b2c15cf5ef4ebf5997a06d27570d9862dd52cd3",
+          "size": 49790,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/canvas.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/ac729aeca95f770245dc035e5b2c15cf5ef4ebf5997a06d27570d9862dd52cd3.webp",
+          "width": 1200
+        }
+      }
+    },
+    {
+      "alt": "A staff-readings note with both sidebars closed, embedding the same CSV as a canvas sheet beneath a short introduction.",
+      "id": "embedded-canvas",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "e79738e7359500000fdca9d3bed4258edff547c6124dd7563ae4e92866180778",
+          "size": 122868,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/embedded-canvas.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/e79738e7359500000fdca9d3bed4258edff547c6124dd7563ae4e92866180778.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "fa6dd8da83bda8ceb0ea8affa25de4d2003b3194ee92eabffa4af09c522d72de",
+          "size": 121756,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/embedded-canvas.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/fa6dd8da83bda8ceb0ea8affa25de4d2003b3194ee92eabffa4af09c522d72de.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "e3d718b623319b9c72e4d30526fbdbadc917dbfa34593ede6a3e3c16026732ae",
+          "size": 92402,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/embedded-canvas.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/e3d718b623319b9c72e4d30526fbdbadc917dbfa34593ede6a3e3c16026732ae.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "074f41cf1fbf02e9608df5a2a6cdf8ecf74d05e6f8dff69d02393208bba0d120",
+          "size": 48398,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/gallery/embedded-canvas.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/074f41cf1fbf02e9608df5a2a6cdf8ecf74d05e6f8dff69d02393208bba0d120.webp",
+          "width": 1200
+        }
+      }
+    }
+  ],
+  "highlights": [
+    "Open a vault CSV or TSV as a table.",
+    "Embed the same table in a note.",
+    "Keep a quoted comma in one cell."
+  ],
+  "id": "lapis-csv",
+  "latestVersion": "0.2.0",
+  "license": "Apache-2.0",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/csv#readme",
+    "homepage": "https://github.com/lapismd/lapis-plugins/tree/main/packages/csv#readme",
+    "issues": "https://github.com/lapismd/lapis-plugins/issues",
+    "repository": "https://github.com/lapismd/lapis-plugins"
+  },
+  "media": {
+    "banner": {
+      "alt": "Lapis CSV showing a staff-readings table with rainbow columns, a quoted comma cell, and the row count, both sidebars closed.",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "8fee034d55fc02a923c83d5b19534217106075b36ce317fc9db3e60334f8d33c",
+          "size": 52218,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/banner.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/8fee034d55fc02a923c83d5b19534217106075b36ce317fc9db3e60334f8d33c.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "d299ff94adedc37369e61e991080f0695af4561f8cd87b2fceaf498152afa250",
+          "size": 67546,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/banner.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/d299ff94adedc37369e61e991080f0695af4561f8cd87b2fceaf498152afa250.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "cbb245e139788c1e06af519566c3ce2a29deae81d3377d5bda2f47cb62ce2d12",
+          "size": 51548,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/banner.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/cbb245e139788c1e06af519566c3ce2a29deae81d3377d5bda2f47cb62ce2d12.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "23a83851c02afd47a5f43a8e778ab602df56b92042667e0ab9384a5807011bf2",
+          "size": 37986,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/banner.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/23a83851c02afd47a5f43a8e778ab602df56b92042667e0ab9384a5807011bf2.webp",
+          "width": 1200
+        }
+      }
+    },
+    "overview": {
+      "alt": "Lapis CSV source showing the same staff readings as rainbow-coloured columns in the editor, both sidebars closed.",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "00b150a43ff81851327f01c65897cb74381c119d161fe0de128255a662e8323e",
+          "size": 71168,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/overview.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/00b150a43ff81851327f01c65897cb74381c119d161fe0de128255a662e8323e.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "ca77337df24c701f31c47e5a60314addbe6360257cd84c40acfed4bc84a863b2",
+          "size": 88662,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/overview.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/ca77337df24c701f31c47e5a60314addbe6360257cd84c40acfed4bc84a863b2.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "1e8875b777663564717d33350faa4219fe9dc68038a73e1eda8474f103fb0fe4",
+          "size": 70798,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/overview.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/1e8875b777663564717d33350faa4219fe9dc68038a73e1eda8474f103fb0fe4.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "18a3de6f4a2173d7dbaf4a9cb4304bcb7984336e159d21242ac78f9d65033d6c",
+          "size": 49394,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/csv/registry-assets/overview.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-csv/18a3de6f4a2173d7dbaf4a9cb4304bcb7984336e159d21242ac78f9d65033d6c.webp",
+          "width": 1200
+        }
+      }
+    }
+  },
+  "name": "CSV",
+  "owner": {
+    "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugins",
+    "verified": true
+  },
+  "schemaVersion": 2,
+  "signatures": [
+    {
+      "alg": "ed25519",
+      "keyId": "lapis-registry-2026-06",
+      "sig": "rdeoqIlM6oLakn/Mhn/1Bbj8PQIUKHwjkpeUQRT/wj5bhLVXL8tW4BVgCYXJbO/8f+CrQvO4Uecl3LFrSeg2BA=="
+    }
+  ],
+  "status": "active",
+  "versions": {
+    "0.2.0": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-csv/0.2.0",
+        "sha256": "af7f4095829187d9f1b4f31e60b2eeb0afd24b41b64ba3b35717ee3a23ee5d34",
+        "size": 229638,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/csv%400.2.0/lapis-csv-0.2.0.lapis-plugin"
+      },
+      "changelog": {
+        "description": "### Minor Changes\n\n- [#28](https://github.com/lapismd/lapis-plugins/pull/28) [`3b2e5df`](https://github.com/lapismd/lapis-plugins/commit/3b2e5df4a5753461a2561c67f9fc42d22e96a896) Thanks [@stevejuma](https://github.com/stevejuma)! - Add a Storybook CSV and TSV table view and note embed for a seeded sample.\n\n### Patch Changes\n\n- [#28](https://github.com/lapismd/lapis-plugins/pull/28) [`8b06759`](https://github.com/lapismd/lapis-plugins/commit/8b067595fe863310e586566b1e99409fb4f79ae0) Thanks [@stevejuma](https://github.com/stevejuma)! - Mirror the workspace-host binding and the Svelte events/reactivity renderer\n  modules that the CSV runtime already imports in the plugin archive's shared\n  dependency metadata, so the packaged runtime resolves them from the host\n  allowlist like every other Svelte component package.\n\n- [#28](https://github.com/lapismd/lapis-plugins/pull/28) [`c9febb1`](https://github.com/lapismd/lapis-plugins/commit/c9febb1c8b431db30ecdcf7507cfff8f727bc4ed) Thanks [@stevejuma](https://github.com/stevejuma)! - Consume the published Notes next packages, Mira 0.1.2, and Design Core 0.7.0 through the existing semver floors. Markdown dependents accept ^0.2.0. History keeps its public repository entrypoints, and Bases keeps the file-icon contract on API 0.2.0.",
+        "title": "CSV 0.2.0"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-10-30T14:58:19.000Z",
+      "version": "0.2.0"
+    }
+  }
+}

@@ -4,7 +4,7 @@
     "icon": "spell-check-2"
   },
   "author": "Lapis Notes",
-  "authorAvatarUrl": "https://www.gravatar.com/avatar/1df68d9ff087b0dd72fd8626056fca7f?s=128&d=404",
+  "authorAvatarUrl": "https://gravatar.com/avatar/f7226d5f9cf07af2a6a60d3ab11413abb9d2e2eb60f2d5cce17356845a166155?size=256&d=initials",
   "authorUrl": "https://app.lapis.md/",
   "channel": "official",
   "description": "Harper grammar and spelling diagnostics for open notes",
@@ -18,7 +18,7 @@
           "mediaType": "image/webp",
           "sha256": "e396fd5f403972e567aafe17d8aa60e7e5fff46bf1d0be64878d36974e395830",
           "size": 126142,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/gallery/suggestions-problems.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/gallery/suggestions-problems.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/e396fd5f403972e567aafe17d8aa60e7e5fff46bf1d0be64878d36974e395830.webp",
           "width": 2400
         },
@@ -27,7 +27,7 @@
           "mediaType": "image/webp",
           "sha256": "e5f1dfb287d5c0ad9b835f50f4953d779e5e42c46ab0372a5f8c3ca9418549b7",
           "size": 127010,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/gallery/suggestions-problems.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/gallery/suggestions-problems.full.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/e5f1dfb287d5c0ad9b835f50f4953d779e5e42c46ab0372a5f8c3ca9418549b7.webp",
           "width": 2400
         },
@@ -36,7 +36,7 @@
           "mediaType": "image/webp",
           "sha256": "a4e25c494217bed427f53a2cf6c85151bfdf477b9b22b40311aacce3f3f33dcd",
           "size": 112232,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/gallery/suggestions-problems.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/gallery/suggestions-problems.light.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/a4e25c494217bed427f53a2cf6c85151bfdf477b9b22b40311aacce3f3f33dcd.webp",
           "width": 2400
         },
@@ -45,7 +45,7 @@
           "mediaType": "image/webp",
           "sha256": "72777ce37847ff48f08d2afd2e916d2c325b8b5a2eae53f3895eb9a766866195",
           "size": 57632,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/gallery/suggestions-problems.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/gallery/suggestions-problems.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/72777ce37847ff48f08d2afd2e916d2c325b8b5a2eae53f3895eb9a766866195.webp",
           "width": 1200
         }
@@ -60,7 +60,7 @@
           "mediaType": "image/webp",
           "sha256": "ecec3acfae515b8ad8b008293adb64de5d89b4acbc6f96c9c0e79ceaf0e83a9e",
           "size": 124304,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/gallery/editor-action-popover.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/gallery/editor-action-popover.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/ecec3acfae515b8ad8b008293adb64de5d89b4acbc6f96c9c0e79ceaf0e83a9e.webp",
           "width": 2400
         },
@@ -69,7 +69,7 @@
           "mediaType": "image/webp",
           "sha256": "7c60da13a59d3cc97a5f95f003f3a794c8ec76ebc426044269b10a0d796f28fb",
           "size": 127830,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/gallery/editor-action-popover.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/gallery/editor-action-popover.full.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/7c60da13a59d3cc97a5f95f003f3a794c8ec76ebc426044269b10a0d796f28fb.webp",
           "width": 2400
         },
@@ -78,7 +78,7 @@
           "mediaType": "image/webp",
           "sha256": "f48942a999ee4da1312ec4dc33cb1245e13d9de0dc4b9eb3290f48f47ad205fa",
           "size": 113564,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/gallery/editor-action-popover.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/gallery/editor-action-popover.light.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/f48942a999ee4da1312ec4dc33cb1245e13d9de0dc4b9eb3290f48f47ad205fa.webp",
           "width": 2400
         },
@@ -87,7 +87,7 @@
           "mediaType": "image/webp",
           "sha256": "af644639152b1220ce67f687975def4aec4b7537e5f47492d0ef7cdbb38fb2d7",
           "size": 57430,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/gallery/editor-action-popover.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/gallery/editor-action-popover.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/af644639152b1220ce67f687975def4aec4b7537e5f47492d0ef7cdbb38fb2d7.webp",
           "width": 1200
         }
@@ -100,7 +100,7 @@
     "Configure dialect, dictionaries, rules, and file scopes per vault."
   ],
   "id": "spellcheck",
-  "latestVersion": "0.1.3",
+  "latestVersion": "0.1.4",
   "license": "Apache-2.0",
   "links": {
     "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/spellcheck#readme",
@@ -117,7 +117,7 @@
           "mediaType": "image/webp",
           "sha256": "0be93664f1c83761c19fd4bd63f333b703c025740573141a11d7f99f7dc83ad2",
           "size": 52520,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/banner.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/banner.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/0be93664f1c83761c19fd4bd63f333b703c025740573141a11d7f99f7dc83ad2.webp",
           "width": 2400
         },
@@ -126,7 +126,7 @@
           "mediaType": "image/webp",
           "sha256": "240cb5d3a8fb8a7bac3f8cd972808cd3f515f4c3b33c4e2b2537e760154c126a",
           "size": 61288,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/banner.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/banner.full.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/240cb5d3a8fb8a7bac3f8cd972808cd3f515f4c3b33c4e2b2537e760154c126a.webp",
           "width": 2400
         },
@@ -135,7 +135,7 @@
           "mediaType": "image/webp",
           "sha256": "543d979931e47edae5a29af2d1d68cd6c8de547fb63279a2de6ed3fe6779c98c",
           "size": 52700,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/banner.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/banner.light.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/543d979931e47edae5a29af2d1d68cd6c8de547fb63279a2de6ed3fe6779c98c.webp",
           "width": 2400
         },
@@ -144,7 +144,7 @@
           "mediaType": "image/webp",
           "sha256": "6f8c991f1a52dfec1c08e4cf6811d8e69c7c5c0e495789e90ebfd07bc7bf9dbd",
           "size": 31350,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/banner.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/banner.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/6f8c991f1a52dfec1c08e4cf6811d8e69c7c5c0e495789e90ebfd07bc7bf9dbd.webp",
           "width": 1200
         }
@@ -158,7 +158,7 @@
           "mediaType": "image/webp",
           "sha256": "6158e271b6f6823cd7c53a8464d28e963af5d82a502698a78db0b675386ed263",
           "size": 44810,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/overview.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/overview.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/6158e271b6f6823cd7c53a8464d28e963af5d82a502698a78db0b675386ed263.webp",
           "width": 2400
         },
@@ -167,7 +167,7 @@
           "mediaType": "image/webp",
           "sha256": "d48d053c099bd1de3f40fa54b1325115a7c90fbb9a6442856310ccf998ef631f",
           "size": 52396,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/overview.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/overview.full.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/d48d053c099bd1de3f40fa54b1325115a7c90fbb9a6442856310ccf998ef631f.webp",
           "width": 2400
         },
@@ -176,7 +176,7 @@
           "mediaType": "image/webp",
           "sha256": "5bc5d2584f73b213b0ea3db24f4f6a657ca700fa38534fe60ef6ff92a62faa1d",
           "size": 45420,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/overview.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/overview.light.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/5bc5d2584f73b213b0ea3db24f4f6a657ca700fa38534fe60ef6ff92a62faa1d.webp",
           "width": 2400
         },
@@ -185,7 +185,7 @@
           "mediaType": "image/webp",
           "sha256": "fec4f15df95871a6b07ebe7a56792aa1861a2b920e39e85d8d2c8a98aa35910c",
           "size": 27712,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/48141a6e4571338c137ac8d44095704199a59083/packages/spellcheck/registry-assets/overview.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/spellcheck/registry-assets/overview.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/spellcheck/fec4f15df95871a6b07ebe7a56792aa1861a2b920e39e85d8d2c8a98aa35910c.webp",
           "width": 1200
         }
@@ -203,7 +203,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "CS4Qzu2OIk5ThCtrfpfBtJSju7aPvwp1SIiyD3aYtdQjwmOnpy4QKY57pKZE1Rsp1xev6gxmZZKDXvkD0vXCBg=="
+      "sig": "Knrf5Hgi+BjJKlI/Mv3/POVmsLYsK6nkNziFZdwxufUcNeQ3rYjzRe9k6p860bZxOKol2QIcAYivYVkedIU/Ag=="
     }
   ],
   "status": "active",
@@ -245,6 +245,25 @@
       ],
       "releasedAt": "2026-10-14T13:44:30.000Z",
       "version": "0.1.3"
+    },
+    "0.1.4": {
+      "bundle": {
+        "downloadUrl": "../../download/spellcheck/0.1.4",
+        "sha256": "36f71bcf2681f83c830a6d828dbc770bbf9e1c101b2561401553120d3f77dc25",
+        "size": 10000519,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/spellcheck%400.1.4/spellcheck-0.1.4.lapis-plugin"
+      },
+      "changelog": {
+        "description": "### Patch Changes\n\n- [#28](https://github.com/lapismd/lapis-plugins/pull/28) [`c9febb1`](https://github.com/lapismd/lapis-plugins/commit/c9febb1c8b431db30ecdcf7507cfff8f727bc4ed) Thanks [@stevejuma](https://github.com/stevejuma)! - Consume the published Notes next packages, Mira 0.1.2, and Design Core 0.7.0 through the existing semver floors. Markdown dependents accept ^0.2.0. History keeps its public repository entrypoints, and Bases keeps the file-icon contract on API 0.2.0.",
+        "title": "Spell Check 0.1.4"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-10-30T15:58:31.000Z",
+      "version": "0.1.4"
     }
   }
 }
