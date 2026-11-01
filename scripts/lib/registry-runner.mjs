@@ -17,6 +17,7 @@ import {
   requestFile,
 } from "./registry-request.mjs";
 import { writeSubmission, parseSubmission } from "./registry-submissions.mjs";
+import { waitForPrHead } from "./registry-head.mjs";
 import { LeaseConflict } from "./registry-refresh.mjs";
 import {
   syncGitHubRelease,
@@ -73,7 +74,13 @@ export function createRegistryRunner(client, target, directory) {
       : await client.list(
           `/repos/${registryRepository}/pulls?state=all&head=${encodeURIComponent(`lapismd:${branch}`)}`,
         );
-    const pr = matches.find((p) => p.state === "open") ?? matches[0];
+    const match = matches.find((p) => p.state === "open") ?? matches[0];
+    const pr =
+      match && !target.prNumber
+        ? await client.call(
+            `/repos/${registryRepository}/pulls/${match.number}`,
+          )
+        : match;
     if (
       pr &&
       pr.state !== "open" &&
@@ -331,15 +338,12 @@ export function createRegistryRunner(client, target, directory) {
     );
     if (latest.pr) {
       // A maintainer may have edited notes during the push. Preserve the latest prose.
-      const current = await client.call(
-        `/repos/${registryRepository}/pulls/${latest.pr.number}`,
-      );
-      if (
-        current.state !== "open" ||
-        current.head.sha !== candidate.sha ||
-        !sameRequest(requestFromPr(current), latest.request)
-      )
-        throw new LeaseConflict("PR changed before description update.");
+      const current = await waitForPrHead(client, latest.pr.number, {
+        expectedHead: candidate.sha,
+        previousHead: expected.headSha,
+        isExpected: (current) =>
+          sameRequest(requestFromPr(current), latest.request),
+      });
       await client.call(
         `/repos/${registryRepository}/pulls/${current.number}`,
         {

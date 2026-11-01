@@ -11,6 +11,7 @@ export class GitHubClient {
       headers: {
         Accept: "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
+        "Cache-Control": "no-cache",
         ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
         ...(body ? { "Content-Type": "application/json" } : {}),
       },
