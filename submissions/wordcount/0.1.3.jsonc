@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "repository": "lapismd/lapis-plugins",
+    "package_name": "@lapis-notes/wordcount",
+    "plugin_id": "wordcount",
+    "source_commit": "879581d1549187bdbac2d75b40d02e0df46e721a",
+    "release_tag": "wordcount@0.1.3",
+    "asset_name": "wordcount-0.1.3.lapis-plugin",
+    "version": "0.1.3",
+  },
+}
