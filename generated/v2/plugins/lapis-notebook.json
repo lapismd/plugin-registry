@@ -1,0 +1,228 @@
+{
+  "appearance": {
+    "accent": "#8B5CF6",
+    "icon": "file-code-2"
+  },
+  "author": "Lapis Notes",
+  "authorUrl": "https://github.com/lapismd",
+  "channel": "official",
+  "description": "Executable .notebook.md notebooks with reactive cells and rich outputs.",
+  "gallery": [
+    {
+      "alt": "Notebook in the real Lapis workspace with Explorer, a regional revenue analysis, live results and a structured table.",
+      "id": "research",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "b91b458e9011c41343d8cd4878463f75a4e0c632c3ada054ac2e36a14405b783",
+          "size": 170476,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/gallery/research.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/b91b458e9011c41343d8cd4878463f75a4e0c632c3ada054ac2e36a14405b783.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "006baa52b8f057baf1d6fb2c960b7bf6b955543c0dd778026412f53b4b546b66",
+          "size": 173022,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/gallery/research.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/006baa52b8f057baf1d6fb2c960b7bf6b955543c0dd778026412f53b4b546b66.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "c4999e93f61f740cf38f4229dac4db5e0b51ff057c73ef152a0eb02e079756a8",
+          "size": 141248,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/gallery/research.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/c4999e93f61f740cf38f4229dac4db5e0b51ff057c73ef152a0eb02e079756a8.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "1b6d88fcc94032ed705d3af118a83bb0ae44690a76da9157d5b83f32134b9971",
+          "size": 64862,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/gallery/research.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/1b6d88fcc94032ed705d3af118a83bb0ae44690a76da9157d5b83f32134b9971.webp",
+          "width": 1200
+        }
+      }
+    },
+    {
+      "alt": "Notebook with a labelled growth slider, revenue table and a reactive forecast in the Lapis workspace.",
+      "id": "interactive",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "e38841398108d9d221fd4c40db7bd89e02875a47db4b461ce24e7b10746ef7df",
+          "size": 155786,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/gallery/interactive.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/e38841398108d9d221fd4c40db7bd89e02875a47db4b461ce24e7b10746ef7df.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "e62cb450dff32f9074dfae25a462740a97bb48f00c9154abd4a414c9f2f23de3",
+          "size": 158276,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/gallery/interactive.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/e62cb450dff32f9074dfae25a462740a97bb48f00c9154abd4a414c9f2f23de3.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "73616d2497f6af87574a39d9392d8a3ff776f0fcf5f322781f41fb121704463f",
+          "size": 132622,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/gallery/interactive.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/73616d2497f6af87574a39d9392d8a3ff776f0fcf5f322781f41fb121704463f.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "3ade0944619e2ad38ae05d9be860914330f6f5158d1bec866e871c1d8c21f297",
+          "size": 58570,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/gallery/interactive.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/3ade0944619e2ad38ae05d9be860914330f6f5158d1bec866e871c1d8c21f297.webp",
+          "width": 1200
+        }
+      }
+    }
+  ],
+  "highlights": [
+    "Execute JavaScript, TypeScript and SQL cells in portable Markdown notebooks.",
+    "Connect live inputs to reactive results, charts and rich tables.",
+    "Keep analysis and narrative together in the Lapis workspace."
+  ],
+  "id": "lapis-notebook",
+  "latestVersion": "0.2.2",
+  "license": "AGPL-3.0-or-later",
+  "links": {
+    "documentation": "https://github.com/lapismd/lapis-plugin-notebook#readme",
+    "repository": "https://github.com/lapismd/lapis-plugin-notebook"
+  },
+  "media": {
+    "banner": {
+      "alt": "Notebook in the real Lapis workspace with Explorer, a regional revenue analysis, live results and a structured table.",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "26257c8a3481e5d4bc26b08bc997af39b650e503411ec8f9bcf934028142ac61",
+          "size": 67886,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/banner.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/26257c8a3481e5d4bc26b08bc997af39b650e503411ec8f9bcf934028142ac61.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "89f414b720270e19aefaf27797e9481a7379c64eb94686790777d4bb6fe21c01",
+          "size": 79050,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/banner.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/89f414b720270e19aefaf27797e9481a7379c64eb94686790777d4bb6fe21c01.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "fa32b2044251d2b6d37fc4a1363a1f46bb2900a93bf633ae957c20cc18f8adbd",
+          "size": 67666,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/banner.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/fa32b2044251d2b6d37fc4a1363a1f46bb2900a93bf633ae957c20cc18f8adbd.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "2f58654ccc33eeb492d3e8399b0e3eaae2e5a9b450f2f9f6a3df5260f890e2b2",
+          "size": 49670,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/banner.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/2f58654ccc33eeb492d3e8399b0e3eaae2e5a9b450f2f9f6a3df5260f890e2b2.webp",
+          "width": 1200
+        }
+      }
+    },
+    "overview": {
+      "alt": "Notebook with a labelled growth slider, revenue table and a reactive forecast in the Lapis workspace.",
+      "images": {
+        "dark": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "76901940ef4e1553d5d9098224e8825efcb81bf4365157785947fa3d672694d8",
+          "size": 65446,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/overview.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/76901940ef4e1553d5d9098224e8825efcb81bf4365157785947fa3d672694d8.webp",
+          "width": 2400
+        },
+        "full": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "54822ba037cfb75d7470784ffa80134b6ec0b87c9eb1890bbbb20e0a32a478ff",
+          "size": 74820,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/overview.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/54822ba037cfb75d7470784ffa80134b6ec0b87c9eb1890bbbb20e0a32a478ff.webp",
+          "width": 2400
+        },
+        "light": {
+          "height": 1600,
+          "mediaType": "image/webp",
+          "sha256": "83f0d65f05244280ad7298e82f8d8a3f87542e265919e1478cc79b19c1dcc0ed",
+          "size": 65108,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/overview.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/83f0d65f05244280ad7298e82f8d8a3f87542e265919e1478cc79b19c1dcc0ed.webp",
+          "width": 2400
+        },
+        "preview": {
+          "height": 800,
+          "mediaType": "image/webp",
+          "sha256": "32cb1dc9d9aee041f7c64af71f950764d51a57308226b3460c59eb1a3ce96ad2",
+          "size": 38556,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-notebook/3c533226082f2195bd2eac435728a5cb5932c83c/registry-assets/overview.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-notebook/32cb1dc9d9aee041f7c64af71f950764d51a57308226b3460c59eb1a3ce96ad2.webp",
+          "width": 1200
+        }
+      }
+    }
+  },
+  "name": "Notebook",
+  "owner": {
+    "name": "Lapis Notes",
+    "url": "https://github.com/lapismd/lapis-plugin-notebook",
+    "verified": true
+  },
+  "schemaVersion": 2,
+  "signatures": [
+    {
+      "alg": "ed25519",
+      "keyId": "lapis-registry-2026-06",
+      "sig": "gsa6xptdtFv7LRFLbGu9O5lG52M0vMQg9HqNvSD7DgyT0uDZpTidlQiTOWk1UW6aLTGV5fD8Hl4/YqWQA2VsCg=="
+    }
+  ],
+  "status": "active",
+  "versions": {
+    "0.2.2": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-notebook/0.2.2",
+        "sha256": "c3c68f5fb607231f4f42fce62269ad76a4d5d71abdb9649f8b75b045c383e29d",
+        "size": 25385264,
+        "url": "https://github.com/lapismd/lapis-plugin-notebook/releases/download/v0.2.2/lapis-notebook-0.2.2.lapis-plugin"
+      },
+      "changelog": {
+        "description": "### Patch Changes\n\n- ad70d2c: Publish signed installable archives and governed plugin screenshots through the automatic Changesets release and registry submission pipelines.",
+        "title": "Notebook 0.2.2"
+      },
+      "minAppVersion": "0.0.1",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-11-01T15:48:20.000Z",
+      "version": "0.2.2"
+    }
+  }
+}

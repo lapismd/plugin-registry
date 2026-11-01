@@ -22,10 +22,10 @@
       "detail": "plugins/ai.json",
       "id": "ai",
       "latestRelease": {
-        "bundleSize": 487496,
-        "releasedAt": "2026-10-14T13:43:15.000Z"
+        "bundleSize": 593820,
+        "releasedAt": "2026-10-30T12:12:56.000Z"
       },
-      "latestVersion": "0.1.5",
+      "latestVersion": "0.1.6",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "AI",
@@ -350,6 +350,46 @@
       "owner": {
         "name": "Lapis Notes",
         "url": "https://github.com/lapismd/lapis-plugins",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "appearance": {
+        "accent": "#8B5CF6",
+        "icon": "file-code-2"
+      },
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "data",
+        "productivity"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Executable .notebook.md notebooks with reactive cells and rich outputs.",
+      "detail": "plugins/lapis-notebook.json",
+      "id": "lapis-notebook",
+      "latestRelease": {
+        "bundleSize": 25385264,
+        "releasedAt": "2026-11-01T15:48:20.000Z"
+      },
+      "latestVersion": "0.2.2",
+      "links": {},
+      "minAppVersion": "0.0.1",
+      "name": "Notebook",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugin-notebook",
         "verified": true
       },
       "platforms": [
@@ -722,7 +762,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "odgvCWeFvvgp1OmPtL/fax42YY3aGW+sLWBvZtCT+NstQxjkwFronyaERszvrmLPLp2vYxB33CCVx1PBLseBCA=="
+      "sig": "jkSckXK/SSTYZnin4NYGrsMvDbYtWzo7jYwuLpYUeHF9Bj6N29aBqA7oIGPWQtSqXnKooYLenngQxNQYgtypDg=="
     }
   ]
 }
