@@ -639,6 +639,45 @@
     },
     {
       "appearance": {
+        "accent": "#8B5CF6",
+        "icon": "list-checks"
+      },
+      "author": "Lapis Notes",
+      "authorUrl": "https://github.com/lapismd",
+      "badges": [
+        "official",
+        "verified"
+      ],
+      "categories": [
+        "productivity"
+      ],
+      "channel": "official",
+      "contributes": {},
+      "description": "Vault-native Tasks planner, indexing, and queries.",
+      "detail": "plugins/tasks.json",
+      "id": "tasks",
+      "latestRelease": {
+        "bundleSize": 596146,
+        "releasedAt": "2026-11-01T15:08:21.000Z"
+      },
+      "latestVersion": "0.1.2",
+      "links": {},
+      "minAppVersion": "0.0.1",
+      "name": "Tasks",
+      "owner": {
+        "name": "Lapis Notes",
+        "url": "https://github.com/lapismd/lapis-plugin-tasks",
+        "verified": true
+      },
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "schemaVersion": 2,
+      "status": "active"
+    },
+    {
+      "appearance": {
         "accent": "#06B6D4",
         "icon": "whole-word"
       },
@@ -683,7 +722,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "JE1AzRgOTWQmceOeJ9KSDDe/lnoFW6MvHhBouftl24Nw7UvwS32e2IJdKt6k+ATd2JWK7h1egkS1MT7v4hPZDQ=="
+      "sig": "odgvCWeFvvgp1OmPtL/fax42YY3aGW+sLWBvZtCT+NstQxjkwFronyaERszvrmLPLp2vYxB33CCVx1PBLseBCA=="
     }
   ]
 }
