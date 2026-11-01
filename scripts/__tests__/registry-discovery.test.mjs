@@ -245,7 +245,8 @@ test("published recovery rejects a tag mismatch and an untrusted release key", a
 
 test("GitHub collection reads paginate and annotated tags resolve to immutable commits", async () => {
   let pages = 0;
-  const client = new GitHubClient("test", async (url) => {
+  const client = new GitHubClient("test", async (url, init) => {
+    assert.equal(init.headers["Cache-Control"], "no-cache");
     if (url.includes("per_page"))
       return Response.json(
         Array.from({ length: ++pages === 1 ? 100 : 2 }, (_, i) => i),

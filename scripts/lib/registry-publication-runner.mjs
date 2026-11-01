@@ -21,6 +21,7 @@ import {
 } from "./registry-publication.mjs";
 import { LeaseConflict } from "./registry-refresh.mjs";
 import { stableStringify } from "./registry.mjs";
+import { waitForPrHead } from "./registry-head.mjs";
 
 const execute = promisify(execFile);
 export function createPublicationRunner(client, directory) {
@@ -83,8 +84,12 @@ export function createPublicationRunner(client, directory) {
     const pulls = await client.list(
       `/repos/${registryRepository}/pulls?state=all&head=${encodeURIComponent(`lapismd:${publicationBranch}`)}`,
     );
-    const pr = pulls.find((p) => p.state === "open");
-    const previous = pr ?? pulls[0];
+    const listed = pulls.find((p) => p.state === "open");
+    const detail = listed
+      ? await client.call(`/repos/${registryRepository}/pulls/${listed.number}`)
+      : null;
+    const pr = detail?.state === "open" ? detail : undefined;
+    const previous = detail ?? pulls[0];
     if (previous) {
       const [commits, files] = await Promise.all([
         client.list(
@@ -274,18 +279,13 @@ export function createPublicationRunner(client, directory) {
       );
     }
     if (latest.pr) {
-      const current = await client.call(
-        `/repos/${registryRepository}/pulls/${latest.pr.number}`,
-      );
-      if (
-        current.state !== "open" ||
-        current.head.sha !== candidate.sha ||
-        publicationIdentity(publicationRecords(current.body)) !==
-          publicationIdentity(publicationRecords(latest.pr.body))
-      )
-        throw new LeaseConflict(
-          "Publication PR changed before description update.",
-        );
+      const current = await waitForPrHead(client, latest.pr.number, {
+        expectedHead: candidate.sha,
+        previousHead: expected.headSha,
+        isExpected: (current) =>
+          publicationIdentity(publicationRecords(current.body)) ===
+          publicationIdentity(publicationRecords(latest.pr.body)),
+      });
       return client.call(
         `/repos/${registryRepository}/pulls/${current.number}`,
         {

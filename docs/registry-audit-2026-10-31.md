@@ -134,3 +134,22 @@ batch. Unrelated plugin edits and formatting-only differences do not trigger it.
 The exact publication-discovery regression failed once before this guard and
 passed after it. Full `pnpm check` passed all 117 unit and 25 cold browser cases,
 signatures, types, build and formatting using the documented timestamp input.
+
+## Post-push PR visibility
+
+The first publication refresh after PR #56 built and validated its catalog three
+times and updated #55's branch, then exhausted its race retries
+([run 41259919227](https://github.com/lapismd/plugin-registry/actions/runs/41259919227)).
+Git and PR API views can expose a pushed head at different times. Mutable API
+reads now bypass caches, and snapshots re-fetch individual PR details instead of
+using list metadata as the final authority.
+
+After a leased push, both submission and publication workers wait for the exact
+expected head before updating the description. Every read rechecks open state
+and request identity. A different head fails immediately; visibility of the
+previous captured head waits for at most 20 reads, one second apart. Overall
+branch replay remains limited to three attempts, with the specific retry cause
+retained in logs. The expected-head regression failed once before the wait and
+passed afterward, including closed PRs, changed requests, competing heads and
+bounded timeouts. Full `pnpm check` passed 118 unit and 25 cold browser cases,
+signatures, types, build and formatting with the documented timestamp input.

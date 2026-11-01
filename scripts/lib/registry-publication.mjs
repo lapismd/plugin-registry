@@ -65,8 +65,9 @@ export function assertPublicationPr(pr, commits, files) {
         filename.startsWith("generated/v2/") ||
         filename === "generated/download-targets.mjs" ||
         entries.has(filename)
-      )
+      ) {
         continue;
+      }
       if (queue.has(filename) && file.status === "removed") continue;
       throw new Error(`Unexpected publication change: ${filename}`);
     }
@@ -118,8 +119,12 @@ export async function publishQueuedSubmissions(
         before.pr?.number !== latest.pr?.number ||
         publicationIdentity(before.records) !==
           publicationIdentity(latest.records)
-      )
+      ) {
+        console.warn(
+          `Publication state moved during attempt ${attempt + 1}/3; rebuilding from the new snapshot.`,
+        );
         continue;
+      }
       const pr = await adapter.publish(candidate, latest);
       return {
         status: "updated",
@@ -128,6 +133,7 @@ export async function publishQueuedSubmissions(
       };
     } catch (error) {
       if (!(error instanceof LeaseConflict)) throw error;
+      console.warn(`Publication retry ${attempt + 1}/3: ${error.message}`);
     }
   }
   throw new Error(

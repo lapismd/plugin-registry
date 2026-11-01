@@ -290,18 +290,20 @@ test("a later metadata dispatch can create a new submission after the preceding 
   };
   const client = {
     call: async (url) =>
-      url.includes("/commits/main")
-        ? { sha: "main" }
-        : url.includes("/git/ref/")
-          ? { object: { sha: "head" } }
-          : url.includes("main...head")
-            ? {
-                total_commits: 0,
-                commits: [],
-                files: [],
-                merge_base_commit: { sha: "base" },
-              }
-            : { status: "ahead" },
+      url.includes("/pulls/")
+        ? previous
+        : url.includes("/commits/main")
+          ? { sha: "main" }
+          : url.includes("/git/ref/")
+            ? { object: { sha: "head" } }
+            : url.includes("main...head")
+              ? {
+                  total_commits: 0,
+                  commits: [],
+                  files: [],
+                  merge_base_commit: { sha: "base" },
+                }
+              : { status: "ahead" },
     list: async () => [previous],
     file: async (_repo, file, ref) =>
       file.startsWith("entries/")
@@ -508,18 +510,20 @@ test("publication discovery rejects truncated queues, closed PRs, human commits 
     files = [{ filename: records[0].file, status: "removed" }];
   const client = {
     call: async (url) =>
-      url.includes("/git/trees/")
-        ? {
-            truncated,
-            tree: records.map((item) => ({ path: item.file, type: "blob" })),
-          }
-        : url.includes("/git/ref/")
-          ? pr
-            ? { object: { sha: "head" } }
-            : null
-          : url.includes("/compare/")
-            ? { merge_base_commit: { sha: "base" } }
-            : { sha: "main" },
+      url.includes("/pulls/")
+        ? pr
+        : url.includes("/git/trees/")
+          ? {
+              truncated,
+              tree: records.map((item) => ({ path: item.file, type: "blob" })),
+            }
+          : url.includes("/git/ref/")
+            ? pr
+              ? { object: { sha: "head" } }
+              : null
+            : url.includes("/compare/")
+              ? { merge_base_commit: { sha: "base" } }
+              : { sha: "main" },
     list: async (url) =>
       url.endsWith("/commits")
         ? [
