@@ -504,6 +504,7 @@ test("publication discovery rejects truncated queues, closed PRs, human commits 
   let pr = null,
     human = false,
     truncated = false,
+    curatedChanged = false,
     files = [{ filename: records[0].file, status: "removed" }];
   const client = {
     call: async (url) =>
@@ -516,7 +517,9 @@ test("publication discovery rejects truncated queues, closed PRs, human commits 
           ? pr
             ? { object: { sha: "head" } }
             : null
-          : { sha: "main" },
+          : url.includes("/compare/")
+            ? { merge_base_commit: { sha: "base" } }
+            : { sha: "main" },
     list: async (url) =>
       url.endsWith("/commits")
         ? [
@@ -530,8 +533,15 @@ test("publication discovery rejects truncated queues, closed PRs, human commits 
           : pr
             ? [pr]
             : [],
-    file: async (_repo, file) =>
-      records.find((item) => item.file === file)?.request,
+    file: async (_repo, file, ref) =>
+      file.startsWith("entries/")
+        ? {
+            description:
+              curatedChanged && ref === "main"
+                ? "Maintainer curation"
+                : "Original",
+          }
+        : records.find((item) => item.file === file)?.request,
   };
   const runner = createPublicationRunner(client, root.pathname.slice(0, -1));
   assert.equal((await runner.snapshot()).records.length, 1);
@@ -548,6 +558,9 @@ test("publication discovery rejects truncated queues, closed PRs, human commits 
     body: publicationDescription("", records),
   };
   assert.equal((await runner.snapshot()).pr.number, 52);
+  curatedChanged = true;
+  await assert.rejects(runner.snapshot(), /curated entry changed/);
+  curatedChanged = false;
   human = true;
   await assert.rejects(runner.snapshot(), /human/);
   human = false;

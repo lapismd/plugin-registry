@@ -117,3 +117,20 @@ the change, and the full `pnpm check` lane passed all 117 unit and 25 cold brows
 cases, signatures, type/build and formatting checks. The local macOS target also
 passed before the change because its system temporary directory shares the
 checkout filesystem; the hosted log supplies the failing environment evidence.
+
+## Independent merges and maintainer curation
+
+At the maintainer's request, required status checks now use `strict: false`,
+removing the up-to-date branch restriction. The `checks` context remains required.
+The complete protection response was compared before and after the update;
+every other setting was unchanged. The proposed ancestry-refresh change in
+PR #54 was closed without merging. Verified one-file submission PRs can therefore
+remain current across unrelated main-branch changes.
+
+Publication updates also compare each already-pending plugin's curated entry on
+current `main` with the publication PR's merge base. A competing semantic entry
+change requires manual reconciliation before the bot can rebuild or publish the
+batch. Unrelated plugin edits and formatting-only differences do not trigger it.
+The exact publication-discovery regression failed once before this guard and
+passed after it. Full `pnpm check` passed all 117 unit and 25 cold browser cases,
+signatures, types, build and formatting using the documented timestamp input.

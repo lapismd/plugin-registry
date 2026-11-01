@@ -20,6 +20,7 @@ import {
   publicationRecords,
 } from "./registry-publication.mjs";
 import { LeaseConflict } from "./registry-refresh.mjs";
+import { stableStringify } from "./registry.mjs";
 
 const execute = promisify(execFile);
 export function createPublicationRunner(client, directory) {
@@ -100,6 +101,34 @@ export function createPublicationRunner(client, directory) {
           throw new Error(
             "Publication request identity changed; reconcile the queue or PR manually.",
           );
+      }
+      if (pr) {
+        const comparison = await client.call(
+          `/repos/${registryRepository}/compare/${mainSha}...${pr.head.sha}`,
+        );
+        const base = comparison.merge_base_commit?.sha;
+        if (!base)
+          throw new Error(
+            "Publication comparison is incomplete; reconcile manually.",
+          );
+        const plugins = new Set(
+          previousRecords
+            .filter((record) =>
+              records.some((queued) => queued.file === record.file),
+            )
+            .map((record) => record.request.client_payload.plugin_id),
+        );
+        for (const id of plugins) {
+          const file = `entries/official/${id}.jsonc`;
+          const [current, original] = await Promise.all([
+            client.file(registryRepository, file, mainSha, { missing: true }),
+            client.file(registryRepository, file, base, { missing: true }),
+          ]);
+          if (stableStringify(current, 0) !== stableStringify(original, 0))
+            throw new Error(
+              `${id}: curated entry changed on main while publication PR https://github.com/${registryRepository}/pull/${pr.number} was open; reconcile manually.`,
+            );
+        }
       }
       if (!pr && !previous.merged_at && records.length)
         throw new Error(
