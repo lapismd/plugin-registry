@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "repository": "lapismd/lapis-plugins",
+    "package_name": "@lapis-notes/markdown-lint",
+    "plugin_id": "lapis-markdown-lint",
+    "version": "0.1.3",
+    "release_tag": "markdown-lint@0.1.3",
+    "asset_name": "lapis-markdown-lint-0.1.3.lapis-plugin",
+    "source_commit": "2e3887a6cb039198c2ab627d3ce1e17f9070e49c",
+  },
+}
