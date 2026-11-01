@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "repository": "lapismd/lapis-plugins",
+    "package_name": "@lapis-notes/bases",
+    "plugin_id": "bases",
+    "source_commit": "be302f372ca2058a9dd9516d2197ce54c6269a0e",
+    "release_tag": "bases@0.2.0",
+    "asset_name": "bases-0.2.0.lapis-plugin",
+    "version": "0.2.0",
+  },
+}
