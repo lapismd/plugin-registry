@@ -60,7 +60,10 @@ test("release dispatch delegates to the shared verified, leased publication pipe
   assert.match(worker, /ref: main/);
   assert.match(worker, /fetch-depth: 0/);
   assert.match(worker, /persist-credentials: false/);
-  assert.match(worker, /actions\/create-github-app-token@v3/);
+  assert.match(
+    worker,
+    /actions\/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510/,
+  );
   assert.match(worker, /REGISTRY_TARGET: \$\{\{ inputs\.target \}\}/);
   assert.match(worker, /node scripts\/update-registry-pr\.mjs/);
   for (const command of [
@@ -138,7 +141,10 @@ test("download statistics use delayed immutable snapshots and a stats-only deplo
   assert.match(workflow, /cron: "17 4 \* \* \*"/);
   assert.match(workflow, /DOWNLOAD_STATS_AUTOMATION_APPROVED == 'true'/);
   assert.match(workflow, /CLOUDFLARE_ANALYTICS_API_TOKEN/);
-  assert.match(workflow, /actions\/create-github-app-token@v3/);
+  assert.match(
+    workflow,
+    /actions\/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510/,
+  );
   assert.match(
     workflow,
     /client-id: \$\{\{ secrets\.LAPIS_REGISTRY_APP_CLIENT_ID \}\}/,
