@@ -63,7 +63,8 @@ to the npm package name and source commit.
    archive and source verifier. It retains indexed versions, mirrors the declared
    media, generates and signs the catalog, and removes the consumed queue files
    in one bot-managed **Publish registry updates** PR. Further submissions update
-   that same open PR. Human commits, unexpected files or changed request identity
+   that same open PR. Human commits, unexpected files, competing curated entry
+   changes on `main` or changed request identity
    stop its update for reconciliation.
 8. A maintainer reviews and merges the publication PR. The existing production
    approval variable and protected deployment environment still control the
