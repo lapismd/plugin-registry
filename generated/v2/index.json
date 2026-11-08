@@ -260,10 +260,10 @@
       "detail": "plugins/lapis-docx.json",
       "id": "lapis-docx",
       "latestRelease": {
-        "bundleSize": 16894463,
-        "releasedAt": "2026-10-30T14:58:16.000Z"
+        "bundleSize": 16894466,
+        "releasedAt": "2026-11-08T03:27:14.000Z"
       },
-      "latestVersion": "0.2.0",
+      "latestVersion": "0.2.1",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "DOCX",
@@ -419,10 +419,10 @@
       "detail": "plugins/lapis-pdf.json",
       "id": "lapis-pdf",
       "latestRelease": {
-        "bundleSize": 6102802,
-        "releasedAt": "2026-10-30T14:58:11.000Z"
+        "bundleSize": 6102805,
+        "releasedAt": "2026-11-08T03:27:04.000Z"
       },
-      "latestVersion": "0.2.0",
+      "latestVersion": "0.2.1",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "PDF",
@@ -459,10 +459,10 @@
       "detail": "plugins/lapis-slides.json",
       "id": "lapis-slides",
       "latestRelease": {
-        "bundleSize": 411655,
-        "releasedAt": "2026-10-30T15:58:04.000Z"
+        "bundleSize": 4813488,
+        "releasedAt": "2026-11-08T03:27:22.000Z"
       },
-      "latestVersion": "0.1.1",
+      "latestVersion": "0.1.2",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Slides",
@@ -762,7 +762,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "vCnc1N1cWpz2uBy2pDYipbt/dLu7h/aWqNNIEUWxNpytg8hUPTf49+Ds86w3PWiF7QeE4jcJFq3THR56YpuwAg=="
+      "sig": "9CTLQJz8WYrSuehW3gZOPZf3/rlO+GmZxZiKk8VjPVt3kI2HY5eDx7AdqOG7Lhu8Pue3YFMLyxDZgOKM7rTYBg=="
     }
   ]
 }

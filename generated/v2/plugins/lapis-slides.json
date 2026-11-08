@@ -18,7 +18,7 @@
           "mediaType": "image/webp",
           "sha256": "34b3302a83f8d592538168492c6994cfaac8333a6cd4c964e7107203a9094e6d",
           "size": 99464,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/slides/registry-assets/gallery/presentation.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/slides/registry-assets/gallery/presentation.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-slides/34b3302a83f8d592538168492c6994cfaac8333a6cd4c964e7107203a9094e6d.webp",
           "width": 2400
         },
@@ -27,7 +27,7 @@
           "mediaType": "image/webp",
           "sha256": "de97d5b4553b9d6e720614691b1c32e2fe301d34ddb56c99fd3e043577be8c12",
           "size": 99808,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/slides/registry-assets/gallery/presentation.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/slides/registry-assets/gallery/presentation.full.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-slides/de97d5b4553b9d6e720614691b1c32e2fe301d34ddb56c99fd3e043577be8c12.webp",
           "width": 2400
         },
@@ -36,7 +36,7 @@
           "mediaType": "image/webp",
           "sha256": "38312b4b481f4170b0f6ad003a9d2067101028ed8012e88e13d4f5fc2ad6b8f9",
           "size": 94508,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/slides/registry-assets/gallery/presentation.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/slides/registry-assets/gallery/presentation.light.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-slides/38312b4b481f4170b0f6ad003a9d2067101028ed8012e88e13d4f5fc2ad6b8f9.webp",
           "width": 2400
         },
@@ -45,7 +45,7 @@
           "mediaType": "image/webp",
           "sha256": "729b4cf634509b3a4401bf28bb970494881ec81abe9048f11527fb4936752b5d",
           "size": 44670,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/slides/registry-assets/gallery/presentation.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/slides/registry-assets/gallery/presentation.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-slides/729b4cf634509b3a4401bf28bb970494881ec81abe9048f11527fb4936752b5d.webp",
           "width": 1200
         }
@@ -58,7 +58,7 @@
     "Keep the presentation synchronized with live editor changes."
   ],
   "id": "lapis-slides",
-  "latestVersion": "0.1.1",
+  "latestVersion": "0.1.2",
   "license": "Apache-2.0",
   "links": {
     "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/slides#readme",
@@ -75,7 +75,7 @@
           "mediaType": "image/webp",
           "sha256": "dea36a9bcc9f5e84b77cc396baa347f2bf311392ef0479c79f5690385b01bbd6",
           "size": 28046,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/slides/registry-assets/banner.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/slides/registry-assets/banner.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-slides/dea36a9bcc9f5e84b77cc396baa347f2bf311392ef0479c79f5690385b01bbd6.webp",
           "width": 2400
         },
@@ -84,7 +84,7 @@
           "mediaType": "image/webp",
           "sha256": "8eab47d38a713deb0ca9a2b374605bb28d1d4561d550340649932b16443fd28a",
           "size": 34386,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/slides/registry-assets/banner.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/slides/registry-assets/banner.full.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-slides/8eab47d38a713deb0ca9a2b374605bb28d1d4561d550340649932b16443fd28a.webp",
           "width": 2400
         },
@@ -93,7 +93,7 @@
           "mediaType": "image/webp",
           "sha256": "68e5f5f5769f47dbf0e90f1be949e5e183e7e09d34d17b324f0d8cb0a3337ae5",
           "size": 28196,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/slides/registry-assets/banner.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/slides/registry-assets/banner.light.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-slides/68e5f5f5769f47dbf0e90f1be949e5e183e7e09d34d17b324f0d8cb0a3337ae5.webp",
           "width": 2400
         },
@@ -102,7 +102,7 @@
           "mediaType": "image/webp",
           "sha256": "9dce601493c4e2f3acca7a5d6a8c8e608ab029db91a4b20a26379ed21f8b490f",
           "size": 19946,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/879581d1549187bdbac2d75b40d02e0df46e721a/packages/slides/registry-assets/banner.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/slides/registry-assets/banner.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-slides/9dce601493c4e2f3acca7a5d6a8c8e608ab029db91a4b20a26379ed21f8b490f.webp",
           "width": 1200
         }
@@ -120,7 +120,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "hIoo1r9MsFvUGXe/B3sSv72Oa+2x4SD8TSjKouC9Qj4NVgXLDgnc3yzcO68x/hAe5IMS2YTMyZY+YeyVNAGLDg=="
+      "sig": "95XkLrx923pkMq/oBahKnbQ4BL6rbNZmkcBfltGi6Op23mTZWvhBCTO976hx4Hrf08/lcqaTxfSupvYNuzg1DQ=="
     }
   ],
   "status": "active",
@@ -162,6 +162,25 @@
       ],
       "releasedAt": "2026-10-30T15:58:04.000Z",
       "version": "0.1.1"
+    },
+    "0.1.2": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-slides/0.1.2",
+        "sha256": "4e4ece02fadfc115db38a111647473e1a669c9c799d8b7dd5f9d41414406ddf9",
+        "size": 4813488,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/slides%400.1.2/lapis-slides-0.1.2.lapis-plugin"
+      },
+      "changelog": {
+        "description": "### Patch Changes\n\n- Release the current document and presentation bundles as immutable patch versions through trusted publishing. Previously published versions retain their original contents.",
+        "title": "Slides 0.1.2"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-11-08T03:27:22.000Z",
+      "version": "0.1.2"
     }
   }
 }
