@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "lapis-docx-0.2.1.lapis-plugin",
+    "package_name": "@lapis-notes/docx",
+    "plugin_id": "lapis-docx",
+    "release_tag": "docx@0.2.1",
+    "repository": "lapismd/lapis-plugins",
+    "source_commit": "0d52829638fa55a9a74650db7ccebfa14833007b",
+    "version": "0.2.1",
+  },
+}
