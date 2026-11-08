@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "lapis-slides-0.1.2.lapis-plugin",
+    "package_name": "@lapis-notes/slides",
+    "plugin_id": "lapis-slides",
+    "release_tag": "slides@0.1.2",
+    "repository": "lapismd/lapis-plugins",
+    "source_commit": "0d52829638fa55a9a74650db7ccebfa14833007b",
+    "version": "0.1.2",
+  },
+}
