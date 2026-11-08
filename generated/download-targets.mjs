@@ -134,6 +134,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.2.0"
     },
+    "lapis-docx@0.2.1": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/docx%400.2.1/lapis-docx-0.2.1.lapis-plugin",
+      "pluginId": "lapis-docx",
+      "status": "active",
+      "version": "0.2.1"
+    },
     "lapis-graph@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.2/lapis-graph-0.1.2.lapis-plugin",
       "pluginId": "lapis-graph",
@@ -200,6 +206,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.2.0"
     },
+    "lapis-pdf@0.2.1": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/pdf%400.2.1/lapis-pdf-0.2.1.lapis-plugin",
+      "pluginId": "lapis-pdf",
+      "status": "active",
+      "version": "0.2.1"
+    },
     "lapis-slides@0.1.0": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/slides%400.1.0/lapis-slides-0.1.0.lapis-plugin",
       "pluginId": "lapis-slides",
@@ -211,6 +223,12 @@ export const downloadTargets = {
       "pluginId": "lapis-slides",
       "status": "active",
       "version": "0.1.1"
+    },
+    "lapis-slides@0.1.2": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/slides%400.1.2/lapis-slides-0.1.2.lapis-plugin",
+      "pluginId": "lapis-slides",
+      "status": "active",
+      "version": "0.1.2"
     },
     "lapis-source-editor@0.1.1": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/source-editor%400.1.1/lapis-source-editor-0.1.1.lapis-plugin",
