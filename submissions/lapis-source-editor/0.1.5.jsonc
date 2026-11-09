@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "lapis-source-editor-0.1.5.lapis-plugin",
+    "package_name": "@lapis-notes/source-editor",
+    "plugin_id": "lapis-source-editor",
+    "release_tag": "source-editor@0.1.5",
+    "repository": "lapismd/lapis-plugins",
+    "source_commit": "35abd2e1f8ec702f9b89d0b4fc3705c34ae110b1",
+    "version": "0.1.5",
+  },
+}
