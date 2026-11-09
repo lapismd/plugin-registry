@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "lapis-graph-0.1.6.lapis-plugin",
+    "package_name": "@lapis-notes/graph",
+    "plugin_id": "lapis-graph",
+    "release_tag": "graph@0.1.6",
+    "repository": "lapismd/lapis-plugins",
+    "source_commit": "35abd2e1f8ec702f9b89d0b4fc3705c34ae110b1",
+    "version": "0.1.6",
+  },
+}
