@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "history-0.2.4.lapis-plugin",
+    "package_name": "@lapis-notes/history",
+    "plugin_id": "history",
+    "release_tag": "history@0.2.4",
+    "repository": "lapismd/lapis-plugins",
+    "source_commit": "42376f79f1eae0ba9650a67e4b44c7a6aaf79256",
+    "version": "0.2.4",
+  },
+}
