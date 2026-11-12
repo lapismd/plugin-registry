@@ -128,6 +128,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.2.3"
     },
+    "history@0.2.4": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/history%400.2.4/history-0.2.4.lapis-plugin",
+      "pluginId": "history",
+      "status": "active",
+      "version": "0.2.4"
+    },
     "lapis-canvas@0.2.0": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/canvas%400.2.0/lapis-canvas-0.2.0.lapis-plugin",
       "pluginId": "lapis-canvas",
