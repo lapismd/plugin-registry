@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "lapis-pdf-0.2.2.lapis-plugin",
+    "package_name": "@lapis-notes/pdf",
+    "plugin_id": "lapis-pdf",
+    "release_tag": "pdf@0.2.2",
+    "repository": "lapismd/lapis-plugins",
+    "source_commit": "5f9aa332a9b00aa28239af9f08417a7846282854",
+    "version": "0.2.2",
+  },
+}
