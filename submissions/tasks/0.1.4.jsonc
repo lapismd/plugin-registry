@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "tasks-0.1.4.lapis-plugin",
+    "package_name": "@lapis-notes/lapis-plugin-tasks",
+    "plugin_id": "tasks",
+    "release_tag": "@lapis-notes/lapis-plugin-tasks@0.1.4",
+    "repository": "lapismd/lapis-plugin-tasks",
+    "source_commit": "634f66b4500a5f437fa2da461f599e8023f02247",
+    "version": "0.1.4",
+  },
+}
