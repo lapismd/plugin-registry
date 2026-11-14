@@ -17,7 +17,7 @@
           "mediaType": "image/webp",
           "sha256": "56677b3751a0fb79eb1b499b11e29f3ee16d33f732f65c3a845dc670a5c1d53d",
           "size": 115786,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/gallery/planner.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/gallery/planner.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/56677b3751a0fb79eb1b499b11e29f3ee16d33f732f65c3a845dc670a5c1d53d.webp",
           "width": 2400
         },
@@ -26,7 +26,7 @@
           "mediaType": "image/webp",
           "sha256": "fdd713e0fff030917089f380d3a68bed24d9e7f1addae89729ba0bcd3cb699c5",
           "size": 120546,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/gallery/planner.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/gallery/planner.full.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/fdd713e0fff030917089f380d3a68bed24d9e7f1addae89729ba0bcd3cb699c5.webp",
           "width": 2400
         },
@@ -35,7 +35,7 @@
           "mediaType": "image/webp",
           "sha256": "236f2cf72686a89e1b7d8933f3649926c16cd40a28bdb005777cc023075c8e2e",
           "size": 116336,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/gallery/planner.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/gallery/planner.light.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/236f2cf72686a89e1b7d8933f3649926c16cd40a28bdb005777cc023075c8e2e.webp",
           "width": 2400
         },
@@ -44,7 +44,7 @@
           "mediaType": "image/webp",
           "sha256": "aaa74914e139d0ca0645833d3b83d6898f66dd74a79e36a010a3e4b36eb0ea85",
           "size": 48872,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/gallery/planner.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/gallery/planner.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/aaa74914e139d0ca0645833d3b83d6898f66dd74a79e36a010a3e4b36eb0ea85.webp",
           "width": 1200
         }
@@ -59,7 +59,7 @@
           "mediaType": "image/webp",
           "sha256": "d4f690ddc81855eb80a27132c060591841b440ef78553a1e3a61ef89a2331978",
           "size": 99612,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/gallery/details.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/gallery/details.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/d4f690ddc81855eb80a27132c060591841b440ef78553a1e3a61ef89a2331978.webp",
           "width": 2400
         },
@@ -68,7 +68,7 @@
           "mediaType": "image/webp",
           "sha256": "0052b9ec6045ecb439851c08b6a55c35ad5975af28a3328fab64967af61b3ec1",
           "size": 108198,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/gallery/details.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/gallery/details.full.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/0052b9ec6045ecb439851c08b6a55c35ad5975af28a3328fab64967af61b3ec1.webp",
           "width": 2400
         },
@@ -77,7 +77,7 @@
           "mediaType": "image/webp",
           "sha256": "94fd7fbae754c86ab81573c1cce45cd7ec7298a0db336a27f2c3aec134c77953",
           "size": 94698,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/gallery/details.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/gallery/details.light.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/94fd7fbae754c86ab81573c1cce45cd7ec7298a0db336a27f2c3aec134c77953.webp",
           "width": 2400
         },
@@ -86,7 +86,7 @@
           "mediaType": "image/webp",
           "sha256": "f072e80ca35e457bdca024f04ced26511e53538fd95e12c1acad719dea99e588",
           "size": 44206,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/gallery/details.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/gallery/details.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/f072e80ca35e457bdca024f04ced26511e53538fd95e12c1acad719dea99e588.webp",
           "width": 1200
         }
@@ -99,7 +99,7 @@
     "Query and index tasks across the vault."
   ],
   "id": "tasks",
-  "latestVersion": "0.1.3",
+  "latestVersion": "0.1.4",
   "license": "AGPL-3.0-or-later",
   "links": {
     "documentation": "https://github.com/lapismd/lapis-plugin-tasks#readme",
@@ -114,7 +114,7 @@
           "mediaType": "image/webp",
           "sha256": "0e722c706cd92d9eeb67dcd717cca2d05d33715dbb86d961c7106d84c8ec6e1a",
           "size": 48404,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/banner.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/banner.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/0e722c706cd92d9eeb67dcd717cca2d05d33715dbb86d961c7106d84c8ec6e1a.webp",
           "width": 2400
         },
@@ -123,7 +123,7 @@
           "mediaType": "image/webp",
           "sha256": "e810903da0ee3a052fa4247d665297aa612a0f351a8c994554123cace8c78d7d",
           "size": 58226,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/banner.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/banner.full.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/e810903da0ee3a052fa4247d665297aa612a0f351a8c994554123cace8c78d7d.webp",
           "width": 2400
         },
@@ -132,7 +132,7 @@
           "mediaType": "image/webp",
           "sha256": "d3ec71d7ed9027a0aa04a04e44308e382a3b7d7e7d5c5d039d892c12c8300d3e",
           "size": 49514,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/banner.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/banner.light.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/d3ec71d7ed9027a0aa04a04e44308e382a3b7d7e7d5c5d039d892c12c8300d3e.webp",
           "width": 2400
         },
@@ -141,7 +141,7 @@
           "mediaType": "image/webp",
           "sha256": "10c947b8db2833679176821f8fde873638118b24c43f17195ce7689cfb8b7d49",
           "size": 29356,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/banner.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/banner.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/10c947b8db2833679176821f8fde873638118b24c43f17195ce7689cfb8b7d49.webp",
           "width": 1200
         }
@@ -155,7 +155,7 @@
           "mediaType": "image/webp",
           "sha256": "fa4237160c86406fe3956234f312c491e91c2cbc789f8d7d00dc7f7936900c16",
           "size": 44310,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/overview.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/overview.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/fa4237160c86406fe3956234f312c491e91c2cbc789f8d7d00dc7f7936900c16.webp",
           "width": 2400
         },
@@ -164,7 +164,7 @@
           "mediaType": "image/webp",
           "sha256": "a1e9ee302e8ce2495e65e86d3ca8d7ba0c63b360183e53ccc31dba2002cd458e",
           "size": 51574,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/overview.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/overview.full.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/a1e9ee302e8ce2495e65e86d3ca8d7ba0c63b360183e53ccc31dba2002cd458e.webp",
           "width": 2400
         },
@@ -173,7 +173,7 @@
           "mediaType": "image/webp",
           "sha256": "6630cd6c88761120cec61054c079168036e304f314ea446a060287f06b16e28f",
           "size": 45528,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/overview.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/overview.light.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/6630cd6c88761120cec61054c079168036e304f314ea446a060287f06b16e28f.webp",
           "width": 2400
         },
@@ -182,7 +182,7 @@
           "mediaType": "image/webp",
           "sha256": "e0108cb0096a6456c408a316990e9de0824bf1aed72e5ff6879608f7a901693e",
           "size": 25986,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/a8a6802e0be8f6a7991d41bac041d3a5381b6072/registry-assets/overview.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugin-tasks/634f66b4500a5f437fa2da461f599e8023f02247/registry-assets/overview.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/tasks/e0108cb0096a6456c408a316990e9de0824bf1aed72e5ff6879608f7a901693e.webp",
           "width": 1200
         }
@@ -200,7 +200,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "pYraLT1d/3jMvSYDQffMOc5HBimuTIliwauiQqam4Y0TW1sK8VzsSbC/baiJTycP/1PZ8jjhkd2bGziaBR7XAg=="
+      "sig": "/Fyicj+F+7jVqP7bystXK1iyVG4VP5ny8NRzzCwedkhMNl+nygI+R1h3JqSCQhvfjtrIg607brh/ZU07nYamAw=="
     }
   ],
   "status": "active",
@@ -242,6 +242,25 @@
       ],
       "releasedAt": "2026-11-14T04:14:21.000Z",
       "version": "0.1.3"
+    },
+    "0.1.4": {
+      "bundle": {
+        "downloadUrl": "../../download/tasks/0.1.4",
+        "sha256": "f5d4740f7eff6be9461da90f4ec0e0fb185504f328095656b7de9582683a518c",
+        "size": 617766,
+        "url": "https://github.com/lapismd/lapis-plugin-tasks/releases/download/%40lapis-notes/lapis-plugin-tasks%400.1.4/tasks-0.1.4.lapis-plugin"
+      },
+      "changelog": {
+        "description": "### Patch Changes\n\n- 3b26466: Refresh first-party Lapis dependencies to the published versions recorded in this pull request.",
+        "title": "Tasks 0.1.4"
+      },
+      "minAppVersion": "0.0.1",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-11-14T08:20:42.000Z",
+      "version": "0.1.4"
     }
   }
 }
