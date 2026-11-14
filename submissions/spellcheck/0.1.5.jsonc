@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "spellcheck-0.1.5.lapis-plugin",
+    "package_name": "@lapis-notes/spellcheck",
+    "plugin_id": "spellcheck",
+    "release_tag": "spellcheck@0.1.5",
+    "repository": "lapismd/lapis-plugins",
+    "source_commit": "5f9aa332a9b00aa28239af9f08417a7846282854",
+    "version": "0.1.5",
+  },
+}
