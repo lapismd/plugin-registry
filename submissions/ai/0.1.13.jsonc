@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "ai-0.1.13.lapis-plugin",
+    "package_name": "@lapis-notes/ai",
+    "plugin_id": "ai",
+    "release_tag": "ai@0.1.13",
+    "repository": "lapismd/lapis-plugins",
+    "source_commit": "557b55c0cc21d4dbd36ceae711721aeadb33de12",
+    "version": "0.1.13",
+  },
+}
