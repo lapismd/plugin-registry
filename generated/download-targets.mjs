@@ -206,6 +206,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.3.3"
     },
+    "lapis-canvas@0.3.4": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/canvas%400.3.4/lapis-canvas-0.3.4.lapis-plugin",
+      "pluginId": "lapis-canvas",
+      "status": "active",
+      "version": "0.3.4"
+    },
     "lapis-csv@0.2.0": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/csv%400.2.0/lapis-csv-0.2.0.lapis-plugin",
       "pluginId": "lapis-csv",
@@ -493,6 +499,12 @@ export const downloadTargets = {
       "pluginId": "markdown",
       "status": "active",
       "version": "0.2.6"
+    },
+    "markdown@0.2.7": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/markdown%400.2.7/markdown-0.2.7.lapis-plugin",
+      "pluginId": "markdown",
+      "status": "active",
+      "version": "0.2.7"
     },
     "search@0.1.10": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/search%400.1.10/search-0.1.10.lapis-plugin",

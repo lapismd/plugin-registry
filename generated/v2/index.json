@@ -182,10 +182,10 @@
       "detail": "plugins/lapis-canvas.json",
       "id": "lapis-canvas",
       "latestRelease": {
-        "bundleSize": 4570194,
-        "releasedAt": "2026-11-14T10:03:59.000Z"
+        "bundleSize": 4625023,
+        "releasedAt": "2026-11-14T17:30:08.000Z"
       },
-      "latestVersion": "0.3.3",
+      "latestVersion": "0.3.4",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Canvas",
@@ -578,10 +578,10 @@
       "detail": "plugins/markdown.json",
       "id": "markdown",
       "latestRelease": {
-        "bundleSize": 6002411,
-        "releasedAt": "2026-11-14T07:09:05.000Z"
+        "bundleSize": 6002372,
+        "releasedAt": "2026-11-14T17:30:16.000Z"
       },
-      "latestVersion": "0.2.6",
+      "latestVersion": "0.2.7",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Markdown",
@@ -762,7 +762,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "kZwxSoWXCZj6G4iaEJHPmXJEnRCUqD1FIy/ceUb1dVydaiHNHiuKRvzhEq4FN41gP6dOSCFPGIqqXLc63MhCCw=="
+      "sig": "PiLTGlm2mG1x7kAumNzekqtdzjoWJIdbdAnQy7laKwkeMXOuZ6VuriJU6c2gS7/PS3SAwdkn+HmlABR9xsB7BQ=="
     }
   ]
 }

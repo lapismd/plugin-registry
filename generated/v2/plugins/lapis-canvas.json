@@ -10,43 +10,43 @@
   "description": "JSON Canvas file view and note embed for Lapis applications",
   "gallery": [
     {
-      "alt": "A reading note with both sidebars closed, embedding the canvas board beneath a short introduction.",
+      "alt": "A reading note beside Explorer, embedding the coastal research board beneath a short introduction.",
       "id": "embedded-note",
       "images": {
         "dark": {
           "height": 1600,
           "mediaType": "image/webp",
-          "sha256": "6a5680aa8326e18a31043c440dd749bd6cd13232ff85832b2d983d90a13020e0",
-          "size": 189138,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/557b55c0cc21d4dbd36ceae711721aeadb33de12/packages/canvas/registry-assets/gallery/embedded-note.dark.webp",
-          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/6a5680aa8326e18a31043c440dd749bd6cd13232ff85832b2d983d90a13020e0.webp",
+          "sha256": "dc3e1aabe44864649255aaea3345840e281b13ac506e7e1ca35046beb3c001e7",
+          "size": 220304,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/dc2269ae4ad96935af50a97973f7dc0b2550088a/packages/canvas/registry-assets/gallery/embedded-note.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/dc3e1aabe44864649255aaea3345840e281b13ac506e7e1ca35046beb3c001e7.webp",
           "width": 2400
         },
         "full": {
           "height": 1600,
           "mediaType": "image/webp",
-          "sha256": "8e2c5400a13565fb5ce47030ee71803b5f9010233fc26393e41cf55621790796",
-          "size": 190872,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/557b55c0cc21d4dbd36ceae711721aeadb33de12/packages/canvas/registry-assets/gallery/embedded-note.full.webp",
-          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/8e2c5400a13565fb5ce47030ee71803b5f9010233fc26393e41cf55621790796.webp",
+          "sha256": "5daaf3e93c6c64fcc277c6d9625cc07be90d0cb4daf4962ee7078446de8e6cc6",
+          "size": 218108,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/dc2269ae4ad96935af50a97973f7dc0b2550088a/packages/canvas/registry-assets/gallery/embedded-note.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/5daaf3e93c6c64fcc277c6d9625cc07be90d0cb4daf4962ee7078446de8e6cc6.webp",
           "width": 2400
         },
         "light": {
           "height": 1600,
           "mediaType": "image/webp",
-          "sha256": "1502c637738b2afb005ad64f0aba90f0a9ee2b9884dc360a2b1ca6331933c5ea",
-          "size": 180628,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/557b55c0cc21d4dbd36ceae711721aeadb33de12/packages/canvas/registry-assets/gallery/embedded-note.light.webp",
-          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/1502c637738b2afb005ad64f0aba90f0a9ee2b9884dc360a2b1ca6331933c5ea.webp",
+          "sha256": "d6e686ef1ec8ada5db85f71d2a036d04264e23ee01dec8d48af3ab9172edf9a7",
+          "size": 208298,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/dc2269ae4ad96935af50a97973f7dc0b2550088a/packages/canvas/registry-assets/gallery/embedded-note.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/d6e686ef1ec8ada5db85f71d2a036d04264e23ee01dec8d48af3ab9172edf9a7.webp",
           "width": 2400
         },
         "preview": {
           "height": 800,
           "mediaType": "image/webp",
-          "sha256": "493f4d463533974cec14006d02813376daf6ea9731150577b4b4b25c9c469ee7",
-          "size": 71298,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/557b55c0cc21d4dbd36ceae711721aeadb33de12/packages/canvas/registry-assets/gallery/embedded-note.preview.webp",
-          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/493f4d463533974cec14006d02813376daf6ea9731150577b4b4b25c9c469ee7.webp",
+          "sha256": "c9ee4c68706c9e81f320e383ad477850ab463f3a808977f6afbd680ed630b17e",
+          "size": 78194,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/dc2269ae4ad96935af50a97973f7dc0b2550088a/packages/canvas/registry-assets/gallery/embedded-note.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/c9ee4c68706c9e81f320e383ad477850ab463f3a808977f6afbd680ed630b17e.webp",
           "width": 1200
         }
       }
@@ -58,7 +58,7 @@
     "Keep text, file, link, and group nodes."
   ],
   "id": "lapis-canvas",
-  "latestVersion": "0.3.3",
+  "latestVersion": "0.3.4",
   "license": "Apache-2.0",
   "links": {
     "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/canvas#readme",
@@ -68,42 +68,42 @@
   },
   "media": {
     "banner": {
-      "alt": "Lapis Canvas showing the feature board with a text note, two file notes, a link, a group, and three labeled connectors, both sidebars closed.",
+      "alt": "Lapis Canvas showing a coastal research board with grouped notes, an original field sketch, a checklist, a web reference, and labeled connections beside Explorer.",
       "images": {
         "dark": {
           "height": 1600,
           "mediaType": "image/webp",
-          "sha256": "fcfa62a63d849d9f64c2059282adef121dd00fb981febdf1a64ee4172b063636",
-          "size": 83210,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/557b55c0cc21d4dbd36ceae711721aeadb33de12/packages/canvas/registry-assets/banner.dark.webp",
-          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/fcfa62a63d849d9f64c2059282adef121dd00fb981febdf1a64ee4172b063636.webp",
+          "sha256": "ad2efdbdc7b8359bffa1d561f1500c0e58661e62053accef49623239d9df7b55",
+          "size": 189528,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/dc2269ae4ad96935af50a97973f7dc0b2550088a/packages/canvas/registry-assets/banner.dark.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/ad2efdbdc7b8359bffa1d561f1500c0e58661e62053accef49623239d9df7b55.webp",
           "width": 2400
         },
         "full": {
           "height": 1600,
           "mediaType": "image/webp",
-          "sha256": "baf64a3f302d5bd87744a314cfb669dd1ab059ee52d0b4f8c9a60d5443d5a8bb",
-          "size": 92630,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/557b55c0cc21d4dbd36ceae711721aeadb33de12/packages/canvas/registry-assets/banner.full.webp",
-          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/baf64a3f302d5bd87744a314cfb669dd1ab059ee52d0b4f8c9a60d5443d5a8bb.webp",
+          "sha256": "155fae2c5f32540a57e7f21c91c7f6fe4eecb8fc00b48b94b2e86f42c0d46240",
+          "size": 197734,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/dc2269ae4ad96935af50a97973f7dc0b2550088a/packages/canvas/registry-assets/banner.full.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/155fae2c5f32540a57e7f21c91c7f6fe4eecb8fc00b48b94b2e86f42c0d46240.webp",
           "width": 2400
         },
         "light": {
           "height": 1600,
           "mediaType": "image/webp",
-          "sha256": "2983509d8ba3cde19f36b4f82d8d0c39dcbd195c722d5e63132ceeb1fbd772e3",
-          "size": 84142,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/557b55c0cc21d4dbd36ceae711721aeadb33de12/packages/canvas/registry-assets/banner.light.webp",
-          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/2983509d8ba3cde19f36b4f82d8d0c39dcbd195c722d5e63132ceeb1fbd772e3.webp",
+          "sha256": "c56a963b751e9bd6b4af6cb25e89183be73136a2cbb1768bdb69f28353ee827c",
+          "size": 187032,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/dc2269ae4ad96935af50a97973f7dc0b2550088a/packages/canvas/registry-assets/banner.light.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/c56a963b751e9bd6b4af6cb25e89183be73136a2cbb1768bdb69f28353ee827c.webp",
           "width": 2400
         },
         "preview": {
           "height": 800,
           "mediaType": "image/webp",
-          "sha256": "8eaeb1ea8c28bd8946d6686a0181c5a866273d2b240e563634105f87121140e3",
-          "size": 61952,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/557b55c0cc21d4dbd36ceae711721aeadb33de12/packages/canvas/registry-assets/banner.preview.webp",
-          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/8eaeb1ea8c28bd8946d6686a0181c5a866273d2b240e563634105f87121140e3.webp",
+          "sha256": "afa2530d93444df2250f6ae2fcbc7438f5d515267931dad2996675b537a6ce2f",
+          "size": 90512,
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/dc2269ae4ad96935af50a97973f7dc0b2550088a/packages/canvas/registry-assets/banner.preview.webp",
+          "url": "https://registry.lapis.md/v2/assets/lapis-canvas/afa2530d93444df2250f6ae2fcbc7438f5d515267931dad2996675b537a6ce2f.webp",
           "width": 1200
         }
       }
@@ -120,7 +120,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "zq4u74RFV6Sa5kHdTLVun6ppGB2SYTgnxX7p8u1vqMSbDXB8fF2hwJEQZ6EmgDZQFW7u7IAhIOvU0AfXfUhyCw=="
+      "sig": "GLMjBiqe3qoUNgFr46NcuQomD1MJmUvrJEp6qiEUclDDooscoBPjCLE+SjyOgfAyE/YEypfbyVLR3Tx2FnqaAw=="
     }
   ],
   "status": "active",
@@ -219,6 +219,25 @@
       ],
       "releasedAt": "2026-11-14T10:03:59.000Z",
       "version": "0.3.3"
+    },
+    "0.3.4": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-canvas/0.3.4",
+        "sha256": "546c46d330cce9a94ab90300413bd63ec34f2ad55494e2f078cdbdba0e53c2af",
+        "size": 4625023,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/canvas%400.3.4/lapis-canvas-0.3.4.lapis-plugin"
+      },
+      "changelog": {
+        "description": "### Patch Changes\n\n- [#111](https://github.com/lapismd/lapis-plugins/pull/111) [`a76d286`](https://github.com/lapismd/lapis-plugins/commit/a76d286a7fd29043e542508195312a1437845a91) Thanks [@stevejuma](https://github.com/stevejuma)! - Use collapsed-by-default Canvas toolbars on one right control rail, searchable card and group pickers, shared tooltips, saved snapping controls and zoom-to-fit. Add richer offline examples and readable titles and hostnames to website cards. Keep group outlines stable, render the custom colour picker as a rainbow swatch, and retain readable zoom controls when an embedded board uses a different colour scheme from its host.\n\n  Let nested Markdown file previews inherit their owning surface palette and retain workspace focus rings so coloured Canvas cards stay readable in both light and dark modes.\n\n- Updated dependencies [[`a76d286`](https://github.com/lapismd/lapis-plugins/commit/a76d286a7fd29043e542508195312a1437845a91)]:\n  - @lapis-notes/markdown@0.2.7",
+        "title": "Canvas 0.3.4"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-11-14T17:30:08.000Z",
+      "version": "0.3.4"
     }
   }
 }
