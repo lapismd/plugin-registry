@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "lapis-canvas-0.3.4.lapis-plugin",
+    "package_name": "@lapis-notes/canvas",
+    "plugin_id": "lapis-canvas",
+    "release_tag": "canvas@0.3.4",
+    "repository": "lapismd/lapis-plugins",
+    "source_commit": "dc2269ae4ad96935af50a97973f7dc0b2550088a",
+    "version": "0.3.4",
+  },
+}
