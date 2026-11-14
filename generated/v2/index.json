@@ -697,10 +697,10 @@
       "detail": "plugins/tasks.json",
       "id": "tasks",
       "latestRelease": {
-        "bundleSize": 609546,
-        "releasedAt": "2026-11-14T17:09:04.000Z"
+        "bundleSize": 609707,
+        "releasedAt": "2026-11-14T18:45:23.000Z"
       },
-      "latestVersion": "0.1.5",
+      "latestVersion": "0.2.0",
       "links": {},
       "minAppVersion": "0.0.1",
       "name": "Tasks",
@@ -762,7 +762,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "PiLTGlm2mG1x7kAumNzekqtdzjoWJIdbdAnQy7laKwkeMXOuZ6VuriJU6c2gS7/PS3SAwdkn+HmlABR9xsB7BQ=="
+      "sig": "4p5xpZpCdPA6ky8Geyn9SJI/+T8R13b1iltTke5tUBeZ1i37LyqBUEfdcyuzvbR/P7j40Cos/LDKlQz9tFrzDA=="
     }
   ]
 }
