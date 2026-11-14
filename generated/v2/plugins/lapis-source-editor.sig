@@ -1,5 +1,5 @@
 {
   "alg": "ed25519",
   "keyId": "lapis-registry-2026-06",
-  "sig": "GHSgif1KAsD+eBdPFDvtu+aeiWbL0Duvua5dY8dKMYZ4aiaqfCeJzIWz7k78xjsKGYw/rx5PCnMYVZr/JRI4Dw=="
+  "sig": "89WUdnEB4+mFr8YlOvaHQGLNtuiepG6KcnoZhUdhdFEiyxqXfWl0hllUGIhFc8rsUkOj0wsf1kyEU6e3u96yAA=="
 }
