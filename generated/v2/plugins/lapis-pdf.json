@@ -18,7 +18,7 @@
           "mediaType": "image/webp",
           "sha256": "99557e6ce35420a12818a5c4f3a1e6742060c160306c31cc4c3fdcb52f49071b",
           "size": 193764,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/pdf/registry-assets/gallery/embedded-note.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/pdf/registry-assets/gallery/embedded-note.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-pdf/99557e6ce35420a12818a5c4f3a1e6742060c160306c31cc4c3fdcb52f49071b.webp",
           "width": 2400
         },
@@ -27,7 +27,7 @@
           "mediaType": "image/webp",
           "sha256": "3fd0d36b32fd6caebf925e245c1036c0c2aea8b3dbe4dcc443f0f6975dd86835",
           "size": 202212,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/pdf/registry-assets/gallery/embedded-note.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/pdf/registry-assets/gallery/embedded-note.full.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-pdf/3fd0d36b32fd6caebf925e245c1036c0c2aea8b3dbe4dcc443f0f6975dd86835.webp",
           "width": 2400
         },
@@ -36,7 +36,7 @@
           "mediaType": "image/webp",
           "sha256": "0f86040d131be8a89e8fa14d14d68b8310fa1c73dc71a5169d59f9fdf6e2bc4f",
           "size": 196652,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/pdf/registry-assets/gallery/embedded-note.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/pdf/registry-assets/gallery/embedded-note.light.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-pdf/0f86040d131be8a89e8fa14d14d68b8310fa1c73dc71a5169d59f9fdf6e2bc4f.webp",
           "width": 2400
         },
@@ -45,7 +45,7 @@
           "mediaType": "image/webp",
           "sha256": "9ab21a17fb77ad70ba6cd5cb7476da5d8741cb078855be500ff32ecf6a703022",
           "size": 70142,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/pdf/registry-assets/gallery/embedded-note.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/pdf/registry-assets/gallery/embedded-note.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-pdf/9ab21a17fb77ad70ba6cd5cb7476da5d8741cb078855be500ff32ecf6a703022.webp",
           "width": 1200
         }
@@ -58,7 +58,7 @@
     "Keep the file owned by the vault."
   ],
   "id": "lapis-pdf",
-  "latestVersion": "0.2.1",
+  "latestVersion": "0.2.2",
   "license": "Apache-2.0",
   "links": {
     "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/pdf#readme",
@@ -75,7 +75,7 @@
           "mediaType": "image/webp",
           "sha256": "3d2033137f1ea15b7773305738d4ab05a008a9211a3b999c49d76651bb5c85b1",
           "size": 706216,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/pdf/registry-assets/banner.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/pdf/registry-assets/banner.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-pdf/3d2033137f1ea15b7773305738d4ab05a008a9211a3b999c49d76651bb5c85b1.webp",
           "width": 2400
         },
@@ -84,7 +84,7 @@
           "mediaType": "image/webp",
           "sha256": "369d5ff74de21416e4458dd9b2b628326ff6a04123776272cceb3b771f7b8165",
           "size": 717776,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/pdf/registry-assets/banner.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/pdf/registry-assets/banner.full.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-pdf/369d5ff74de21416e4458dd9b2b628326ff6a04123776272cceb3b771f7b8165.webp",
           "width": 2400
         },
@@ -93,7 +93,7 @@
           "mediaType": "image/webp",
           "sha256": "5d61fe24565745acd959aab778d4fc4c4b77fa81afc4b75246deeca62d6e8fcb",
           "size": 710776,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/pdf/registry-assets/banner.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/pdf/registry-assets/banner.light.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-pdf/5d61fe24565745acd959aab778d4fc4c4b77fa81afc4b75246deeca62d6e8fcb.webp",
           "width": 2400
         },
@@ -102,7 +102,7 @@
           "mediaType": "image/webp",
           "sha256": "5ebf3a9d87cf59afdba1097097fae81940e50849fdabfd1d72d436036f2eaf1d",
           "size": 247390,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/0d52829638fa55a9a74650db7ccebfa14833007b/packages/pdf/registry-assets/banner.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/pdf/registry-assets/banner.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-pdf/5ebf3a9d87cf59afdba1097097fae81940e50849fdabfd1d72d436036f2eaf1d.webp",
           "width": 1200
         }
@@ -120,7 +120,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "lCixKStnfr+931MR+xOjepJO/O66rtkQnBg2X6TUNra+4bxjTXC+AsRPXHjVECsqaZRIMzNSBi03kxLYmD/+Cg=="
+      "sig": "HvPhK5oZMsimDnrGQWlIqfO/9lBhW+6YgpFHChnwU084zvD4MzKP8ndw6PDuQaNtgH1qj3ieMbLhZvIWf2V+Ag=="
     }
   ],
   "status": "active",
@@ -162,6 +162,25 @@
       ],
       "releasedAt": "2026-11-08T03:27:04.000Z",
       "version": "0.2.1"
+    },
+    "0.2.2": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-pdf/0.2.2",
+        "sha256": "8f12cedf5dc8dba833140548052e71e1226a4b5acbcf1d64c4ce4389694448b6",
+        "size": 6102805,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/pdf%400.2.2/lapis-pdf-0.2.2.lapis-plugin"
+      },
+      "changelog": {
+        "description": "### Patch Changes\n\n- [#103](https://github.com/lapismd/lapis-plugins/pull/103) [`694be86`](https://github.com/lapismd/lapis-plugins/commit/694be869a1494851a86b48d79a36d28541b9db36) Thanks [@stevejuma](https://github.com/stevejuma)! - Admit the released API 0.4 host alongside the existing API 0.2 contract and qualify the matching published Workspace/Core/Mira cohort.",
+        "title": "PDF 0.2.2"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-11-14T07:09:25.000Z",
+      "version": "0.2.2"
     }
   }
 }

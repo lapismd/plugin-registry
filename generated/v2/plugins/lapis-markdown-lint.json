@@ -18,7 +18,7 @@
           "mediaType": "image/webp",
           "sha256": "0ac3ec21df2ccf326760ccbe9bd13cfc67da2fd4f4c21875277f14f78691ee24",
           "size": 140304,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/markdown-lint/registry-assets/gallery/editor-diagnostics.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/markdown-lint/registry-assets/gallery/editor-diagnostics.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/0ac3ec21df2ccf326760ccbe9bd13cfc67da2fd4f4c21875277f14f78691ee24.webp",
           "width": 2400
         },
@@ -27,7 +27,7 @@
           "mediaType": "image/webp",
           "sha256": "5980ab8c62ba19c415014404862f8569f103627195169e22830709f6e99dcdbc",
           "size": 139182,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/markdown-lint/registry-assets/gallery/editor-diagnostics.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/markdown-lint/registry-assets/gallery/editor-diagnostics.full.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/5980ab8c62ba19c415014404862f8569f103627195169e22830709f6e99dcdbc.webp",
           "width": 2400
         },
@@ -36,7 +36,7 @@
           "mediaType": "image/webp",
           "sha256": "31abae03fb2f2def1bd1ca3ffd34b7fe7e5f48963e9bbd632c6db9679cdaf1e7",
           "size": 126700,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/markdown-lint/registry-assets/gallery/editor-diagnostics.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/markdown-lint/registry-assets/gallery/editor-diagnostics.light.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/31abae03fb2f2def1bd1ca3ffd34b7fe7e5f48963e9bbd632c6db9679cdaf1e7.webp",
           "width": 2400
         },
@@ -45,7 +45,7 @@
           "mediaType": "image/webp",
           "sha256": "c4cbe164c11e0a98598ef5d3f3ea424a3e8cbd2e876a12625ca83988801e89dc",
           "size": 63868,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/markdown-lint/registry-assets/gallery/editor-diagnostics.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/markdown-lint/registry-assets/gallery/editor-diagnostics.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/c4cbe164c11e0a98598ef5d3f3ea424a3e8cbd2e876a12625ca83988801e89dc.webp",
           "width": 1200
         }
@@ -58,7 +58,7 @@
     "Configure rule exclusions and path filters per vault."
   ],
   "id": "lapis-markdown-lint",
-  "latestVersion": "0.1.3",
+  "latestVersion": "0.1.4",
   "license": "Apache-2.0",
   "links": {
     "documentation": "https://github.com/lapismd/lapis-plugins/tree/main/packages/markdown-lint#readme",
@@ -75,7 +75,7 @@
           "mediaType": "image/webp",
           "sha256": "13eacb5f61f4559f7803f859bad6937940241a568b145fef742fa27e74ad50c9",
           "size": 51600,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/markdown-lint/registry-assets/banner.dark.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/markdown-lint/registry-assets/banner.dark.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/13eacb5f61f4559f7803f859bad6937940241a568b145fef742fa27e74ad50c9.webp",
           "width": 2400
         },
@@ -84,7 +84,7 @@
           "mediaType": "image/webp",
           "sha256": "9069b3350de47b67a32708937ba57c24a6e7387692334d297465c2b1748affe1",
           "size": 58312,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/markdown-lint/registry-assets/banner.full.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/markdown-lint/registry-assets/banner.full.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/9069b3350de47b67a32708937ba57c24a6e7387692334d297465c2b1748affe1.webp",
           "width": 2400
         },
@@ -93,7 +93,7 @@
           "mediaType": "image/webp",
           "sha256": "fd1c46d04793e9ab254c54d76b700e71a3bcc6a1b48c0ee5e3c1b1689c4e5164",
           "size": 51824,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/markdown-lint/registry-assets/banner.light.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/markdown-lint/registry-assets/banner.light.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/fd1c46d04793e9ab254c54d76b700e71a3bcc6a1b48c0ee5e3c1b1689c4e5164.webp",
           "width": 2400
         },
@@ -102,7 +102,7 @@
           "mediaType": "image/webp",
           "sha256": "0b856137a2b72b15d46ec9c6e680c28ba23198fd2afc28a2d4bf9cb9e277acf5",
           "size": 31858,
-          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/2e3887a6cb039198c2ab627d3ce1e17f9070e49c/packages/markdown-lint/registry-assets/banner.preview.webp",
+          "sourceUrl": "https://raw.githubusercontent.com/lapismd/lapis-plugins/5f9aa332a9b00aa28239af9f08417a7846282854/packages/markdown-lint/registry-assets/banner.preview.webp",
           "url": "https://registry.lapis.md/v2/assets/lapis-markdown-lint/0b856137a2b72b15d46ec9c6e680c28ba23198fd2afc28a2d4bf9cb9e277acf5.webp",
           "width": 1200
         }
@@ -120,7 +120,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "fXHk8ibzZY6RTlSouZbvWFrtgCO2hbwQdKikzCxNYvodUt3REQGLcp9wjzzOfhhC3A4+k1GUHZjido+PFs3wCg=="
+      "sig": "qdJPEnL23pbQucdGMtmnuXUJf566iVTVHwGwPYKENbTqqQYbWg0vBFo5MSHyftB+U+vnDtbPJrTQ5WlLHGUhCg=="
     }
   ],
   "status": "active",
@@ -181,6 +181,25 @@
       ],
       "releasedAt": "2026-10-30T14:58:08.000Z",
       "version": "0.1.3"
+    },
+    "0.1.4": {
+      "bundle": {
+        "downloadUrl": "../../download/lapis-markdown-lint/0.1.4",
+        "sha256": "c9bd64e34a59222ddff001edcac0cc789dd236386700c850cccbb2f0b66ddd0b",
+        "size": 153187,
+        "url": "https://github.com/lapismd/lapis-plugins/releases/download/markdown-lint%400.1.4/lapis-markdown-lint-0.1.4.lapis-plugin"
+      },
+      "changelog": {
+        "description": "### Patch Changes\n\n- [#103](https://github.com/lapismd/lapis-plugins/pull/103) [`694be86`](https://github.com/lapismd/lapis-plugins/commit/694be869a1494851a86b48d79a36d28541b9db36) Thanks [@stevejuma](https://github.com/stevejuma)! - Admit the released API 0.4 host alongside the existing API 0.2 contract and qualify the matching published Workspace/Core/Mira cohort.",
+        "title": "Markdown Lint 0.1.4"
+      },
+      "minAppVersion": "0.1.0",
+      "platforms": [
+        "web",
+        "desktop"
+      ],
+      "releasedAt": "2026-11-14T07:09:12.000Z",
+      "version": "0.1.4"
     },
     "2026.6.6": {
       "bundle": {
