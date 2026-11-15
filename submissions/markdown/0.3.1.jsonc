@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "markdown-0.3.1.lapis-plugin",
+    "package_name": "@lapis-notes/markdown",
+    "plugin_id": "markdown",
+    "release_tag": "markdown@0.3.1",
+    "repository": "lapismd/lapis-plugins",
+    "source_commit": "1e7cda3d5eae672a66695bd577f7fa9939519240",
+    "version": "0.3.1",
+  },
+}
