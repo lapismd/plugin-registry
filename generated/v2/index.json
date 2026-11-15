@@ -143,10 +143,10 @@
       "detail": "plugins/history.json",
       "id": "history",
       "latestRelease": {
-        "bundleSize": 191098,
-        "releasedAt": "2026-11-14T07:08:57.000Z"
+        "bundleSize": 190854,
+        "releasedAt": "2026-11-15T04:23:16.000Z"
       },
-      "latestVersion": "0.2.6",
+      "latestVersion": "0.3.0",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "History",
@@ -762,7 +762,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "4p5xpZpCdPA6ky8Geyn9SJI/+T8R13b1iltTke5tUBeZ1i37LyqBUEfdcyuzvbR/P7j40Cos/LDKlQz9tFrzDA=="
+      "sig": "1gT1Gk1ubK0emjJNAHKzJ/F8aumbLaXpzXxxpJr0cDEo2KDS1AxnQK3n2mBHRUqx1YzqVdOJIBxI5PYvD0ueBQ=="
     }
   ]
 }
