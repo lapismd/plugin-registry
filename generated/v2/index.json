@@ -144,9 +144,9 @@
       "id": "history",
       "latestRelease": {
         "bundleSize": 190854,
-        "releasedAt": "2026-11-15T14:28:15.000Z"
+        "releasedAt": "2026-11-15T20:33:48.000Z"
       },
-      "latestVersion": "0.4.0",
+      "latestVersion": "0.5.0",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "History",
@@ -762,7 +762,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "eZq57QzkOOgMtoXRPzQauS0g0CK0pWjDwyLT4zFeG9ygqquHK49VefxjvneHI6EW93Yyhx92hPMYDBnqu6YBAA=="
+      "sig": "Umr2Fp9GcFoGelb+bw/4ow8jEr3tL8V1rSJ5PKrIzHSuSzcGoDSHftzdTjOXqMqMwaN1MT0deMLD+uk2HDPHAA=="
     }
   ]
 }
