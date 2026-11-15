@@ -17,6 +17,10 @@ comes from the latest release. Nostr deployment remains deferred.
 metadata before opening idempotent one-file submission PRs. Merging a submission
 queues it; one **Publish registry updates** PR combines approved requests and
 updates the entries, mirrored images, generated catalog and signatures together.
+Preparation uploads an immutable qualified candidate before a separate writer
+publishes it. Failed publication resumes that artifact without repeating builds
+or signing; identical qualified batches create no new writes. See the
+[qualification and recovery contract](docs/publishing-official-plugins.md#qualified-batch-reuse-and-recovery).
 Metadata-only dispatches retain
 release artifacts and version history. Source schema V1 remains readable for
 older independent plugins; publication normalizes to V2. Structured notes use

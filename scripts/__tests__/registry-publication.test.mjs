@@ -437,7 +437,7 @@ test("publication dry runs and empty queues do not write, and moving main or lea
     }),
     /kept changing/,
   );
-  assert.equal(builds, 3);
+  assert.equal(builds, 1, "a known lease retry reuses its qualified candidate");
   assert.equal(writes, 3);
   await assert.rejects(
     publishQueuedSubmissions({
@@ -587,4 +587,28 @@ test("publication discovery rejects truncated queues, closed PRs, human commits 
   pr.body = publicationDescription("", records);
   files = [...files, { filename: "scripts/changed.mjs", status: "modified" }];
   await assert.rejects(runner.snapshot(), /Unexpected/);
+});
+
+test("an identical qualified publication does not repeat verification, signing or PR writes", async () => {
+  const snapshot = {
+    mainSha: "main",
+    headSha: "head",
+    records: [record("search")],
+    pr: { number: 52 },
+  };
+  let reads = 0;
+  const result = await publishQueuedSubmissions({
+    snapshot: async () => {
+      reads++;
+      return snapshot;
+    },
+    reuse: async () => ({ sha: "head" }),
+    verify: () => assert.fail("qualified bytes must not be fetched again"),
+    build: () =>
+      assert.fail("qualified batch must not be rebuilt or signed again"),
+    publish: () => assert.fail("unchanged PR must not be written again"),
+  });
+  assert.equal(result.status, "unchanged");
+  assert.equal(result.prNumber, 52);
+  assert.equal(reads, 2, "revalidate immediately before reporting reuse");
 });

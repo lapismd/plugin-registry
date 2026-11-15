@@ -191,15 +191,36 @@ test("every GitHub workflow uses Node 24 builds and Node 24 action runtimes", as
     "materialize-registry-pr.yml",
     "refresh-registry-prs.yml",
     "publish-registry-updates.yml",
+    "write-registry-publication.yml",
   ];
   for (const name of workflowNames) {
     const workflow = await readFile(
       new URL(`.github/workflows/${name}`, repoRoot),
       "utf8",
     );
-    assert.match(workflow, /actions\/checkout@v7/);
-    assert.match(workflow, /pnpm\/action-setup@v6/);
-    assert.match(workflow, /actions\/setup-node@v7/);
+    if (
+      [
+        "publish-registry-updates.yml",
+        "write-registry-publication.yml",
+      ].includes(name)
+    ) {
+      assert.match(
+        workflow,
+        /actions\/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1/,
+      );
+      assert.match(
+        workflow,
+        /pnpm\/action-setup@ea17c68df8912ef543352723c149a84f56e3d413/,
+      );
+      assert.match(
+        workflow,
+        /actions\/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1/,
+      );
+    } else {
+      assert.match(workflow, /actions\/checkout@v7/);
+      assert.match(workflow, /pnpm\/action-setup@v6/);
+      assert.match(workflow, /actions\/setup-node@v7/);
+    }
     assert.match(workflow, /node-version:\s*["']?24/);
     assert.doesNotMatch(workflow, /@v4|node-version:\s*["']?(20|22)/);
   }
@@ -215,16 +236,53 @@ test("one publication workflow consumes approved submissions without deploying t
     "utf8",
   );
   assert.match(workflow, /push:[\s\S]*branches: \[main\]/);
-  assert.match(
-    workflow,
-    /group: registry-publication-\$\{\{ github.event_name == 'workflow_dispatch' && github.run_id \|\| 'automatic' \}\}/,
-  );
+  assert.match(workflow, /group: registry-publication-preparation/);
   assert.match(workflow, /cancel-in-progress: false/);
-  assert.match(workflow, /ref: main/);
+  assert.match(workflow, /ref: \$\{\{ github\.sha \}\}/);
+  assert.match(workflow, /if: github\.ref == 'refs\/heads\/main'/);
   assert.match(workflow, /fetch-depth: 0/);
   assert.match(workflow, /dry_run:/);
   assert.match(workflow, /node scripts\/publish-registry-updates.mjs/);
   assert.match(workflow, /LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64/);
   assert.doesNotMatch(workflow, /wrangler|pull_request_target/);
   assert.match(deploy, /paths-ignore: \[submissions\/\*\*\]/);
+});
+
+test("qualified artifact production has no write token and the separate writer has no signing secret", async () => {
+  const prepare = await readFile(
+    new URL(".github/workflows/publish-registry-updates.yml", repoRoot),
+    "utf8",
+  );
+  const writer = await readFile(
+    new URL(".github/workflows/write-registry-publication.yml", repoRoot),
+    "utf8",
+  );
+  assert.match(prepare, /permission-contents: read/);
+  assert.match(prepare, /permission-pull-requests: read/);
+  assert.doesNotMatch(prepare, /permission-(?:contents|pull-requests): write/);
+  assert.match(prepare, /REGISTRY_PUBLICATION_STAGE: prepare/);
+  assert.match(
+    prepare,
+    /registry-qualified-candidate-\$\{\{ github.run_id \}\}-\$\{\{ github.run_attempt \}\}/,
+  );
+  assert.match(prepare, /if-no-files-found: error/);
+  assert.match(
+    writer,
+    /workflow_run:[\s\S]*workflows: \[Prepare registry publication\]/,
+  );
+  assert.match(writer, /workflow_run.conclusion == 'success'/);
+  assert.match(writer, /node scripts\/inspect-publication-producer.mjs/);
+  assert.match(writer, /needs.inspect.outputs.has_candidate == 'true'/);
+  assert.match(writer, /repositories: plugin-registry\n/);
+  assert.match(writer, /REGISTRY_PUBLICATION_STAGE: publish/);
+  assert.doesNotMatch(
+    writer,
+    /LAPIS_REGISTRY_PRIVATE_KEY_PEM|LAPIS_PLUGIN_RELEASE_KEY|registry:sign|wrangler/,
+  );
+  const inspect = writer.slice(
+    writer.indexOf("  inspect:"),
+    writer.indexOf("  publish:"),
+  );
+  assert.doesNotMatch(inspect, /secrets\.|create-github-app-token/);
+  assert.doesNotMatch(inspect, /pnpm install/);
 });

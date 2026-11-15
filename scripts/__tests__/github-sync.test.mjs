@@ -654,3 +654,64 @@ function byteResponse(bytes) {
       bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength),
   };
 }
+
+test("publication verifies signatures again while applying snapshot-cached archive bytes once", async (t) => {
+  const { createSubmissionFetchCache } = await import(
+    "../lib/submission-fetch-cache.mjs"
+  );
+  const {
+    verifySubmission,
+    applySubmissions,
+    writeSubmission,
+    loadSubmissions,
+  } = await import("../lib/registry-submissions.mjs");
+  const fixture = await fixtureDir();
+  t.after(() => rm(fixture.root, { recursive: true, force: true }));
+  const root = new URL(`file://${fixture.root}/`);
+  const trust = new URL("generated/v2/trust/root.json", root);
+  await mkdir(new URL("./", trust), { recursive: true });
+  const release = await signedReleaseFixture();
+  await writeTrustRoot(trust, release.publicKeyPem);
+  const request = {
+    schemaVersion: 1,
+    action: "plugin_release",
+    client_payload: payload,
+  };
+  const file = await writeSubmission(request, root);
+  const item = { request, file },
+    calls = new Map();
+  const fetchImpl = createSubmissionFetchCache(async (url, options) => {
+    calls.set(String(url), (calls.get(String(url)) ?? 0) + 1);
+    const response = await release.fetchImpl(url, options);
+    if (!response.ok) return new Response(null, { status: response.status });
+    return response.arrayBuffer
+      ? new Response(await response.arrayBuffer())
+      : Response.json(await response.json());
+  });
+  const verified = await verifySubmission(item, { root, fetchImpl });
+  assert.equal(verified.bundleSha256, sha256(release.bundleBytes));
+  const untrusted = JSON.parse(await readFile(trust, "utf8"));
+  untrusted.roles.release = [];
+  await writeFile(trust, JSON.stringify(untrusted));
+  await assert.rejects(
+    applySubmissions([item], { root, fetchImpl }),
+    /trusted|signature|key/i,
+  );
+  assert.equal((await loadSubmissions(root)).length, 1);
+  await writeTrustRoot(trust, release.publicKeyPem);
+  await applySubmissions([item], { root, fetchImpl });
+  assert.equal((await loadSubmissions(root)).length, 0);
+  const result = JSON.parse(
+    await readFile(new URL("entries/official/lapis-graph.jsonc", root), "utf8"),
+  );
+  assert.equal(
+    result.versions[payload.version].bundle.sha256,
+    verified.bundleSha256,
+  );
+  const archiveCalls = [...calls].filter(([url]) =>
+    url.endsWith(payload.asset_name),
+  );
+  assert.equal(archiveCalls.length, 1);
+  assert.equal(archiveCalls[0][1], 1);
+  assert(fetchImpl.metrics().hits > 0);
+});

@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { registryBot, registryRepository } from "./registry-request.mjs";
 import { orderSubmissions, recordKey } from "./registry-submissions.mjs";
 import { stableStringify } from "./registry.mjs";
@@ -103,15 +104,103 @@ export function publicationDescription(body, records, sourceRef = "main") {
 
 export async function publishQueuedSubmissions(
   adapter,
-  { dryRun = false } = {},
+  { dryRun = false, prepareOnly = false, onProgress = async () => {} } = {},
 ) {
+  let prepared, preparedIdentity;
+  const metrics = {
+    verifyMs: 0,
+    buildMs: 0,
+    attempts: 0,
+    reusedCandidate: false,
+  };
+  const measure = async (phase, work) => {
+    const start = Date.now();
+    try {
+      return await work();
+    } finally {
+      metrics[phase] += Date.now() - start;
+      Object.assign(metrics, adapter.metrics?.() ?? {});
+      await onProgress({ metrics: { ...metrics } });
+    }
+  };
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
+      metrics.attempts++;
       const before = await adapter.snapshot();
-      if (!before.records.length) return { status: "empty" };
-      await adapter.verify(before);
-      if (dryRun) return { status: "verified", count: before.records.length };
-      const candidate = await adapter.build(before);
+      const inputIdentity = JSON.stringify([
+        before.mainSha,
+        publicationIdentity(before.records),
+      ]);
+      const batchIdentity = createHash("sha256")
+        .update(inputIdentity)
+        .digest("hex");
+      await onProgress({
+        phase: "discovered",
+        batchIdentity,
+        sourceSha: before.mainSha,
+        count: before.records.length,
+        metrics: { ...metrics },
+      });
+      if (!before.records.length)
+        return { status: "empty", sourceSha: before.mainSha, metrics };
+      if (!dryRun) {
+        const reused = await adapter.reuse?.(before);
+        if (
+          reused?.pending &&
+          prepared?.sha === before.headSha &&
+          preparedIdentity === inputIdentity
+        )
+          reused.pending = false;
+        if (
+          reused?.pending ||
+          (reused && before.pr && reused.descriptionCurrent !== false)
+        ) {
+          const latest = await adapter.snapshot();
+          if (
+            before.mainSha !== latest.mainSha ||
+            before.headSha !== latest.headSha ||
+            before.pr?.number !== latest.pr?.number ||
+            publicationIdentity(before.records) !==
+              publicationIdentity(latest.records)
+          )
+            continue;
+          return {
+            status: reused.pending ? "qualification-pending" : "unchanged",
+            count: before.records.length,
+            prNumber: before.pr?.number,
+            candidateSha: before.headSha,
+            sourceSha: before.mainSha,
+            batchIdentity,
+            metrics: { ...metrics, reusedCandidate: true },
+          };
+        }
+        if (reused) {
+          prepared = reused;
+          preparedIdentity = inputIdentity;
+          metrics.reusedCandidate = true;
+        }
+      }
+      if (dryRun || !prepared || preparedIdentity !== inputIdentity) {
+        await onProgress({ phase: "verifying" });
+        await measure("verifyMs", () => adapter.verify(before));
+        await onProgress({ phase: "verified", metrics: { ...metrics } });
+        if (dryRun)
+          return {
+            status: "verified",
+            count: before.records.length,
+            sourceSha: before.mainSha,
+            batchIdentity,
+            metrics,
+          };
+        prepared = await measure("buildMs", () => adapter.build(before));
+        preparedIdentity = inputIdentity;
+        await onProgress({
+          phase: "qualified",
+          candidateSha: prepared.sha,
+          metrics: { ...metrics },
+        });
+      } else metrics.reusedCandidate = true;
+      const candidate = prepared;
       const latest = await adapter.snapshot();
       if (
         before.mainSha !== latest.mainSha ||
@@ -125,11 +214,32 @@ export async function publishQueuedSubmissions(
         );
         continue;
       }
+      if (prepareOnly) {
+        const checkpoint = await adapter.checkpoint(candidate, latest);
+        return {
+          status: "prepared",
+          sourceSha: before.mainSha,
+          candidateSha: candidate.sha,
+          count: before.records.length,
+          batchIdentity,
+          checkpointDigest: checkpoint.digest,
+          metrics,
+        };
+      }
+      await onProgress({
+        phase: "publishing",
+        candidateSha: candidate.sha,
+        metrics: { ...metrics },
+      });
       const pr = await adapter.publish(candidate, latest);
       return {
         status: "updated",
         count: before.records.length,
         prNumber: pr.number,
+        sourceSha: before.mainSha,
+        candidateSha: candidate.sha,
+        batchIdentity,
+        metrics,
       };
     } catch (error) {
       if (!(error instanceof LeaseConflict)) throw error;
@@ -139,4 +249,83 @@ export async function publishQueuedSubmissions(
   throw new Error(
     "Registry publication kept changing; retry the publication workflow.",
   );
+}
+
+export async function pushQualifiedCandidate(
+  candidateSha,
+  expectedSha,
+  { push, readHead },
+) {
+  if (candidateSha === expectedSha) return { status: "already-accepted" };
+  try {
+    await push();
+    return { status: "accepted" };
+  } catch (error) {
+    if ((await readHead()) === candidateSha)
+      return { status: "accepted-after-readback" };
+    if (/stale info|fetch first|non-fast-forward/.test(error.stderr ?? ""))
+      throw new LeaseConflict(
+        "Publication branch lease was rejected; reconcile current state.",
+      );
+    throw Error(
+      "Publication push outcome is uncertain; inspect the exact branch/PR before re-dispatching. No write was retried.",
+    );
+  }
+}
+
+export async function publishCheckpoint(
+  adapter,
+  checkpoint,
+  { onProgress = async () => {} } = {},
+) {
+  const before = await adapter.snapshot(),
+    manifest = checkpoint.manifest;
+  if (
+    before.mainSha !== manifest.sourceSha ||
+    publicationIdentity(before.records) !==
+      publicationIdentity(manifest.records)
+  )
+    throw Error(
+      "Qualified artifact source/queue changed; prepare a fresh candidate.",
+    );
+  const same = await adapter.reuse?.(before);
+  if (same?.pending || (same && before.pr && same.descriptionCurrent !== false))
+    return {
+      status: same.pending ? "qualification-pending" : "unchanged",
+      sourceSha: before.mainSha,
+      candidateSha: before.headSha,
+      prNumber: before.pr?.number,
+      count: before.records.length,
+      batchIdentity: manifest.batchIdentity,
+      metrics: { verifyMs: 0, buildMs: 0, attempts: 1, reusedCandidate: true },
+    };
+  let candidate;
+  if (same) candidate = same;
+  else {
+    if (
+      ![manifest.expectedHead, manifest.candidateSha].includes(before.headSha)
+    )
+      throw new LeaseConflict(
+        "Publication head changed after candidate qualification; preserve current ownership.",
+      );
+    candidate = await adapter.installCheckpoint(checkpoint, before);
+  }
+  await onProgress({
+    phase: "publishing",
+    sourceSha: before.mainSha,
+    candidateSha: candidate.sha,
+    batchIdentity: manifest.batchIdentity,
+    artifactId: checkpoint.artifactId,
+    artifactDigest: checkpoint.artifactDigest,
+  });
+  const pr = await adapter.publish(candidate, before);
+  return {
+    status: "updated",
+    sourceSha: before.mainSha,
+    candidateSha: candidate.sha,
+    batchIdentity: manifest.batchIdentity,
+    prNumber: pr.number,
+    count: before.records.length,
+    metrics: { verifyMs: 0, buildMs: 0, attempts: 1, reusedCandidate: true },
+  };
 }

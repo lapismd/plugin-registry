@@ -4,8 +4,8 @@ import {
 } from "../sync-github-release.mjs";
 import { stableStringify } from "./registry.mjs";
 
-export const registryRepository = "lapismd/plugin-registry";
-export const registryBot = "lapismd-registry-automation[bot]";
+import { registryRepository, registryBot } from "./registry-identity.mjs";
+export { registryRepository, registryBot } from "./registry-identity.mjs";
 const start = "<!-- lapis-registry-managed:start -->";
 const end = "<!-- lapis-registry-managed:end -->";
 const recordStart = "<!-- lapis-registry-request\n";

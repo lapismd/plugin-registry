@@ -149,6 +149,7 @@ export async function applySubmissions(
     token = process.env.GITHUB_TOKEN,
     verify = verifySubmission,
     replay = replaySubmission,
+    fetchImpl = fetch,
     compareSources = async (repository, before, after) =>
       (
         await new GitHubClient(token).call(
@@ -184,7 +185,7 @@ export async function applySubmissions(
               p.source_commit,
             );
       if (status === "behind") {
-        await verify(record, { root, token });
+        await verify(record, { root, token, fetchImpl });
         await rm(new URL(record.file, root));
         continue;
       }
@@ -194,7 +195,7 @@ export async function applySubmissions(
         );
     }
     if (p.version && isIndexedRelease(existing, p.version)) {
-      const verified = await verify(record, { root, token });
+      const verified = await verify(record, { root, token, fetchImpl });
       if (
         stableStringify(existing.versions[p.version].bundle, 0) !==
         stableStringify(verified.entry.versions[p.version].bundle, 0)
@@ -213,6 +214,7 @@ export async function applySubmissions(
         );
       await replay(record, {
         token,
+        fetchImpl,
         entriesDir: new URL("entries/official/", root),
         trustRootPath: new URL("generated/v2/trust/root.json", root),
         contentDir: new URL("generated/v2/content/", root),
