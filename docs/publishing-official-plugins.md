@@ -277,3 +277,9 @@ Preparation and writer runs retain versioned progress reports under ignored
 `tmp/publication-report.json`. They include source/queue/candidate/artifact
 identities, verification/build timing, fetch reuse and recovery status. Reports
 are Actions artifacts for Maintenance, never deployed catalog/site content.
+
+Publication messages retain their verified queue/source list, machine record and
+maintainer notes while adding validated source/candidate commits, successful
+preparation, immutable artifact digest, publication-attempt and existing gate
+links. Recovery links to the real writer workflow with exact producer inputs;
+checkbox actions are reserved for workflows with an actual handler.

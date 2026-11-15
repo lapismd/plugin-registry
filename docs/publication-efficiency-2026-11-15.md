@@ -73,7 +73,7 @@ pnpm registry:submissions:verify
 actionlint .github/workflows/*.yml
 ```
 
-The complete check passes 140 unit tests, 25 cold browser scenarios, source and
+The complete check passes 141 unit tests, 25 cold browser scenarios, source and
 signature/statistics validation, Astro checking with zero errors/warnings,
 the 147-page site build and formatting. Actionlint 1.7.12 passes. Strict remote
 validation verifies 19 registry entries. After rebasing onto main `a81fd3b2`,
@@ -108,3 +108,10 @@ Rollback reverts the source workflow/controller change, retaining queued records
 reviewed PRs, signed catalog and deployment approval. Existing immutable artifacts
 expire naturally. Inspect branch/PR ownership before restoring any older writer;
 never reset state, delete repairs or replay an uncertain publication blindly.
+
+Source [PR #165](https://github.com/lapismd/plugin-registry/pull/165) starts from
+verified durable-publication commit
+[`b7f6394a8de7`](https://github.com/lapismd/plugin-registry/commit/b7f6394a8de7).
+The subsequent requested bot-message enrichment adds factual provenance, gate
+and wired manual recovery links while preserving the managed queue record and
+maintainer notes; no decorative checkbox, secret or permission is added.

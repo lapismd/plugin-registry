@@ -115,6 +115,12 @@ export function createPublicationRunner(client, directory, options = {}) {
       });
     return {
       sha: snapshot.headSha,
+      evidence: {
+        sourceSha: snapshot.mainSha,
+        candidateSha: snapshot.headSha,
+        producerRunId: receipt.runId,
+        producerRunAttempt: receipt.runAttempt,
+      },
       pending: !completed,
       descriptionCurrent: snapshot.pr
         ? publicationIdentity(publicationRecords(snapshot.pr.body)) ===
@@ -623,6 +629,12 @@ export function createPublicationRunner(client, directory, options = {}) {
               current.body,
               latest.records,
               latest.mainSha,
+              candidate.evidence
+                ? {
+                    ...candidate.evidence,
+                    writerRunId: process.env.GITHUB_RUN_ID,
+                  }
+                : undefined,
             ),
           },
         },
@@ -634,7 +646,14 @@ export function createPublicationRunner(client, directory, options = {}) {
         base: "main",
         head: publicationBranch,
         title: "Publish registry updates",
-        body: publicationDescription("", latest.records, latest.mainSha),
+        body: publicationDescription(
+          "",
+          latest.records,
+          latest.mainSha,
+          candidate.evidence
+            ? { ...candidate.evidence, writerRunId: process.env.GITHUB_RUN_ID }
+            : undefined,
+        ),
       },
     });
   }

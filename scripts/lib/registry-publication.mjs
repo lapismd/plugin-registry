@@ -76,7 +76,12 @@ export function assertPublicationPr(pr, commits, files) {
   return records;
 }
 
-export function publicationDescription(body, records, sourceRef = "main") {
+export function publicationDescription(
+  body,
+  records,
+  sourceRef = "main",
+  evidence,
+) {
   const managed = [
     start,
     "This PR publishes verified plugin submissions that maintainers have merged into the registry queue. It updates the curated entries, mirrors their declared images, regenerates the catalog and signs its metadata together.",
@@ -84,6 +89,7 @@ export function publicationDescription(body, records, sourceRef = "main") {
       const p = request.client_payload;
       return `- **${p.plugin_id} ${p.version ?? "metadata"}** — [queued request](https://github.com/${registryRepository}/blob/${sourceRef}/${file}) · [verified source](https://github.com/${p.repository}/commit/${p.source_commit})`;
     }),
+    ...(evidence ? [publicationEvidence(evidence, sourceRef)] : []),
     "Merge this PR to publish this batch through the existing production deployment gate. New submissions are collected into this same open PR automatically.",
     `<!-- lapis-registry-publication-record\n${JSON.stringify({ schemaVersion: 1, submissions: orderSubmissions(records) }, null, 2)}\n-->`,
     end,
@@ -100,6 +106,50 @@ export function publicationDescription(body, records, sourceRef = "main") {
     managed +
     body.slice(body.indexOf(end) + end.length)
   );
+}
+
+function publicationEvidence(evidence, sourceRef) {
+  if (
+    !/^[a-f0-9]{40}$/.test(evidence.sourceSha ?? "") ||
+    evidence.sourceSha !== sourceRef ||
+    !/^[a-f0-9]{40}$/.test(evidence.candidateSha ?? "") ||
+    !/^\d+$/.test(evidence.producerRunId ?? "") ||
+    !Number.isSafeInteger(evidence.producerRunAttempt) ||
+    evidence.producerRunAttempt < 1 ||
+    (evidence.writerRunId !== undefined && !/^\d+$/.test(evidence.writerRunId))
+  )
+    throw Error("Invalid publication message evidence.");
+  if (
+    evidence.artifactId !== undefined &&
+    (!Number.isSafeInteger(evidence.artifactId) ||
+      !/^sha256:[a-f0-9]{64}$/.test(evidence.artifactDigest ?? ""))
+  )
+    throw Error("Invalid immutable artifact message evidence.");
+  const base = `https://github.com/${registryRepository}`;
+  const run = `${base}/actions/runs/${evidence.producerRunId}`;
+  const rows = [
+    "### Candidate and qualification",
+    "| Evidence | Immutable target |",
+    "| --- | --- |",
+    `| Source and approved queue | [${evidence.sourceSha.slice(0, 12)}](${base}/commit/${evidence.sourceSha}) |`,
+    `| Candidate | [${evidence.candidateSha.slice(0, 12)}](${base}/commit/${evidence.candidateSha}) |`,
+    `| Successful preparation | [Run ${evidence.producerRunId}, attempt ${evidence.producerRunAttempt}](${run}/attempts/${evidence.producerRunAttempt}) |`,
+    ...(evidence.artifactId === undefined
+      ? []
+      : [
+          `| Qualified artifact | [Artifact ${evidence.artifactId}](${run}/artifacts/${evidence.artifactId}) · \`${evidence.artifactDigest}\` |`,
+        ]),
+    ...(evidence.writerRunId === undefined
+      ? []
+      : [
+          `| Publication attempt | [Run ${evidence.writerRunId}](${base}/actions/runs/${evidence.writerRunId}) |`,
+        ]),
+  ];
+  return [
+    rows.join("\n"),
+    `**Gates:** review this batch and its ordinary [functional checks](${base}/actions/workflows/checks.yml) before merging; the existing [production deployment approval](${base}/actions/workflows/publish.yml) still applies.`,
+    `**Recovery:** open the [qualified writer workflow](${base}/actions/workflows/write-registry-publication.yml) and dispatch on main with \`preparation_run_id=${evidence.producerRunId}\` and \`preparation_run_attempt=${evidence.producerRunAttempt}\`. Ownership and immutable-artifact checks run again; see the [recovery contract](${base}/blob/${evidence.sourceSha}/docs/publishing-official-plugins.md#qualified-batch-reuse-and-recovery).`,
+  ].join("\n\n");
 }
 
 export async function publishQueuedSubmissions(
@@ -318,6 +368,20 @@ export async function publishCheckpoint(
     artifactId: checkpoint.artifactId,
     artifactDigest: checkpoint.artifactDigest,
   });
+  const sameArtifact = candidate.sha === manifest.candidateSha;
+  candidate = {
+    ...candidate,
+    evidence: sameArtifact
+      ? {
+          sourceSha: before.mainSha,
+          candidateSha: candidate.sha,
+          producerRunId: manifest.producer.runId,
+          producerRunAttempt: manifest.producer.runAttempt,
+          artifactId: checkpoint.artifactId,
+          artifactDigest: checkpoint.artifactDigest,
+        }
+      : candidate.evidence,
+  };
   const pr = await adapter.publish(candidate, before);
   return {
     status: "updated",
