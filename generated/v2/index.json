@@ -499,10 +499,10 @@
       "detail": "plugins/lapis-source-editor.json",
       "id": "lapis-source-editor",
       "latestRelease": {
-        "bundleSize": 11394,
-        "releasedAt": "2026-11-14T10:04:26.000Z"
+        "bundleSize": 11396,
+        "releasedAt": "2026-11-15T15:17:11.000Z"
       },
-      "latestVersion": "0.1.10",
+      "latestVersion": "0.1.11",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Source Editor",
@@ -578,10 +578,10 @@
       "detail": "plugins/markdown.json",
       "id": "markdown",
       "latestRelease": {
-        "bundleSize": 6002372,
-        "releasedAt": "2026-11-14T17:30:16.000Z"
+        "bundleSize": 6005931,
+        "releasedAt": "2026-11-15T15:16:55.000Z"
       },
-      "latestVersion": "0.2.7",
+      "latestVersion": "0.3.1",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Markdown",
@@ -618,10 +618,10 @@
       "detail": "plugins/search.json",
       "id": "search",
       "latestRelease": {
-        "bundleSize": 170281,
-        "releasedAt": "2026-11-14T10:04:20.000Z"
+        "bundleSize": 170074,
+        "releasedAt": "2026-11-15T15:17:04.000Z"
       },
-      "latestVersion": "0.1.11",
+      "latestVersion": "0.1.12",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Search",
@@ -762,7 +762,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "tdh71kVCwsEjQova6kyMCiSFNHtwsb5zCsel5KdP6+5zrRM1lhxzEz2emcriD+rmuaTEuSozi8EZIRX75sIDBg=="
+      "sig": "RbPOG2Mf3q2IWfUuvYjKwLH2D1DU7L4/PnTjgWZPYksZMh9SUEbLP/1Og/zy3OgCw1IQoFEDKPPr7T4UlWmaBA=="
     }
   ]
 }
