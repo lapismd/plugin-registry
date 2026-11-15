@@ -14,6 +14,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.13"
     },
+    "ai@0.1.15": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.15/ai-0.1.15.lapis-plugin",
+      "pluginId": "ai",
+      "status": "active",
+      "version": "0.1.15"
+    },
     "ai@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.2/ai-0.1.2.lapis-plugin",
       "pluginId": "ai",
@@ -92,6 +98,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.3.4"
     },
+    "bases@0.4.0": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/bases%400.4.0/bases-0.4.0.lapis-plugin",
+      "pluginId": "bases",
+      "status": "active",
+      "version": "0.4.0"
+    },
     "bookmarks@0.1.10": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/bookmarks%400.1.10/bookmarks-0.1.10.lapis-plugin",
       "pluginId": "bookmarks",
@@ -103,6 +115,12 @@ export const downloadTargets = {
       "pluginId": "bookmarks",
       "status": "active",
       "version": "0.1.11"
+    },
+    "bookmarks@0.1.12": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/bookmarks%400.1.12/bookmarks-0.1.12.lapis-plugin",
+      "pluginId": "bookmarks",
+      "status": "active",
+      "version": "0.1.12"
     },
     "bookmarks@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/bookmarks%400.1.2/bookmarks-0.1.2.lapis-plugin",
@@ -236,6 +254,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.3.4"
     },
+    "lapis-canvas@0.4.0": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/canvas%400.4.0/lapis-canvas-0.4.0.lapis-plugin",
+      "pluginId": "lapis-canvas",
+      "status": "active",
+      "version": "0.4.0"
+    },
     "lapis-csv@0.2.0": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/csv%400.2.0/lapis-csv-0.2.0.lapis-plugin",
       "pluginId": "lapis-csv",
@@ -266,6 +290,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.2.7"
     },
+    "lapis-csv@0.2.9": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/csv%400.2.9/lapis-csv-0.2.9.lapis-plugin",
+      "pluginId": "lapis-csv",
+      "status": "active",
+      "version": "0.2.9"
+    },
     "lapis-docx@0.2.0": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/docx%400.2.0/lapis-docx-0.2.0.lapis-plugin",
       "pluginId": "lapis-docx",
@@ -284,6 +314,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.2.2"
     },
+    "lapis-docx@0.2.3": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/docx%400.2.3/lapis-docx-0.2.3.lapis-plugin",
+      "pluginId": "lapis-docx",
+      "status": "active",
+      "version": "0.2.3"
+    },
     "lapis-graph@0.1.10": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.10/lapis-graph-0.1.10.lapis-plugin",
       "pluginId": "lapis-graph",
@@ -295,6 +331,12 @@ export const downloadTargets = {
       "pluginId": "lapis-graph",
       "status": "active",
       "version": "0.1.11"
+    },
+    "lapis-graph@0.1.12": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.12/lapis-graph-0.1.12.lapis-plugin",
+      "pluginId": "lapis-graph",
+      "status": "active",
+      "version": "0.1.12"
     },
     "lapis-graph@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/graph%400.1.2/lapis-graph-0.1.2.lapis-plugin",
@@ -356,6 +398,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.4"
     },
+    "lapis-markdown-lint@0.1.5": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/markdown-lint%400.1.5/lapis-markdown-lint-0.1.5.lapis-plugin",
+      "pluginId": "lapis-markdown-lint",
+      "status": "active",
+      "version": "0.1.5"
+    },
     "lapis-markdown-lint@2026.6.6": {
       "originUrl": "https://github.com/lapis-notes/releases/releases/download/official-plugin-assets-lapis-markdown-lint-2026.6.6/lapis-markdown-lint-2026.6.6.lapis-plugin",
       "pluginId": "lapis-markdown-lint",
@@ -386,6 +434,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.2.2"
     },
+    "lapis-pdf@0.2.3": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/pdf%400.2.3/lapis-pdf-0.2.3.lapis-plugin",
+      "pluginId": "lapis-pdf",
+      "status": "active",
+      "version": "0.2.3"
+    },
     "lapis-slides@0.1.0": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/slides%400.1.0/lapis-slides-0.1.0.lapis-plugin",
       "pluginId": "lapis-slides",
@@ -409,6 +463,12 @@ export const downloadTargets = {
       "pluginId": "lapis-slides",
       "status": "active",
       "version": "0.1.3"
+    },
+    "lapis-slides@0.1.4": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/slides%400.1.4/lapis-slides-0.1.4.lapis-plugin",
+      "pluginId": "lapis-slides",
+      "status": "active",
+      "version": "0.1.4"
     },
     "lapis-source-editor@0.1.1": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/source-editor%400.1.1/lapis-source-editor-0.1.1.lapis-plugin",
@@ -487,6 +547,12 @@ export const downloadTargets = {
       "pluginId": "lapis-transcripts",
       "status": "active",
       "version": "0.2.7"
+    },
+    "lapis-transcripts@0.2.8": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/transcripts%400.2.8/lapis-transcripts-0.2.8.lapis-plugin",
+      "pluginId": "lapis-transcripts",
+      "status": "active",
+      "version": "0.2.8"
     },
     "markdown@0.1.3": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/markdown%400.1.3/markdown-0.1.3.lapis-plugin",
@@ -614,6 +680,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.5"
     },
+    "spellcheck@0.1.6": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/spellcheck%400.1.6/spellcheck-0.1.6.lapis-plugin",
+      "pluginId": "spellcheck",
+      "status": "active",
+      "version": "0.1.6"
+    },
     "tasks@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugin-tasks/releases/download/%40lapis-notes/lapis-plugin-tasks%400.1.2/tasks-0.1.2.lapis-plugin",
       "pluginId": "tasks",
@@ -667,6 +739,12 @@ export const downloadTargets = {
       "pluginId": "wordcount",
       "status": "active",
       "version": "0.1.4"
+    },
+    "wordcount@0.1.5": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/wordcount%400.1.5/wordcount-0.1.5.lapis-plugin",
+      "pluginId": "wordcount",
+      "status": "active",
+      "version": "0.1.5"
     }
   }
 };
