@@ -10,14 +10,17 @@ on:
         default: false
         type: boolean
 
-permissions: {}
+permissions:
+  contents: read
+  actions: read
 
 concurrency:
-  group: registry-publication-${{ github.event_name == 'workflow_dispatch' && github.run_id || 'automatic' }}
+  group: registry-publication-preparation
   cancel-in-progress: false
 
 jobs:
-  publication:
+  prepare:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
@@ -31,28 +34,54 @@ jobs:
           repositories: |
             plugin-registry
             lapis-plugins
-          permission-contents: write
-          permission-pull-requests: write
-      - uses: actions/checkout@v7
+          permission-contents: read
+          permission-pull-requests: read
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: main
+          ref: ${{ github.sha }}
           fetch-depth: 0
           token: ${{ steps.registry-app.outputs.token }}
           persist-credentials: false
-      - uses: pnpm/action-setup@v6
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         with:
           version: 10.32.1
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: "24"
+          node-version: "24.15.0"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Collect approved submissions and prepare the signed publication PR
+      - name: Prepare qualified candidate
+        id: candidate
         run: node scripts/publish-registry-updates.mjs
         env:
+          REGISTRY_PUBLICATION_STAGE: prepare
+          REGISTRY_ARTIFACT_TOKEN: ${{ github.token }}
           REGISTRY_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
           GITHUB_TOKEN: ${{ steps.registry-app.outputs.token }}
           LAPIS_PLUGIN_RELEASE_KEY_ID: ${{ secrets.LAPIS_PLUGIN_RELEASE_KEY_ID }}
           LAPIS_PLUGIN_RELEASE_PUBLIC_KEY_PEM: ${{ secrets.LAPIS_PLUGIN_RELEASE_PUBLIC_KEY_PEM }}
           LAPIS_REGISTRY_KEY_ID: ${{ secrets.LAPIS_REGISTRY_KEY_ID }}
           LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64: ${{ secrets.LAPIS_REGISTRY_PRIVATE_KEY_PEM_B64 }}
+
+      - name: Retain immutable qualified candidate before publication
+        if: steps.candidate.outputs.status == 'prepared'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: registry-qualified-candidate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: tmp/qualified-publication/candidate.zip
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+      - name: "Publication decision: ${{ steps.candidate.outputs.status }}"
+        run: test -n "$DECISION"
+        env:
+          DECISION: ${{ steps.candidate.outputs.status }}
+
+      - name: Retain publication progress and recovery receipt
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: registry-preparation-progress-${{ github.run_attempt }}
+          path: tmp/publication-report.json
+          if-no-files-found: warn
+          retention-days: 14

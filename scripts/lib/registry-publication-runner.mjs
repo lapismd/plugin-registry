@@ -1,3 +1,19 @@
+import { readFile, mkdir, writeFile } from "node:fs/promises";
+import {
+  encodeCheckpoint,
+  assertPublicChanges,
+  verifyCheckpointProducer,
+} from "./publication-checkpoint.mjs";
+import { GitHubClient } from "./github-client.mjs";
+import { createSubmissionFetchCache } from "./submission-fetch-cache.mjs";
+import {
+  buildReceipt,
+  readReceipt,
+  receiptMessage,
+  reusableReceipt,
+  assertReceiptRun,
+  batchIdentity,
+} from "./publication-receipt.mjs";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { pathToFileURL } from "node:url";
@@ -18,13 +34,15 @@ import {
   publicationDescription,
   publicationIdentity,
   publicationRecords,
+  pushQualifiedCandidate,
 } from "./registry-publication.mjs";
 import { LeaseConflict } from "./registry-refresh.mjs";
 import { stableStringify } from "./registry.mjs";
 import { waitForPrHead } from "./registry-head.mjs";
 
-const execute = promisify(execFile);
-export function createPublicationRunner(client, directory) {
+const executeCommand = promisify(execFile);
+export function createPublicationRunner(client, directory, options = {}) {
+  const execute = options.execute ?? executeCommand;
   const root = pathToFileURL(`${directory}/`);
   const token = process.env.GITHUB_TOKEN;
   const authEnv = {
@@ -41,6 +59,75 @@ export function createPublicationRunner(client, directory) {
         maxBuffer: 30 * 1024 * 1024,
       })
     ).stdout.trim();
+  let runtime, cachedInput, submissionFetch;
+  const executionRuntime = async () =>
+    (runtime ??= await (options.runtime?.() ??
+      (async () => {
+        const sourceSha = await git("rev-parse", "HEAD");
+        const pkg = JSON.parse(
+          await readFile(new URL("package.json", root), "utf8"),
+        );
+        const version = (
+          await execute("pnpm", ["--version"], { cwd: directory })
+        ).stdout.trim();
+        if (pkg.packageManager !== `pnpm@${version}`)
+          throw Error("Publication requires its exact pinned package manager.");
+        return {
+          sourceSha,
+          node: process.versions.node,
+          packageManager: pkg.packageManager,
+        };
+      })()));
+  async function reuseArtifact(snapshot) {
+    const checkpoint = await options.reuseCheckpoint?.(snapshot);
+    if (!checkpoint) return null;
+    const candidate = await installCheckpoint(checkpoint, snapshot);
+    return { ...candidate, descriptionCurrent: false };
+  }
+  async function reuse(snapshot) {
+    if (!snapshot.headSha) return reuseArtifact(snapshot);
+    const commit = await client.call(
+      `/repos/${registryRepository}/commits/${snapshot.headSha}`,
+    );
+    const receipt = readReceipt(commit);
+    if (!receipt) return reuseArtifact(snapshot);
+    if (
+      commit.author?.login !== registryBot ||
+      commit.committer?.login !== registryBot
+    )
+      throw Error(
+        "Unattributed publication receipt; preserve branch for repair.",
+      );
+    if (!reusableReceipt(receipt, snapshot, await executionRuntime()))
+      return reuseArtifact(snapshot);
+    const readRun =
+      options.readRun ??
+      ((path) => new GitHubClient("", client.fetch).call(path));
+    const run = await readRun(
+      `/repos/${registryRepository}/actions/runs/${receipt.runId}/attempts/${receipt.runAttempt}`,
+    );
+    const completed = assertReceiptRun(receipt, run);
+    if (completed && !options.readRun)
+      await verifyCheckpointProducer(new GitHubClient("", client.fetch), {
+        runId: receipt.runId,
+        runAttempt: receipt.runAttempt,
+        sourceSha: receipt.sourceSha,
+      });
+    return {
+      sha: snapshot.headSha,
+      evidence: {
+        sourceSha: snapshot.mainSha,
+        candidateSha: snapshot.headSha,
+        producerRunId: receipt.runId,
+        producerRunAttempt: receipt.runAttempt,
+      },
+      pending: !completed,
+      descriptionCurrent: snapshot.pr
+        ? publicationIdentity(publicationRecords(snapshot.pr.body)) ===
+          publicationIdentity(snapshot.records)
+        : false,
+    };
+  }
   async function command(name, args) {
     console.log(`Running ${name} ${args.join(" ")}`);
     try {
@@ -178,6 +265,23 @@ export function createPublicationRunner(client, directory) {
     // Verify against the captured trusted main, never against a PR checkout.
     if (process.env.GITHUB_ACTIONS !== "true")
       throw new Error("Use the read-only submissions verifier locally.");
+    const identity = await executionRuntime();
+    if (
+      identity.sourceSha !== snapshot.mainSha ||
+      process.env.GITHUB_SHA !== snapshot.mainSha ||
+      process.env.GITHUB_REF !== "refs/heads/main" ||
+      process.env.GITHUB_REPOSITORY !== registryRepository ||
+      process.env.GITHUB_WORKFLOW_REF !==
+        `${registryRepository}/.github/workflows/publish-registry-updates.yml@refs/heads/main`
+    )
+      throw new LeaseConflict(
+        "Trusted execution source moved; start a fresh main workflow.",
+      );
+    const input = batchIdentity(snapshot.mainSha, snapshot.records);
+    if (cachedInput !== input) {
+      cachedInput = input;
+      submissionFetch = createSubmissionFetchCache(options.fetchImpl ?? fetch);
+    }
     await git(
       "fetch",
       "origin",
@@ -188,7 +292,11 @@ export function createPublicationRunner(client, directory) {
     await command("pnpm", ["install", "--frozen-lockfile"]);
     for (const record of snapshot.records) {
       try {
-        await verifySubmission(record, { root, token });
+        await verifySubmission(record, {
+          root,
+          token,
+          fetchImpl: submissionFetch,
+        });
       } catch (error) {
         throw new Error(
           `${record.file} (https://github.com/${registryRepository}/blob/${snapshot.mainSha}/${record.file}): ${error.message}`,
@@ -201,7 +309,11 @@ export function createPublicationRunner(client, directory) {
       throw new Error(
         "Publication is restricted to disposable GitHub Actions checkouts.",
       );
-    await applySubmissions(snapshot.records, { root, token });
+    await applySubmissions(snapshot.records, {
+      root,
+      token,
+      fetchImpl: submissionFetch,
+    });
     for (const task of [
       "fmt",
       "registry:submissions:validate",
@@ -242,9 +354,17 @@ export function createPublicationRunner(client, directory) {
     );
     const user = await client.call(`/users/${encodeURIComponent(registryBot)}`);
     const email = `${user.id}+${registryBot}@users.noreply.github.com`;
+    const receipt = buildReceipt({
+      ...(await executionRuntime()),
+      sourceSha: snapshot.mainSha,
+      treeSha: await git("write-tree"),
+      records: snapshot.records,
+      runId: process.env.GITHUB_RUN_ID,
+      runAttempt: process.env.GITHUB_RUN_ATTEMPT,
+    });
     await execute(
       "git",
-      ["commit", "-m", "chore(registry): publish queued plugin updates"],
+      ["-c", "commit.gpgsign=false", "commit", "-m", receiptMessage(receipt)],
       {
         cwd: directory,
         env: {
@@ -258,7 +378,217 @@ export function createPublicationRunner(client, directory) {
     );
     return { sha: await git("rev-parse", "HEAD") };
   }
+  const rawGit = async (...args) =>
+    (
+      await execute("git", args, {
+        cwd: directory,
+        env: authEnv,
+        encoding: "buffer",
+        maxBuffer: 128 * 1024 * 1024,
+      })
+    ).stdout;
+  async function changes(sourceSha, candidateSha, cached = false, indexPath) {
+    const output = async (...args) =>
+      indexPath
+        ? (
+            await execute("git", args, {
+              cwd: directory,
+              env: { ...authEnv, GIT_INDEX_FILE: indexPath },
+              encoding: "buffer",
+              maxBuffer: 128 * 1024 * 1024,
+            })
+          ).stdout
+        : rawGit(...args);
+    const raw = (
+      await output(
+        "diff",
+        ...(cached ? ["--cached"] : []),
+        "--name-status",
+        "--no-renames",
+        "-z",
+        sourceSha,
+        ...(cached ? [] : [candidateSha]),
+      )
+    )
+      .toString("utf8")
+      .split("\0")
+      .filter(Boolean);
+    const files = [];
+    for (let i = 0; i < raw.length; i += 2) {
+      if (!["A", "M", "D"].includes(raw[i]) || !raw[i + 1])
+        throw Error("Unexpected candidate change type.");
+      const filename = raw[i + 1],
+        status = raw[i] === "D" ? "removed" : "modified";
+      const line =
+        status === "removed"
+          ? ""
+          : await output(
+              ...(cached
+                ? ["ls-files", "--stage", "--", filename]
+                : ["ls-tree", candidateSha, "--", filename]),
+            );
+      files.push({
+        filename,
+        status,
+        ...(line ? { mode: line.toString("utf8").trim().split(" ")[0] } : {}),
+      });
+    }
+    return files;
+  }
+  async function checkpoint(candidate, snapshot) {
+    if (
+      process.env.GITHUB_ACTIONS !== "true" ||
+      process.env.GITHUB_SHA !== snapshot.mainSha ||
+      (await executionRuntime()).sourceSha !== snapshot.mainSha
+    )
+      throw Error("Checkpoint preparation requires the exact trusted source.");
+    try {
+      await git("cat-file", "-e", `${candidate.sha}^{commit}`);
+    } catch {
+      await git("fetch", "origin", candidate.sha);
+    }
+    const commitObject = await rawGit("cat-file", "commit", candidate.sha);
+    const patch = await rawGit(
+      "diff",
+      "--binary",
+      "--full-index",
+      "--no-ext-diff",
+      "--no-textconv",
+      "--no-renames",
+      snapshot.mainSha,
+      candidate.sha,
+      "--",
+    );
+    const result = encodeCheckpoint({
+      snapshot,
+      candidateSha: candidate.sha,
+      commitObject,
+      patch,
+      files: await changes(snapshot.mainSha, candidate.sha),
+      producer: {
+        runId: process.env.GITHUB_RUN_ID,
+        runAttempt: Number(process.env.GITHUB_RUN_ATTEMPT),
+        sourceSha: snapshot.mainSha,
+      },
+    });
+    await mkdir(new URL("tmp/qualified-publication/", root), {
+      recursive: true,
+    });
+    await writeFile(
+      new URL("tmp/qualified-publication/candidate.zip", root),
+      result.bytes,
+    );
+    return { digest: result.digest };
+  }
+  async function installCheckpoint(checkpoint, snapshot) {
+    if (
+      process.env.GITHUB_ACTIONS !== "true" ||
+      process.env.GITHUB_SHA !== snapshot.mainSha ||
+      process.env.GITHUB_REF !== "refs/heads/main" ||
+      process.env.GITHUB_REPOSITORY !== registryRepository ||
+      process.env.GITHUB_WORKFLOW_REF !==
+        `${registryRepository}/.github/workflows/${process.env.REGISTRY_PUBLICATION_STAGE === "prepare" ? "publish-registry-updates" : "write-registry-publication"}.yml@refs/heads/main`
+    )
+      throw Error("Artifact import requires its exact trusted main workflow.");
+    const identity = await executionRuntime();
+    if (
+      identity.sourceSha !== snapshot.mainSha ||
+      !reusableReceipt(checkpoint.receipt, snapshot, identity)
+    )
+      throw Error("Qualified artifact toolchain or source identity changed.");
+    assertPublicChanges(snapshot.records, checkpoint.manifest.files);
+    await git("diff", "--quiet");
+    const patchPath = new URL("tmp/qualified-publication/restore.patch", root);
+    const commitPath = new URL(
+      "tmp/qualified-publication/restore.commit",
+      root,
+    );
+    await mkdir(new URL("./", patchPath), { recursive: true });
+    await writeFile(patchPath, checkpoint.patch);
+    await writeFile(commitPath, checkpoint.commitObject);
+    const numstat = (
+      await rawGit("apply", "--numstat", "-z", patchPath.pathname)
+    )
+      .toString("utf8")
+      .split("\0")
+      .filter(Boolean)
+      .map((line) => line.split("\t").slice(2).join("\t"));
+    if (
+      numstat.sort().join("\0") !==
+      checkpoint.manifest.files
+        .map((file) => file.filename)
+        .sort()
+        .join("\0")
+    )
+      throw Error("Patch paths differ from the public manifest.");
+    const summary = (
+      await rawGit("apply", "--summary", patchPath.pathname)
+    ).toString("utf8");
+    if (
+      [
+        ...summary.matchAll(
+          /(?:create mode|delete mode|mode change)\s+([0-9]{6})(?:\s*=>\s*([0-9]{6}))?/g,
+        ),
+      ].some((match) =>
+        match
+          .slice(1)
+          .filter(Boolean)
+          .some((mode) => mode !== "100644"),
+      )
+    )
+      throw Error("Non-regular or executable candidate mode.");
+    const indexPath = new URL("tmp/qualified-publication/restore.index", root)
+      .pathname;
+    const indexGit = async (...args) =>
+      (
+        await execute("git", args, {
+          cwd: directory,
+          env: { ...authEnv, GIT_INDEX_FILE: indexPath },
+          maxBuffer: 128 * 1024 * 1024,
+        })
+      ).stdout.trim();
+    await indexGit("read-tree", snapshot.mainSha);
+    await indexGit(
+      "apply",
+      "--cached",
+      "--binary",
+      "--whitespace=nowarn",
+      patchPath.pathname,
+    );
+    const actual = await changes(snapshot.mainSha, "", true, indexPath);
+    assertPublicChanges(snapshot.records, actual);
+    if (
+      stableStringify(actual, 0) !==
+        stableStringify(checkpoint.manifest.files, 0) ||
+      (await indexGit("write-tree")) !== checkpoint.receipt.treeSha
+    )
+      throw Error(
+        "Restored artifact tree/path mutation; no publication attempted.",
+      );
+    const sha = await git(
+      "hash-object",
+      "-t",
+      "commit",
+      "-w",
+      commitPath.pathname,
+    );
+    if (sha !== checkpoint.manifest.candidateSha)
+      throw Error("Restored commit hash mismatch.");
+    return { sha };
+  }
   async function publish(candidate, expected) {
+    if (
+      process.env.GITHUB_ACTIONS !== "true" ||
+      process.env.GITHUB_SHA !== expected.mainSha ||
+      process.env.GITHUB_REF !== "refs/heads/main" ||
+      process.env.GITHUB_REPOSITORY !== registryRepository ||
+      process.env.GITHUB_WORKFLOW_REF !==
+        `${registryRepository}/.github/workflows/write-registry-publication.yml@refs/heads/main` ||
+      (await executionRuntime()).sourceSha !== expected.mainSha
+    )
+      throw Error(
+        "Publication writes require the exact trusted writer workflow.",
+      );
     const latest = await snapshot();
     if (
       latest.mainSha !== expected.mainSha ||
@@ -266,18 +596,22 @@ export function createPublicationRunner(client, directory) {
       latest.pr?.number !== expected.pr?.number
     )
       throw new LeaseConflict("Publication changed before push.");
-    try {
-      await git(
-        "push",
-        `--force-with-lease=refs/heads/${publicationBranch}:${expected.headSha}`,
-        "origin",
-        `${candidate.sha}:refs/heads/${publicationBranch}`,
-      );
-    } catch {
-      throw new LeaseConflict(
-        "Publication branch lease changed or push failed.",
-      );
-    }
+    await pushQualifiedCandidate(candidate.sha, expected.headSha, {
+      push: () =>
+        git(
+          "push",
+          `--force-with-lease=refs/heads/${publicationBranch}:${expected.headSha}`,
+          "origin",
+          `${candidate.sha}:refs/heads/${publicationBranch}`,
+        ),
+      readHead: async () =>
+        (
+          await client.call(
+            `/repos/${registryRepository}/git/ref/heads/${encodeURIComponent(publicationBranch)}`,
+            { missing: true },
+          )
+        )?.object.sha,
+    });
     if (latest.pr) {
       const current = await waitForPrHead(client, latest.pr.number, {
         expectedHead: candidate.sha,
@@ -295,6 +629,12 @@ export function createPublicationRunner(client, directory) {
               current.body,
               latest.records,
               latest.mainSha,
+              candidate.evidence
+                ? {
+                    ...candidate.evidence,
+                    writerRunId: process.env.GITHUB_RUN_ID,
+                  }
+                : undefined,
             ),
           },
         },
@@ -306,9 +646,35 @@ export function createPublicationRunner(client, directory) {
         base: "main",
         head: publicationBranch,
         title: "Publish registry updates",
-        body: publicationDescription("", latest.records, latest.mainSha),
+        body: publicationDescription(
+          "",
+          latest.records,
+          latest.mainSha,
+          candidate.evidence
+            ? { ...candidate.evidence, writerRunId: process.env.GITHUB_RUN_ID }
+            : undefined,
+        ),
       },
     });
   }
-  return { snapshot, verify, build, publish };
+  const metrics = () => {
+    const stats = submissionFetch?.metrics();
+    return stats
+      ? {
+          fetchHits: stats.hits,
+          fetchRequests: stats.misses,
+          retainedBytes: stats.retainedBytes,
+        }
+      : {};
+  };
+  return {
+    snapshot,
+    reuse,
+    verify,
+    build,
+    checkpoint,
+    installCheckpoint,
+    publish,
+    metrics,
+  };
 }

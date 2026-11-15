@@ -62,7 +62,9 @@ to the npm package name and source commit.
 7. **Prepare registry publication** replays the merged requests through the same
    archive and source verifier. It retains indexed versions, mirrors the declared
    media, generates and signs the catalog, and removes the consumed queue files
-   in one bot-managed **Publish registry updates** PR. Further submissions update
+   in an immutable qualified artifact. Its successful preparation attempt wakes
+   **Publish qualified registry candidate**, which verifies the artifact and
+   updates one bot-managed **Publish registry updates** PR. Further submissions update
    that same open PR. Human commits, unexpected files, competing curated entry
    changes on `main` or changed request identity
    stop its update for reconciliation.
@@ -216,3 +218,68 @@ Download statistics remain hidden until a current, validated summary is availabl
 The author row then links its compact lifetime count to the statistics section;
 counts remain approximate tracked redirect requests. Missing, stale or malformed
 summaries never reveal either surface or invent a zero.
+
+## Qualified batch reuse and recovery
+
+Preparation and writing are separate workflows. Preparation uses read-only App
+permissions and owns the existing signing authority; the writer has a
+one-repository contents/PR token and no signing secret. The deployment switch,
+production environment and maintainer review remain separate and unchanged.
+
+A qualified candidate contains only an allowed public binary diff, fixed bot
+commit metadata and a versioned manifest. It contains no Git configuration,
+credentials, untracked files or private signer bytes. Its receipt binds the
+exact source revision (including qualification tools and lockfile), approved
+queue, tree, Node 24.15.0 and pinned pnpm 10.32.1. The artifact is uploaded before
+publication begins and retained for 14 days. The writer verifies the immutable
+Actions artifact ID/SHA-256, exact successful trusted-main workflow attempt and
+preparation decision. Failed, wrong, missing, expired or mutable evidence holds
+publication. A dry/no-op preparation explicitly starts no writer.
+
+Archive and decoded payloads are bounded to 128 MiB, manifests to 1 MiB and
+commit metadata to 64 KiB. Only fixed ZIP members and known public output paths
+are allowed; symlinks, executables, hidden paths, traversal and configuration
+files are rejected. The writer validates actual patch paths/modes, reconstructs
+an isolated Git index and checks the exact tree and commit hashes before any
+publication write. It never checks out or executes candidate code.
+
+Automatic and manual preparation share one lock. Before repeating qualification,
+preparation looks for an earlier successful exact-source artifact, including when
+no publication branch exists yet. An identical qualified open PR returns
+unchanged without downloads, building, signing or PR writes. Source, queue or
+toolchain changes invalidate reuse.
+Legacy candidates without receipts receive normal full qualification. During a
+single exact snapshot, verification and application reuse bounded in-memory
+response bytes while independently checking every plugin's signature, hash and
+source. Failed responses are not cached; no shared credential-bearing cache is
+created. Existing remote/catalog/signature and ordinary PR checks remain active.
+
+If the writer fails during branch upload or PR publication, retain the successful
+preparation run and rerun only the failed writer workflow. It downloads the same
+qualified artifact and resumes publication without repeating preparation. Manual
+recovery selects the immutable producer explicitly:
+
+```sh
+gh workflow run write-registry-publication.yml --ref main \
+  -f preparation_run_id=EXACT_SUCCESSFUL_RUN_ID \
+  -f preparation_run_attempt=EXACT_SUCCESSFUL_ATTEMPT
+```
+
+The source/queue must still match and the artifact must remain available. Missing
+or expired qualification requires fresh preparation, never a fabricated receipt.
+An uncertain push receives one read-back: only the exact accepted candidate may
+continue. Unknown outcomes stop; PR write timeouts are not blindly replayed.
+Known lease changes are reconciled, preserving manually repaired, closed and
+ambiguous branches and curated edits. A qualified branch left after an uncertain
+PR write resumes only its missing metadata operation after fresh ownership checks.
+
+Preparation and writer runs retain versioned progress reports under ignored
+`tmp/publication-report.json`. They include source/queue/candidate/artifact
+identities, verification/build timing, fetch reuse and recovery status. Reports
+are Actions artifacts for Maintenance, never deployed catalog/site content.
+
+Publication messages retain their verified queue/source list, machine record and
+maintainer notes while adding validated source/candidate commits, successful
+preparation, immutable artifact digest, publication-attempt and existing gate
+links. Recovery links to the real writer workflow with exact producer inputs;
+checkbox actions are reserved for workflows with an actual handler.

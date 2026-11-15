@@ -437,7 +437,7 @@ test("publication dry runs and empty queues do not write, and moving main or lea
     }),
     /kept changing/,
   );
-  assert.equal(builds, 3);
+  assert.equal(builds, 1, "a known lease retry reuses its qualified candidate");
   assert.equal(writes, 3);
   await assert.rejects(
     publishQueuedSubmissions({
@@ -587,4 +587,79 @@ test("publication discovery rejects truncated queues, closed PRs, human commits 
   pr.body = publicationDescription("", records);
   files = [...files, { filename: "scripts/changed.mjs", status: "modified" }];
   await assert.rejects(runner.snapshot(), /Unexpected/);
+});
+
+test("an identical qualified publication does not repeat verification, signing or PR writes", async () => {
+  const snapshot = {
+    mainSha: "main",
+    headSha: "head",
+    records: [record("search")],
+    pr: { number: 52 },
+  };
+  let reads = 0;
+  const result = await publishQueuedSubmissions({
+    snapshot: async () => {
+      reads++;
+      return snapshot;
+    },
+    reuse: async () => ({ sha: "head" }),
+    verify: () => assert.fail("qualified bytes must not be fetched again"),
+    build: () =>
+      assert.fail("qualified batch must not be rebuilt or signed again"),
+    publish: () => assert.fail("unchanged PR must not be written again"),
+  });
+  assert.equal(result.status, "unchanged");
+  assert.equal(result.prNumber, 52);
+  assert.equal(reads, 2, "revalidate immediately before reporting reuse");
+});
+
+test("publication message links validated receipts, gates and recovery while preserving managed records and notes", () => {
+  const records = [record("search")],
+    sourceSha = "a".repeat(40),
+    candidateSha = "b".repeat(40);
+  const evidence = {
+    sourceSha,
+    candidateSha,
+    producerRunId: "123",
+    producerRunAttempt: 2,
+    artifactId: 456,
+    artifactDigest: `sha256:${"c".repeat(64)}`,
+    writerRunId: "789",
+  };
+  const original = `Maintainer note\n\n${publicationDescription("", records)}\n\nReview later`;
+  const body = publicationDescription(original, records, sourceSha, evidence);
+  assert(body.startsWith("Maintainer note"));
+  assert(body.endsWith("Review later"));
+  assert.deepEqual(publicationRecords(body), records);
+  for (const target of [
+    `/commit/${sourceSha}`,
+    `/commit/${candidateSha}`,
+    "/actions/runs/123/attempts/2",
+    "/actions/runs/123/artifacts/456",
+    "/actions/runs/789",
+    "/actions/workflows/checks.yml",
+    "/actions/workflows/publish.yml",
+    "/actions/workflows/write-registry-publication.yml",
+    "preparation_run_id=123",
+    "preparation_run_attempt=2",
+    evidence.artifactDigest,
+  ])
+    assert(body.includes(target), target);
+  assert.doesNotMatch(body, /^- \[[ x]\]/m);
+  assert.throws(
+    () =>
+      publicationDescription("", records, sourceSha, {
+        ...evidence,
+        producerRunId: "unverified",
+      }),
+    /Invalid publication message/,
+  );
+  assert.throws(
+    () =>
+      publicationDescription("", records, sourceSha, {
+        ...evidence,
+        artifactDigest: "unverified",
+      }),
+    /Invalid immutable artifact message/,
+  );
 });
