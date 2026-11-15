@@ -422,6 +422,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.10"
     },
+    "lapis-source-editor@0.1.11": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/source-editor%400.1.11/lapis-source-editor-0.1.11.lapis-plugin",
+      "pluginId": "lapis-source-editor",
+      "status": "active",
+      "version": "0.1.11"
+    },
     "lapis-source-editor@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/source-editor%400.1.2/lapis-source-editor-0.1.2.lapis-plugin",
       "pluginId": "lapis-source-editor",
@@ -530,6 +536,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.2.7"
     },
+    "markdown@0.3.1": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/markdown%400.3.1/markdown-0.3.1.lapis-plugin",
+      "pluginId": "markdown",
+      "status": "active",
+      "version": "0.3.1"
+    },
     "search@0.1.10": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/search%400.1.10/search-0.1.10.lapis-plugin",
       "pluginId": "search",
@@ -541,6 +553,12 @@ export const downloadTargets = {
       "pluginId": "search",
       "status": "active",
       "version": "0.1.11"
+    },
+    "search@0.1.12": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/search%400.1.12/search-0.1.12.lapis-plugin",
+      "pluginId": "search",
+      "status": "active",
+      "version": "0.1.12"
     },
     "search@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/search%400.1.2/search-0.1.2.lapis-plugin",
