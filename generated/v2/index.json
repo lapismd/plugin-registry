@@ -63,10 +63,10 @@
       "detail": "plugins/bases.json",
       "id": "bases",
       "latestRelease": {
-        "bundleSize": 654093,
-        "releasedAt": "2026-11-15T17:06:02.000Z"
+        "bundleSize": 661565,
+        "releasedAt": "2026-11-15T22:09:36.000Z"
       },
-      "latestVersion": "0.4.0",
+      "latestVersion": "0.4.1",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Bases",
@@ -182,10 +182,10 @@
       "detail": "plugins/lapis-canvas.json",
       "id": "lapis-canvas",
       "latestRelease": {
-        "bundleSize": 4628961,
-        "releasedAt": "2026-11-15T17:06:18.000Z"
+        "bundleSize": 4634074,
+        "releasedAt": "2026-11-15T22:09:45.000Z"
       },
-      "latestVersion": "0.4.0",
+      "latestVersion": "0.4.1",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Canvas",
@@ -578,10 +578,10 @@
       "detail": "plugins/markdown.json",
       "id": "markdown",
       "latestRelease": {
-        "bundleSize": 6005931,
-        "releasedAt": "2026-11-15T15:16:55.000Z"
+        "bundleSize": 6019357,
+        "releasedAt": "2026-11-15T22:09:54.000Z"
       },
-      "latestVersion": "0.3.1",
+      "latestVersion": "0.3.2",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Markdown",
@@ -762,7 +762,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "Umr2Fp9GcFoGelb+bw/4ow8jEr3tL8V1rSJ5PKrIzHSuSzcGoDSHftzdTjOXqMqMwaN1MT0deMLD+uk2HDPHAA=="
+      "sig": "uFY9JjwUAzsZ7wR7pPrmxCg8maFejmXu+3txc/WI1rVtqVv2Itw9GSsA/xp2g3XDK0D2mukCpWooBOI/i3ACCw=="
     }
   ]
 }
