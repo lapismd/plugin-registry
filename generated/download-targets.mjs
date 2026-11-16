@@ -710,6 +710,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.1.12"
     },
+    "search@0.1.13": {
+      "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/search%400.1.13/search-0.1.13.lapis-plugin",
+      "pluginId": "search",
+      "status": "active",
+      "version": "0.1.13"
+    },
     "search@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/search%400.1.2/search-0.1.2.lapis-plugin",
       "pluginId": "search",

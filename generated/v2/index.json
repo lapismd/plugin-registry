@@ -619,9 +619,9 @@
       "id": "search",
       "latestRelease": {
         "bundleSize": 170074,
-        "releasedAt": "2026-11-15T15:17:04.000Z"
+        "releasedAt": "2026-11-16T22:23:22.000Z"
       },
-      "latestVersion": "0.1.12",
+      "latestVersion": "0.1.13",
       "links": {},
       "minAppVersion": "0.1.0",
       "name": "Search",
@@ -762,7 +762,7 @@
     {
       "alg": "ed25519",
       "keyId": "lapis-registry-2026-06",
-      "sig": "3UB+iFHJwmIPBaIyYvjv//HNEw1X5RRVjOeTvMmT9R2jdX1k50sjJlN7g0O3i2KjnCU4fKqu1ylJfuZfBHHiDQ=="
+      "sig": "RK6+hkweH546DCX+MawwdEYOUIuFH7qQMOseUmlDKEbnj/kmn42qH+/91IwSIVszgUbnK+XSS7EmiM5AihdGDg=="
     }
   ]
 }
