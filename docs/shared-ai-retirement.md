@@ -7,12 +7,12 @@ entry validation rejects reactivation. The matching rule is scoped to the source
 repository and shared package coordinates, not a global ban on plugin ID `ai`.
 Tauri-owned AI and App Profile native chat remain owned by their current hosts.
 
-Historical versions, bundle URLs, checksums, signatures, assets and generated
-catalogs are retained. Do not edit signed generated files by hand. The normal
-reviewed publication workflow must regenerate and sign new mutable metadata
-before the source disablement becomes effective on the hosted registry. Existing
-signed metadata remains the published truth until then. Deployment, UI/direct
-API/stale-cache acceptance and npm deprecation remain separate pending gates.
+Historical versions, bundle URLs, checksums, artifact signatures, assets and
+archived catalogs are retained. Do not edit signed generated files by hand.
+The user-approved protected workflow has regenerated and signed mutable metadata
+as recorded below. Existing production metadata remains the published truth
+until deployment. Deployment, UI/direct API/stale-cache acceptance and npm
+deprecation remain separate pending gates.
 This source safeguard does not uninstall plugins or alter user data.
 
 Notes owns the cross-repository plan and resume checklist:
@@ -51,10 +51,43 @@ The final full lane passes all 26 cases. Initial partial local install hit ENOSP
 only this task's incomplete generated install/snapshot files were removed, then
 the frozen install succeeded. Quarantined workspaces were not purged.
 
+## Approved signed metadata
+
+The user explicitly approved protected signing for source
+`37ee50609d5fbb89ce4bc3bb81b1d3ec5d091df1`. Workflow
+[44159554590](https://github.com/lapismd/plugin-registry/actions/runs/44159554590)
+ran the existing main-owned `sign-registry-metadata.yml` with
+`source_ref=retirement/shared-ai-distribution` and
+`approval=REGISTRY_SIGN_APPROVED`. Artifact-origin validation, signing, all
+verification checks and the generated-only guard passed.
+
+Generated-only [PR #182](https://github.com/lapismd/plugin-registry/pull/182),
+head `356412082836bb7629a3a6169412c5ab082e8eeb`, passed complete hosted Checks
+[44159923356](https://github.com/lapismd/plugin-registry/actions/runs/44159923356)
+and merged into the feature branch at
+`812e4a44d3843e83cad15c1f34086843511703d3`. Its diff contains five files only:
+
+- All nine indexed AI version download targets change from active to disabled.
+- The mutable V2 index and AI document change only AI status and outer signatures.
+- The corresponding index and AI detached signatures are refreshed.
+
+Independent structural comparison confirms the remaining JSON content is exactly
+unchanged, including every historical version, origin, hash and artifact record.
+Local `pnpm registry:verify-signatures` verifies all 21 metadata signatures.
+No signing material was printed, changed or read outside the protected workflow.
+The complete parent PR still requires checks at its final head before landing.
+
 ## Next boundary
 
-Sign and publish the disabled mutable metadata through the ordinary reviewed
-workflow, then prove deployed registry, direct Notes API and stale-cache behavior.
-The published signed catalog still represents its previous state. Retire the
-shared implementation and consuming catalogs/probes separately, preserve native
-AI/data, and leave npm deprecation behind its explicit release gate.
+Source [PR #181](https://github.com/lapismd/plugin-registry/pull/181) is ready for
+review, with signed metadata incorporated. Its main merge automatically deploys
+through `publish.yml` because `STATIC_REGISTRY_V2_DEPLOY_APPROVED=true`. The
+user's approval covered signing only; obtain deployment approval for the final
+qualified candidate before merging that PR. Do not disable the repository's
+existing publication gate or infer deployment permission from signing approval.
+
+After an approved deployment, prove live disabled metadata, direct Notes API and
+saved-link/stale-cache behavior. No npm deprecation or unpublish has occurred.
+Native/data acceptance remains owned by Desktop and Notes. The source safeguards
+do not uninstall plugins, delete settings/conversations/memory or retire the
+standalone controller needed by the excluded consumers.
