@@ -30,7 +30,8 @@
     "test:browser": "playwright test",
     "check:format": "prettier . --check --log-level warn",
     "fmt": "prettier . --write --log-level warn",
-    "check": "pnpm registry:submissions:validate && pnpm registry:validate && pnpm registry:generate && pnpm registry:verify-signatures && pnpm stats:validate && pnpm site:check && pnpm site:build && pnpm test && pnpm test:browser && pnpm check:format"
+    "check": "pnpm dependency:check && pnpm registry:submissions:validate && pnpm registry:validate && pnpm registry:generate && pnpm registry:verify-signatures && pnpm stats:validate && pnpm site:check && pnpm site:build && pnpm test && pnpm test:browser && pnpm check:format",
+    "dependency:check": "node scripts/check-dependency-contract.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
