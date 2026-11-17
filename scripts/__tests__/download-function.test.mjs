@@ -28,6 +28,12 @@ const targets = {
       originUrl: "https://example.test/revoked.lapis-plugin",
       status: "revoked",
     },
+    "lapis-disabled@0.1.0": {
+      pluginId: "lapis-disabled",
+      version: "0.1.0",
+      originUrl: "https://example.test/disabled.lapis-plugin",
+      status: "disabled",
+    },
   },
 };
 const archiveFetch = async () => new Response(new Uint8Array([1, 2, 3]));
@@ -178,6 +184,34 @@ test("unsupported, unknown, pending, and revoked requests are rejected", async (
   assert.equal(pending.status, 404);
   assert.equal(revoked.status, 410);
   assert.equal(await revoked.text(), "Plugin release revoked");
+});
+
+test("disabled releases return authoritative Gone without origin or analytics IO", async () => {
+  for (const method of ["GET", "HEAD"]) {
+    let fetches = 0;
+    let writes = 0;
+    const response = await handleDownloadRequest(
+      context({
+        pluginId: "lapis-disabled",
+        method,
+        env: { PLUGIN_DOWNLOADS: { writeDataPoint: () => writes++ } },
+      }),
+      targets,
+      async () => {
+        fetches++;
+        throw new Error("Disabled archives must not be fetched");
+      },
+    );
+    assert.equal(response.status, 410);
+    assert.equal(response.headers.get("location"), null);
+    assert.equal(response.headers.get("access-control-allow-origin"), "*");
+    assert.equal(
+      await response.text(),
+      method === "HEAD" ? "" : "Plugin release disabled",
+    );
+    assert.equal(fetches, 0);
+    assert.equal(writes, 0);
+  }
 });
 
 test("missing and failing Analytics Engine bindings fail open", async () => {

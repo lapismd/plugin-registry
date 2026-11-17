@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "purpose": "Existing Notes HTTP 410 refusal and retained transient fallback acceptance",
+  "runs": {
+    "focused": {
+      "schema": 1,
+      "run": "lapis-notes-validation-3e992cb2-269d-4329-b720-7e0c3391ffb9",
+      "lane": "test",
+      "args": [
+        "--filter=@lapis-notes/api",
+        "--task-args",
+        "src/lib/__tests__/plugin-installer.test.ts",
+        "-t",
+        "does not fall back after the signed download endpoint reports revocation"
+      ],
+      "image": "sha256:a4ffd16112f050b63d0e53c22ce7f6e8790872c0cdcfb2d8c85d5a6df0bc8345",
+      "imageTarget": "ui",
+      "workspace": "84c2c8f6da2041b5",
+      "cache": {
+        "javascript": "5169474634680ef1ff01"
+      },
+      "resources": {
+        "cpus": 4,
+        "memoryGiB": 12,
+        "shmGiB": 2
+      },
+      "source": {
+        "schema": 1,
+        "nativeSources": [],
+        "revision": "0635b132c8cbd78a3a796cc6d9cd0bcb6bc9e7b9",
+        "parents": ["150ddc76609812339b1cef092f0a75057696aba0"],
+        "fileCount": 2588,
+        "archives": [],
+        "packSha256": "111be5ddef9aeb4be818d97574e4a1e68950f62025215176bef567f62543615c"
+      },
+      "started": "2026-11-17T19:58:56.263Z",
+      "status": "passed",
+      "tools": {
+        "node": "v24.15.0",
+        "pnpm": "10.34.5",
+        "jj": "jj 0.45.1-7c41cdeb16b6b321c64e789a966b6adf723816a5",
+        "git": "git version 2.39.5",
+        "mdbook": "mdbook v0.5.4",
+        "deno": "deno 2.9.7 (stable, release, x86_64-unknown-linux-gnu)\nv8 15.0.245.2-rusty\ntypescript 6.0.3"
+      },
+      "invocations": [
+        {
+          "args": [
+            "--filter=@lapis-notes/api",
+            "--task-args",
+            "src/lib/__tests__/plugin-installer.test.ts",
+            "-t",
+            "does not fall back after the signed download endpoint reports revocation"
+          ],
+          "status": "passed"
+        }
+      ],
+      "exitCode": 0,
+      "finished": "2026-11-17T19:59:14.009Z"
+    },
+    "completeInstaller": {
+      "schema": 1,
+      "run": "lapis-notes-validation-73b5a916-a70a-4515-81f1-fc695f84ec53",
+      "lane": "test",
+      "args": [
+        "--filter=@lapis-notes/api",
+        "--task-args",
+        "src/lib/__tests__/plugin-installer.test.ts"
+      ],
+      "image": "sha256:a4ffd16112f050b63d0e53c22ce7f6e8790872c0cdcfb2d8c85d5a6df0bc8345",
+      "imageTarget": "ui",
+      "workspace": "84c2c8f6da2041b5",
+      "cache": {
+        "javascript": "5169474634680ef1ff01"
+      },
+      "resources": {
+        "cpus": 4,
+        "memoryGiB": 12,
+        "shmGiB": 2
+      },
+      "source": {
+        "schema": 1,
+        "nativeSources": [],
+        "revision": "0635b132c8cbd78a3a796cc6d9cd0bcb6bc9e7b9",
+        "parents": ["150ddc76609812339b1cef092f0a75057696aba0"],
+        "fileCount": 2588,
+        "archives": [],
+        "packSha256": "8bb7b60856b149d35e27580fa6a8ebecf50863d7709b51fe29f50c6b59c6177e"
+      },
+      "started": "2026-11-17T19:59:59.555Z",
+      "status": "passed",
+      "tools": {
+        "node": "v24.15.0",
+        "pnpm": "10.34.5",
+        "jj": "jj 0.45.1-7c41cdeb16b6b321c64e789a966b6adf723816a5",
+        "git": "git version 2.39.5",
+        "mdbook": "mdbook v0.5.4",
+        "deno": "deno 2.9.7 (stable, release, x86_64-unknown-linux-gnu)\nv8 15.0.245.2-rusty\ntypescript 6.0.3"
+      },
+      "invocations": [
+        {
+          "args": [
+            "--filter=@lapis-notes/api",
+            "--task-args",
+            "src/lib/__tests__/plugin-installer.test.ts"
+          ],
+          "status": "passed"
+        }
+      ],
+      "exitCode": 0,
+      "finished": "2026-11-17T20:00:17.368Z"
+    }
+  },
+  "counts": {
+    "focused": {
+      "passed": 1,
+      "unselected": 27
+    },
+    "completeInstaller": {
+      "passed": 28,
+      "failed": 0
+    }
+  },
+  "limits": "Consumer source and response-contract tests; live HTTP checks follow deployment."
+}

@@ -43,6 +43,9 @@ export async function handleDownloadRequest(
   if (target.status === "revoked") {
     return textResponse(context.request, "Plugin release revoked", 410);
   }
+  if (target.status === "disabled") {
+    return textResponse(context.request, "Plugin release disabled", 410);
+  }
   if (target.status !== "active") {
     return textResponse(context.request, "Plugin release not found", 404);
   }

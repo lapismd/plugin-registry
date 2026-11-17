@@ -75,19 +75,25 @@ Independent structural comparison confirms the remaining JSON content is exactly
 unchanged, including every historical version, origin, hash and artifact record.
 Local `pnpm registry:verify-signatures` verifies all 21 metadata signatures.
 No signing material was printed, changed or read outside the protected workflow.
-The complete parent PR still requires checks at its final head before landing.
+The complete parent PR subsequently passed final-head Checks `44160731689`.
 
-## Next boundary
+## Production and remaining boundary
 
-Source [PR #181](https://github.com/lapismd/plugin-registry/pull/181) is ready for
-review, with signed metadata incorporated. Its main merge automatically deploys
-through `publish.yml` because `STATIC_REGISTRY_V2_DEPLOY_APPROVED=true`. The
-user's approval covered signing only; obtain deployment approval for the final
-qualified candidate before merging that PR. Do not disable the repository's
-existing publication gate or infer deployment permission from signing approval.
+The user separately approved merge and production deployment of source
+[PR #181](https://github.com/lapismd/plugin-registry/pull/181) at
+`36bd61e3488b4282d903a2004062ef36817f42c9`. Its main merge deploys through
+`publish.yml` with the existing `STATIC_REGISTRY_V2_DEPLOY_APPROVED=true` gate.
+No publication gate or repository variable was bypassed.
 
-After an approved deployment, prove live disabled metadata, direct Notes API and
-saved-link/stale-cache behavior. No npm deprecation or unpublish has occurred.
+The approved source merged at
+`42903595b7ea78194d47635319dfa0f5046ab5bb`; exact-main Checks and production
+publication passed. Live index/detail signatures verify, all nine indexed
+GET/HEAD download links reject with 404 and the live disabled-install browser
+case passes. That response still permits Notes' signed-origin fallback with
+stale active metadata. The user-approved
+[disabled download response follow-up](disabled-download-response.md) closes
+that path through the existing HTTP 410 contract. Its own complete qualification
+and production checks remain required. No npm deprecation or unpublish occurred.
 Native/data acceptance remains owned by Desktop and Notes. The source safeguards
 do not uninstall plugins, delete settings/conversations/memory or retire the
 standalone controller needed by the excluded consumers.
