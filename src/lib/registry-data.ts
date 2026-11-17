@@ -269,6 +269,7 @@ export async function readStructuredMarkdownHtml(
 }
 
 export function statusLabel(status: SitePlugin["status"]) {
+  if (status === "disabled") return "Disabled";
   if (status === "pending") {
     return "Coming soon";
   }

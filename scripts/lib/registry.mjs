@@ -1,3 +1,4 @@
+import { isRetiredDistribution } from "./retired-distribution.mjs";
 import {
   createHash,
   sign,
@@ -117,6 +118,14 @@ export function validateEntryRules(entries) {
   for (const entry of entries) {
     if (!pluginIdPattern.test(entry.id)) {
       errors.push(`${entry.__sourcePath}: invalid plugin id ${entry.id}`);
+    }
+    if (
+      isRetiredDistribution({ ...entry.source, pluginId: entry.id }) &&
+      entry.status !== "disabled"
+    ) {
+      errors.push(
+        `${entry.__sourcePath}: retired shared AI distribution must remain disabled`,
+      );
     }
     const existing = seen.get(entry.id);
     if (existing) {

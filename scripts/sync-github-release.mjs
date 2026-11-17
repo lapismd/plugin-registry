@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { assertDistributionIsActive } from "./lib/retired-distribution.mjs";
 import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { parse } from "jsonc-parser";
@@ -65,6 +66,7 @@ export async function syncGitHubRelease(options = {}) {
         await readFile(options.eventPath ?? env.GITHUB_EVENT_PATH, "utf8"),
       ),
     );
+  assertDistributionIsActive(payload);
   const token = options.token ?? env.GITHUB_TOKEN ?? "";
   const release = await fetchGitHubJson({
     fetchImpl,
@@ -162,6 +164,7 @@ export async function syncGitHubMetadata(options = {}) {
         await readFile(options.eventPath ?? env.GITHUB_EVENT_PATH, "utf8"),
       ),
     );
+  assertDistributionIsActive(payload);
   const existingEntry = await readExistingEntry(payload.pluginId, entriesDir);
   if (!existingEntry) {
     throw new Error(
@@ -251,6 +254,12 @@ export function validateDispatchPayload(input) {
   if (input.asset_name !== expectedAssetName) {
     throw new Error(`GitHub dispatch asset_name must be ${expectedAssetName}.`);
   }
+  assertDistributionIsActive({
+    repository: input.repository,
+    packageName: input.package_name,
+    pluginId: input.plugin_id,
+    releaseTag: input.release_tag,
+  });
   return {
     repository: input.repository,
     packageName: input.package_name,
@@ -295,6 +304,12 @@ export function validateMetadataDispatchPayload(input) {
       "GitHub dispatch source_commit must be a full Git commit ID.",
     );
   }
+  assertDistributionIsActive({
+    repository: input.repository,
+    packageName: input.package_name,
+    pluginId: input.plugin_id,
+    releaseTag: input.release_tag,
+  });
   return {
     repository: input.repository,
     packageName: input.package_name,
@@ -441,6 +456,7 @@ export function buildUpdatedEntry({
   releasedAt,
   bundle,
 }) {
+  assertDistributionIsActive(payload);
   const packageDirectory = payload.releaseTag.split("@")[0];
   const readmeUrl =
     payload.repository === "lapismd/lapis-plugins"
