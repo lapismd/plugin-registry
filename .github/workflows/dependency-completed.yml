@@ -1,0 +1,19 @@
+name: Notify dependency completion
+on:
+  workflow_run:
+    workflows:
+      - Checks
+      - Publish registry
+    types: [completed]
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+jobs:
+  notify:
+    if: github.event.workflow_run.conclusion == 'success'
+    uses: lapismd/dependency-automation/.github/workflows/completion.yml@053ac8be573871ccc5b0232bc91d8ce7f3bff02f
+    with:
+      automation-ref: 053ac8be573871ccc5b0232bc91d8ce7f3bff02f
+    secrets:
+      app-private-key: ${{ secrets.LAPIS_DEPENDENCY_APP_PRIVATE_KEY }}

@@ -47,3 +47,29 @@ coordinator entry to its prior phase. Preserve signed artifacts, queued requests
 manual repairs and durable operations; inspect uncertain writes before retrying.
 Tracker [65](https://github.com/lapismd/dependency-automation/issues/65) owns
 activation and end-to-end acceptance.
+
+## Registered source callback
+
+The caller pins reviewed coordinator053ac8be573871ccc5b0232bc91d8ce7f3bff02f
+for implementation and policy. It observes only Checks344820581 at
+`.github/workflows/checks.yml` (PR/push/manual) and Publish registry344820582 at
+`.github/workflows/publish.yml` (push/manual). It excludes signing, queue writers,
+statistics and its own workflow. Read-only source permissions and one named
+notification secret cannot grant registry signing or publication authority.
+
+Central registration79 merged73282218ecec0dd257cdb47d2e63fc0cbbc253f3. Existing-App
+read-only probe44192016274 passes for exactly this repository. The operator
+provisioned the existing bot credential and client-ID metadata without changing
+registry signing credentials or rotating/retrieving any GitHub secret. Source
+checks, main callback execution, coordinator activation and repeat receipts
+remain distinct hosted acceptance steps in tracker65.
+
+## Source validation
+
+The registry-only frozen install (`--ignore-pnpmfile`) passes with Node24.15.0
+and pnpm10.32.1. All17 focused source-contract/callback cases,164 complete script
+cases and26 browser cases pass. The complete existing check also passes remote
+registry validation, queued submission verification, committed catalog generation,
+signatures/statistics, Astro check/build and formatting. Actionlint passes. No
+dependency, lockfile, catalog entry, signed bytes, artifact or product UI changes.
+Hosted candidate/main checks and actual callback/activation/replay remain pending.
