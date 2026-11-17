@@ -5,55 +5,55 @@ export const downloadTargets = {
     "ai@0.1.12": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.12/ai-0.1.12.lapis-plugin",
       "pluginId": "ai",
-      "status": "active",
+      "status": "disabled",
       "version": "0.1.12"
     },
     "ai@0.1.13": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.13/ai-0.1.13.lapis-plugin",
       "pluginId": "ai",
-      "status": "active",
+      "status": "disabled",
       "version": "0.1.13"
     },
     "ai@0.1.15": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.15/ai-0.1.15.lapis-plugin",
       "pluginId": "ai",
-      "status": "active",
+      "status": "disabled",
       "version": "0.1.15"
     },
     "ai@0.1.16": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.16/ai-0.1.16.lapis-plugin",
       "pluginId": "ai",
-      "status": "active",
+      "status": "disabled",
       "version": "0.1.16"
     },
     "ai@0.1.2": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.2/ai-0.1.2.lapis-plugin",
       "pluginId": "ai",
-      "status": "active",
+      "status": "disabled",
       "version": "0.1.2"
     },
     "ai@0.1.5": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.5/ai-0.1.5.lapis-plugin",
       "pluginId": "ai",
-      "status": "active",
+      "status": "disabled",
       "version": "0.1.5"
     },
     "ai@0.1.6": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.6/ai-0.1.6.lapis-plugin",
       "pluginId": "ai",
-      "status": "active",
+      "status": "disabled",
       "version": "0.1.6"
     },
     "ai@0.1.7": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.7/ai-0.1.7.lapis-plugin",
       "pluginId": "ai",
-      "status": "active",
+      "status": "disabled",
       "version": "0.1.7"
     },
     "ai@0.1.8": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/ai%400.1.8/ai-0.1.8.lapis-plugin",
       "pluginId": "ai",
-      "status": "active",
+      "status": "disabled",
       "version": "0.1.8"
     },
     "bases@0.1.2": {
