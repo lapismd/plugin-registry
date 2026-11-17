@@ -31,6 +31,9 @@ jobs:
       - name: Install browser acceptance runtime
         run: pnpm exec playwright install --with-deps chromium
 
+      - name: Validate private dependency intake
+        run: pnpm dependency:check
+
       - name: Validate source and published bundles
         run: pnpm registry:validate:remote
 
