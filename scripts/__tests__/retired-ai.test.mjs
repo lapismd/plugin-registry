@@ -99,7 +99,7 @@ test("retirement is scoped to shared AI provenance, not every plugin named ai", 
   );
 });
 
-test("saved download links for every retired AI version fail before archive fetch", async () => {
+test("saved download links for every retired AI version return authoritative Gone before archive fetch", async () => {
   const entry = parse(
     await readFile(
       new URL("../../entries/official/ai.jsonc", import.meta.url),
@@ -127,7 +127,7 @@ test("saved download links for every retired AI version fail before archive fetc
           throw new Error("must not fetch a retired archive");
         },
       );
-      assert.equal(response.status, 404, `${method} ai@${version}`);
+      assert.equal(response.status, 410, `${method} ai@${version}`);
     }
   }
   assert.equal(fetches, 0);
