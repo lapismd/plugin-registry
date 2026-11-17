@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawn } from "node:child_process";
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
@@ -89,6 +89,45 @@ Review requests before a tool changes application state, then follow the resulti
       index,
     ),
   ]),
+]);
+
+// Keep pending-versus-published acceptance on a plugin that is still available.
+const graphRoot = path.join(sourceRoot, "packages", "graph");
+await mkdir(path.join(graphRoot, "registry-content"), { recursive: true });
+await cp(
+  path.join(packageRoot, "registry-assets"),
+  path.join(graphRoot, "registry-assets"),
+  { recursive: true },
+);
+await Promise.all([
+  writeJson(path.join(graphRoot, "package.json"), {
+    name: "@lapis-notes/graph",
+    version: "0.99.0",
+    license: "Apache-2.0",
+    repository: "https://github.com/lapismd/lapis-plugins.git",
+  }),
+  writeJson(path.join(graphRoot, "manifest.json"), {
+    id: "lapis-graph",
+    name: "Graph",
+    version: "0.99.0",
+    minAppVersion: "0.1.0",
+    description: "Graph source-preview acceptance.",
+    author: "Lapis Notes",
+    isDesktopOnly: false,
+  }),
+  writeJson(path.join(graphRoot, "registry.json"), {
+    ...registrySource(),
+    categories: ["graph"],
+    documentationUrl: "https://lapis.md/plugins/graph",
+  }),
+  writeFile(
+    path.join(graphRoot, "registry-content", "overview.md"),
+    "# Graph\n\nExplore note relationships.\n",
+  ),
+  writeFile(
+    path.join(graphRoot, "CHANGELOG.md"),
+    "## 0.99.0\n\n- Preview fixture.\n",
+  ),
 ]);
 
 const child = spawn(

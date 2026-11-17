@@ -21,7 +21,9 @@ const removedPluginIds = [
 test("site build emits signed V2 pages and retains the V1 archive", async (t) => {
   const entries = await loadEntries();
   const expectedPluginIds = entries.map((entry) => entry.id).sort();
-  const aiVersion = entries.find((entry) => entry.id === "ai").latestVersion;
+  const graphVersion = entries.find(
+    (entry) => entry.id === "lapis-graph",
+  ).latestVersion;
   // Astro renames prerender assets from the checkout cache into the output.
   // Keep both on the checkout filesystem; hosted runners may mount /tmp elsewhere.
   const fixtureParent = new URL("../../tmp/", import.meta.url);
@@ -142,18 +144,25 @@ test("site build emits signed V2 pages and retains the V1 archive", async (t) =>
 
   const detail = await readFile(new URL("plugins/ai/index.html", dist), "utf8");
   assert.match(detail, /Signed bundle/);
-  assert.match(detail, /Download \.lapis-plugin/);
+  assert.match(detail, /data-install-disabled="true"/);
+  assert.match(detail, /<dd>Disabled<\/dd>/);
+  assert.doesNotMatch(detail, /data-download-link/);
+  const activeDetail = await readFile(
+    new URL("plugins/lapis-graph/index.html", dist),
+    "utf8",
+  );
+  assert.match(activeDetail, /Download \.lapis-plugin/);
   assert.match(detail, /Bundle size/);
   assert.match(detail, /data-download-detail/);
   assert.match(detail, /data-download-stats-values hidden/);
   assert.doesNotMatch(detail, /Statistics unavailable/);
   assert.match(detail, /data-download-detail[^>]*hidden/);
   assert.match(detail, /data-download-summary[^>]*hidden/);
-  assert.match(detail, /data-download-link/);
+  assert.match(activeDetail, /data-download-link/);
   assert.match(
-    detail,
+    activeDetail,
     new RegExp(
-      `href="/download/ai/${aiVersion.replaceAll(".", "\\.")}\\?action=download(?:&amp;|&)platform=web(?:&amp;|&)os=unknown"[^>]*data-download-link`,
+      `href="/download/lapis-graph/${graphVersion.replaceAll(".", "\\.")}\\?action=download(?:&amp;|&)platform=web(?:&amp;|&)os=unknown"[^>]*data-download-link`,
     ),
   );
   assert.match(detail, /data-plugin-overview/);

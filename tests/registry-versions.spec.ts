@@ -48,7 +48,7 @@ test("version selector opens a shareable older release with its own archive and 
     (entry) => entry.id === "lapis-graph",
   );
   await expect(versions.locator("option:checked")).toHaveText(
-    `${graph.latestVersion} (Latest)`,
+    `${process.env.LAPIS_REGISTRY_TEST_BASE_URL ? graph.latestVersion : "0.99.0"} (Latest)`,
   );
 });
 
@@ -59,19 +59,39 @@ test("a pending source version cannot install while its retained published versi
     Boolean(process.env.LAPIS_REGISTRY_TEST_BASE_URL),
     "Uses the local source fixture.",
   );
-  await page.goto("/plugins/ai/");
+  await page.goto("/plugins/lapis-graph/");
   await expect(
     page.getByRole("button", { name: "Install pending" }),
   ).toBeDisabled();
   await page
     .getByRole("combobox", { name: "Plugin version" })
-    .selectOption({ label: "0.1.2" });
+    .selectOption({ label: "2026.6.6" });
   await expect(
     page
       .getByRole("combobox", { name: "Plugin version" })
       .locator("option:checked"),
-  ).toHaveText("0.1.2");
+  ).toHaveText("2026.6.6");
   await expect(
     page.getByRole("link", { name: "Install in Lapis", exact: true }),
   ).toBeEnabled();
+});
+
+test("retired shared AI keeps history but cannot install any retained version", async ({
+  page,
+}) => {
+  await page.goto("/plugins/ai/");
+  const versions = page.getByRole("combobox", { name: "Plugin version" });
+  await versions.selectOption({ label: "0.1.2" });
+  await expect(page.locator("[data-install-button]")).toBeDisabled();
+  await expect(
+    page.getByRole("link", { name: "Install in Lapis", exact: true }),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: "More actions" }).click();
+  await expect(
+    page.getByRole("menuitem", { name: "Download .lapis-plugin" }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("menuitem", { name: "Open in installed web app" }),
+  ).toHaveCount(0);
+  await expect(versions.locator("option")).not.toHaveCount(0);
 });

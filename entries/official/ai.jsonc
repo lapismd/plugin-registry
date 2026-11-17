@@ -254,7 +254,7 @@
     "repository": "lapismd/lapis-plugins",
     "sourceCommit": "993e53456bf5044bc73c515cf98dc2424625e6c7",
   },
-  "status": "active",
+  "status": "disabled",
   "versions": {
     "0.1.12": {
       "bundle": {
