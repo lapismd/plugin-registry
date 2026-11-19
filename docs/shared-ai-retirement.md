@@ -9,10 +9,11 @@ Tauri-owned AI and App Profile native chat remain owned by their current hosts.
 
 Historical versions, bundle URLs, checksums, artifact signatures, assets and
 archived catalogs are retained. Do not edit signed generated files by hand.
-The user-approved protected workflow has regenerated and signed mutable metadata
-as recorded below. Existing production metadata remains the published truth
-until deployment. Deployment, UI/direct API/stale-cache acceptance and npm
-deprecation remain separate pending gates.
+The user-approved protected workflow regenerated and signed mutable metadata as
+recorded below. The disabled metadata and HTTP 410 download policy are deployed,
+UI/direct API/stale-cache acceptance passes, and all eleven published npm
+versions are deprecated without unpublishing. Historical artifacts and installed
+data remain preserved.
 This source safeguard does not uninstall plugins or alter user data.
 
 Notes owns the cross-repository plan and resume checklist:
@@ -77,7 +78,7 @@ Local `pnpm registry:verify-signatures` verifies all 21 metadata signatures.
 No signing material was printed, changed or read outside the protected workflow.
 The complete parent PR subsequently passed final-head Checks `44160731689`.
 
-## Production and remaining boundary
+## Production closure and retained boundary
 
 The user separately approved merge and production deployment of source
 [PR #181](https://github.com/lapismd/plugin-registry/pull/181) at
@@ -87,13 +88,19 @@ No publication gate or repository variable was bypassed.
 
 The approved source merged at
 `42903595b7ea78194d47635319dfa0f5046ab5bb`; exact-main Checks and production
-publication passed. Live index/detail signatures verify, all nine indexed
-GET/HEAD download links reject with 404 and the live disabled-install browser
-case passes. That response still permits Notes' signed-origin fallback with
-stale active metadata. The user-approved
-[disabled download response follow-up](disabled-download-response.md) closes
-that path through the existing HTTP 410 contract. Its own complete qualification
-and production checks remain required. No npm deprecation or unpublish occurred.
-Native/data acceptance remains owned by Desktop and Notes. The source safeguards
-do not uninstall plugins, delete settings/conversations/memory or retire the
-standalone controller needed by the excluded consumers.
+publication passed. Live index/detail signatures verify and the live
+disabled-install browser case passes. Its initial 404 download response exposed
+the stale signed-origin fallback recorded above; the user-approved
+[HTTP 410 follow-up](disabled-download-response.md) merged as
+`e99f5fd40c92a779b26fcab4a5efa84372d6f4a3`, passed Checks and production
+publication, and now rejects every indexed retired version before origin fetch
+or analytics writes.
+
+Plugins PR
+[#156](https://github.com/lapismd/lapis-plugins/pull/156) separately deprecated
+all eleven published `@lapis-notes/ai` versions with bundled-Desktop replacement
+guidance. No version was unpublished and all tarballs and integrity hashes remain
+available as historical artifacts. Native/data acceptance remains owned by
+Desktop and Notes. The safeguards do not uninstall plugins, delete
+settings/conversations/memory or retire the standalone controller needed by the
+excluded consumers.
