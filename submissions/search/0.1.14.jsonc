@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "action": "plugin_release",
+  "client_payload": {
+    "asset_name": "search-0.1.14.lapis-plugin",
+    "package_name": "@lapis-notes/search",
+    "plugin_id": "search",
+    "release_tag": "search@0.1.14",
+    "repository": "lapismd/lapis-plugins",
+    "source_commit": "fa78048c12abdb4b37a46b43d73d6ae0fa5ac868",
+    "version": "0.1.14",
+  },
+}
