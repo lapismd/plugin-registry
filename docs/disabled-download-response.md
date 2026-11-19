@@ -61,7 +61,11 @@ The current Cloudflare Workers best-practices reference and published
 no platform configuration, dependency or binding changes are needed. The
 production change adds only the disabled-status early return.
 
-Hosted candidate checks and production confirmation remain required before this
-follow-up is reported delivered. The earlier retirement is live; its recorded
-404 behavior is historical evidence of the gap, not complete stale-client
-acceptance.
+PR [#183](https://github.com/lapismd/plugin-registry/pull/183) merged exact
+reviewed head `ca8421f515e54aa0da32ea65018ca662039829fb` as
+`e99f5fd40c92a779b26fcab4a5efa84372d6f4a3`. Hosted Checks
+[44166043673](https://github.com/lapismd/plugin-registry/actions/runs/44166043673)
+and production publication
+[44166153748](https://github.com/lapismd/plugin-registry/actions/runs/44166153748)
+passed. Live GET and HEAD requests for every indexed retired AI version return 410. The earlier 404 behavior remains historical evidence of the gap rather than
+current stale-client behavior.
