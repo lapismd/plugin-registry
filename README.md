@@ -35,11 +35,10 @@ using the existing registry and release trust roots.
 ## Commands
 
 The V2 contract is owned by `@lapis-notes/api/registry/schema` and requires
-API 0.1.1 or newer. Community publication is not a prerequisite. Before that
-API release is published, local acceptance uses an ignored checksum-pinned API
-tarball hook. Keep the tracked dependency on its npm semver range; refresh the
-registry lockfile from npm once that release is available. A temporary tarball
-install does not qualify the production frozen-install gate.
+API 0.6.11 or a compatible 0.6 patch. Community publication is not a
+prerequisite. Keep the tracked dependency on its npm semver range and refresh
+the registry lockfile from npm. A temporary tarball install does not qualify the
+production frozen-install gate.
 
 ```sh
 pnpm install
