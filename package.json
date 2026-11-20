@@ -39,7 +39,7 @@
     "fflate": "^0.8.3",
     "jsonc-parser": "^3.3.1",
     "sharp": "^0.34.5",
-    "@lapis-notes/api": "^0.1.2"
+    "@lapis-notes/api": "^0.6.11"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

@@ -1,10 +1,11 @@
 # API-owned registry schema migration
 
 The site, V2 generator, and source metadata reader use
-`@lapis-notes/api/registry/schema` with dependency range `^0.1.2`. Community is
-absent from the active manifest and installed local graph. API 0.1.2 is published on npm under `next` and exposes the required registry
-subpaths. The committed portable lock now resolves it from npm; a clean frozen
-install with pnpm hooks disabled passes.
+`@lapis-notes/api/registry/schema` with dependency range `^0.6.11`. Community is
+absent from the active manifest and installed local graph. API 0.6.11 is the
+concrete npm `latest` release and exposes the required registry subpaths. The
+committed portable lock resolves it and its qualified first-party closure from
+npm; a clean frozen install with pnpm hooks disabled passes.
 
 Focused catalog/source tests pass 8/8. The full aggregate check passes against
 13 metadata files signed with an isolated ephemeral test key: signature

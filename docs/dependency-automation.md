@@ -11,15 +11,18 @@ is not a replacement for the coordinator notification credential.
 `pnpm dependency:check` runs in normal `pnpm check` and the hosted Checks workflow,
 independently of bot specification exemptions. It requires the private single
 root, pinned pnpm, retained signature verification and registry generation. The
-only qualified first-party input is the API runtime schema on its existing
-`^0.1` patch family, with minimum0.1.2. New owners, a 0.x minor migration,
+only qualified first-party input is the API runtime schema on its current
+`^0.6` patch family, with minimum 0.6.11. The guard also checks the active pnpm
+snapshot for the qualified UI 0.2.8, Design Core 0.13.7 and Mira 0.2.0 closure,
+so a frozen install cannot silently retain obsolete packages after npm metadata
+or dist-tag repairs. New owners, another 0.x minor migration,
 prerelease/catalog/local references, Deno commands or an npm version/publication
 recipe require source review and new qualification. This guard grants no writer,
 signing, release, deployment or baseline authority.
 
 The existing registry and browser tests validate the API-owned public schema.
-The historical API migration record describes its reviewed minimum; manifests
-and the frozen registry lockfile own current resolved coordinates. This source
+The historical API migration record describes the initial reviewed minimum;
+manifests and the frozen registry lockfile own current resolved coordinates. This source
 has no canonical dependency version slots or public npm owner to regenerate. A
 compatible private dependency update has no package-version or Changeset intent.
 The shared native preparer must retain that no-version result.
