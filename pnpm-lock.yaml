@@ -8,8 +8,8 @@ importers:
   .:
     dependencies:
       "@lapis-notes/api":
-        specifier: ^0.6.11
-        version: 0.6.11(cd0522b1f4eed72680f62b13eab6c754)
+        specifier: ^0.6.12
+        version: 0.6.12(cd0522b1f4eed72680f62b13eab6c754)
       ajv:
         specifier: ^8.17.1
         version: 8.20.0
@@ -1905,10 +1905,10 @@ packages:
         integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==,
       }
 
-  "@lapis-notes/api@0.6.11":
+  "@lapis-notes/api@0.6.12":
     resolution:
       {
-        integrity: sha512-FRaHquaSI8vwP/socaR2JyFS5bEjPKGVZu3LOg7dWT6DLFdcwJ7rPb17ygPLa/juTUIdfNJiQBRkLmiYLoDq7w==,
+        integrity: sha512-ubF3lM0IShoDlfwIUeaomjelFvnOwGq5qVHRAa549rucjl5A1zoX3zq5eyq/MsBejgMuBQPN+RnpqlbLtF2gsg==,
       }
     peerDependencies:
       "@codemirror/autocomplete": ^6.18.6
@@ -7641,7 +7641,7 @@ snapshots:
       "@jridgewell/resolve-uri": 3.1.2
       "@jridgewell/sourcemap-codec": 1.5.5
 
-  "@lapis-notes/api@0.6.11(cd0522b1f4eed72680f62b13eab6c754)":
+  "@lapis-notes/api@0.6.12(cd0522b1f4eed72680f62b13eab6c754)":
     dependencies:
       "@codemirror/autocomplete": 6.20.4
       "@codemirror/commands": 6.11.1

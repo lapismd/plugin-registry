@@ -19,7 +19,7 @@ test("current registry retains private signed-deployment authority", () => {
 
 test("the current lock resolves the qualified API closure", () => {
   assert.deepEqual(checkDependencyLock(manifest(), lockfile()), {
-    api: "0.6.11",
+    api: "0.6.12",
     ui: "0.2.8",
     designCore: "0.13.7",
     mira: "0.2.0",
