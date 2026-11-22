@@ -914,6 +914,12 @@ export const downloadTargets = {
       "status": "active",
       "version": "0.2.2"
     },
+    "tasks@0.3.0": {
+      "originUrl": "https://github.com/lapismd/lapis-plugin-tasks/releases/download/%40lapis-notes/lapis-plugin-tasks%400.3.0/tasks-0.3.0.lapis-plugin",
+      "pluginId": "tasks",
+      "status": "active",
+      "version": "0.3.0"
+    },
     "wordcount@0.1.1": {
       "originUrl": "https://github.com/lapismd/lapis-plugins/releases/download/wordcount%400.1.1/wordcount-0.1.1.lapis-plugin",
       "pluginId": "wordcount",
